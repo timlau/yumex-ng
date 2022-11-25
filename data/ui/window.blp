@@ -1,0 +1,108 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexMainWindow : Adw.ApplicationWindow {
+  title: _("Yum Extender");
+  default-width: 1000;
+  default-height: 700;
+  Adw.ToastOverlay toast_overlay {
+    Adw.Leaflet leaflet {
+      can-navigate-back: true;
+      can-unfold: false;
+
+      Gtk.Box main_view {
+        orientation: vertical;
+
+        Adw.HeaderBar titlebar {
+          centering-policy: strict;
+
+          Button apply-button {
+            styles ["suggested-action"]
+            label: _("Apply");
+            tooltip-text: _("Apply Package Actions");
+            action-name: "app.apply_actions";
+          }
+
+          [title]
+          Adw.ViewSwitcherTitle title {
+            stack: view_stack;
+          }
+
+          [end]
+          Gtk.MenuButton {
+            tooltip-text: _("Main Menu");
+            icon-name: "open-menu-symbolic";
+            menu-model: main-menu;
+          }
+
+        }
+
+        Gtk.Box {
+          orientation: vertical;
+
+          Adw.ViewStack view_stack {
+            vexpand: true;
+            hexpand: true;
+
+            Adw.ViewStackPage {
+              name: "packages";
+              title: _("Packages");
+              icon-name: "view-paged-symbolic";
+
+              child: Adw.PreferencesPage content { 
+                Gtk.Label {
+                  label: _("Packages");
+                }
+              };
+            }
+
+            Adw.ViewStackPage {
+              name: "group";
+              title: _("Groups");
+              icon-name: "starred-symbolic";
+
+              child: Adw.PreferencesPage content_groups { 
+                Gtk.Label {
+                  label: _("Groups");
+                }
+
+              };
+            }
+
+            Adw.ViewStackPage {
+              name: "queue";
+              title: _("Queue");
+              icon-name: "system-run-symbolic";
+
+              child: Adw.PreferencesPage content_queue {
+                Gtk.Label {
+                  label: _("Action Queue");
+                }
+
+               };
+            }
+          }
+
+          Adw.ViewSwitcherBar {
+            stack: view_stack;
+            reveal: bind title.title-visible;
+          }
+        }
+      }
+    }
+  }
+}
+
+menu main-menu {
+  section {
+    item {
+      label: _("Preferences");
+      action: "app.preferences";
+    }
+
+    item {
+      label: _("About Yum Extender");
+      action: "app.about";
+    }
+  }
+}
