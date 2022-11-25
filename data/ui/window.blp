@@ -48,11 +48,8 @@ template YumexMainWindow : Adw.ApplicationWindow {
               name: "packages";
               title: _("Packages");
               icon-name: "view-paged-symbolic";
-
-              child: Adw.PreferencesPage content { 
-                Gtk.Label {
-                  label: _("Packages");
-                }
+              child: Gtk.Box  content_packages { 
+                orientation: vertical;
               };
             }
 
@@ -61,11 +58,8 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Groups");
               icon-name: "starred-symbolic";
 
-              child: Adw.PreferencesPage content_groups { 
-                Gtk.Label {
-                  label: _("Groups");
-                }
-
+              child: Gtk.Box content_groups { 
+                orientation: vertical;
               };
             }
 
@@ -74,12 +68,9 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Queue");
               icon-name: "system-run-symbolic";
 
-              child: Adw.PreferencesPage content_queue {
-                Gtk.Label {
-                  label: _("Action Queue");
-                }
-
-               };
+              child: Gtk.Box content_queue {  
+                orientation: vertical;
+              };
             }
           }
 

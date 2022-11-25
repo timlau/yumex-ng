@@ -28,11 +28,41 @@ from yumex.constants import rootdir
 class YumexMainWindow(Adw.ApplicationWindow):
     __gtype_name__ = "YumexMainWindow"
 
-    content = Gtk.Template.Child()
+    content_packages = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
     content_groups = Gtk.Template.Child("content_groups")
-    content_plugins = Gtk.Template.Child("content_queue")
+    content_queue = Gtk.Template.Child("content_queue")
     main_menu = Gtk.Template.Child("main-menu")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.setup_gui()
+
+    def setup_gui(self):
+        self.setup_packages()
+        self.setup_groups()
+        self.setup_queue()
+        self.show_message("Welcome to Yum Extender")
+
+
+    def setup_packages(self):
+        self.content_packages.append(self.create_label_center("Packages"))
+
+    def setup_groups(self):
+        self.content_groups.append(self.create_label_center("Groups"))
+
+    def setup_queue(self):
+        self.content_queue.append(self.create_label_center("Action Queue"))
+
+    def show_message(self, title):
+        self.toast_overlay.add_toast(Adw.Toast(title=title))
+
+    def create_label_center(self, label):
+        lbl = Gtk.Label()
+        lbl.props.hexpand = True
+        lbl.props.vexpand = True
+        lbl.props.label = label
+        return lbl
+
+
+
