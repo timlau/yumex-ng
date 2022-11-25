@@ -55,7 +55,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.content_queue.append(self.create_label_center("Action Queue"))
 
     def show_message(self, title):
-        self.toast_overlay.add_toast(Adw.Toast(title=title))
+        toast = Adw.Toast(title=title)
+        toast.set_timeout(1)
+        self.toast_overlay.add_toast(toast)
 
     def create_label_center(self, label):
         lbl = Gtk.Label()
