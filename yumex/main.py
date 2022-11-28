@@ -35,11 +35,6 @@ class YumexApplication(Adw.Application):
                 application=self,
             )
 
-        # self.create_action("apply_actions", self.on_apply_actions)
-
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_resource(f"{rootdir}/style.css")
-        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)        
         self.create_action("about", self.on_about)
         self.create_action("preferences", self.on_preferences)
         print(f"dark mode: {self.style_manager.get_dark()}")
