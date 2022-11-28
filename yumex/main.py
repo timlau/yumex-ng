@@ -71,7 +71,7 @@ class YumexApplication(Adw.Application):
             application_icon=app_id,
             developer_name="Tim Lauridsen",
             website="https://yumex.dk",
-            support_url="https://github.com/timlau/yumex-ng",
+            support_url="",
             issue_url="https://github.com/timlau/yumex-ng",
             developers=["Tim Lauridsen"],
             artists=[],
