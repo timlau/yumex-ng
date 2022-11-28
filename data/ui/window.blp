@@ -2,9 +2,11 @@ using Gtk 4.0;
 using Adw 1;
 
 template YumexMainWindow : Adw.ApplicationWindow {
+  styles ["devel"]
   title: _("Yum Extender");
   default-width: 1000;
   default-height: 700;
+
   Adw.ToastOverlay toast_overlay {
     Adw.Leaflet leaflet {
       can-navigate-back: true;
