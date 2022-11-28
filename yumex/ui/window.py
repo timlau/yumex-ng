@@ -67,7 +67,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         return lbl
 
     @Gtk.Template.Callback()
-    def on_apply_actions(self, *_args):
+    def on_apply_actions_clicked(self, *_args):
         self.show_message("Apply pressed")
 
 
