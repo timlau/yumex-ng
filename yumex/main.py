@@ -11,6 +11,11 @@ from yumex.constants import (  # noqa: F401
 )
 
 
+# temp translation wrapper
+def _(txt):
+    return txt
+
+
 class YumexApplication(Adw.Application):
     """The main application singleton class."""
 
@@ -59,10 +64,49 @@ class YumexApplication(Adw.Application):
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
-    def on_about(self, widget, data):
-        self.win.show_message("About pressed")
+    def on_about(self, *_args):
+        about = Adw.AboutWindow(
+            transient_for=self.props.active_window,
+            application_name="Yum Extender",
+            application_icon=app_id,
+            developer_name="Tim Lauridsen",
+            website="https://yumex.dk",
+            support_url="https://github.com/timlau/yumex-ng",
+            issue_url="https://github.com/timlau/yumex-ng",
+            developers=["Tim Lauridsen"],
+            artists=[],
+            designers=[],
+            documenters=[],
+            translator_credits="",
+            copyright="© 2022 Tim Lauridsen",
+            license_type=Gtk.License.GPL_3_0,
+            version=version,
+            release_notes_version=version,
+            release_notes=_(
+                """
+<ul>
+<li>Early Build, not released yet</li>
+</ul>
+"""
+            ),
+            comments=_(
+                """
+Yum Extender is a Package management to install, update and remove packages
+"""
+            ),
+        )
+        # about.add_credit_section(
+        #     _("Section title"),
+        #     ["Somebody https://yumex.dk"],
+        # )
+        # about.add_acknowledgement_section(
+        #     _("Special thanks to"),
+        #     ["Somebody https://yumex.dk"],
+        # )
 
-    def on_preferences(self, widget, data):
+        about.present()
+
+    def on_preferences(self, *_args):
         self.win.show_message("Preferences pressed")
 
 
