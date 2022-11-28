@@ -20,7 +20,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
             styles ["suggested-action"]
             label: _("Apply");
             tooltip-text: _("Apply Package Actions");
-            clicked => on_apply_actions();
+            clicked => on_apply_actions_clicked();
           }
 
           [title]
