@@ -20,6 +20,7 @@
 from gi.repository import Gtk, Adw, Gio
 
 from yumex.constants import rootdir, app_id
+from yumex.ui.package_row import YumexPackageRow
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -56,7 +57,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_queue()
 
     def setup_packages(self):
-        self.content_packages.append(self.create_label_center("Packages"))
+        # self.content_packages.append(self.create_label_center("Packages"))
+        pkg = YumexPackageRow("packagename 1", "this is a package")
+        self.content_packages.append(pkg)
+        pkg = YumexPackageRow("packagename 2", "this is a package")
+        self.content_packages.append(pkg)
+        pkg = YumexPackageRow("packagename 3", "this is a package")
+        self.content_packages.append(pkg)
+        pkg = YumexPackageRow("packagename 4", "this is a package")
+        self.content_packages.append(pkg)
+        pkg = YumexPackageRow("packagename 5", "this is a package")
+        self.content_packages.append(pkg)
 
     def setup_groups(self):
         self.content_groups.append(self.create_label_center("Groups"))

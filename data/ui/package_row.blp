@@ -1,0 +1,12 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexPackageRow : Adw.ActionRow {
+  [prefix]
+  CheckButton action {
+    valign: center;
+    tooltip-text: _("Action");
+    // toggled => on_text_value_toggled();
+  }
+}
+
