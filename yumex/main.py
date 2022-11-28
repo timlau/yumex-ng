@@ -1,9 +1,9 @@
 import sys
 
-from gi.repository import Gtk, Gdk, Gio, Adw, GLib
+from gi.repository import Gtk, Gdk, Gio, Adw, GLib  # noqa: F401
 
 from yumex.ui.window import YumexMainWindow
-from yumex.constants import (
+from yumex.constants import (  # noqa: F401
     rootdir,
     app_id,
     rel_ver,
@@ -22,7 +22,6 @@ class YumexApplication(Adw.Application):
         self.set_resource_base_path(rootdir)
         self.style_manager = Adw.StyleManager.get_default()
 
-
     def do_activate(self):
         """Called when the application is activated.
 
@@ -34,6 +33,10 @@ class YumexApplication(Adw.Application):
         if not self.win:
             self.win = YumexMainWindow(
                 application=self,
+                default_height=self.settings.get_int("window-height"),
+                default_width=self.settings.get_int("window-width"),
+                fullscreened=self.settings.get_boolean("window-fullscreen"),
+                maximized=self.settings.get_boolean("window-maximized"),
             )
 
         self.create_action("about", self.on_about)
@@ -61,6 +64,7 @@ class YumexApplication(Adw.Application):
 
     def on_preferences(self, widget, data):
         self.win.show_message("Preferences pressed")
+
 
 def main():
     """The application's entry point."""
