@@ -64,6 +64,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         lbl.props.hexpand = True
         lbl.props.vexpand = True
         lbl.props.label = label
+        lbl.add_css_class("my_label")
         return lbl
 
     @Gtk.Template.Callback()
