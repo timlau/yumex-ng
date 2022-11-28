@@ -54,7 +54,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_packages()
         self.setup_groups()
         self.setup_queue()
-        self.show_message("Welcome to Yum Extender")
 
     def setup_packages(self):
         self.content_packages.append(self.create_label_center("Packages"))
