@@ -19,6 +19,8 @@ class YumexApplication(Adw.Application):
     def __init__(self):
         super().__init__(application_id=app_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         self.set_resource_base_path(rootdir)
+        self.style_manager = Adw.StyleManager.get_default()
+
 
     def do_activate(self):
         """Called when the application is activated.
@@ -36,7 +38,7 @@ class YumexApplication(Adw.Application):
         # self.create_action("apply_actions", self.on_apply_actions)
         self.create_action("about", self.on_about)
         self.create_action("preferences", self.on_preferences)
-
+        print(f"dark mode: {self.style_manager.get_dark()}")
         self.win.present()
 
     def create_action(self, name, callback, shortcuts=None):
