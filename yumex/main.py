@@ -33,7 +33,7 @@ class YumexApplication(Adw.Application):
                 application=self,
             )
 
-        self.create_action("apply_actions", self.on_apply_actions)
+        # self.create_action("apply_actions", self.on_apply_actions)
         self.create_action("about", self.on_about)
         self.create_action("preferences", self.on_preferences)
 
@@ -53,9 +53,6 @@ class YumexApplication(Adw.Application):
         self.add_action(action)
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
-
-    def on_apply_actions(self, widget, data):
-        self.win.show_message("Apply pressed")
 
     def on_about(self, widget, data):
         self.win.show_message("About pressed")

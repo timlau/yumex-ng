@@ -66,5 +66,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         lbl.props.label = label
         return lbl
 
+    @Gtk.Template.Callback()
+    def on_apply_actions(self, *_args):
+        self.show_message("Apply pressed")
 
 
