@@ -15,6 +15,7 @@ class YumexApplication(Adw.Application):
     """The main application singleton class."""
 
     __gtype_name__ = "YumexApplication"
+    settings = Gio.Settings.new(app_id)
 
     def __init__(self):
         super().__init__(application_id=app_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
