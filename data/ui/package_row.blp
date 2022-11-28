@@ -8,5 +8,15 @@ template YumexPackageRow : Adw.ActionRow {
     tooltip-text: _("Action");
     // toggled => on_text_value_toggled();
   }
+  [suffix]
+  Gtk.Separator {}
+  [suffix]
+  Gtk.Label {
+      // valign: center;
+      // halign: center;
+      label: "1.0.1-23";
+      // xalign: 0;
+      // yalign: 0;
+  }  
 }
 
