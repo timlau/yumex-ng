@@ -13,16 +13,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Copyright (C) 2022  Tim Lauridsen 
+# Copyright (C) 2022  Tim Lauridsen
 #
 #
-
-
-import os
 
 from gi.repository import Gtk, Adw, Gio
 
-from yumex.constants import rootdir
+from yumex.constants import rootdir, app_id
+
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
 class YumexMainWindow(Adw.ApplicationWindow):
@@ -36,14 +34,27 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        self.settings = Gio.Settings(app_id)
+
+        self.connect("unrealize", self.save_window_props)
+
         self.setup_gui()
+
+    def save_window_props(self, *args):
+        win_size = self.get_default_size()
+
+        self.settings.set_int("window-width", win_size.width)
+        self.settings.set_int("window-height", win_size.height)
+
+        self.settings.set_boolean("window-maximized", self.is_maximized())
+        self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
 
     def setup_gui(self):
         self.setup_packages()
         self.setup_groups()
         self.setup_queue()
         self.show_message("Welcome to Yum Extender")
-
 
     def setup_packages(self):
         self.content_packages.append(self.create_label_center("Packages"))
@@ -71,5 +82,3 @@ class YumexMainWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
         self.show_message("Apply pressed")
-
-
