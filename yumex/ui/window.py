@@ -65,6 +65,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         lbl.props.vexpand = True
         lbl.props.label = label
         lbl.add_css_class("my_label")
+        lbl.add_css_class("accent")
         return lbl
 
     @Gtk.Template.Callback()
