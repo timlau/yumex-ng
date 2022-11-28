@@ -1,6 +1,7 @@
 gnome = import('gnome')
 
 subdir('ui')
+subdir('icons')
 
 gnome.compile_resources('yumex',
   'yumex.gresource.xml',
