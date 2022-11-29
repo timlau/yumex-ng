@@ -51,6 +51,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Packages");
               icon-name: "view-paged-symbolic";
               child: Gtk.Box  content_packages { 
+                styles ["package_list"]
                 orientation: vertical;
               };
             }
