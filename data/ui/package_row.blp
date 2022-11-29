@@ -3,20 +3,33 @@ using Adw 1;
 
 template YumexPackageRow : Adw.ActionRow {
   [prefix]
-  CheckButton action {
+  Button install-button {
     valign: center;
-    tooltip-text: _("Action");
-    // toggled => on_text_value_toggled();
+    icon-name: "insert-object-symbolic";
+    tooltip-text: _("Install Package");
+    clicked => on_install_clicked();
+  }
+  [prefix]
+  Button remove-button {
+    valign: center;
+    icon-name: "user-trash-symbolic";
+    tooltip-text: _("Remove Package");
+    clicked => on_remove_clicked();
+  }
+  [suffix]
+  Image installed {
+    icon-name: "view-pin-symbolic";
   }
   [suffix]
   Gtk.Separator {}
   [suffix]
-  Gtk.Label {
-      // valign: center;
-      // halign: center;
+  Gtk.Label version {
       label: "1.0.1-23";
-      // xalign: 0;
-      // yalign: 0;
+  }  
+  Gtk.Separator {}
+  [suffix]
+  Gtk.Label repo {
+      label: "Fedora";
   }  
 }
 

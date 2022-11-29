@@ -58,13 +58,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_packages(self):
         # self.content_packages.append(self.create_label_center("Packages"))
-        pkg = YumexPackageRow("packagename 1", "this is a package")
+        pkg = YumexPackageRow("packagename 1", "this is a package",installed=True)
         self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 2", "this is a package")
+        pkg = YumexPackageRow("packagename 2", "this is a package",repo="Updates")
         self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 3", "this is a package")
+        pkg = YumexPackageRow("packagename 3", "this is a package",installed=True)
         self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 4", "this is a package")
+        pkg = YumexPackageRow("packagename 4", "this is a package",version="12.23.4-34")
         self.content_packages.append(pkg)
         pkg = YumexPackageRow("packagename 5", "this is a package")
         self.content_packages.append(pkg)
