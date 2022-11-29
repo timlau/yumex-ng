@@ -13,9 +13,15 @@ template YumexPackageRow : Adw.ActionRow {
   [suffix]
   Gtk.Separator {}
   [suffix]
-  Gtk.Label version {}  
+  Gtk.Label version {
+    width-chars: 10;
+    xalign: 0.1;
+  }  
   Gtk.Separator {}
   [suffix]
-  Gtk.Label repo {}  
+  Gtk.Label repo {
+    width-chars: 10;
+    xalign: 0.1;
+  }  
 }
 
