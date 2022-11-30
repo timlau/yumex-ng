@@ -1,8 +1,5 @@
-from abc import abstractmethod
-from ensurepip import version
-from typing import List
 
-from gi.repository import Gtk, Adw, Gio, GObject
+from gi.repository import Gtk, Gio, GObject
 
 from yumex.constants import rootdir
 
@@ -79,7 +76,7 @@ class YumexPackageView(Gtk.ColumnView):
     def on_selection_changed(self, widget, position, n_items):
         # get the current selection (GtkBitset)
         selection = widget.get_selection()
-        # the the first value in the GtkBitset, that contain the index of the selection in the data model
+        # the first value contain the index of the selection in the data model
         # as we use Gtk.SingleSelection, there can only be one ;-)
         ndx = selection.get_nth(0)
         msg = f"Row {ndx} was selected ( {self.store[ndx]} )"

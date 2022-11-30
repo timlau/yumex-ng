@@ -13,5 +13,14 @@
 		<key name="window-fullscreen" type="b">
 			<default>false</default>
 		</key>
+		<key name="col-name-width" type="i">
+			<default>200</default>
+		</key>
+		<key name="col-version-width" type="i">
+			<default>100</default>
+		</key>
+		<key name="col-repo-width" type="i">
+			<default>100</default>
+		</key>
 	</schema>
 </schemalist>

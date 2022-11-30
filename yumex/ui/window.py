@@ -45,8 +45,20 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def save_window_props(self, *args):
         win_size = self.get_default_size()
 
+        # Save windows size
         self.settings.set_int("window-width", win_size.width)
         self.settings.set_int("window-height", win_size.height)
+
+        # Save coloumn widths
+        self.settings.set_int(
+            "col-name-width", self.package_view.names.get_fixed_width()
+        )
+        self.settings.set_int(
+            "col-version-width", self.package_view.versions.get_fixed_width()
+        )
+        self.settings.set_int(
+            "col-repo-width", self.package_view.repos.get_fixed_width()
+        )
 
         self.settings.set_boolean("window-maximized", self.is_maximized())
         self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
@@ -58,9 +70,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_packages(self):
         # self.content_packages.append(self.create_label_center("Packages"))
-        data = [(f"package{nr}",f"{nr}.{nr}","fedora") for nr in range(5)]
+        data = [(f"package{nr}", f"{nr}.{nr}", "fedora") for nr in range(5)]
         self.package_view = YumexPackageView(self, data)
         self.content_packages.append(self.package_view)
+        self.package_view.names.set_fixed_width(
+            self.settings.get_int("col-name-width")
+        )
+        self.package_view.versions.set_fixed_width(
+            self.settings.get_int("col-version-width")
+        )
+        self.package_view.repos.set_fixed_width(
+            self.settings.get_int("col-version-width")
+        )
 
     def setup_groups(self):
         self.content_groups.append(self.create_label_center("Groups"))
