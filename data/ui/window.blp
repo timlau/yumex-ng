@@ -50,9 +50,15 @@ template YumexMainWindow : Adw.ApplicationWindow {
               name: "packages";
               title: _("Packages");
               icon-name: "view-paged-symbolic";
-              child: Gtk.Box  content_packages { 
-                styles ["package_list"]
-                orientation: vertical;
+              child: Adw.ClampScrollable {
+                Gtk.ScrolledWindow {
+                  margin-top: 20;
+                  margin-bottom: 20;
+                  Gtk.Box  content_packages { 
+                    styles ["package_list"]
+                    orientation: vertical;
+                  }
+                }
               };
             }
 

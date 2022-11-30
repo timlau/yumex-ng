@@ -70,12 +70,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_packages(self):
         # self.content_packages.append(self.create_label_center("Packages"))
-        data = [(f"package{nr}", f"{nr}.{nr}", "fedora") for nr in range(5)]
-        self.package_view = YumexPackageView(self, data)
+        data = [(f"package{nr}", f"{nr}.{nr}", "fedora") for nr in range(1, 300)]
+        self.package_view = YumexPackageView(self)
+        print(f"len: {len(data)}")
+        self.package_view.add_packages(data)
         self.content_packages.append(self.package_view)
-        self.package_view.names.set_fixed_width(
-            self.settings.get_int("col-name-width")
-        )
+        self.package_view.names.set_fixed_width(self.settings.get_int("col-name-width"))
         self.package_view.versions.set_fixed_width(
             self.settings.get_int("col-version-width")
         )

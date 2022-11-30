@@ -1,4 +1,3 @@
-
 from gi.repository import Gtk, Gio, GObject
 
 from yumex.constants import rootdir
@@ -28,15 +27,17 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(self, window, data, **kwargs):
+    def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.win = window
         self.store = Gio.ListStore.new(Package)
         self.selection.set_model(self.store)
-        for (name, version, repo) in data:
-            self.store.append(Package(name, version, repo))
         self.last_position = -1
         self.column_num = 0
+
+    def add_packages(self, data):
+        for (name, version, repo) in data:
+            self.store.append(Package(name, version, repo))
 
     @Gtk.Template.Callback()
     def on_packages_setup(self, widget, item):
@@ -60,9 +61,13 @@ class YumexPackageView(Gtk.ColumnView):
             case 0:
                 label.set_text(data.name)  # Update Gtk.Label with data from model item
             case 1:
-                label.set_text(data.version)  # Update Gtk.Label with data from model item
+                label.set_text(
+                    data.version
+                )  # Update Gtk.Label with data from model item
             case 2:
                 label.set_text(data.repo)  # Update Gtk.Label with data from model item
+            case _:
+                print('No match found')
 
     @Gtk.Template.Callback()
     def on_packages_unbind(self, *_args):
@@ -74,10 +79,11 @@ class YumexPackageView(Gtk.ColumnView):
 
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):
+        pass
         # get the current selection (GtkBitset)
-        selection = widget.get_selection()
-        # the first value contain the index of the selection in the data model
-        # as we use Gtk.SingleSelection, there can only be one ;-)
-        ndx = selection.get_nth(0)
-        msg = f"Row {ndx} was selected ( {self.store[ndx]} )"
-        self.win.show_message(msg)
+        # selection = widget.get_selection()
+        # # the first value contain the index of the selection in the data model
+        # # as we use Gtk.SingleSelection, there can only be one ;-)
+        # ndx = selection.get_nth(0)
+        # msg = f"Row {ndx} was selected ( {self.store[ndx]} )"
+        # self.win.show_message(msg)
