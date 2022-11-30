@@ -50,7 +50,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
               name: "packages";
               title: _("Packages");
               icon-name: "view-paged-symbolic";
-              child: Adw.ClampScrollable {
+              child: Adw.Clamp {
                 Gtk.ScrolledWindow {
                   margin-top: 20;
                   margin-bottom: 20;

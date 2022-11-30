@@ -8,29 +8,36 @@ template YumexPackageView : Gtk.ColumnView {
         title: _("name");
         fixed-width: 200;
         resizable: true;
-        factory: packages;
+        factory: name_factory;
     }
     Gtk.ColumnViewColumn versions {
         title: _("version");
         fixed-width: 100;
         resizable: true;
-        factory: packages;
+        factory: version_factory;
     }
     Gtk.ColumnViewColumn repos {
         title: _("repo");
         fixed-width: 100;
         resizable: true;
-        factory: packages;
+        factory: repo_factory;
     }
 
 }
 
-
-Gtk.SignalListItemFactory packages {
+Gtk.SignalListItemFactory name_factory {
     setup => on_packages_setup();
-    bind => on_packages_bind();
-    unbind => on_packages_unbind();
-    teardown => on_packages_teardown();
+    bind => on_name_bind();
+}
+
+Gtk.SignalListItemFactory version_factory {
+    setup => on_packages_setup();
+    bind => on_version_bind();
+}
+
+Gtk.SignalListItemFactory repo_factory {
+    setup => on_packages_setup();
+    bind => on_repo_bind();
 }
 
 Gtk.SingleSelection selection {
