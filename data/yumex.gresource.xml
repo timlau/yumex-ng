@@ -2,7 +2,7 @@
 <gresources>
   <gresource prefix="/dk/yumex/Yumex">
     <file preprocess="xml-stripblanks">ui/window.ui</file>
-    <file preprocess="xml-stripblanks">ui/package_row.ui</file>
+    <file preprocess="xml-stripblanks">ui/package_view.ui</file>
     <file>style.css</file>
   </gresource>
 </gresources>

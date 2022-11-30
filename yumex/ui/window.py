@@ -20,7 +20,7 @@
 from gi.repository import Gtk, Adw, Gio
 
 from yumex.constants import rootdir, app_id
-from yumex.ui.package_row import YumexPackageRow
+from yumex.ui.pachage_view import YumexPackageView
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -58,16 +58,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_packages(self):
         # self.content_packages.append(self.create_label_center("Packages"))
-        pkg = YumexPackageRow("packagename 1", "this is a package",installed=True)
-        self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 2", "this is a package",repo="Updates")
-        self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 3", "this is a package",installed=True)
-        self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 4", "this is a package",version="12.23.4-34")
-        self.content_packages.append(pkg)
-        pkg = YumexPackageRow("packagename 5", "this is a package")
-        self.content_packages.append(pkg)
+        data = [(f"package{nr}",f"{nr}.{nr}","fedora") for nr in range(5)]
+        self.package_view = YumexPackageView(self, data)
+        self.content_packages.append(self.package_view)
 
     def setup_groups(self):
         self.content_groups.append(self.create_label_center("Groups"))

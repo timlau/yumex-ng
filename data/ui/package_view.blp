@@ -1,0 +1,38 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexPackageView : Gtk.ColumnView {
+    show-column-separators: true;
+    model: selection;
+    Gtk.ColumnViewColumn names {
+        title: _("name");
+        fixed-width: 200;
+        resizable: true;
+        factory: packages;
+    }
+    Gtk.ColumnViewColumn versions {
+        title: _("version");
+        fixed-width: 100;
+        resizable: true;
+        factory: packages;
+    }
+    Gtk.ColumnViewColumn repos {
+        title: _("repo");
+        fixed-width: 100;
+        resizable: true;
+        factory: packages;
+    }
+
+}
+
+
+Gtk.SignalListItemFactory packages {
+    setup => on_packages_setup();
+    bind => on_packages_bind();
+    unbind => on_packages_unbind();
+    teardown => on_packages_teardown();
+}
+
+Gtk.SingleSelection selection {
+    selection-changed => on_selection_changed();
+}

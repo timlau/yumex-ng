@@ -5,3 +5,11 @@
 .package_list {
     margin: 20px;
 }
+
+#version {
+    margin-left: 10px;
+}
+
+#repo {
+    margin-left: 10px;
+}
