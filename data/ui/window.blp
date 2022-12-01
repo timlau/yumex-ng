@@ -50,10 +50,14 @@ template YumexMainWindow : Adw.ApplicationWindow {
               name: "packages";
               title: _("Packages");
               icon-name: "view-paged-symbolic";
-              child: Gtk.ScrolledWindow content_packages { 
-                styles ["package_list"]
-                hexpand: true;
-                vexpand: true;
+              child: Adw.Clamp clamp_packages{ 
+                maximum-size: 1024;
+
+                Gtk.ScrolledWindow content_packages { 
+                  styles ["package_list"]
+                  hexpand: true;
+                  vexpand: true;
+                }
               };
             }
 

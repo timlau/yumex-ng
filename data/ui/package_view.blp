@@ -3,6 +3,8 @@ using Adw 1;
 
 template YumexPackageView : Gtk.ColumnView {
     show-column-separators: true;
+    hexpand: true;
+    vexpand: true;
     model: selection;
     Gtk.ColumnViewColumn names {
         title: _("name");

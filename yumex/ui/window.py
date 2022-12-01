@@ -28,6 +28,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     __gtype_name__ = "YumexMainWindow"
 
     content_packages = Gtk.Template.Child()
+    clamp_packages = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
     content_groups = Gtk.Template.Child("content_groups")
     content_queue = Gtk.Template.Child("content_queue")
@@ -74,13 +75,20 @@ class YumexMainWindow(Adw.ApplicationWindow):
         data = [(f"package{nr}", f"{nr}.{nr}", "fedora") for nr in range(1, 10000)]
         self.package_view.add_packages(data)
         self.content_packages.set_child(self.package_view)
+
         self.package_view.names.set_fixed_width(self.settings.get_int("col-name-width"))
         self.package_view.versions.set_fixed_width(
             self.settings.get_int("col-version-width")
         )
         self.package_view.repos.set_fixed_width(
-            self.settings.get_int("col-version-width")
+            self.settings.get_int("col-repo-width")
         )
+
+        # Set the size of the clamp based on the column sizes
+        clamp_width = 200
+        for setting in ["name","version", "repo"]:
+            clamp_width += self.settings.get_int(f"col-{setting}-width")
+        self.clamp_packages.set_maximum_size(clamp_width)
 
     def setup_groups(self):
         self.content_groups.append(self.create_label_center("Groups"))
