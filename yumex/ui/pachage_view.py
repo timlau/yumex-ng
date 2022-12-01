@@ -33,6 +33,9 @@ class YumexPackageView(Gtk.ColumnView):
         self.selection.set_model(self.store)
         self.last_position = -1
         self.column_num = 0
+        self.props.hexpand = True
+        self.props.vexpand = True
+        self.props.show_column_separators = True
 
     def add_packages(self, data):
         for (name, version, repo) in data:
