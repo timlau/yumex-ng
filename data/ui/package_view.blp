@@ -2,10 +2,15 @@ using Gtk 4.0;
 using Adw 1;
 
 template YumexPackageView : Gtk.ColumnView {
+    name: "package_view";
     show-column-separators: true;
     hexpand: true;
     vexpand: true;
     model: selection;
+    Gtk.ColumnViewColumn queued {
+        factory: queued_factory;
+        title: "✔";
+    }
     Gtk.ColumnViewColumn names {
         title: _("name");
         fixed-width: 200;
@@ -28,19 +33,25 @@ template YumexPackageView : Gtk.ColumnView {
 }
 
 Gtk.SignalListItemFactory name_factory {
-    setup => on_packages_setup();
+    setup => on_package_column_text_setup();
     bind => on_name_bind();
 }
 
 Gtk.SignalListItemFactory version_factory {
-    setup => on_packages_setup();
+    setup => on_package_column_text_setup();
     bind => on_version_bind();
 }
 
 Gtk.SignalListItemFactory repo_factory {
-    setup => on_packages_setup();
+    setup => on_package_column_text_setup();
     bind => on_repo_bind();
 }
+
+Gtk.SignalListItemFactory queued_factory {
+    setup => on_package_column_checkmark_setup();
+    bind => on_queued_bind();
+}
+
 
 Gtk.SingleSelection selection {
     selection-changed => on_selection_changed();

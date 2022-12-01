@@ -80,13 +80,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_view.versions.set_fixed_width(
             self.settings.get_int("col-version-width")
         )
-        self.package_view.repos.set_fixed_width(
-            self.settings.get_int("col-repo-width")
-        )
+        self.package_view.repos.set_fixed_width(self.settings.get_int("col-repo-width"))
 
         # Set the size of the clamp based on the column sizes
         clamp_width = 200
-        for setting in ["name","version", "repo"]:
+        for setting in ["name", "version", "repo"]:
             clamp_width += self.settings.get_int(f"col-{setting}-width")
         self.clamp_packages.set_maximum_size(clamp_width)
 
