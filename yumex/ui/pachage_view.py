@@ -12,6 +12,9 @@ class YumexPackage(GObject.GObject):
         self.name = name
         self.version = version
         self.repo = repo
+        self.summary = "This is a packages there is doing something"
+        self.arch = "x64_86"
+        self.size = "123 Kb"
 
     def __repr__(self):
         return f"{self.name}-{self.version} from {self.repo}"
@@ -25,6 +28,8 @@ class YumexPackageView(Gtk.ColumnView):
     versions = Gtk.Template.Child("versions")
     repos = Gtk.Template.Child("repos")
     queued = Gtk.Template.Child()
+    archs = Gtk.Template.Child()
+    sizes = Gtk.Template.Child()
 
     selection = Gtk.Template.Child("selection")
 
@@ -73,6 +78,18 @@ class YumexPackageView(Gtk.ColumnView):
         label.set_text(data.repo)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
+    def on_arch_bind(self, widget, item):
+        label = item.get_child()  # Get the Gtk.Label stored in the ListItem
+        data = item.get_item()  # get the model item, connected to current ListItem
+        label.set_text(data.arch)  # Update Gtk.Label with data from model item
+
+    @Gtk.Template.Callback()
+    def on_size_bind(self, widget, item):
+        label = item.get_child()  # Get the Gtk.Label stored in the ListItem
+        data = item.get_item()  # get the model item, connected to current ListItem
+        label.set_text(data.size)  # Update Gtk.Label with data from model item
+
+    @Gtk.Template.Callback()
     def on_queued_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
         data = item.get_item()  # get the model item, connected to current ListItem
@@ -90,6 +107,6 @@ class YumexPackageView(Gtk.ColumnView):
         # self.win.show_message(msg)
 
     def on_queued_toggled(self, widget, item):
-        """ update the dataobject with the current check state """
+        """update the dataobject with the current check state"""
         data = item.get_item()
         data.queued = widget.get_active()

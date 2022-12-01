@@ -23,6 +23,9 @@ from yumex.constants import rootdir, app_id
 from yumex.ui.pachage_view import YumexPackageView
 
 
+PACKAGE_COLUMNS = ["name", "version", "repo", "arch", "size"]
+
+
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
 class YumexMainWindow(Adw.ApplicationWindow):
     __gtype_name__ = "YumexMainWindow"
@@ -61,6 +64,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
             "col-repo-width", self.package_view.repos.get_fixed_width()
         )
 
+        self.settings.set_int(
+            "col-arch-width", self.package_view.archs.get_fixed_width()
+        )
+        self.settings.set_int(
+            "col-size-width", self.package_view.sizes.get_fixed_width()
+        )
+
         self.settings.set_boolean("window-maximized", self.is_maximized())
         self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
 
@@ -81,10 +91,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.settings.get_int("col-version-width")
         )
         self.package_view.repos.set_fixed_width(self.settings.get_int("col-repo-width"))
+        self.package_view.archs.set_fixed_width(self.settings.get_int("col-arch-width"))
+        self.package_view.sizes.set_fixed_width(self.settings.get_int("col-size-width"))
 
         # Set the size of the clamp based on the column sizes
         clamp_width = 200
-        for setting in ["name", "version", "repo"]:
+        for setting in PACKAGE_COLUMNS:
             clamp_width += self.settings.get_int(f"col-{setting}-width")
         self.clamp_packages.set_maximum_size(clamp_width)
 
@@ -104,7 +116,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         lbl.props.hexpand = True
         lbl.props.vexpand = True
         lbl.props.label = label
-        lbl.add_css_class("my_label")
+        lbl.add_css_class("page_label")
         lbl.add_css_class("accent")
         return lbl
 

@@ -22,5 +22,11 @@
 		<key name="col-repo-width" type="i">
 			<default>100</default>
 		</key>
+		<key name="col-size-width" type="i">
+			<default>100</default>
+		</key>
+		<key name="col-arch-width" type="i">
+			<default>100</default>
+		</key>
 	</schema>
 </schemalist>

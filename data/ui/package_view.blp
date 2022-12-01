@@ -23,6 +23,18 @@ template YumexPackageView : Gtk.ColumnView {
         resizable: true;
         factory: version_factory;
     }
+    Gtk.ColumnViewColumn archs {
+        title: _("Arch.");
+        fixed-width: 100;
+        resizable: true;
+        factory: arch_factory;
+    }
+    Gtk.ColumnViewColumn sizes {
+        title: _("Size");
+        fixed-width: 100;
+        resizable: true;
+        factory: size_factory;
+    }
     Gtk.ColumnViewColumn repos {
         title: _("repo");
         fixed-width: 100;
@@ -45,6 +57,16 @@ Gtk.SignalListItemFactory version_factory {
 Gtk.SignalListItemFactory repo_factory {
     setup => on_package_column_text_setup();
     bind => on_repo_bind();
+}
+
+Gtk.SignalListItemFactory arch_factory {
+    setup => on_package_column_text_setup();
+    bind => on_arch_bind();
+}
+
+Gtk.SignalListItemFactory size_factory {
+    setup => on_package_column_text_setup();
+    bind => on_size_bind();
 }
 
 Gtk.SignalListItemFactory queued_factory {
