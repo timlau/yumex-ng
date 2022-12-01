@@ -1,7 +1,10 @@
-.my_label {
+
+/* center label in not implemented pages */
+.page_label {
     font-size: 3em;
 }
 
+/* packagelist scrolledwindow */
 .package_list {
     margin: 20px;
 }
@@ -14,12 +17,30 @@
     margin-left: 10px;
 }
 
+/* packages page */
+/* #packages {
+
+} */
+
+/* groups page */
+/* #groups {
+
+} */
+
+/* queue page */
+/* #queue {
+
+} */
+
+
+/* headers labels in packageview */
 #package_view header button label {
     /* color: blue; */
     font-size: 1.2em;
     padding-left: 1em;
 }
 
+/* header label for first column in packageview */
 #package_view header button:first-child label {
     /* color: blue; */
     padding-left: 5px;
