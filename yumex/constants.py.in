@@ -27,4 +27,4 @@ build_type = "@BUILD_TYPE@"
 
 
 # package column names, for save/load values from setting
-PACKAGE_COLUMNS = ["name", "version", "repo", "arch", "size"]
+PACKAGE_COLUMNS = ["name", "version", "repo", "arch", "size", "description"]

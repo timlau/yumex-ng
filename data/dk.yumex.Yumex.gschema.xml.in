@@ -28,5 +28,8 @@
 		<key name="col-arch-width" type="i">
 			<default>100</default>
 		</key>
+		<key name="col-description-width" type="i">
+			<default>250</default>
+		</key>
 	</schema>
 </schemalist>

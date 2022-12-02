@@ -31,7 +31,7 @@ class YumexPackage(GObject.GObject):
         self.name = name
         self.version = version
         self.repo = repo
-        self.summary = "This is a packages there is doing something"
+        self.description = "This is a package there is doing something"
         self.arch = "x64_86"
         self.size = "123 Kb"
 
@@ -49,6 +49,7 @@ class YumexPackageView(Gtk.ColumnView):
     queued = Gtk.Template.Child()
     archs = Gtk.Template.Child()
     sizes = Gtk.Template.Child()
+    descriptions = Gtk.Template.Child()
 
     selection = Gtk.Template.Child("selection")
 
@@ -107,6 +108,12 @@ class YumexPackageView(Gtk.ColumnView):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
         data = item.get_item()  # get the model item, connected to current ListItem
         label.set_text(data.size)  # Update Gtk.Label with data from model item
+
+    @Gtk.Template.Callback()
+    def on_description_bind(self, widget, item):
+        label = item.get_child()  # Get the Gtk.Label stored in the ListItem
+        data = item.get_item()  # get the model item, connected to current ListItem
+        label.set_text(data.description)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_queued_bind(self, widget, item):
