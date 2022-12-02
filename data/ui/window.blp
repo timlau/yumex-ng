@@ -19,17 +19,17 @@ template YumexMainWindow : Adw.ApplicationWindow {
           centering-policy: strict;
 
           [start]
-          ToggleButton sidebar-button {
-            icon-name: "go-jump-symbolic";
-            tooltip-text: _("Apply Package Actions");
-            // clicked => on_sidebar_clicked();
-          }
-          [start]
           Button apply-button {
             styles ["suggested-action"]
             label: _("Apply");
             tooltip-text: _("Apply Package Actions");
             clicked => on_apply_actions_clicked();
+          }
+          [start]
+          ToggleButton sidebar-button {
+            icon-name: "list-drag-handle-symbolic";
+            tooltip-text: _("Apply Package Actions");
+            // clicked => on_sidebar_clicked();
           }
 
           [title]
