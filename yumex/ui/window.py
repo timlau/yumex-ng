@@ -1,4 +1,3 @@
-#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -19,11 +18,8 @@
 
 from gi.repository import Gtk, Adw, Gio
 
-from yumex.constants import rootdir, app_id
+from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
-
-
-PACKAGE_COLUMNS = ["name", "version", "repo", "arch", "size"]
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
