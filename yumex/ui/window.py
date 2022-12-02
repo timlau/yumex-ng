@@ -69,12 +69,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_view.add_packages(data)
         self.content_packages.set_child(self.package_view)
         # set columns width from settings and calc clamp width
-        clamp_width = 200
+        clamp_width = 100
         for setting in PACKAGE_COLUMNS:
             width = self.settings.get_int(f"col-{setting}-width")
             getattr(self.package_view, f"{setting}s").set_fixed_width(width)
             clamp_width += width
         self.clamp_packages.set_maximum_size(clamp_width)
+        self.clamp_packages.set_tightening_threshold(clamp_width)
 
     def setup_groups(self):
         self.content_groups.append(self.create_label_center("Groups"))
