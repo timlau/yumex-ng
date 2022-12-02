@@ -1,0 +1,5 @@
+data/ui/package_view.blp
+data/ui/window.blp
+yumex/ui/pachage_view.py
+yumex/ui/window.py
+yumex/main.py

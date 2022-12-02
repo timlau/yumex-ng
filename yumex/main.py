@@ -30,11 +30,6 @@ from yumex.constants import (  # noqa: F401
 )
 
 
-# temp translation wrapper
-def _(txt):
-    return txt
-
-
 class YumexApplication(Adw.Application):
     """The main application singleton class."""
 

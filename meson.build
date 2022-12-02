@@ -58,7 +58,7 @@ local_conf.set('local_build', 'True')
 
 subdir('data')
 subdir('yumex')
-
+subdir('po')
 
 gnome.post_install(
   glib_compile_schemas: true,

@@ -25,39 +25,44 @@ import locale
 import shutil
 import gettext
 
-is_local = @local_build@ # noqa: E999 
-
-
-pkgdatadir = '@PKGDATA_DIR@'
-localedir = '@LOCALE_DIR@'
+is_local = "@local_build@" == "True"
+pkgdatadir = "@PKGDATA_DIR@"
+localedir = "@LOCALE_DIR@"
 
 sys.dont_write_bytecode = True
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
+gettext.install("yumex", localedir)
 
-if __name__ == '__main__':
+locale.bindtextdomain("yumex", localedir)
+locale.textdomain("yumex")
+
+
+if __name__ == "__main__":
     if is_local:
         # In the local use case, use yumex module from the sourcetree
-        sys.path.insert(1, '@PYTHON@')
+        sys.path.insert(1, "@PYTHON@")
 
         # In the local use case the installed schemas go in <builddir>/data
-        os.environ["XDG_DATA_DIRS"] = '@SCHEMAS_DIR@:' + os.environ.get("XDG_DATA_DIRS", "")
+        os.environ["XDG_DATA_DIRS"] = "@SCHEMAS_DIR@:" + os.environ.get(
+            "XDG_DATA_DIRS", ""
+        )
 
         shutil.copyfile(
-            os.path.join('@BUILD_DIR@', "yumex", "constants.py"),
-            os.path.join('@SOURCE_DIR@', "yumex", "constants.py")
+            os.path.join("@BUILD_DIR@", "yumex", "constants.py"),
+            os.path.join("@SOURCE_DIR@", "yumex", "constants.py"),
         )
 
     import gi
 
-    gi.require_version('Gtk', '4.0')
-    gi.require_version('Adw', '1')
+    gi.require_version("Gtk", "4.0")
+    gi.require_version("Adw", "1")
 
     from gi.repository import Gio
-    resource = Gio.Resource.load(
-        os.path.join(pkgdatadir, 'yumex.gresource'))
+
+    resource = Gio.Resource.load(os.path.join(pkgdatadir, "yumex.gresource"))
     Gio.Resource._register(resource)
 
-
     from yumex import main
+
     sys.exit(main.main())
