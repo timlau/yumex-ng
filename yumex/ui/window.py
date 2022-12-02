@@ -54,22 +54,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings.set_int("window-height", win_size.height)
 
         # Save coloumn widths
-        self.settings.set_int(
-            "col-name-width", self.package_view.names.get_fixed_width()
-        )
-        self.settings.set_int(
-            "col-version-width", self.package_view.versions.get_fixed_width()
-        )
-        self.settings.set_int(
-            "col-repo-width", self.package_view.repos.get_fixed_width()
-        )
-
-        self.settings.set_int(
-            "col-arch-width", self.package_view.archs.get_fixed_width()
-        )
-        self.settings.set_int(
-            "col-size-width", self.package_view.sizes.get_fixed_width()
-        )
+        for setting in PACKAGE_COLUMNS:
+            width = getattr(self.package_view, f"{setting}s").get_fixed_width()
+            width = self.settings.set_int(f"col-{setting}-width", width)
 
         self.settings.set_boolean("window-maximized", self.is_maximized())
         self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
@@ -85,19 +72,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         data = [(f"package{nr}", f"{nr}.{nr}", "fedora") for nr in range(1, 10000)]
         self.package_view.add_packages(data)
         self.content_packages.set_child(self.package_view)
-
-        self.package_view.names.set_fixed_width(self.settings.get_int("col-name-width"))
-        self.package_view.versions.set_fixed_width(
-            self.settings.get_int("col-version-width")
-        )
-        self.package_view.repos.set_fixed_width(self.settings.get_int("col-repo-width"))
-        self.package_view.archs.set_fixed_width(self.settings.get_int("col-arch-width"))
-        self.package_view.sizes.set_fixed_width(self.settings.get_int("col-size-width"))
-
-        # Set the size of the clamp based on the column sizes
+        # set columns width from settings and calc clamp width
         clamp_width = 200
         for setting in PACKAGE_COLUMNS:
-            clamp_width += self.settings.get_int(f"col-{setting}-width")
+            width = self.settings.get_int(f"col-{setting}-width")
+            getattr(self.package_view, f"{setting}s").set_fixed_width(width)
+            clamp_width += width
         self.clamp_packages.set_maximum_size(clamp_width)
 
     def setup_groups(self):
