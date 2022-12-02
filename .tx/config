@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+
+[o:timlau:p:yumex:r:yumex-ng]
+file_filter   = po/<lang>.po
+source_file   = po/yumex.pot
+type          = PO
+minimum_perc  = 0
+resource_name = yumex-ng
+

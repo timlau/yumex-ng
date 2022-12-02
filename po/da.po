@@ -3,13 +3,17 @@
 # This file is distributed under the GNU GPLv3 license.
 # Tim Lauridsen, 2022.
 # 
+# Translators:
+# Tim Lauridsen <tla@rasmil.dk>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 12:19+0100\n"
+"POT-Creation-Date: 2022-12-02 13:35+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
+"Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
 "Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,74 +23,80 @@ msgstr ""
 
 #: data/ui/package_view.blp:15
 msgid "name"
-msgstr ""
+msgstr "Navn"
 
 #: data/ui/package_view.blp:21
 msgid "version"
-msgstr ""
+msgstr "version"
 
 #: data/ui/package_view.blp:27
 msgid "Arch."
-msgstr ""
+msgstr "Ark."
 
 #: data/ui/package_view.blp:33
 msgid "Size"
-msgstr ""
+msgstr "Størrelse"
 
 #: data/ui/package_view.blp:39
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: data/ui/package_view.blp:45
 msgid "repo"
-msgstr ""
+msgstr "kilde"
 
 #: data/ui/window.blp:6
 msgid "Yum Extender"
-msgstr ""
+msgstr "Yum Extender"
 
 #: data/ui/window.blp:23
 msgid "Apply"
-msgstr ""
+msgstr "Udfør"
 
 #: data/ui/window.blp:24
 msgid "Apply Package Actions"
-msgstr ""
+msgstr "Udfør pakke handlinger"
 
 #: data/ui/window.blp:35
 msgid "Main Menu"
-msgstr ""
+msgstr "Hovedmenu"
 
 #: data/ui/window.blp:51
 msgid "Packages"
-msgstr ""
+msgstr "Pakker"
 
 #: data/ui/window.blp:66
 msgid "Groups"
-msgstr ""
+msgstr "Grupper"
 
 #: data/ui/window.blp:76
 msgid "Queue"
-msgstr ""
+msgstr "Kø"
 
 #: data/ui/window.blp:98
 msgid "Preferences"
-msgstr ""
+msgstr "Indstillinger"
 
 #: data/ui/window.blp:103
 msgid "About Yum Extender"
-msgstr ""
+msgstr "Om Yum Extender"
 
-#: yumex/main.py:105
+#: yumex/main.py:100
 msgid ""
 "\n"
 "<ul>\n"
 "<li>Early Build, not released yet</li>\n"
 "</ul>\n"
 msgstr ""
+"\n"
+"<ul>\n"
+"<li>Tidlig Version, ikke udgiver endnu</li>\n"
+"</ul>\n"
 
-#: yumex/main.py:112
+#: yumex/main.py:107
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
+"\n"
+"Yum Extender er et pakke håndterings værktøj til at installer, opdater og slette pakker\n"
