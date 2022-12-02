@@ -18,6 +18,13 @@ template YumexMainWindow : Adw.ApplicationWindow {
         Adw.HeaderBar titlebar {
           centering-policy: strict;
 
+          [start]
+          ToggleButton sidebar-button {
+            icon-name: "go-jump-symbolic";
+            tooltip-text: _("Apply Package Actions");
+            // clicked => on_sidebar_clicked();
+          }
+          [start]
           Button apply-button {
             styles ["suggested-action"]
             label: _("Apply");
@@ -38,7 +45,6 @@ template YumexMainWindow : Adw.ApplicationWindow {
           }
 
         }
-
         Gtk.Box {
           orientation: vertical;
 
@@ -50,15 +56,46 @@ template YumexMainWindow : Adw.ApplicationWindow {
               name: "packages";
               title: _("Packages");
               icon-name: "view-paged-symbolic";
-              child: Adw.Clamp clamp_packages{ 
-                maximum-size: 1024;
+              child: Adw.Flap sidebar {
+                  reveal-flap: bind sidebar-button.active bidirectional;
+                  transition-type: over;
+                  fold-policy: always;
+                  styles ["background"]
+                  [flap]
+                    Gtk.Box {
+                      orientation: vertical;
+                      margin-top: 40;
+                      margin-start: 20;
+                      margin-end: 20;
+                      hexpand: false;
 
-                Gtk.ScrolledWindow content_packages { 
-                  styles ["package_list"]
-                  hexpand: true;
-                  vexpand: true;
-                }
-              };
+                      Gtk.Label {
+                        label: "It's a Flap";
+                      }
+                      Gtk.Label {
+                        label: "It's a Flap";
+                      }
+                      Gtk.Label {
+                        label: "It's a Flap";
+                      }
+                      Gtk.Label {
+                        label: "It's a Flap";
+                      }
+                    }
+                  [separator]
+                    Gtk.Separator {}
+                  [content]
+                  Adw.Clamp clamp_packages{ 
+                    maximum-size: 1024;
+
+                
+                    Gtk.ScrolledWindow content_packages { 
+                      styles ["package_list"]
+                      hexpand: true;
+                      vexpand: true;
+                    }
+                  }
+                };
             }
 
             Adw.ViewStackPage {

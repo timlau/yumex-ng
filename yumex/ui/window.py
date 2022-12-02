@@ -32,6 +32,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     content_groups = Gtk.Template.Child("content_groups")
     content_queue = Gtk.Template.Child("content_queue")
     main_menu = Gtk.Template.Child("main-menu")
+    sidebar = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
