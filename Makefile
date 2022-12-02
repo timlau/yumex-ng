@@ -4,8 +4,7 @@ user:
 	ninja -C builddir run
 
 inst-builddeps:
-	sudo dnf install gtk4-devel libadwaita-devel meson blueprint-compiler transifex-client
-
+	sudo dnf install gtk4-devel libadwaita-devel meson blueprint-compiler
 
 transifex-update:
 	tx pull 
