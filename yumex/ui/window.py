@@ -101,3 +101,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
         self.show_message("Apply pressed")
+
+    @Gtk.Template.Callback()
+    def on_package_filter_activated(self, widget, item):
+        self.show_message(f"package filter : {item.get_name()} selected")

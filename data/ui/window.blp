@@ -64,22 +64,26 @@ template YumexMainWindow : Adw.ApplicationWindow {
                   [flap]
                     Gtk.Box {
                       orientation: vertical;
-                      margin-top: 40;
+                      margin-top: 10;
                       margin-start: 20;
                       margin-end: 20;
-                      hexpand: false;
-
-                      Gtk.Label {
-                        label: "It's a Flap";
-                      }
-                      Gtk.Label {
-                        label: "It's a Flap";
-                      }
-                      Gtk.Label {
-                        label: "It's a Flap";
-                      }
-                      Gtk.Label {
-                        label: "It's a Flap";
+                      margin-bottom: 10;
+                      ListBox package_filter {
+                        name: "package_filter";
+                        selection-mode: single;
+                        ListBoxRow filter_updates{
+                          name: "updates";
+                          Label {label: _("Updates");}
+                        }
+                        ListBoxRow filter_installed{
+                          name: "installed";
+                          Label {label: _("Installed");}
+                        }
+                        ListBoxRow filter_available{
+                          name: "available";
+                          Label {label: _("Available");}
+                        }
+                        row-activated => on_package_filter_activated();
                       }
                     }
                   [separator]
