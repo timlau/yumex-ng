@@ -1,0 +1,92 @@
+# Yum Extender (yumex) POT file
+# Copyright (C) 2022 Tim Lauridsen
+# This file is distributed under the GNU GPLv3 license.
+# Tim Lauridsen, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-02 14:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/ui/package_view.blp:15
+msgid "name"
+msgstr ""
+
+#: data/ui/package_view.blp:21
+msgid "version"
+msgstr ""
+
+#: data/ui/package_view.blp:27
+msgid "Arch."
+msgstr ""
+
+#: data/ui/package_view.blp:33
+msgid "Size"
+msgstr ""
+
+#: data/ui/package_view.blp:39
+msgid "Description"
+msgstr ""
+
+#: data/ui/package_view.blp:45
+msgid "repo"
+msgstr ""
+
+#: data/ui/window.blp:6
+msgid "Yum Extender"
+msgstr ""
+
+#: data/ui/window.blp:23
+msgid "Apply"
+msgstr ""
+
+#: data/ui/window.blp:24
+msgid "Apply Package Actions"
+msgstr ""
+
+#: data/ui/window.blp:35
+msgid "Main Menu"
+msgstr ""
+
+#: data/ui/window.blp:51
+msgid "Packages"
+msgstr ""
+
+#: data/ui/window.blp:66
+msgid "Groups"
+msgstr ""
+
+#: data/ui/window.blp:76
+msgid "Queue"
+msgstr ""
+
+#: data/ui/window.blp:98
+msgid "Preferences"
+msgstr ""
+
+#: data/ui/window.blp:103
+msgid "About Yum Extender"
+msgstr ""
+
+#: yumex/main.py:100
+msgid ""
+"\n"
+"<ul>\n"
+"<li>Early Build, not released yet</li>\n"
+"</ul>\n"
+msgstr ""
+
+#: yumex/main.py:107
+msgid ""
+"\n"
+"Yum Extender is a Package management to install, update and remove packages\n"
+msgstr ""
