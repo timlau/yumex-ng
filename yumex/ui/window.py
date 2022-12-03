@@ -66,8 +66,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def setup_packages(self):
         # self.package_view = build_package_view(self)
         self.package_view = YumexPackageView(self)
-        data = [(f"package{nr}", f"{nr}.{nr}", "fedora") for nr in range(1, 10000)]
-        self.package_view.add_packages(data)
+        self.package_view.add_packages()
         self.content_packages.set_child(self.package_view)
         # set columns width from settings and calc clamp width
         clamp_width = 100

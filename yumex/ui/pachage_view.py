@@ -17,26 +17,11 @@
 #
 
 
-from gi.repository import Gtk, Gio, GObject
+from gi.repository import Gtk, Gio
 
 from yumex.constants import rootdir
-
-
-class YumexPackage(GObject.GObject):
-    """custom data element for a ColumnView model (Must be based on GObject)"""
-
-    def __init__(self, name: str, version: str, repo: str):
-        super(YumexPackage, self).__init__()
-        self.queued = False
-        self.name = name
-        self.version = version
-        self.repo = repo
-        self.description = "This is a package there is doing something"
-        self.arch = "x64_86"
-        self.size = "123 Kb"
-
-    def __repr__(self):
-        return f"{self.name}-{self.version} from {self.repo}"
+from yumex.backend import YumexPackage
+from yumex.backend.dnf import Backend
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/package_view.ui")
@@ -60,10 +45,11 @@ class YumexPackageView(Gtk.ColumnView):
         self.selection.set_model(self.store)
         self.last_position = -1
         self.column_num = 0
+        self.backend = Backend()
 
-    def add_packages(self, data):
-        for (name, version, repo) in data:
-            self.store.append(YumexPackage(name, version, repo))
+    def add_packages(self):
+        for pkg in sorted(self.backend.get_packages()):
+            self.store.append(pkg)
 
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):
@@ -89,7 +75,7 @@ class YumexPackageView(Gtk.ColumnView):
     def on_version_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
         data = item.get_item()  # get the model item, connected to current ListItem
-        label.set_text(data.version)  # Update Gtk.Label with data from model item
+        label.set_text(data.evr)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_repo_bind(self, widget, item):
