@@ -33,6 +33,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
     content_queue = Gtk.Template.Child("content_queue")
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
+    package_filter = Gtk.Template.Child()
+    filter_available = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -66,7 +68,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def setup_packages(self):
         # self.package_view = build_package_view(self)
         self.package_view = YumexPackageView(self)
-        self.package_view.add_packages()
         self.content_packages.set_child(self.package_view)
         # set columns width from settings and calc clamp width
         clamp_width = 100
@@ -76,6 +77,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             clamp_width += width
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width)
+        self.filter_available.activate()
 
     def setup_groups(self):
         self.content_groups.append(self.create_label_center("Groups"))
@@ -103,4 +105,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_package_filter_activated(self, widget, item):
-        self.show_message(f"package filter : {item.get_name()} selected")
+        match item.get_name():
+            case "available":
+                self.package_view.add_packages()
+        self.sidebar.set_reveal_flap(False)
+        # self.show_message(f"package filter : {item.get_name()} selected")
