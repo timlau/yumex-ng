@@ -42,8 +42,8 @@ class YumexPackage(GObject.GObject):
         self.state = PackageState.AVAILABLE
         self.ref_to = None
 
-    def set_installed(self, avail_pkg):
-        self.repo = f"@{avail_pkg.reponame}"
+    def set_installed(self):
+        self.repo = f"@{self.repo}"
         self.installed = True
         self.state = PackageState.INSTALLED
 
@@ -55,6 +55,13 @@ class YumexPackage(GObject.GObject):
     @property
     def size(self):
         return str(self.sizeB)
+
+    @property
+    def styles(self):
+        match self.state:
+            case PackageState.INSTALLED:
+                return ["success"]
+        return []
 
     @property
     def evr(self):

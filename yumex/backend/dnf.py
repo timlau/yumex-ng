@@ -34,11 +34,12 @@ class Packages:
 
     def __init__(self, base):
         self._base = base
-        self._sack = base.sack
-        self._inst_na = self._sack.query().installed()._na_dict()
-        self._update_na = self._sack.query().upgrades()._na_dict()
+        self.sack = base.sack
+        self.query = self.sack.query()
+        self._inst_na = self.query.installed()._na_dict()
+        self._update_na = self.query.upgrades()._na_dict()
 
-    def _filter_packages(self, pkg_list, replace=True):
+    def _filter_packages(self, pkg_list):
         """
         Filter a list of package objects and replace
         the installed ones with the installed object, instead
@@ -46,31 +47,13 @@ class Packages:
         """
         pkgs = []
         for pkg in pkg_list:
+            ypkg = YumexPackage(pkg)
             key = (pkg.name, pkg.arch)
             inst_pkg = self._inst_na.get(key, [None])[0]
-            upd_pkg = self._update_na.get(key, [None])[0]
-            if inst_pkg and inst_pkg.evr == pkg.evr:
-                # print(inst_pkg, pkg.reponame)
-                if replace:
-                    new_pkg = YumexPackage(inst_pkg)
-                    new_pkg.set_installed(pkg)
-                    pkgs.append(new_pkg)
-            if upd_pkg and upd_pkg.evr == pkg.evr:
-                new_pkg = YumexPackage(upd_pkg)
-                new_pkg.set_update(inst_pkg)
-                pkgs.append(new_pkg)
-
-            else:
-                new_pkg = YumexPackage(pkg)
-                pkgs.append(new_pkg)
+            if inst_pkg:
+                ypkg.set_installed()
+            pkgs.append(ypkg)
         return pkgs
-
-    @property
-    def query(self):
-        """
-        Get the query object from the current sack
-        """
-        return self._sack.query()
 
     @property
     def installed(self):
@@ -98,14 +81,11 @@ class Packages:
             return self._filter_packages(self.query.latest().run())
 
     @property
-    def available(self, showdups=False):
+    def available(self):
         """
         available packages there is not installed yet
         """
-        if showdups:
-            return self._filter_packages(self.query.available().run(), replace=False)
-        else:
-            return self._filter_packages(self.query.latest().run(), replace=True)
+        return self._filter_packages(self.query.available().run())
 
     @property
     def extras(self):
