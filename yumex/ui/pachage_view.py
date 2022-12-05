@@ -50,10 +50,10 @@ class YumexPackageView(Gtk.ColumnView):
         self.column_num = 0
         self.backend = Backend()
 
-    def add_packages(self):
+    def add_packages(self, pkg_filter="available"):
         print("Loading packages")
         st = time.time()
-        pkgs = sorted(self.backend.get_packages(), key=lambda n: n.name)
+        pkgs = sorted(self.backend.get_packages(pkg_filter), key=lambda n: n.name)
         et = time.time()
         print("Get packages from dnf")
         print("Execution time:", time.strftime("%H:%M:%S", time.gmtime(et - st)))

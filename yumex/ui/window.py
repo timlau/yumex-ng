@@ -107,6 +107,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_package_filter_activated(self, widget, item):
         match item.get_name():
             case "available":
-                self.package_view.add_packages()
+                self.package_view.add_packages('available')
+            case "installed":
+                self.package_view.add_packages('installed')
+
         self.sidebar.set_reveal_flap(False)
         # self.show_message(f"package filter : {item.get_name()} selected")

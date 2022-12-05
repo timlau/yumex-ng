@@ -24,7 +24,7 @@ import dnf.const
 import dnf.conf
 import dnf.subject
 
-from yumex.backend import YumexPackage
+from yumex.backend import YumexPackage, PackageState
 
 
 class Packages:
@@ -60,7 +60,19 @@ class Packages:
         """
         get installed packages
         """
-        return self.query.installed().run()
+        avail_na = self.query.available()._na_dict()
+        pkgs = []
+        for pkg in self.query.installed().run():
+            key = (pkg.name, pkg.arch)
+            repo_pkg = avail_na.get(key, [None])[0]
+            if repo_pkg:
+                ypkg = YumexPackage(repo_pkg)
+                ypkg.set_installed()
+            else:
+                ypkg = YumexPackage(pkg)
+                ypkg.state = PackageState.INSTALLED
+            pkgs.append(ypkg)
+        return pkgs
 
     @property
     def updates(self):
@@ -177,5 +189,10 @@ class Backend(DnfBase):
     def __init__(self):
         DnfBase.__init__(self)
 
-    def get_packages(self):
-        return Packages(self).available
+    def get_packages(self, pkg_filter):
+        match pkg_filter:
+            case "available":
+                return Packages(self).available
+            case "installed":
+                return Packages(self).installed
+        return []
