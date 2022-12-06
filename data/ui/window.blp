@@ -47,6 +47,16 @@ template YumexMainWindow : Adw.ApplicationWindow {
         }
         Gtk.Box {
           orientation: vertical;
+          Gtk.SearchBar search_bar {
+            search-mode-enabled: true;
+            child: Gtk.Box {
+              orientation: vertical;
+              hexpand: true;
+              Gtk.SearchEntry search {
+
+              }
+            }; 
+          }
 
           Adw.ViewStack view_stack {
             vexpand: true;
