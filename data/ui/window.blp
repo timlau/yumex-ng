@@ -109,15 +109,24 @@ template YumexMainWindow : Adw.ApplicationWindow {
                         margin-end: 20;
                         ListBoxRow filter_updates{
                           name: "updates";
-                          Label {label: _("Updates");}
+                          Label {
+                            label: _("Updates");
+                            tooltip-text: _("Show available updates");
+                          }
                         }
                         ListBoxRow filter_installed{
                           name: "installed";
-                          Label {label: _("Installed");}
+                          Label {
+                            label: _("Installed");
+                            tooltip-text: _("Show installed packages");
+                          }
                         }
                         ListBoxRow filter_available{
                           name: "available";
-                          Label {label: _("Available");}
+                          Label {
+                            label: _("Available");
+                            tooltip-text: _("Show available packages");
+                          }
                         }
                         row-activated => on_package_filter_activated();
                       }
