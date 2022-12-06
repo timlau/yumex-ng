@@ -47,14 +47,8 @@
     font-size: 2em;
 }
 
-#package_filter {
-    border: 1px solid;
-    border-radius: 5px;
-}
-
 #package_filter row {
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px; 
+    border-radius: 5px; 
 }

@@ -60,17 +60,16 @@ template YumexMainWindow : Adw.ApplicationWindow {
                   reveal-flap: bind sidebar-button.active bidirectional;
                   transition-type: over;
                   fold-policy: always;
-                  styles ["background"]
                   [flap]
                     Gtk.Box {
+                      styles ["background"]
                       orientation: vertical;
-                      margin-top: 10;
-                      margin-start: 20;
-                      margin-end: 20;
-                      margin-bottom: 10;
                       ListBox package_filter {
+                        styles ["navigation-sidebar"]
                         name: "package_filter";
                         selection-mode: single;
+                        margin-start: 20;
+                        margin-end: 20;
                         ListBoxRow filter_updates{
                           name: "updates";
                           Label {label: _("Updates");}
