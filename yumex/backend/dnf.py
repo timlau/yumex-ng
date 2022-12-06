@@ -69,8 +69,7 @@ class Packages:
                 ypkg = YumexPackage(repo_pkg)
                 ypkg.set_installed()
             else:
-                ypkg = YumexPackage(pkg)
-                ypkg.state = PackageState.INSTALLED
+                ypkg = YumexPackage(pkg, state=PackageState.INSTALLED)
             pkgs.append(ypkg)
         return pkgs
 
@@ -79,25 +78,25 @@ class Packages:
         """
         get available updates
         """
-        return self.query.upgrades().run()
-
-    @property
-    def all(self, showdups=False):
-        """
-        all packages in the repositories
-        installed ones are replace with the install package objects
-        """
-        if showdups:
-            return self._filter_packages(self.query.available().run())
-        else:
-            return self._filter_packages(self.query.latest().run())
+        return [
+            YumexPackage(pkg, state=PackageState.UPDATE)
+            for pkg in self.query.upgrades().run()
+        ]
 
     @property
     def available(self):
         """
         available packages there is not installed yet
         """
-        return self._filter_packages(self.query.available().run())
+        pkgs = []
+        for pkg in self.query.available().run():
+            ypkg = YumexPackage(pkg)
+            key = (pkg.name, pkg.arch)
+            inst_pkg = self._inst_na.get(key, [None])[0]
+            if inst_pkg:
+                ypkg.set_installed()
+            pkgs.append(ypkg)
+        return pkgs
 
     @property
     def extras(self):
@@ -192,7 +191,9 @@ class Backend(DnfBase):
     def get_packages(self, pkg_filter):
         match pkg_filter:
             case "available":
-                return Packages(self).available
+                return self.packages.available
             case "installed":
-                return Packages(self).installed
+                return self.packages.installed
+            case "updates":
+                return self.packages.updates
         return []

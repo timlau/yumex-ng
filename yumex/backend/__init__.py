@@ -28,7 +28,7 @@ class PackageState(Enum):
 
 
 class YumexPackage(GObject.GObject):
-    def __init__(self, pkg):
+    def __init__(self, pkg, state=PackageState.AVAILABLE):
         super(YumexPackage, self).__init__()
         self.queued = False
         self.name = pkg.name
@@ -39,7 +39,7 @@ class YumexPackage(GObject.GObject):
         self.repo = pkg.reponame
         self.description = pkg.summary
         self.sizeB = pkg.size
-        self.state = PackageState.AVAILABLE
+        self.state = state
         self.ref_to = None
 
     def set_installed(self):
@@ -61,6 +61,8 @@ class YumexPackage(GObject.GObject):
         match self.state:
             case PackageState.INSTALLED:
                 return ["success"]
+            case PackageState.UPDATE:
+                return ['error']
         return []
 
     @property

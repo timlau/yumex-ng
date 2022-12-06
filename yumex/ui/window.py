@@ -110,6 +110,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.package_view.add_packages('available')
             case "installed":
                 self.package_view.add_packages('installed')
+            case "updates":
+                self.package_view.add_packages('updates')
 
         self.sidebar.set_reveal_flap(False)
         # self.show_message(f"package filter : {item.get_name()} selected")
