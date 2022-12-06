@@ -35,14 +35,19 @@ class YumexMainWindow(Adw.ApplicationWindow):
     sidebar = Gtk.Template.Child()
     package_filter = Gtk.Template.Child()
     filter_available = Gtk.Template.Child()
+    stack = Gtk.Template.Child("view_stack")
+    search_button = Gtk.Template.Child("search-button")
+    search_bar = Gtk.Template.Child("search_bar")
+    sidebar_button = Gtk.Template.Child("sidebar-button")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
+        self.app = kwargs["application"]
         self.settings = Gio.Settings(app_id)
 
         self.connect("unrealize", self.save_window_props)
-
+        # connect to changes on Adw.ViewStack
+        self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.setup_gui()
 
     def save_window_props(self, *args):
@@ -66,7 +71,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_queue()
 
     def setup_packages(self):
-        # self.package_view = build_package_view(self)
+        """Setup the packages page"""
         self.package_view = YumexPackageView(self)
         self.content_packages.set_child(self.package_view)
         # set columns width from settings and calc clamp width
@@ -80,9 +85,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.filter_available.activate()
 
     def setup_groups(self):
+        """Setup the groups page"""
         self.content_groups.append(self.create_label_center("Groups"))
 
     def setup_queue(self):
+        """Setup the groups page"""
         self.content_queue.append(self.create_label_center("Action Queue"))
 
     def show_message(self, title):
@@ -104,14 +111,36 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.show_message("Apply pressed")
 
     @Gtk.Template.Callback()
+    def on_search_changed(self, widget):
+        print(f"search changed : {widget.get_text()}")
+
+    @Gtk.Template.Callback()
     def on_package_filter_activated(self, widget, item):
         match item.get_name():
             case "available":
-                self.package_view.add_packages('available')
+                self.package_view.add_packages("available")
             case "installed":
-                self.package_view.add_packages('installed')
+                self.package_view.add_packages("installed")
             case "updates":
-                self.package_view.add_packages('updates')
+                self.package_view.add_packages("updates")
 
         self.sidebar.set_reveal_flap(False)
         # self.show_message(f"package filter : {item.get_name()} selected")
+
+    def show_on_packages_page(self, show=False):
+        """show/hide widget only used on packages page"""
+        self.search_button.set_visible(show)
+        self.search_bar.set_visible(show)
+        self.sidebar_button.set_visible(show)
+
+    def on_stack_changed(self, widget, position, n_items):
+        """Called when the stack page is changed"""
+        active_name = self.stack.get_visible_child_name()
+        print(f"stack changed : {active_name}")
+        match active_name:
+            case "packages":
+                self.show_on_packages_page(show=True)
+            case "groups":
+                self.show_on_packages_page(show=False)
+            case "queue":
+                self.show_on_packages_page(show=False)

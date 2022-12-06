@@ -7,6 +7,14 @@ template YumexMainWindow : Adw.ApplicationWindow {
   default-width: 1000;
   default-height: 700;
 
+  ShortcutController {
+    scope: managed;
+    Shortcut {
+      trigger: "<Ctrl>q";
+      action: "action(window.close)";
+    }
+  } 
+
   Adw.ToastOverlay toast_overlay {
     Adw.Leaflet leaflet {
       can-navigate-back: true;
@@ -25,6 +33,37 @@ template YumexMainWindow : Adw.ApplicationWindow {
             // clicked => on_sidebar_clicked();
           }
           [start]
+          Gtk.Separator {
+            styles ["spacer"]
+          }
+          [start]
+          ToggleButton search-button {
+            icon-name: "system-search";
+            tooltip-text: _("Search");
+            ShortcutController {
+              scope: managed;
+              Shortcut {
+                trigger: "<Ctrl>F";
+                action: "activate";
+              }
+            } 
+          }
+
+          [title]
+          Adw.ViewSwitcherTitle title {
+            stack: view_stack;
+          }
+          [end]
+          Gtk.MenuButton {
+            tooltip-text: _("Main Menu");
+            icon-name: "open-menu-symbolic";
+            menu-model: main-menu;
+          }
+          [end]
+          Gtk.Separator {
+            styles ["spacer"]
+          }
+          [end]
           Button apply-button {
             styles ["suggested-action"]
             label: _("Apply");
@@ -32,37 +71,25 @@ template YumexMainWindow : Adw.ApplicationWindow {
             clicked => on_apply_actions_clicked();
           }
 
-          [title]
-          Adw.ViewSwitcherTitle title {
-            stack: view_stack;
-          }
-
-          [end]
-          Gtk.MenuButton {
-            tooltip-text: _("Main Menu");
-            icon-name: "open-menu-symbolic";
-            menu-model: main-menu;
-          }
-
         }
         Gtk.Box {
           orientation: vertical;
           Gtk.SearchBar search_bar {
-            search-mode-enabled: true;
-            child: Gtk.Box {
-              orientation: vertical;
-              Gtk.SearchEntry search {
+            search-mode-enabled: bind search-button.active bidirectional;
+            key-capture-widget: YumexMainWindow;
+            child: Gtk.SearchEntry search {
                 max-width-chars: 40;
-
-              }
-            }; 
+                search-delay: 500;
+                search-changed => on_search_changed();
+              };
           }
+
 
           Adw.ViewStack view_stack {
             vexpand: true;
             hexpand: true;
 
-            Adw.ViewStackPage {
+            Adw.ViewStackPage package_page {
               name: "packages";
               title: _("Packages");
               icon-name: "view-paged-symbolic";
@@ -115,7 +142,6 @@ template YumexMainWindow : Adw.ApplicationWindow {
               name: "groups";
               title: _("Groups");
               icon-name: "starred-symbolic";
-
               child: Gtk.Box content_groups { 
                 orientation: vertical;
               };
@@ -155,3 +181,4 @@ menu main-menu {
     }
   }
 }
+
