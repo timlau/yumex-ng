@@ -51,8 +51,8 @@ template YumexMainWindow : Adw.ApplicationWindow {
             search-mode-enabled: true;
             child: Gtk.Box {
               orientation: vertical;
-              hexpand: true;
               Gtk.SearchEntry search {
+                max-width-chars: 40;
 
               }
             }; 
