@@ -88,7 +88,7 @@ class YumexPackageView(Gtk.ColumnView):
         et = time.time()
         log(f"number of packages : {len(pkgs)}")
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
-        log(f"Execution time: {elapsed}")
+        log(f"Execution time (add_packages_to_store) : {elapsed}")
 
     def set_styles(self, item, data):
         current_styles = item.get_css_classes()

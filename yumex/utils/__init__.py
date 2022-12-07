@@ -30,11 +30,15 @@ from yumex.constants import build_type
 def setup_logging():
     if build_type == "debug":
         logging.basicConfig(
-            level=logging.DEBUG, format="%(levelname)-6s: (%(name)-5s) -  %(message)s"
+            level=logging.DEBUG,
+            format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
+            datefmt="%H:%M:%S",
         )
     else:
         logging.basicConfig(
-            level=logging.WARNING, format="%(levelname)-6s: (%(name)-5s) -  %(message)s"
+            level=logging.WARNING,
+            format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
+            datefmt="%H:%M:%S",
         )
 
 
