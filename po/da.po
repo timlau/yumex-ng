@@ -51,11 +51,11 @@ msgstr "Yum Extender"
 
 #: data/ui/window.blp:32
 msgid "Select Package filters"
-msgstr ""
+msgstr "Vælg pakke filter"
 
 #: data/ui/window.blp:42
 msgid "Search"
-msgstr ""
+msgstr "Søg"
 
 #: data/ui/window.blp:58
 msgid "Main Menu"
@@ -75,27 +75,27 @@ msgstr "Pakker"
 
 #: data/ui/window.blp:113
 msgid "Updates"
-msgstr ""
+msgstr "Opdateringer"
 
 #: data/ui/window.blp:114
 msgid "Show available updates"
-msgstr ""
+msgstr "Vis tilgængelige pakker"
 
 #: data/ui/window.blp:120
 msgid "Installed"
-msgstr ""
+msgstr "Instalerede"
 
 #: data/ui/window.blp:121
 msgid "Show installed packages"
-msgstr ""
+msgstr "Vis installerede pakker"
 
 #: data/ui/window.blp:127
 msgid "Available"
-msgstr ""
+msgstr "Tilgængelige"
 
 #: data/ui/window.blp:128
 msgid "Show available packages"
-msgstr ""
+msgstr "Vis tilgængelige pakker"
 
 #: data/ui/window.blp:152
 msgid "Groups"
