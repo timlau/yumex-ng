@@ -23,6 +23,7 @@ import dnf.yum
 import dnf.const
 import dnf.conf
 import dnf.subject
+import hawkey
 
 from yumex.backend import YumexPackage, PackageState
 
@@ -83,13 +84,9 @@ class Packages:
             for pkg in self.query.upgrades().run()
         ]
 
-    @property
-    def available(self):
-        """
-        available packages there is not installed yet
-        """
+    def filter_installed(self, query):
         pkgs = []
-        for pkg in self.query.available().run():
+        for pkg in query.run():
             ypkg = YumexPackage(pkg)
             key = (pkg.name, pkg.arch)
             inst_pkg = self._inst_na.get(key, [None])[0]
@@ -97,6 +94,13 @@ class Packages:
                 ypkg.set_installed()
             pkgs.append(ypkg)
         return pkgs
+
+    @property
+    def available(self):
+        """
+        available packages there is not installed yet
+        """
+        return self.filter_installed(query=self.query.available())
 
     @property
     def extras(self):
@@ -136,6 +140,12 @@ class Packages:
             if int(po.buildtime) > recentlimit:
                 recent.append(po)
         return recent
+
+    def search(self, txt, field="name"):
+        q = self.query.available()
+        fdict = {f"{field}__substr": txt}
+        q = q.filter(hawkey.ICASE, **fdict)
+        return self.filter_installed(query=q)
 
 
 class DnfBase(dnf.Base):
@@ -197,3 +207,6 @@ class Backend(DnfBase):
             case "updates":
                 return self.packages.updates
         return []
+
+    def search(self, txt, field="name"):
+        return self.packages.search(txt, field=field)

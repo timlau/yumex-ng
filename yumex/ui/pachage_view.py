@@ -74,6 +74,17 @@ class YumexPackageView(Gtk.ColumnView):
         current_styles += data.styles
         item.set_css_classes(current_styles)
 
+    def search(self, txt):
+        if len(txt) > 2:
+            print("search packages")
+            pkgs = sorted(self.backend.search(txt), key=lambda n: n.name)
+            store = Gio.ListStore.new(YumexPackage)
+            for pkg in pkgs:
+                store.append(pkg)
+            self.store = store
+            self.selection.set_model(self.store)
+            print(f"number of packages found : {len(pkgs)}")
+
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):
         check = Gtk.CheckButton()

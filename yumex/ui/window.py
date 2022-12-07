@@ -112,10 +112,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
-        print(f"search changed : {widget.get_text()}")
+        search_txt = widget.get_text()
+        print(f"search changed : {search_txt}")
+        if search_txt:
+            # remove selection in package filter (sidebar)
+            self.package_filter.unselect_all()
+            self.package_view.search(search_txt)
 
     @Gtk.Template.Callback()
     def on_package_filter_activated(self, widget, item):
+        entry = self.search_bar.get_child()
+        entry.set_text("")
         match item.get_name():
             case "available":
                 self.package_view.add_packages("available")
