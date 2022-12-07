@@ -4,7 +4,7 @@
 # Tim Lauridsen, 2022.
 # 
 # Translators:
-# Tim Lauridsen <tla@rasmil.dk>, 2022
+# Davidmp <medipas@gmail.com>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -13,37 +13,37 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-07 06:43+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
-"Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
-"Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
+"Last-Translator: Davidmp <medipas@gmail.com>, 2022\n"
+"Language-Team: Catalan (https://www.transifex.com/timlau/teams/16939/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/ui/package_view.blp:15
 msgid "name"
-msgstr "Navn"
+msgstr "nom"
 
 #: data/ui/package_view.blp:21
 msgid "version"
-msgstr "version"
+msgstr "versió"
 
 #: data/ui/package_view.blp:27
 msgid "Arch."
-msgstr "Ark."
+msgstr "Arquitectura"
 
 #: data/ui/package_view.blp:33
 msgid "Size"
-msgstr "Størrelse"
+msgstr "Mida"
 
 #: data/ui/package_view.blp:39
 msgid "Description"
-msgstr "Beskrivelse"
+msgstr "Descripció"
 
 #: data/ui/package_view.blp:45
 msgid "repo"
-msgstr "kilde"
+msgstr "dipòsit"
 
 #: data/ui/window.blp:6
 msgid "Yum Extender"
@@ -59,19 +59,19 @@ msgstr ""
 
 #: data/ui/window.blp:58
 msgid "Main Menu"
-msgstr "Hovedmenu"
+msgstr "Menú principal"
 
 #: data/ui/window.blp:69
 msgid "Apply"
-msgstr "Udfør"
+msgstr "Aplica"
 
 #: data/ui/window.blp:70
 msgid "Apply Package Actions"
-msgstr "Udfør pakke handlinger"
+msgstr "Aplica les accions del paquet"
 
 #: data/ui/window.blp:94
 msgid "Packages"
-msgstr "Pakker"
+msgstr "Paquets"
 
 #: data/ui/window.blp:113
 msgid "Updates"
@@ -99,19 +99,19 @@ msgstr ""
 
 #: data/ui/window.blp:152
 msgid "Groups"
-msgstr "Grupper"
+msgstr "Grups"
 
 #: data/ui/window.blp:161
 msgid "Queue"
-msgstr "Kø"
+msgstr "Cua"
 
 #: data/ui/window.blp:183
 msgid "Preferences"
-msgstr "Indstillinger"
+msgstr "Preferències"
 
 #: data/ui/window.blp:188
 msgid "About Yum Extender"
-msgstr "Om Yum Extender"
+msgstr "Quant al Yum Extender"
 
 #: yumex/main.py:100
 msgid ""
@@ -122,7 +122,7 @@ msgid ""
 msgstr ""
 "\n"
 "<ul>\n"
-"<li>Tidlig Version, ikke udgiver endnu</li>\n"
+"<li>Construcció primerenca, encara no publicada</li>\n"
 "</ul>\n"
 
 #: yumex/main.py:107
@@ -131,4 +131,4 @@ msgid ""
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 "\n"
-"Yum Extender er et pakke håndterings værktøj til at installere, opdatere og slette pakker\n"
+"El Yum Extender és un gestor per instal·lar, actualitzar i suprimir paquets.\n"

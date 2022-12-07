@@ -3,9 +3,6 @@
 # This file is distributed under the GNU GPLv3 license.
 # Tim Lauridsen, 2022.
 # 
-# Translators:
-# Tim Lauridsen <tla@rasmil.dk>, 2022
-# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -13,41 +10,40 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-07 06:43+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
-"Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
-"Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
+"Language-Team: Italian (Italy) (https://www.transifex.com/timlau/teams/16939/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: data/ui/package_view.blp:15
 msgid "name"
-msgstr "Navn"
+msgstr ""
 
 #: data/ui/package_view.blp:21
 msgid "version"
-msgstr "version"
+msgstr ""
 
 #: data/ui/package_view.blp:27
 msgid "Arch."
-msgstr "Ark."
+msgstr ""
 
 #: data/ui/package_view.blp:33
 msgid "Size"
-msgstr "Størrelse"
+msgstr ""
 
 #: data/ui/package_view.blp:39
 msgid "Description"
-msgstr "Beskrivelse"
+msgstr ""
 
 #: data/ui/package_view.blp:45
 msgid "repo"
-msgstr "kilde"
+msgstr ""
 
 #: data/ui/window.blp:6
 msgid "Yum Extender"
-msgstr "Yum Extender"
+msgstr ""
 
 #: data/ui/window.blp:32
 msgid "Select Package filters"
@@ -59,19 +55,19 @@ msgstr ""
 
 #: data/ui/window.blp:58
 msgid "Main Menu"
-msgstr "Hovedmenu"
+msgstr ""
 
 #: data/ui/window.blp:69
 msgid "Apply"
-msgstr "Udfør"
+msgstr ""
 
 #: data/ui/window.blp:70
 msgid "Apply Package Actions"
-msgstr "Udfør pakke handlinger"
+msgstr ""
 
 #: data/ui/window.blp:94
 msgid "Packages"
-msgstr "Pakker"
+msgstr ""
 
 #: data/ui/window.blp:113
 msgid "Updates"
@@ -99,19 +95,19 @@ msgstr ""
 
 #: data/ui/window.blp:152
 msgid "Groups"
-msgstr "Grupper"
+msgstr ""
 
 #: data/ui/window.blp:161
 msgid "Queue"
-msgstr "Kø"
+msgstr ""
 
 #: data/ui/window.blp:183
 msgid "Preferences"
-msgstr "Indstillinger"
+msgstr ""
 
 #: data/ui/window.blp:188
 msgid "About Yum Extender"
-msgstr "Om Yum Extender"
+msgstr ""
 
 #: yumex/main.py:100
 msgid ""
@@ -120,15 +116,9 @@ msgid ""
 "<li>Early Build, not released yet</li>\n"
 "</ul>\n"
 msgstr ""
-"\n"
-"<ul>\n"
-"<li>Tidlig Version, ikke udgiver endnu</li>\n"
-"</ul>\n"
 
 #: yumex/main.py:107
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
-"\n"
-"Yum Extender er et pakke håndterings værktøj til at installere, opdatere og slette pakker\n"
