@@ -153,12 +153,13 @@ class DnfBase(dnf.Base):
     class to encapsulate and extend the dnf.Base API
     """
 
-    def __init__(self, setup_sack=True):
+    def __init__(self, setup_sack=False):
         dnf.Base.__init__(self)
         # setup the dnf cache
         RELEASEVER = dnf.rpm.detect_releasever(self.conf.installroot)
         self.conf.substitutions["releasever"] = RELEASEVER
         # read the repository infomation
+        self._packages = None
         self.read_all_repos()
         if setup_sack:
             # populate the dnf sack
@@ -172,6 +173,8 @@ class DnfBase(dnf.Base):
     @property
     def packages(self):
         """property to get easy acceess to packages"""
+        if not self._packages:
+            self.setup_base()
         return self._packages
 
     def cachedir_fit(self):
