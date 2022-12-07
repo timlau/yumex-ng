@@ -220,7 +220,8 @@ class Backend(DnfBase):
                 return self.packages.installed
             case "updates":
                 return self.packages.updates
-        return []
+            case _:
+                return []
 
     def search(self, txt, field="name"):
         return self.packages.search(txt, field=field)
