@@ -18,9 +18,11 @@
 
 import logging
 
+from yumex.constants import build_type
 
-def setup_logging(debug=True):
-    if debug:
+
+def setup_logging():
+    if build_type == "debug":
         logging.basicConfig(
             level=logging.DEBUG, format="%(levelname)-6s: (%(name)-5s) -  %(message)s"
         )
