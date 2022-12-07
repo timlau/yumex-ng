@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 14:31+0100\n"
+"POT-Creation-Date: 2022-12-07 06:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,35 +45,67 @@ msgstr ""
 msgid "Yum Extender"
 msgstr ""
 
-#: data/ui/window.blp:23
-msgid "Apply"
+#: data/ui/window.blp:32
+msgid "Select Package filters"
 msgstr ""
 
-#: data/ui/window.blp:24
-msgid "Apply Package Actions"
+#: data/ui/window.blp:42
+msgid "Search"
 msgstr ""
 
-#: data/ui/window.blp:35
+#: data/ui/window.blp:58
 msgid "Main Menu"
 msgstr ""
 
-#: data/ui/window.blp:51
+#: data/ui/window.blp:69
+msgid "Apply"
+msgstr ""
+
+#: data/ui/window.blp:70
+msgid "Apply Package Actions"
+msgstr ""
+
+#: data/ui/window.blp:94
 msgid "Packages"
 msgstr ""
 
-#: data/ui/window.blp:66
+#: data/ui/window.blp:113
+msgid "Updates"
+msgstr ""
+
+#: data/ui/window.blp:114
+msgid "Show available updates"
+msgstr ""
+
+#: data/ui/window.blp:120
+msgid "Installed"
+msgstr ""
+
+#: data/ui/window.blp:121
+msgid "Show installed packages"
+msgstr ""
+
+#: data/ui/window.blp:127
+msgid "Available"
+msgstr ""
+
+#: data/ui/window.blp:128
+msgid "Show available packages"
+msgstr ""
+
+#: data/ui/window.blp:152
 msgid "Groups"
 msgstr ""
 
-#: data/ui/window.blp:76
+#: data/ui/window.blp:161
 msgid "Queue"
 msgstr ""
 
-#: data/ui/window.blp:98
+#: data/ui/window.blp:183
 msgid "Preferences"
 msgstr ""
 
-#: data/ui/window.blp:103
+#: data/ui/window.blp:188
 msgid "About Yum Extender"
 msgstr ""
 
