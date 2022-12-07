@@ -50,15 +50,28 @@ class YumexPackageView(Gtk.ColumnView):
         self.column_num = 0
         self.backend = Backend()
 
-    def add_packages(self, pkg_filter="available"):
+    def get_packages(self, pkg_filter="available"):
         print("Loading packages")
         st = time.time()
-        pkgs = sorted(self.backend.get_packages(pkg_filter), key=lambda n: n.name)
+        pkgs = sorted(
+            self.backend.get_packages(pkg_filter), key=lambda n: n.name.lower()
+        )
         et = time.time()
-        print("Get packages from dnf")
         print("Execution time:", time.strftime("%H:%M:%S", time.gmtime(et - st)))
+        self.add_packages_to_store(pkgs)
+
+    def search(self, txt):
+        if len(txt) > 2:
+            print("search packages")
+            pkgs = self.backend.search(txt)
+            self.add_packages_to_store(pkgs)
+
+    def add_packages_to_store(self, pkgs):
+        print("Adding packages to store")
+        st = time.time()
+        # create a new store and add packages (big speed improvement)
         store = Gio.ListStore.new(YumexPackage)
-        for pkg in pkgs:
+        for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
             store.append(pkg)
         self.store = store
         self.selection.set_model(self.store)
@@ -73,17 +86,6 @@ class YumexPackageView(Gtk.ColumnView):
         ]
         current_styles += data.styles
         item.set_css_classes(current_styles)
-
-    def search(self, txt):
-        if len(txt) > 2:
-            print("search packages")
-            pkgs = sorted(self.backend.search(txt), key=lambda n: n.name)
-            store = Gio.ListStore.new(YumexPackage)
-            for pkg in pkgs:
-                store.append(pkg)
-            self.store = store
-            self.selection.set_model(self.store)
-            print(f"number of packages found : {len(pkgs)}")
 
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):
