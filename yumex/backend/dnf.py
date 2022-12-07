@@ -143,8 +143,9 @@ class Packages:
 
     def search(self, txt, field="name"):
         q = self.query.available()
-        fdict = {f"{field}__substr": txt}
-        q = q.filter(hawkey.ICASE, **fdict)
+        # field like *txt* and arch != src
+        fdict = {f"{field}__substr": txt, "arch__neq": "src"}
+        q = q.filter(hawkey.ICASE, **fdict).latest()
         return self.filter_installed(query=q)
 
 
