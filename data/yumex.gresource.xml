@@ -3,6 +3,8 @@
   <gresource prefix="/dk/yumex/Yumex">
     <file preprocess="xml-stripblanks">ui/window.ui</file>
     <file preprocess="xml-stripblanks">ui/package_view.ui</file>
+    <file preprocess="xml-stripblanks">ui/queue_view.ui</file>
+    <file preprocess="xml-stripblanks">ui/queue_row.ui</file>
     <file>style.css</file>
   </gresource>
 </gresources>

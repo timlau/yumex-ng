@@ -21,6 +21,7 @@ from gi.repository import Gtk, Adw, Gio
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
+from yumex.ui.queue_view import YumexQueueView
 from yumex.utils import log
 
 
@@ -33,7 +34,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     toast_overlay = Gtk.Template.Child()
     main_view = Gtk.Template.Child()
     content_groups = Gtk.Template.Child("content_groups")
-    content_queue = Gtk.Template.Child("content_queue")
+    content_queue = Gtk.Template.Child()
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
     package_filter = Gtk.Template.Child()
@@ -92,7 +93,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_queue(self):
         """Setup the groups page"""
-        self.content_queue.append(self.create_label_center("Action Queue"))
+        self.queue_view = YumexQueueView(self)
+        self.content_queue.set_child(self.queue_view)
 
     def show_message(self, title, timeout=1):
         toast = Adw.Toast(title=title)

@@ -162,8 +162,16 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Queue");
               icon-name: "system-run-symbolic";
 
-              child: Gtk.Box content_queue {  
+              child: Gtk.Box {  
                 orientation: vertical;
+                Adw.Clamp {
+                    maximum-size: 1024;
+                    margin-top: 20;
+                    margin-bottom: 20;
+                    Gtk.ScrolledWindow content_queue  {
+
+                    }
+                }
               };
             }
           }

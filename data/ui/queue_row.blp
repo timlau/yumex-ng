@@ -1,0 +1,13 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexQueueRow : Adw.ActionRow {
+    title: "some package 1";
+    icon-name: "edit-delete-symbolic";
+    [suffix]
+    Gtk.Button {
+        styles ["flat"]
+        icon-name: "user-trash-symbolic";
+        clicked => on_delete_clicked();
+    }
+}

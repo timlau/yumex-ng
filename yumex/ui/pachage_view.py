@@ -175,3 +175,7 @@ class YumexPackageView(Gtk.ColumnView):
         """update the dataobject with the current check state"""
         data = item.get_item()
         data.queued = widget.get_active()
+        if data.queued:
+            self.win.queue_view.add(data)
+        else:
+            self.win.queue_view.remove(data)
