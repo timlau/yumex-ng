@@ -70,10 +70,10 @@ class YumexPackageView(Gtk.ColumnView):
         st = time.time()
         RunAsync(self.backend.get_packages, set_completed, pkg_filter)
 
-    def search(self, txt):
+    def search(self, txt, field="name"):
         if len(txt) > 2:
             log("search packages")
-            pkgs = self.backend.search(txt)
+            pkgs = self.backend.search(txt, field=field)
             self.add_packages_to_store(pkgs)
 
     def add_packages_to_store(self, pkgs):

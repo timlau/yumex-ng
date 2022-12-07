@@ -144,9 +144,19 @@ class Packages:
     def search(self, txt, field="name"):
         q = self.query.available()
         # field like *txt* and arch != src
-        fdict = {f"{field}__substr": txt, "arch__neq": "src"}
-        q = q.filter(hawkey.ICASE, **fdict).latest()
-        return self.filter_installed(query=q)
+        match field:
+            case "name":
+                fdict = {f"{field}__substr": txt, "arch__neq": "src"}
+            case "summary":
+                fdict = {f"{field}__substr": txt, "arch__neq": "src"}
+            case _:
+                fdict = {f"{field}": txt}
+
+        try:
+            q = q.filter(hawkey.ICASE, **fdict).latest()
+            return self.filter_installed(query=q)
+        except AssertionError:
+            return []
 
 
 class DnfBase(dnf.Base):

@@ -15,6 +15,7 @@
 # Copyright (C) 2022  Tim Lauridsen
 #
 #
+import re
 
 from gi.repository import Gtk, Adw, Gio
 
@@ -116,7 +117,34 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_search_changed(self, widget):
         search_txt = widget.get_text()
         log(f"search changed : {search_txt}")
-        if search_txt:
+        if search_txt and search_txt[0] != ".":
+            # remove selection in package filter (sidebar)
+            self.package_filter.unselect_all()
+            self.package_view.search(search_txt)
+
+    @Gtk.Template.Callback()
+    def on_search_activate(self, widget):
+        allowed_field_map = {
+            "name": "name",
+            "arch": "arch",
+            "repo": "reponame",
+            "desc": "summary",
+        }
+        search_txt = widget.get_text()
+        log(f"search activate : {search_txt}")
+        if search_txt[0] == ".":
+            # syntax: .<field>=<value>
+            cmds = re.compile(r"^\.(.*)=(.*)")
+            res = cmds.match(search_txt)
+            if len(res.groups()) == 2:
+                field, key = res.groups()
+                if field in allowed_field_map:
+                    field = allowed_field_map[field]
+                    self.package_filter.unselect_all()
+                    log(f"searching for : {key} in pkg.{field}")
+                    self.package_view.search(key, field=field)
+
+        else:
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)

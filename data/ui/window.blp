@@ -81,6 +81,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                 max-width-chars: 40;
                 search-delay: 500;
                 search-changed => on_search_changed();
+                activate => on_search_activate();
               };
           }
 
