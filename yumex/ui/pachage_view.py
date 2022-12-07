@@ -23,7 +23,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage
 from yumex.backend.dnf import Backend
-from yumex.utils import log
+from yumex.utils import log, RunAsync
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
@@ -52,15 +52,23 @@ class YumexPackageView(Gtk.ColumnView):
         self.backend = Backend()
 
     def get_packages(self, pkg_filter="available"):
+        def set_completed(result, error=False):
+            self.win.main_view.set_sensitive(True)
+            pkgs = sorted(
+                result,
+                key=lambda n: n.name.lower(),
+            )
+            et = time.time()
+            elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
+            log(f"Execution time: (get-packages) {elapsed}")
+            self.add_packages_to_store(pkgs)
+            toast.dismiss()
+
         log("Loading packages")
+        toast = self.win.show_message("Loading packages, please wait", timeout=0)
+        self.win.main_view.set_sensitive(False)
         st = time.time()
-        pkgs = sorted(
-            self.backend.get_packages(pkg_filter), key=lambda n: n.name.lower()
-        )
-        et = time.time()
-        elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
-        log(f"Execution time: {elapsed}")
-        self.add_packages_to_store(pkgs)
+        RunAsync(self.backend.get_packages, set_completed, pkg_filter)
 
     def search(self, txt):
         if len(txt) > 2:

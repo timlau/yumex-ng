@@ -30,6 +30,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     content_packages = Gtk.Template.Child()
     clamp_packages = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
+    main_view = Gtk.Template.Child()
     content_groups = Gtk.Template.Child("content_groups")
     content_queue = Gtk.Template.Child("content_queue")
     main_menu = Gtk.Template.Child("main-menu")
@@ -45,7 +46,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
         self.settings = Gio.Settings(app_id)
-
+        # save settings on windows close
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
@@ -67,11 +68,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
 
     def setup_gui(self):
-        self.setup_packages()
-        self.setup_groups()
+        self.setup_package_page()
+        self.setup_groups_page()
         self.setup_queue()
 
-    def setup_packages(self):
+    def setup_package_page(self):
         """Setup the packages page"""
         self.package_view = YumexPackageView(self)
         self.content_packages.set_child(self.package_view)
@@ -83,9 +84,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             clamp_width += width
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width)
-        self.filter_available.activate()
 
-    def setup_groups(self):
+    def setup_groups_page(self):
         """Setup the groups page"""
         self.content_groups.append(self.create_label_center("Groups"))
 
@@ -93,10 +93,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Setup the groups page"""
         self.content_queue.append(self.create_label_center("Action Queue"))
 
-    def show_message(self, title):
+    def show_message(self, title, timeout=1):
         toast = Adw.Toast(title=title)
-        toast.set_timeout(1)
+        toast.set_timeout(timeout)
         self.toast_overlay.add_toast(toast)
+        return toast
 
     def create_label_center(self, label):
         lbl = Gtk.Label()
