@@ -23,6 +23,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage
 from yumex.backend.dnf import Backend
+from yumex.utils import log
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
@@ -51,23 +52,24 @@ class YumexPackageView(Gtk.ColumnView):
         self.backend = Backend()
 
     def get_packages(self, pkg_filter="available"):
-        print("Loading packages")
+        log("Loading packages")
         st = time.time()
         pkgs = sorted(
             self.backend.get_packages(pkg_filter), key=lambda n: n.name.lower()
         )
         et = time.time()
-        print("Execution time:", time.strftime("%H:%M:%S", time.gmtime(et - st)))
+        elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
+        log(f"Execution time: {elapsed}")
         self.add_packages_to_store(pkgs)
 
     def search(self, txt):
         if len(txt) > 2:
-            print("search packages")
+            log("search packages")
             pkgs = self.backend.search(txt)
             self.add_packages_to_store(pkgs)
 
     def add_packages_to_store(self, pkgs):
-        print("Adding packages to store")
+        log("Adding packages to store")
         st = time.time()
         # create a new store and add packages (big speed improvement)
         store = Gio.ListStore.new(YumexPackage)
@@ -76,8 +78,9 @@ class YumexPackageView(Gtk.ColumnView):
         self.store = store
         self.selection.set_model(self.store)
         et = time.time()
-        print(f"number of packages : {len(pkgs)}")
-        print("Execution time:", time.strftime("%H:%M:%S", time.gmtime(et - st)))
+        log(f"number of packages : {len(pkgs)}")
+        elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
+        log(f"Execution time: {elapsed}")
 
     def set_styles(self, item, data):
         current_styles = item.get_css_classes()

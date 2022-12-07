@@ -20,6 +20,7 @@ from gi.repository import Gtk, Adw, Gio
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
+from yumex.utils import log
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -113,7 +114,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
         search_txt = widget.get_text()
-        print(f"search changed : {search_txt}")
+        log(f"search changed : {search_txt}")
         if search_txt:
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
@@ -143,7 +144,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_stack_changed(self, widget, position, n_items):
         """Called when the stack page is changed"""
         active_name = self.stack.get_visible_child_name()
-        print(f"stack changed : {active_name}")
+        log(f"stack changed : {active_name}")
         match active_name:
             case "packages":
                 self.show_on_packages_page(show=True)

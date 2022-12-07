@@ -22,6 +22,7 @@ import sys
 from gi.repository import Gtk, Gdk, Gio, Adw, GLib  # noqa: F401
 
 from yumex.ui.window import YumexMainWindow
+from yumex.utils import setup_logging, log
 from yumex.constants import (  # noqa: F401
     rootdir,
     app_id,
@@ -60,7 +61,7 @@ class YumexApplication(Adw.Application):
 
         self.create_action("about", self.on_about)
         self.create_action("preferences", self.on_preferences)
-        print(f"dark mode: {self.style_manager.get_dark()}")
+        log(f"dark mode: {self.style_manager.get_dark()}")
         self.win.present()
 
     def create_action(self, name, callback, shortcuts=None):
@@ -126,6 +127,7 @@ Yum Extender is a Package management to install, update and remove packages
 
 def main():
     """The application's entry point."""
-    print("yumex is running")
+    setup_logging()
+    log("yumex is running")
     app = YumexApplication()
     return app.run(sys.argv)
