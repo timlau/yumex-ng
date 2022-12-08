@@ -14,3 +14,4 @@ I will try to use DNF5 over Dbus for the package actions, if it is ready to solv
 
 ![The Look](data/gfx/screenshot-mainwin.png) 
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
