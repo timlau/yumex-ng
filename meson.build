@@ -45,7 +45,7 @@ conf.set('local_build', 'False')
 # Local install configuration data
 local_conf = configuration_data()
 local_conf.set('PKGDATA_DIR', join_paths(meson.current_build_dir(), 'data'))
-conf.set('APP_ID', APPLICATION_ID)
+local_conf.set('APP_ID', APPLICATION_ID)
 local_conf.set('LOCALE_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'locale'))
 local_conf.set('PYTHON', meson.current_source_dir())
 local_conf.set('VERSION', meson.project_version())
