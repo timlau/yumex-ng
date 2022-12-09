@@ -17,6 +17,7 @@
 #
 
 from time import time
+from typing import Union
 
 import dnf
 import dnf.yum
@@ -33,14 +34,14 @@ class Packages:
     Get access to packages in the dnf (hawkey) sack in an easy way
     """
 
-    def __init__(self, base):
+    def __init__(self, base: dnf.Base):
         self._base = base
         self.sack = base.sack
         self.query = self.sack.query()
         self._inst_na = self.query.installed()._na_dict()
         self._update_na = self.query.upgrades()._na_dict()
 
-    def _filter_packages(self, pkg_list):
+    def _filter_packages(self, pkg_list: list[dnf.package.Package]):
         """
         Filter a list of package objects and replace
         the installed ones with the installed object, instead
@@ -84,7 +85,7 @@ class Packages:
             for pkg in self.query.upgrades().run()
         ]
 
-    def filter_installed(self, query):
+    def filter_installed(self, query: dnf.query.Query):
         pkgs = []
         for pkg in query.run():
             ypkg = YumexPackage(pkg)
@@ -141,7 +142,7 @@ class Packages:
                 recent.append(po)
         return recent
 
-    def search(self, txt, field="name"):
+    def search(self, txt: str, field="name"):
         q = self.query.available()
         # field like *txt* and arch != src
         match field:
@@ -157,6 +158,28 @@ class Packages:
             return self.filter_installed(query=q)
         except AssertionError:
             return []
+
+    def find_package(self, pkg: YumexPackage) -> dnf.package.Package:
+        """Get the package from given package id."""
+        q = self.query
+        if pkg.repo.startswith("@"):  # installed package
+            f = q.installed()
+            f = f.filter(
+                name=pkg.name, version=pkg.version, release=pkg.release, arch=pkg.arch
+            )
+            if len(f) > 0:
+                return f[0]
+            else:
+                return None
+        else:
+            f = q.available()
+            f = f.filter(
+                name=pkg.name, version=pkg.version, release=pkg.release, arch=pkg.arch
+            )
+            if len(f) > 0:
+                return f[0]
+            else:
+                return None
 
 
 class DnfBase(dnf.Base):
@@ -212,7 +235,7 @@ class Backend(DnfBase):
     def __init__(self):
         DnfBase.__init__(self)
 
-    def get_packages(self, pkg_filter):
+    def get_packages(self, pkg_filter: str) -> list[YumexPackage]:
         match pkg_filter:
             case "available":
                 return self.packages.available
@@ -223,5 +246,12 @@ class Backend(DnfBase):
             case _:
                 return []
 
-    def search(self, txt, field="name"):
+    def search(self, txt: str, field: str = "name") -> list[YumexPackage]:
         return self.packages.search(txt, field=field)
+
+    def get_package_info(self, pkg: YumexPackage, attr: str) -> Union[str, None]:
+        found = self.packages.find_package(pkg)
+        if found:
+            if hasattr(found, attr):
+                return getattr(found, attr)
+        return None

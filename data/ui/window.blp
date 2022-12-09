@@ -143,11 +143,28 @@ template YumexMainWindow : Adw.ApplicationWindow {
                       margin-bottom:  20;
                       margin-start: 10;
                       margin-end: 10;
-                      Gtk.ScrolledWindow content_packages { 
-                        styles ["package_list"]
-                        hexpand: true;
-                        vexpand: true;
+                      Gtk.Paned package_paned {
+                        orientation: vertical;
+                        Gtk.ScrolledWindow content_packages  {
+                          styles ["package_list"]
+                          hexpand: true;
+                          vexpand: true;
+                        }
+                        Gtk.ScrolledWindow content_desc {
+                          Gtk.Box {
+                            margin-top: 20;
+                            margin-bottom:  20;
+                            margin-start: 10;
+                            margin-end: 10;
+                            Gtk.Label package_info {
+                              halign: start;
+                              valign: start;
+                              styles ["accent"]
+                            }
+                          }
+                        }
                       }
+
                     }                
                   }
                 };
@@ -176,9 +193,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                       margin-bottom:  20;
                       margin-start: 10;
                       margin-end: 10;
-                      Gtk.ScrolledWindow content_queue  {
-
-                      }
+                      Gtk.ScrolledWindow content_queue  {}
                     }
                 }
               };

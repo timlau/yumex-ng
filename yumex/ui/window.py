@@ -43,6 +43,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
     search_button = Gtk.Template.Child("search-button")
     search_bar = Gtk.Template.Child("search_bar")
     sidebar_button = Gtk.Template.Child("sidebar-button")
+    package_paned = Gtk.Template.Child()
+    package_info = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -68,6 +70,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
         self.settings.set_boolean("window-maximized", self.is_maximized())
         self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
+        self.settings.set_int("pkg-paned-pos", self.package_paned.get_position())
 
     def setup_gui(self):
         self.setup_package_page()
@@ -86,6 +89,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             clamp_width += width
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width)
+        self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
 
     def setup_groups_page(self):
         """Setup the groups page"""

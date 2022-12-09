@@ -175,14 +175,13 @@ class YumexPackageView(Gtk.ColumnView):
 
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):
-        pass
-        # get the current selection (GtkBitset)
-        # selection = widget.get_selection()
-        # # the first value contain the index of the selection in the data model
-        # # as we use Gtk.SingleSelection, there can only be one ;-)
-        # ndx = selection.get_nth(0)
-        # msg = f"Row {ndx} was selected ( {self.store[ndx]} )"
-        # self.win.show_message(msg)
+        selection = widget.get_selection()
+        ndx = selection.get_nth(0)
+        pkg = self.store[ndx]
+        desc = self.backend.get_package_info(pkg, "description")
+        if not desc:
+            desc = ""
+        self.win.package_info.set_label(desc)
 
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""

@@ -31,5 +31,8 @@
 		<key name="col-description-width" type="i">
 			<default>250</default>
 		</key>
+		<key name="pkg-paned-pos" type="i">
+			<default>900</default>
+		</key>
 	</schema>
 </schemalist>
