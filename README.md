@@ -24,7 +24,7 @@ I will try to use DNF5 over Dbus for the package actions, if it is ready to solv
 
 # what is not working
 
-* Very thing is readonly for now, so no changes to your system
+* Everything is readonly for now, so no changes to your system
 * A lot of other stuff
 
 # current look
