@@ -51,6 +51,12 @@ class YumexQueueView(Gtk.ListView):
             else:
                 log(f"{pkg} was not found in queue")
 
+    def find_by_nevra(self, nevra):
+        for pkg in self.store:
+            if pkg.nevra == nevra:
+                return pkg
+        return None
+
     @Gtk.Template.Callback()
     def on_queue_setup(self, widget, item):
         """setup ui for a list item"""
@@ -95,7 +101,7 @@ class YumexQueueRow(Gtk.Box):
     def on_delete_clicked(self, button):
         """row delete button cliecked"""
         # row -> box -> box -> button
-        row = button.get_parent().get_parent().get_parent()
+        row = button.get_parent()
         pkg = row.pkg
         if pkg:
             row.view.remove(pkg)

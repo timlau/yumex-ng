@@ -52,6 +52,10 @@ class YumexPackageView(Gtk.ColumnView):
         self.backend = Backend()
         self.package_cache = YumexPackageCache(self.backend)
 
+    @property
+    def queue_view(self):
+        return self.win.queue_view
+
     def get_packages(self, pkg_filter="available"):
         def set_completed(result, error=False):
             self.win.main_view.set_sensitive(True)
@@ -74,7 +78,15 @@ class YumexPackageView(Gtk.ColumnView):
     def search(self, txt, field="name"):
         if len(txt) > 2:
             log("search packages")
-            pkgs = self.backend.search(txt, field=field)
+            _pkgs = self.backend.search(txt, field=field)
+            pkgs = []
+            for pkg in _pkgs:
+                qpkg = self.queue_view.find_by_nevra(pkg.nevra)
+                if qpkg:
+                    pkgs.append(qpkg)
+                else:
+                    pkgs.append(pkg)
+
             self.add_packages_to_store(pkgs)
 
     def add_packages_to_store(self, pkgs):
@@ -177,6 +189,6 @@ class YumexPackageView(Gtk.ColumnView):
         data = item.get_item()
         data.queued = widget.get_active()
         if data.queued:
-            self.win.queue_view.add(data)
+            self.queue_view.add(data)
         else:
-            self.win.queue_view.remove(data)
+            self.queue_view.remove(data)
