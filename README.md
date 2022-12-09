@@ -15,6 +15,17 @@ I will try to use DNF5 over Dbus for the package actions, if it is ready to solv
 * install deps `make inst-deps`
 * run `./local.sh`
 
+# what is working
+
+* View packages filtered by installed, updates & available
+* Seach packages by name as you type (used .arch=noarch for searching for noarch in arch (.desc=... , .repo=..., .desc=...))
+* Add packages to queue
+* About Yum Extender
+
+# what is not working
+
+* Very thing is readonly for now, so no changes to your system
+* A lot of other stuff
 
 # current look
 
