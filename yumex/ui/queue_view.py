@@ -16,7 +16,7 @@
 #
 #
 
-from gi.repository import Gtk, Adw, Gio
+from gi.repository import Gtk, Gio
 
 from yumex.constants import rootdir
 
@@ -29,8 +29,7 @@ from yumex.backend import PackageState
 class YumexQueueView(Gtk.ListView):
     __gtype_name__ = "YumexQueueView"
 
-    queue_list = Gtk.Template.Child()
-    selection = Gtk.Template.Child("selection")
+    selection = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -47,7 +46,6 @@ class YumexQueueView(Gtk.ListView):
         """Remove package from queue"""
         if pkg in self.store:
             found, ndx = self.store.find(pkg)
-            print(ndx)
             if found:
                 self.store.remove(ndx)
             else:
@@ -64,20 +62,29 @@ class YumexQueueView(Gtk.ListView):
         """setup data for a list item"""
         row = item.get_child()
         data = item.get_item()
-        row.set_title(data.nevra)
+        row.text.set_label(data.nevra)
         row.pkg = data
         match data.state:
             case PackageState.INSTALLED:
-                row.set_icon_name("edit-delete-symbolic")
+                row.icon.set_from_icon_name("edit-delete-symbolic")
+                row.icon.set_tooltip_text(_("Package will be deleted"))
+                row.icon.add_css_class("error")
             case PackageState.AVAILABLE:
-                row.set_icon_name("emblem-default-symbolic")
+                row.icon.set_from_icon_name("emblem-default-symbolic")
+                row.icon.set_tooltip_text(_("Package will be installed"))
+                row.icon.add_css_class("success")
             case PackageState.UPDATE:
-                row.set_icon_name("emblem-synchronizing-symbolic")
+                row.icon.set_from_icon_name("emblem-synchronizing-symbolic")
+                row.icon.set_tooltip_text(_("Package will be updated"))
+                row.icon.add_css_class("accent")
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/queue_row.ui")
-class YumexQueueRow(Adw.ActionRow):
+class YumexQueueRow(Gtk.Box):
     __gtype_name__ = "YumexQueueRow"
+
+    icon = Gtk.Template.Child()
+    text = Gtk.Template.Child()
 
     def __init__(self, view, **kwargs):
         super().__init__(**kwargs)

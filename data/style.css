@@ -1,4 +1,3 @@
-
 /* center label in not implemented pages */
 .page_label {
     font-size: 3em;
@@ -50,5 +49,10 @@
 #package_filter row {
     padding-left: 20px;
     padding-right: 20px;
-    border-radius: 5px; 
+    border-radius: 5px;
+}
+
+/* disable the hover bg color change */
+#queue_view>row:hover {
+    background-color: @bg-color;
 }

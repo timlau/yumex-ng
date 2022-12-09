@@ -1,10 +1,19 @@
 using Gtk 4.0;
-using Adw 1;
 
-template YumexQueueRow : Adw.ActionRow {
-    title: "some package 1";
-    icon-name: "edit-delete-symbolic";
-    [suffix]
+template YumexQueueRow : Gtk.Box {
+    orientation: horizontal;
+    Gtk.Image icon{
+        margin-start: 10;
+        margin-end: 10;
+        icon-size: normal;
+    }
+
+    Gtk.Label text {
+        hexpand: true;
+        halign: start;  
+        label: "Some package";
+    }
+
     Gtk.Button {
         styles ["flat"]
         icon-name: "user-trash-symbolic";
