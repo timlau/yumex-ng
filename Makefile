@@ -3,8 +3,8 @@ user:
 	ninja -C builddir install
 	ninja -C builddir run
 
-inst-builddeps:
-	sudo dnf install gtk4-devel libadwaita-devel meson blueprint-compiler
+inst-deps:
+	sudo dnf install gtk4-devel libadwaita-devel meson blueprint-compiler python3-dnf 
 
 transifex-update:
 	tx pull 

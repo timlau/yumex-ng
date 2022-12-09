@@ -9,6 +9,12 @@ I will try to use DNF5 over Dbus for the package actions, if it is ready to solv
 
 **This is very early in development, so it might take a long time before it is useful**
 
+# how to test
+
+* check out this repository
+* install deps `make inst-deps`
+* run `./local.sh`
+
 
 # current look
 
