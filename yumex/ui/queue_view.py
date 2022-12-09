@@ -40,7 +40,7 @@ class YumexQueueView(Gtk.ListView):
     def add(self, pkg):
         """Add package to queue"""
         if pkg not in self.store:
-            self.store.append(pkg)
+            self.store.insert_sorted(pkg, lambda a, b: a.state > b.state)
 
     def remove(self, pkg):
         """Remove package from queue"""

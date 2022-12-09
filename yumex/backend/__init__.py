@@ -18,13 +18,13 @@
 
 from gi.repository import GObject
 
-from enum import Enum
+from enum import IntEnum
 
 
-class PackageState(Enum):
-    AVAILABLE = 1
-    INSTALLED = 2
-    UPDATE = 3
+class PackageState(IntEnum):
+    UPDATE = 1
+    AVAILABLE = 2
+    INSTALLED = 3
 
 
 class YumexPackage(GObject.GObject):
@@ -62,7 +62,7 @@ class YumexPackage(GObject.GObject):
             case PackageState.INSTALLED:
                 return ["success"]
             case PackageState.UPDATE:
-                return ['error']
+                return ["error"]
         return []
 
     @property
@@ -78,3 +78,14 @@ class YumexPackage(GObject.GObject):
 
     def __repr__(self) -> str:
         return f"{self.nevra} : {self.repo}"
+
+
+class YumexPackageCache:
+    def __init__(self, backend) -> None:
+        self._packages = {}
+        self.backend = backend
+
+    def get_packages(self, pkgfilter, reset=False):
+        if pkgfilter not in self._packages or reset:
+            self._packages[pkgfilter] = self.backend.get_packages(pkgfilter)
+        return self._packages[pkgfilter]

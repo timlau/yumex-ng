@@ -21,7 +21,7 @@ import time
 from gi.repository import Gtk, Gio
 
 from yumex.constants import rootdir
-from yumex.backend import YumexPackage
+from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.backend.dnf import Backend
 from yumex.utils import log, RunAsync
 
@@ -50,6 +50,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.last_position = -1
         self.column_num = 0
         self.backend = Backend()
+        self.package_cache = YumexPackageCache(self.backend)
 
     def get_packages(self, pkg_filter="available"):
         def set_completed(result, error=False):
@@ -68,7 +69,7 @@ class YumexPackageView(Gtk.ColumnView):
         toast = self.win.show_message("Loading packages, please wait", timeout=0)
         self.win.main_view.set_sensitive(False)
         st = time.time()
-        RunAsync(self.backend.get_packages, set_completed, pkg_filter)
+        RunAsync(self.package_cache.get_packages, set_completed, pkg_filter)
 
     def search(self, txt, field="name"):
         if len(txt) > 2:
