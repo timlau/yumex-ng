@@ -6,5 +6,9 @@
     "python.analysis.diagnosticSeverityOverrides": {
         "reportUndefinedVariable": "none"
     },
+    "mesonbuild.configureOnOpen": false,
+    "files.associations": {
+        "*.py.in": "python"
+    },
+    "css.validate": false,
 }
-
