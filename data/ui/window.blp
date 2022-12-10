@@ -98,7 +98,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
             Adw.ViewStackPage package_page {
               name: "packages";
               title: _("Packages");
-              icon-name: "view-paged-symbolic";
+              icon-name: "system-software-install-symbolic";
               child: Adw.Flap sidebar {
                   reveal-flap: bind sidebar-button.active bidirectional;
                   transition-type: over;
@@ -187,7 +187,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
             Adw.ViewStackPage {
               name: "queue";
               title: _("Queue");
-              icon-name: "system-run-symbolic";
+              icon-name: "view-list-bullet-symbolic";
 
               child: Gtk.Box {  
                 orientation: vertical;
