@@ -97,11 +97,12 @@ class Packages:
         return pkgs
 
     @property
-    def available(self):
+    def available(self) -> list[YumexPackage]:
         """
-        available packages there is not installed yet
+        newest available packages
+        mark the installed ones
         """
-        return self.filter_installed(query=self.query.available())
+        return self.filter_installed(query=self.query.available().latest())
 
     @property
     def extras(self):
