@@ -1,0 +1,39 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexPreferences: Adw.PreferencesWindow {
+  title: _("Preferences");
+  default-height: 400;
+  default-width: 600;
+  modal: true;
+Adw.PreferencesPage {
+    Adw.PreferencesGroup main_group {
+      title: _("Main Setting");
+
+      Adw.ActionRow {
+        title: _("Settings #1");
+        subtitle: _("This setting controls how to do somethine");
+        activatable-widget: pref_setting_01;
+        Gtk.Switch pref_setting_01 {
+          valign: center;
+        }
+      }
+      Adw.ActionRow {
+        title: _("Settings #2");
+        subtitle: _("This setting controls how to do somethine");
+        activatable-widget: pref_setting_02;
+        Gtk.Switch pref_setting_02 {
+          valign: center;
+        }
+      }
+      Adw.ActionRow {
+        title: _("Settings #3");
+        subtitle: _("This setting controls how to do somethine");
+        activatable-widget: pref_setting_03;
+        Gtk.Switch pref_setting_03 {
+          valign: center;
+        }
+      }
+    }
+  }
+}

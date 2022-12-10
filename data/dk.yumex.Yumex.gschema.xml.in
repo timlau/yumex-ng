@@ -34,5 +34,14 @@
 		<key name="pkg-paned-pos" type="i">
 			<default>900</default>
 		</key>
+		<key name="pref-setting-01" type="b">
+			<default>true</default>
+		</key>
+		<key name="pref-setting-02" type="b">
+			<default>true</default>
+		</key>
+		<key name="pref-setting-03" type="b">
+			<default>true</default>
+		</key>
 	</schema>
 </schemalist>

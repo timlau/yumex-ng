@@ -22,6 +22,7 @@ import sys
 from gi.repository import Gtk, Gdk, Gio, Adw, GLib  # noqa: F401
 
 from yumex.ui.window import YumexMainWindow
+from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log
 from yumex.constants import (  # noqa: F401
     rootdir,
@@ -127,7 +128,9 @@ Yum Extender is a Package management to install, update and remove packages
         about.present()
 
     def on_preferences(self, *_args):
-        self.win.show_message("Preferences pressed")
+        prefs = YumexPreferences(self.win)
+        prefs.set_transient_for(self.win)
+        prefs.present()
 
 
 def main():
