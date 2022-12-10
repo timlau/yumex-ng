@@ -95,7 +95,11 @@ class YumexPackageView(Gtk.ColumnView):
         # create a new store and add packages (big speed improvement)
         store = Gio.ListStore.new(YumexPackage)
         for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
-            store.append(pkg)
+            qpkg = self.queue_view.find_by_nevra(pkg.nevra)
+            if qpkg:
+                store.append(qpkg)
+            else:
+                store.append(pkg)
         self.store = store
         self.selection.set_model(self.store)
         et = time.time()
@@ -110,6 +114,21 @@ class YumexPackageView(Gtk.ColumnView):
         ]
         current_styles += data.styles
         item.set_css_classes(current_styles)
+
+    def select_all(self, state: bool):
+        for pkg in self.store:
+            if state:
+                if not pkg.queued:
+                    pkg.queued = True
+                    self.queue_view.add(pkg)
+            else:
+                if pkg.queued:
+                    pkg.queued = False
+                    self.queue_view.remove(pkg)
+        self.refresh()
+
+    def refresh(self):
+        self.selection.selection_changed(0, len(self.store))
 
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):

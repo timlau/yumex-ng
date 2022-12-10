@@ -50,11 +50,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
         self.settings = Gio.Settings(app_id)
+        self.active_pkg_filer = None
         # save settings on windows close
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.setup_gui()
+        self.create_action("select_all", self.on_selectall_activate)
+        self.create_action("deselect_all", self.on_deselectall_activate)
 
     def save_window_props(self, *args):
         win_size = self.get_default_size()
@@ -127,6 +130,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)
+            self.active_pkg_filer = "search"
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
@@ -154,6 +158,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)
+        self.active_pkg_filer = "search"
 
     @Gtk.Template.Callback()
     def on_package_filter_activated(self, widget, item):
@@ -166,9 +171,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.package_view.get_packages("installed")
             case "updates":
                 self.package_view.get_packages("updates")
-
+        self.active_pkg_filer = item.get_name()
         self.sidebar.set_reveal_flap(False)
         # self.show_message(f"package filter : {item.get_name()} selected")
+
+    def on_selectall_activate(self, *_args):
+        # select all work only on updates pkg_filter
+        if self.active_pkg_filer in ["updates", "search"]:
+            self.package_view.select_all(True)
+
+    def on_deselectall_activate(self, *_args):
+        self.package_view.select_all(False)
 
     def show_on_packages_page(self, show=False):
         """show/hide widget only used on packages page"""
@@ -183,7 +196,23 @@ class YumexMainWindow(Adw.ApplicationWindow):
         match active_name:
             case "packages":
                 self.show_on_packages_page(show=True)
+                self.package_view.refresh()
             case "groups":
                 self.show_on_packages_page(show=False)
             case "queue":
                 self.show_on_packages_page(show=False)
+
+    def create_action(self, name, callback, shortcuts=None):
+        """Add an application action.
+
+        Args:
+            name: the name of the action
+            callback: the function to be called when the action is
+            activated
+            shortcuts: an optional list of accelerators
+        """
+        action = Gio.SimpleAction.new(name, None)
+        action.connect("activate", callback)
+        self.add_action(action)
+        if shortcuts:
+            self.set_accels_for_action(f"app.{name}", shortcuts)

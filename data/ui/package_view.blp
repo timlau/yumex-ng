@@ -1,5 +1,6 @@
 using Gtk 4.0;
 using Adw 1;
+using Gio 2.0;
 
 template YumexPackageView : Gtk.ColumnView {
     name: "package_view";
@@ -10,6 +11,7 @@ template YumexPackageView : Gtk.ColumnView {
     Gtk.ColumnViewColumn queued {
         factory: queued_factory;
         title: "✔";
+        header-menu: package_header;
     }
     Gtk.ColumnViewColumn names {
         title: _("name");
@@ -90,3 +92,11 @@ Gtk.SignalListItemFactory description_factory {
 Gtk.SingleSelection selection {
     selection-changed => on_selection_changed();
 }
+
+menu package_header {
+  section {
+    item (_("Select All"), "win.select_all", "checkbox-checked-symbolic")
+    item (_("Deselect All"), "win.deselect_all", "checkbox-checked-symbolic")
+  }
+}
+
