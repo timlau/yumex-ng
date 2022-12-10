@@ -37,7 +37,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
     content_queue = Gtk.Template.Child()
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
-    package_filter = Gtk.Template.Child()
     filter_available = Gtk.Template.Child()
     filter_installed = Gtk.Template.Child()
     filter_updates = Gtk.Template.Child()
@@ -181,10 +180,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.current_pkg_filer = "search"
 
     @Gtk.Template.Callback()
-    def on_package_filter_activated(self, widget, item):
+    def on_package_filter_toggled(self, button):
+        state = button.get_active()
+        if state:
+            log(f"name : {button.get_name()} state: {state}")
+            self.on_package_filter_activated(button)
+
+    @Gtk.Template.Callback()
+    def on_package_filter_activated(self, button):
         entry = self.search_bar.get_child()
         entry.set_text("")
-        pkg_filter = item.get_name()
+        pkg_filter = button.get_name()
         match pkg_filter:
             case "available":
                 self.package_view.get_packages("available")
@@ -192,6 +198,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.package_view.get_packages("installed")
             case "updates":
                 self.package_view.get_packages("updates")
+            case _:
+                log(f"package_filter not found : {pkg_filter}")
         self.current_pkg_filer = pkg_filter
         self.previuos_pkg_filer = pkg_filter
         self.sidebar.set_reveal_flap(False)

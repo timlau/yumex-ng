@@ -107,34 +107,43 @@ template YumexMainWindow : Adw.ApplicationWindow {
                     Gtk.Box {
                       styles ["background"]
                       orientation: vertical;
-                      ListBox package_filter {
-                        styles ["navigation-sidebar"]
-                        name: "package_filter";
-                        selection-mode: single;
+                      Adw.PreferencesGroup package_filter {
+                        title: _("Package filter");
+                        hexpand: false;
                         margin-start: 20;
                         margin-end: 20;
-                        ListBoxRow filter_updates{
-                          name: "updates";
-                          Label {
-                            label: _("Updates");
-                            tooltip-text: _("Show available updates");
+                        Adw.ActionRow {
+                          subtitle: _("Updates");
+                          // subtitle: _("This setting controls how to do somethine");
+                          activatable-widget: filter_updates;
+                          [prefix]
+                          Gtk.CheckButton filter_updates {
+                            name: "updates";
+                            toggled =>  on_package_filter_toggled();
                           }
                         }
-                        ListBoxRow filter_installed{
-                          name: "installed";
-                          Label {
-                            label: _("Installed");
-                            tooltip-text: _("Show installed packages");
+                        Adw.ActionRow {
+                          subtitle: _("Installed");
+                          // subtitle: _("This setting controls how to do somethine");
+                          activatable-widget: filter_installed;
+                          [prefix]
+                          Gtk.CheckButton filter_installed { 
+                            name: "installed";
+                            group: filter_updates;
+                            toggled =>  on_package_filter_toggled();
                           }
                         }
-                        ListBoxRow filter_available{
-                          name: "available";
-                          Label {
-                            label: _("Available");
-                            tooltip-text: _("Show available packages");
+                        Adw.ActionRow {
+                          subtitle: _("Available");
+                          // subtitle: _("This setting controls how to do somethine");
+                          activatable-widget: filter_available;
+                          [prefix]
+                          Gtk.CheckButton filter_available { 
+                            name: "available";
+                            group: filter_updates;
+                            toggled =>  on_package_filter_toggled();
                           }
                         }
-                        row-activated => on_package_filter_activated();
                       }
                     }
                   [separator]
