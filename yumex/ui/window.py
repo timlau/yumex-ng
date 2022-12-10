@@ -60,8 +60,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.setup_gui()
-        self.create_action("select_all", self.on_selectall_activate)
-        self.create_action("deselect_all", self.on_deselectall_activate)
 
     def save_window_props(self, *args):
         win_size = self.get_default_size()
@@ -225,18 +223,3 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.show_on_packages_page(show=False)
             case "queue":
                 self.show_on_packages_page(show=False)
-
-    def create_action(self, name, callback, shortcuts=None):
-        """Add an application action.
-
-        Args:
-            name: the name of the action
-            callback: the function to be called when the action is
-            activated
-            shortcuts: an optional list of accelerators
-        """
-        action = Gio.SimpleAction.new(name, None)
-        action.connect("activate", callback)
-        self.add_action(action)
-        if shortcuts:
-            self.set_accels_for_action(f"app.{name}", shortcuts)
