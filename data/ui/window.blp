@@ -37,7 +37,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
             styles ["spacer"]
           }
           [start]
-          ToggleButton search-button {
+          ToggleButton search_button {
             icon-name: "system-search";
             tooltip-text: _("Search");
             ShortcutController {
@@ -75,9 +75,10 @@ template YumexMainWindow : Adw.ApplicationWindow {
         Gtk.Box {
           orientation: vertical;
           Gtk.SearchBar search_bar {
-            search-mode-enabled: bind search-button.active bidirectional;
+            search-mode-enabled: bind search_button.active bidirectional;
             key-capture-widget: YumexMainWindow;
-            child: Gtk.SearchEntry search {
+            
+            child: Gtk.SearchEntry search_entry {
                 max-width-chars: 40;
                 search-delay: 500;
                 search-changed => on_search_changed();

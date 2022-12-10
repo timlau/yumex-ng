@@ -17,7 +17,7 @@
 #
 import re
 
-from gi.repository import Gtk, Adw, Gio
+from gi.repository import Gtk, Adw, Gio, GLib
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
@@ -33,15 +33,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
     clamp_packages = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
     main_view = Gtk.Template.Child()
-    content_groups = Gtk.Template.Child("content_groups")
+    content_groups = Gtk.Template.Child()
     content_queue = Gtk.Template.Child()
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
     package_filter = Gtk.Template.Child()
     filter_available = Gtk.Template.Child()
+    filter_installed = Gtk.Template.Child()
+    filter_updates = Gtk.Template.Child()
     stack = Gtk.Template.Child("view_stack")
-    search_button = Gtk.Template.Child("search-button")
-    search_bar = Gtk.Template.Child("search_bar")
+    search_button = Gtk.Template.Child()
+    search_bar = Gtk.Template.Child()
+    search_entry = Gtk.Template.Child()
     sidebar_button = Gtk.Template.Child("sidebar-button")
     package_paned = Gtk.Template.Child()
     package_info = Gtk.Template.Child()
@@ -50,7 +53,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
         self.settings = Gio.Settings(app_id)
-        self.active_pkg_filer = None
+        self.current_pkg_filer = None
+        self.previuos_pkg_filer = None
         # save settings on windows close
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
@@ -109,7 +113,22 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.toast_overlay.add_toast(toast)
         return toast
 
+    def load_packages(self, pkg_filter: str):
+        """Trigger the activation of a given pkg filter"""
+        GLib.idle_add(self._load_packages, pkg_filter)
+
+    def _load_packages(self, pkg_filter: str):
+        """Helper for Trigger the activation of a given pkg filter
+        Using GLib.idle_add
+        """
+        if pkg_filter in ["updates", "installed", "available"]:
+            getattr(self, f"filter_{pkg_filter}").activate()
+            if self.search_bar.get_search_mode():
+                self.search_bar.set_search_mode(False)
+        return False
+
     def create_label_center(self, label):
+
         lbl = Gtk.Label()
         lbl.props.hexpand = True
         lbl.props.vexpand = True
@@ -126,11 +145,15 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_search_changed(self, widget):
         search_txt = widget.get_text()
         log(f"search changed : {search_txt}")
-        if search_txt and search_txt[0] != ".":
+        if search_txt == "":
+            if self.current_pkg_filer == "search":
+                # self.last_pkg_filer.activate()
+                self.load_packages(self.previuos_pkg_filer)
+        elif search_txt[0] != ".":
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)
-            self.active_pkg_filer = "search"
+            self.current_pkg_filer = "search"
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
@@ -158,26 +181,28 @@ class YumexMainWindow(Adw.ApplicationWindow):
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)
-        self.active_pkg_filer = "search"
+        self.current_pkg_filer = "search"
 
     @Gtk.Template.Callback()
     def on_package_filter_activated(self, widget, item):
         entry = self.search_bar.get_child()
         entry.set_text("")
-        match item.get_name():
+        pkg_filter = item.get_name()
+        match pkg_filter:
             case "available":
                 self.package_view.get_packages("available")
             case "installed":
                 self.package_view.get_packages("installed")
             case "updates":
                 self.package_view.get_packages("updates")
-        self.active_pkg_filer = item.get_name()
+        self.current_pkg_filer = pkg_filter
+        self.previuos_pkg_filer = pkg_filter
         self.sidebar.set_reveal_flap(False)
         # self.show_message(f"package filter : {item.get_name()} selected")
 
     def on_selectall_activate(self, *_args):
         # select all work only on updates pkg_filter
-        if self.active_pkg_filer in ["updates", "search"]:
+        if self.current_pkg_filer in ["updates", "search"]:
             self.package_view.select_all(True)
 
     def on_deselectall_activate(self, *_args):

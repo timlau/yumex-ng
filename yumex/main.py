@@ -64,11 +64,7 @@ class YumexApplication(Adw.Application):
         log(f"dark mode: {self.style_manager.get_dark()}")
         self.win.present()
         # click the Availble package filter, without looking the UI
-        GLib.idle_add(self.load_packages)
-
-    def load_packages(self):
-        self.win.filter_available.activate()
-        return False
+        self.win.load_packages("available")
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.
