@@ -33,15 +33,15 @@
 
 
 /* headers labels in packageview */
-#package_view header button label {
-    /* color: blue; */
-    font-size: 1.2em;
+#package_view>header>button>box>label {
+    font-size: 1.3em;
     padding-left: 1em;
+    color: @accent_color;
+
 }
 
 /* header label for first column in packageview */
-#package_view header button:first-child label {
-    /* color: blue; */
+#package_view>header>button:first-child>box>label {
     padding-left: 5px;
     font-size: 2em;
 }
