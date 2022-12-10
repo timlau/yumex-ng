@@ -123,8 +123,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """
         if pkg_filter in ["updates", "installed", "available"]:
             getattr(self, f"filter_{pkg_filter}").activate()
-            if self.search_bar.get_search_mode():
-                self.search_bar.set_search_mode(False)
+            self.search_bar.set_search_mode(False)
         return False
 
     def create_label_center(self, label):

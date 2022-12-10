@@ -134,6 +134,7 @@ class YumexPackageView(Gtk.ColumnView):
     def on_package_column_checkmark_setup(self, widget, item):
         check = Gtk.CheckButton()
         check.connect("toggled", self.on_queued_toggled, item)
+        check.set_can_focus(False)
         item.set_child(check)
 
     @Gtk.Template.Callback()
