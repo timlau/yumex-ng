@@ -202,7 +202,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 log(f"package_filter not found : {pkg_filter}")
         self.current_pkg_filer = pkg_filter
         self.previuos_pkg_filer = pkg_filter
-        self.sidebar.set_reveal_flap(False)
         # self.show_message(f"package filter : {item.get_name()} selected")
 
     def on_selectall_activate(self, *_args):

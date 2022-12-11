@@ -46,13 +46,8 @@
     font-size: 2em;
 }
 
-#package_filter row {
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 5px;
-}
 
-/* disable the hover bg color change */
-#queue_view>row:hover {
-    background-color: @bg-color;
+.package-filter-row .title {
+    font-size: .9em;
 }
+  

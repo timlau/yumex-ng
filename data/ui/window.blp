@@ -113,9 +113,10 @@ template YumexMainWindow : Adw.ApplicationWindow {
                         margin-start: 20;
                         margin-end: 20;
                         Adw.ActionRow {
-                          subtitle: _("Updates");
+                          title: _("Updates");
                           // subtitle: _("This setting controls how to do somethine");
                           activatable-widget: filter_updates;
+                          styles ["package-filter-row"]
                           [prefix]
                           Gtk.CheckButton filter_updates {
                             name: "updates";
@@ -123,9 +124,10 @@ template YumexMainWindow : Adw.ApplicationWindow {
                           }
                         }
                         Adw.ActionRow {
-                          subtitle: _("Installed");
+                          title: _("Installed");
                           // subtitle: _("This setting controls how to do somethine");
                           activatable-widget: filter_installed;
+                          styles ["package-filter-row"]
                           [prefix]
                           Gtk.CheckButton filter_installed { 
                             name: "installed";
@@ -134,9 +136,10 @@ template YumexMainWindow : Adw.ApplicationWindow {
                           }
                         }
                         Adw.ActionRow {
-                          subtitle: _("Available");
+                          title: _("Available");
                           // subtitle: _("This setting controls how to do somethine");
                           activatable-widget: filter_available;
+                          styles ["package-filter-row"]
                           [prefix]
                           Gtk.CheckButton filter_available { 
                             name: "available";
