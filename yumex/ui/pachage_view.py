@@ -67,12 +67,16 @@ class YumexPackageView(Gtk.ColumnView):
             elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
             log(f"Execution time: (get-packages) {elapsed}")
             self.add_packages_to_store(pkgs)
-            toast.dismiss()
+            self.win.progress.hide()
             self.win.sidebar.set_reveal_flap(False)
             self.on_selection_changed(self.selection, 0, 0)
 
         log("Loading packages")
-        toast = self.win.show_message("Loading packages, please wait", timeout=0)
+
+        self.win.progress.set_title(_("Loading Packages"))
+        self.win.progress.set_subtitle(_("This make take a little while"))
+
+        self.win.progress.show()
         self.win.main_view.set_sensitive(False)
         st = time.time()
         RunAsync(self.package_cache.get_packages, set_completed, pkg_filter)

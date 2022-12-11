@@ -54,3 +54,12 @@
 .sorting-row label {
     font-size: .8em;
 }
+
+.progress_title {
+    font-size: 1.3em;
+    color: @accent_color;
+}
+
+.progress_subtitle {
+    font-size: .9em;
+}

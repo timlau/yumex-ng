@@ -7,6 +7,7 @@
     <file preprocess="xml-stripblanks">ui/queue_row.ui</file>
     <file preprocess="xml-stripblanks">ui/preferences.ui</file>
     <file preprocess="xml-stripblanks">ui/package_settings.ui</file>
+    <file preprocess="xml-stripblanks">ui/progress.ui</file>
     <file>style.css</file>
   </gresource>
 </gresources>

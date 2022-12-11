@@ -23,6 +23,7 @@ from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.package_settings import YumexPackageSettings
+from yumex.ui.progress import YumexProgress
 from yumex.utils import log
 
 
@@ -75,6 +76,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings.set_int("pkg-paned-pos", self.package_paned.get_position())
 
     def setup_gui(self):
+        self.progress = YumexProgress(self)
+        self.progress.set_transient_for(self)
         self.setup_package_page()
         self.setup_groups_page()
         self.setup_queue()
