@@ -69,6 +69,7 @@ class YumexPackageView(Gtk.ColumnView):
             self.add_packages_to_store(pkgs)
             toast.dismiss()
             self.win.sidebar.set_reveal_flap(False)
+            self.on_selection_changed(self.selection, 0, 0)
 
         log("Loading packages")
         toast = self.win.show_message("Loading packages, please wait", timeout=0)

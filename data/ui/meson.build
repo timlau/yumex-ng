@@ -4,7 +4,8 @@ blueprints = custom_target('blueprints',
     'package_view.blp',
     'queue_view.blp',
     'queue_row.blp',
-    'preferences.blp'
+    'preferences.blp',
+    'package_filter.blp'
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@']

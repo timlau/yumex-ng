@@ -22,6 +22,7 @@ from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
+from yumex.ui.package_filter import YumexPackageFilter
 from yumex.utils import log
 
 
@@ -37,9 +38,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
     content_queue = Gtk.Template.Child()
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
-    filter_available = Gtk.Template.Child()
-    filter_installed = Gtk.Template.Child()
-    filter_updates = Gtk.Template.Child()
     stack = Gtk.Template.Child("view_stack")
     search_button = Gtk.Template.Child()
     search_bar = Gtk.Template.Child()
@@ -94,6 +92,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width)
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
+        self.package_filter = YumexPackageFilter(self)
+        self.sidebar.set_flap(self.package_filter)
 
     def setup_groups_page(self):
         """Setup the groups page"""
@@ -119,7 +119,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         Using GLib.idle_add
         """
         if pkg_filter in ["updates", "installed", "available"]:
-            getattr(self, f"filter_{pkg_filter}").activate()
+            getattr(self.package_filter, f"filter_{pkg_filter}").activate()
             self.search_bar.set_search_mode(False)
         return False
 
@@ -142,14 +142,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         search_txt = widget.get_text()
         log(f"search changed : {search_txt}")
         if search_txt == "":
-            if self.current_pkg_filer == "search":
+            if self.package_filter.current_pkg_filter == "search":
                 # self.last_pkg_filer.activate()
-                self.load_packages(self.previuos_pkg_filer)
+                self.load_packages(self.package_filter.previuos_pkg_filer)
         elif search_txt[0] != ".":
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)
-            self.current_pkg_filer = "search"
+            self.package_filter.current_pkg_filter = "search"
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
@@ -177,36 +177,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
             # remove selection in package filter (sidebar)
             self.package_filter.unselect_all()
             self.package_view.search(search_txt)
-        self.current_pkg_filer = "search"
-
-    @Gtk.Template.Callback()
-    def on_package_filter_toggled(self, button):
-        state = button.get_active()
-        if state:
-            log(f"name : {button.get_name()} state: {state}")
-            self.on_package_filter_activated(button)
-
-    @Gtk.Template.Callback()
-    def on_package_filter_activated(self, button):
-        entry = self.search_bar.get_child()
-        entry.set_text("")
-        pkg_filter = button.get_name()
-        match pkg_filter:
-            case "available":
-                self.package_view.get_packages("available")
-            case "installed":
-                self.package_view.get_packages("installed")
-            case "updates":
-                self.package_view.get_packages("updates")
-            case _:
-                log(f"package_filter not found : {pkg_filter}")
-        self.current_pkg_filer = pkg_filter
-        self.previuos_pkg_filer = pkg_filter
-        # self.show_message(f"package filter : {item.get_name()} selected")
+        self.package_filter.current_pkg_filter = "search"
 
     def on_selectall_activate(self, *_args):
         # select all work only on updates pkg_filter
-        if self.current_pkg_filer in ["updates", "search"]:
+        if self.package_filter.current_pkg_filter in ["updates", "search"]:
             self.package_view.select_all(True)
 
     def on_deselectall_activate(self, *_args):
