@@ -19,6 +19,15 @@ class YumexPackageFilter(Gtk.Box):
         self.current_pkg_filter = None
         self.previuos_pkg_filter = None
 
+    def set_active_filter(self, pkg_filter):
+        match pkg_filter:
+            case "updates":
+                self.filter_updates.activate()
+            case "installed":
+                self.filter_installed.activate()
+            case "available":
+                self.filter_available.activate()
+
     @Gtk.Template.Callback()
     def on_package_filter_toggled(self, button):
         state = button.get_active()

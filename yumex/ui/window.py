@@ -118,9 +118,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Helper for Trigger the activation of a given pkg filter
         Using GLib.idle_add
         """
-        if pkg_filter in ["updates", "installed", "available"]:
-            getattr(self.package_filter, f"filter_{pkg_filter}").activate()
-            self.search_bar.set_search_mode(False)
+        self.package_filter.set_active_filter(pkg_filter)
+        self.search_bar.set_search_mode(False)
         return False
 
     def create_label_center(self, label):
