@@ -28,6 +28,11 @@ class YumexPackageFilter(Gtk.Box):
             case "available":
                 self.filter_available.activate()
 
+    def unselect_all(self):
+        self.filter_available.set_active(False)
+        self.filter_installed.set_active(False)
+        self.filter_updates.set_active(False)
+
     @Gtk.Template.Callback()
     def on_package_filter_toggled(self, button):
         state = button.get_active()
