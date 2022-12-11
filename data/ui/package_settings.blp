@@ -1,0 +1,71 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexPackageSettings : Gtk.Box {
+    styles ["background"]
+    orientation: vertical;
+    width-request: 250;
+    Adw.PreferencesGroup package_filter {
+        title: _("Package filter");
+        hexpand: false;
+        margin-start: 20;
+        margin-end: 20;
+        Adw.ActionRow {
+            title: _("Updates");
+            // subtitle: _("This setting controls how to do somethine");
+            activatable-widget: filter_updates;
+            styles ["package-filter-row"]
+            [prefix]
+            Gtk.CheckButton filter_updates {
+            name: "updates";
+            toggled =>  on_package_filter_toggled();
+            }
+        }
+        Adw.ActionRow {
+            title: _("Installed");
+            // subtitle: _("This setting controls how to do somethine");
+            activatable-widget: filter_installed;
+            styles ["package-filter-row"]
+            [prefix]
+            Gtk.CheckButton filter_installed { 
+            name: "installed";
+            group: filter_updates;
+            toggled =>  on_package_filter_toggled();
+            }
+        }
+        Adw.ActionRow {
+            title: _("Available");
+            // subtitle: _("This setting controls how to do somethine");
+            activatable-widget: filter_available;
+            styles ["package-filter-row"]
+            [prefix]
+            Gtk.CheckButton filter_available { 
+            name: "available";
+            group: filter_updates;
+            toggled =>  on_package_filter_toggled();
+            }
+        }
+    }
+    Adw.PreferencesGroup {
+        title: _("Sorting");
+        hexpand: false;
+        margin-start: 20;
+        margin-end: 20;
+        Adw.ComboRow sort_by {
+            title: _("Sort by:");
+            model: sort_attr;
+            styles ["sorting-row"]
+            activated => on_sorting_activated();
+       }
+    }
+}
+
+
+Gtk.StringList sort_attr{
+    strings [
+        _("Name"),
+        _("Arch"),
+        _("Size"),
+        _("Repo")
+    ]
+}

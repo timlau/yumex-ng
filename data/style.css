@@ -50,4 +50,7 @@
 .package-filter-row .title {
     font-size: .9em;
 }
-  
+
+.sorting-row label {
+    font-size: .8em;
+}

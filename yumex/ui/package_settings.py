@@ -4,13 +4,14 @@ from yumex.constants import rootdir
 from yumex.utils import log  # noqa: F401
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/package_filter.ui")
-class YumexPackageFilter(Gtk.Box):
-    __gtype_name__ = "YumexPackageFilter"
+@Gtk.Template(resource_path=f"{rootdir}/ui/package_settings.ui")
+class YumexPackageSettings(Gtk.Box):
+    __gtype_name__ = "YumexPackageSettings"
 
     filter_available = Gtk.Template.Child()
     filter_installed = Gtk.Template.Child()
     filter_updates = Gtk.Template.Child()
+    sort_by = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -32,6 +33,14 @@ class YumexPackageFilter(Gtk.Box):
         self.filter_available.set_active(False)
         self.filter_installed.set_active(False)
         self.filter_updates.set_active(False)
+
+    def get_sort_attr(self):
+        selected = self.sort_by.get_selected()
+        return ["name", "arch", "size", "repo"][selected]
+
+    @Gtk.Template.Callback()
+    def on_sorting_activated(self, widget):
+        log(f"Sorting activated: {widget}")
 
     @Gtk.Template.Callback()
     def on_package_filter_toggled(self, button):

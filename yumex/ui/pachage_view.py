@@ -96,18 +96,35 @@ class YumexPackageView(Gtk.ColumnView):
         st = time.time()
         # create a new store and add packages (big speed improvement)
         store = Gio.ListStore.new(YumexPackage)
-        for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
+        # for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
+        for pkg in pkgs:
             qpkg = self.queue_view.find_by_nevra(pkg.nevra)
             if qpkg:
                 store.append(qpkg)
             else:
                 store.append(pkg)
+        sort_attr = self.win.package_settings.get_sort_attr()
+        log(f"sorting by : {sort_attr}")
+        store = self.sort_by(store, sort_attr)
         self.store = store
         self.selection.set_model(self.store)
         et = time.time()
         log(f"number of packages : {len(pkgs)}")
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
         log(f"Execution time (add_packages_to_store) : {elapsed}")
+
+    @staticmethod
+    def sort_by(store: Gio.ListStore, attr: str) -> Gio.ListStore:
+        match attr:
+            case "name":
+                store.sort(lambda a, b: a.name.lower() > b.name.lower())
+            case "arch":
+                store.sort(lambda a, b: a.arch > b.arch)
+            case "size":
+                store.sort(lambda a, b: a.sizeB > b.sizeB)
+            case "repo":
+                store.sort(lambda a, b: a.repo > b.repo)
+        return store
 
     def set_styles(self, item, data):
         current_styles = item.get_css_classes()

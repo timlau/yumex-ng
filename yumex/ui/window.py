@@ -22,7 +22,7 @@ from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
-from yumex.ui.package_filter import YumexPackageFilter
+from yumex.ui.package_settings import YumexPackageSettings
 from yumex.utils import log
 
 
@@ -92,8 +92,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width)
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
-        self.package_filter = YumexPackageFilter(self)
-        self.sidebar.set_flap(self.package_filter)
+        self.package_settings = YumexPackageSettings(self)
+        self.sidebar.set_flap(self.package_settings)
 
     def setup_groups_page(self):
         """Setup the groups page"""
@@ -118,7 +118,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Helper for Trigger the activation of a given pkg filter
         Using GLib.idle_add
         """
-        self.package_filter.set_active_filter(pkg_filter)
+        self.package_settings.set_active_filter(pkg_filter)
         self.search_bar.set_search_mode(False)
         return False
 
@@ -141,14 +141,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         search_txt = widget.get_text()
         log(f"search changed : {search_txt}")
         if search_txt == "":
-            if self.package_filter.current_pkg_filter == "search":
+            if self.package_settings.current_pkg_filter == "search":
                 # self.last_pkg_filer.activate()
-                self.load_packages(self.package_filter.previuos_pkg_filer)
+                self.load_packages(self.package_settings.previuos_pkg_filer)
         elif search_txt[0] != ".":
             # remove selection in package filter (sidebar)
-            self.package_filter.unselect_all()
+            self.package_settings.unselect_all()
             self.package_view.search(search_txt)
-            self.package_filter.current_pkg_filter = "search"
+            self.package_settings.current_pkg_filter = "search"
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
@@ -168,19 +168,19 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 field, key = res.groups()
                 if field in allowed_field_map:
                     field = allowed_field_map[field]
-                    self.package_filter.unselect_all()
+                    self.package_settings.unselect_all()
                     log(f"searching for : {key} in pkg.{field}")
                     self.package_view.search(key, field=field)
 
         else:
             # remove selection in package filter (sidebar)
-            self.package_filter.unselect_all()
+            self.package_settings.unselect_all()
             self.package_view.search(search_txt)
-        self.package_filter.current_pkg_filter = "search"
+        self.package_settings.current_pkg_filter = "search"
 
     def on_selectall_activate(self, *_args):
         # select all work only on updates pkg_filter
-        if self.package_filter.current_pkg_filter in ["updates", "search"]:
+        if self.package_settings.current_pkg_filter in ["updates", "search"]:
             self.package_view.select_all(True)
 
     def on_deselectall_activate(self, *_args):
