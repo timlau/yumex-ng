@@ -17,6 +17,7 @@
 #
 
 from gi.repository import GObject
+from yumex.utils import format_number
 
 from enum import IntEnum
 
@@ -38,7 +39,7 @@ class YumexPackage(GObject.GObject):
         self.version = pkg.version
         self.repo = pkg.reponame
         self.description = pkg.summary
-        self.sizeB = pkg.size
+        self.sizeB = int(pkg.size)
         self.state = state
         self.ref_to = None
 
@@ -54,7 +55,7 @@ class YumexPackage(GObject.GObject):
 
     @property
     def size(self):
-        return str(self.sizeB)
+        return format_number(self.sizeB)
 
     @property
     def styles(self):

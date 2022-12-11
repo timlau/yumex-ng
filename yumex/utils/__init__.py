@@ -84,3 +84,47 @@ class RunAsync(threading.Thread):
             log([str(exception), traceback_info])
         self.source_id = GLib.idle_add(self.callback, result, error)
         return self.source_id
+
+
+def format_number(number, SI=0, space=" "):
+    """Turn numbers into human-readable metric-like numbers"""
+    symbols = [
+        "",  # (none)
+        "K",  # kilo
+        "M",  # mega
+        "G",  # giga
+        "T",  # tera
+        "P",  # peta
+        "E",  # exa
+        "Z",  # zetta
+        "Y",
+    ]  # yotta
+
+    if SI:
+        step = 1000.0
+    else:
+        step = 1024.0
+
+    thresh = 999
+    depth = 0
+    max_depth = len(symbols) - 1
+
+    # we want numbers between 0 and thresh, but don't exceed the length
+    # of our list.  In that event, the formatting will be screwed up,
+    # but it'll still show the right number.
+    while number > thresh and depth < max_depth:
+        depth = depth + 1
+        number = number / step
+
+    if isinstance(number, int):
+        # it's an int or a long, which means it didn't get divided,
+        # which means it's already short enough
+        fmt = "%i%s%s"
+    elif number < 9.95:
+        # must use 9.95 for proper sizing.  For example, 9.99 will be
+        # rounded to 10.0 with the .1f fmt string (which is too long)
+        fmt = "%.1f%s%s"
+    else:
+        fmt = "%.0f%s%s"
+
+    return fmt % (float(number or 0), space, symbols[depth])
