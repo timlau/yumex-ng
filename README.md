@@ -29,6 +29,13 @@ I will try to use DNF5 over Dbus for the package actions, if it is ready to solv
 
 # current look
 
-![The Look](data/gfx/screenshot-mainwin.png) 
+## Packages Page
+![packages](data/gfx/yumex-ng-main.png) 
+
+## package view settings
+![package settings](data/gfx/yumex-ng-package-setting.png) 
+
+## Queue Page
+![queue](data/gfx/yumex-ng-queue.png) 
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
