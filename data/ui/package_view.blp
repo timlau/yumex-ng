@@ -8,6 +8,7 @@ template YumexPackageView : Gtk.ColumnView {
     hexpand: true;
     vexpand: true;
     model: selection;
+    styles ["data-table"]
     Gtk.ColumnViewColumn queued {
         factory: queued_factory;
         title: "✔";
