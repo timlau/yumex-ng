@@ -11,10 +11,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
 # Copyright (C) 2022  Tim Lauridsen
-#
-#
+
 import re
 
 from gi.repository import Gtk, Adw, Gio, GLib
@@ -60,6 +58,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_gui()
 
     def save_window_props(self, *args):
+        """Save windows and column information on windows close"""
         win_size = self.get_default_size()
 
         # Save windows size
@@ -76,6 +75,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings.set_int("pkg-paned-pos", self.package_paned.get_position())
 
     def setup_gui(self):
+        """Setup the gui"""
         self.progress = YumexProgress(self)
         self.progress.set_transient_for(self)
         self.setup_package_page()
@@ -108,6 +108,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.content_queue.set_child(self.queue_view)
 
     def show_message(self, title, timeout=1):
+        """Create a toast with text and a given timeout"""
         toast = Adw.Toast(title=title)
         toast.set_timeout(timeout)
         self.toast_overlay.add_toast(toast)
@@ -137,10 +138,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
+        """handler for the apply button"""
         self.show_message("Apply pressed")
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
+        """handler for changes in the seach entry"""
         search_txt = widget.get_text()
         log(f"search changed : {search_txt}")
         if search_txt == "":
@@ -155,6 +158,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
+        """handler for enter pressed in the seach entry"""
         allowed_field_map = {
             "name": "name",
             "arch": "arch",
@@ -182,11 +186,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_settings.current_pkg_filter = "search"
 
     def on_selectall_activate(self, *_args):
+        """handler for select all on selection column right click menu"""
         # select all work only on updates pkg_filter
         if self.package_settings.current_pkg_filter in ["updates", "search"]:
             self.package_view.select_all(True)
 
     def on_deselectall_activate(self, *_args):
+        """handler for deselect all on selection column right click menu"""
         self.package_view.select_all(False)
 
     def show_on_packages_page(self, show=False):
@@ -196,7 +202,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.sidebar_button.set_visible(show)
 
     def on_stack_changed(self, widget, position, n_items):
-        """Called when the stack page is changed"""
+        """handler for stack page is changed"""
         active_name = self.stack.get_visible_child_name()
         log(f"stack changed : {active_name}")
         match active_name:
