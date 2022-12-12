@@ -9,7 +9,8 @@ I will try to use DNF5 over Dbus for the package actions, if it is ready to solv
 
 **This is very early in development, so it might take a long time before it is useful**
 
-Follow news on the development on [![Mastodon](data/gfx/Mastodon-Social-300px.png)](https://fosstodon.org/@nerdytim)
+Follow news on the development on:
+[![Mastodon](data/gfx/Mastodon-Social-150px.png)](https://fosstodon.org/@nerdytim)
 
 # how to test
 
