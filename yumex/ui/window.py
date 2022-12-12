@@ -151,6 +151,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if self.package_settings.current_pkg_filter == "search":
                 # self.last_pkg_filer.activate()
                 self.load_packages(self.package_settings.previuos_pkg_filter)
+                return False
         elif search_txt[0] != ".":
             # remove selection in package filter (sidebar)
             self.package_settings.unselect_all()
