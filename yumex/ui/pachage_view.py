@@ -71,7 +71,7 @@ class YumexPackageView(Gtk.ColumnView):
             self.win.sidebar.set_reveal_flap(False)
             self.on_selection_changed(self.selection, 0, 0)
 
-        log("Loading packages")
+        log(f"Loading packages : {pkg_filter}")
 
         self.win.progress.set_title(_("Loading Packages"))
         self.win.progress.set_subtitle(_("This make take a little while"))
@@ -83,7 +83,7 @@ class YumexPackageView(Gtk.ColumnView):
 
     def search(self, txt, field="name"):
         if len(txt) > 2:
-            log("search packages")
+            log(f"search packages field:{field} value: {txt}")
             _pkgs = self.backend.search(txt, field=field)
             pkgs = []
             for pkg in _pkgs:
@@ -108,17 +108,18 @@ class YumexPackageView(Gtk.ColumnView):
             else:
                 store.append(pkg)
         sort_attr = self.win.package_settings.get_sort_attr()
-        log(f"sorting by : {sort_attr}")
+        log(f" --> sorting by : {sort_attr}")
         store = self.sort_by(store, sort_attr)
         self.store = store
         self.selection.set_model(self.store)
         et = time.time()
-        log(f"number of packages : {len(pkgs)}")
+        log(f" --> number of packages : {len(pkgs)}")
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
-        log(f"Execution time (add_packages_to_store) : {elapsed}")
+        log(f" --> Execution time (add_packages_to_store) : {elapsed}")
 
     def sort(self):
         sort_attr = self.win.package_settings.get_sort_attr()
+        log(f" --> sorting by : {sort_attr}")
         self.store = self.sort_by(self.store, sort_attr)
 
     @staticmethod

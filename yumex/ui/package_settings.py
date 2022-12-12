@@ -68,7 +68,6 @@ class YumexPackageSettings(Gtk.Box):
     def on_package_filter_toggled(self, button):
         state = button.get_active()
         if state:
-            log(f"name : {button.get_name()} state: {state}")
             self.on_package_filter_activated(button)
 
     def on_package_filter_activated(self, button):
