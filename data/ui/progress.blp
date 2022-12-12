@@ -15,16 +15,18 @@ template YumexProgress : Adw.Window {
         margin-end: 20; 
         Gtk.Box {
             orientation: horizontal;
+            valign: center;
+            margin-start: 30;
+            margin-end: 30;
             Gtk.Box {
                 orientation: vertical;
+                vexpand: true;
                 Gtk.Label title {
-                    margin-start: 30;
                     hexpand: true;
                     xalign: 0.0;
                     styles ["progress_title"]
                 }
                 Gtk.Label subtitle {
-                    margin-start: 30;
                     hexpand: true;
                     xalign: 0.0;
                     styles ["progress_subtitle"]
@@ -33,6 +35,7 @@ template YumexProgress : Adw.Window {
             }
             
             Gtk.Box {
+                vexpand: true;
                 Gtk.Spinner {
                     spinning: true;
                 }
