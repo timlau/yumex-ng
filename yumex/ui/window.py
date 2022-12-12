@@ -100,7 +100,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_groups_page(self):
         """Setup the groups page"""
-        self.content_groups.append(self.create_label_center("Groups"))
+        self.content_groups.append(
+            self.create_label_center("Groups is not implemented yet")
+        )
 
     def setup_queue(self):
         """Setup the groups page"""
@@ -138,7 +140,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
-        self.show_message("Apply pressed")
+        self.show_message("Apply changes is not implemented yet")
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
