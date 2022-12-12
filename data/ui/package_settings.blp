@@ -57,6 +57,21 @@ template YumexPackageSettings : Gtk.Box {
             styles ["sorting-row"]
             activated => on_sorting_activated();
        }
+        Adw.ActionRow {
+            title: _("Sort");
+            // subtitle: _("This setting controls how to do somethine");
+            activatable-widget: sort_resort;
+            styles ["package-filter-row"]
+            [suffix]
+            Gtk.Button sort_resort { 
+                hexpand: false;
+                vexpand: false;
+                valign: center;
+                halign: center;
+                icon-name: "system-run-symbolic";
+                clicked => on_resort_clicked();
+            }
+        }
     }
 }
 

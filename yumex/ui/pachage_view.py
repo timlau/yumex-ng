@@ -117,6 +117,10 @@ class YumexPackageView(Gtk.ColumnView):
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
         log(f"Execution time (add_packages_to_store) : {elapsed}")
 
+    def sort(self):
+        sort_attr = self.win.package_settings.get_sort_attr()
+        self.store = self.sort_by(self.store, sort_attr)
+
     @staticmethod
     def sort_by(store: Gio.ListStore, attr: str) -> Gio.ListStore:
         match attr:
@@ -151,7 +155,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.refresh()
 
     def refresh(self):
-        self.selection.selection_changed(0, len(self.store))
+        self.selection.selection_changed(0, 30)
 
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):

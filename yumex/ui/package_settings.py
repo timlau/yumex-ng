@@ -58,6 +58,13 @@ class YumexPackageSettings(Gtk.Box):
         log(f"Sorting activated: {widget}")
 
     @Gtk.Template.Callback()
+    def on_resort_clicked(self, widget):
+        log("Sorting activated")
+        self.win.package_view.sort()
+        self.win.package_view.refresh()
+        self.win.sidebar.set_reveal_flap(False)
+
+    @Gtk.Template.Callback()
     def on_package_filter_toggled(self, button):
         state = button.get_active()
         if state:
