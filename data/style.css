@@ -63,3 +63,8 @@
 .progress_subtitle {
     font-size: .9em;
 }
+
+spinner {
+    color: @accent_color;
+    -gtk-icon-size: 32px;
+}
