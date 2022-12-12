@@ -77,6 +77,5 @@ class YumexPackageSettings(Gtk.Box):
                 self.win.package_view.get_packages("updates")
             case _:
                 log(f"package_filter not found : {pkg_filter}")
-        self.current_pkg_filer = pkg_filter
-        self.previuos_pkg_filer = pkg_filter
-        # self.show_message(f"package filter : {item.get_name()} selected")
+        self.current_pkg_filter = pkg_filter
+        self.previuos_pkg_filter = pkg_filter
