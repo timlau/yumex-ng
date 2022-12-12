@@ -5,13 +5,10 @@
 
 /* packagelist scrolledwindow */
 .package_list {
-    margin: 20px;
+    margin: 10px 10px 0px 10px;
 }
 
-#version {
-    margin-left: 10px;
-}
-
+#version,
 #repo {
     margin-left: 10px;
 }

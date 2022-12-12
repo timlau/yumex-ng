@@ -117,6 +117,8 @@ template YumexMainWindow : Adw.ApplicationWindow {
                       margin-end: 10;
                       Gtk.Paned package_paned {
                         orientation: vertical;
+                        wide-handle: true;
+                        
                         Gtk.ScrolledWindow content_packages  {
                           styles ["package_list"]
                           hexpand: true;
