@@ -6,9 +6,12 @@ template YumexPreferences: Adw.PreferencesWindow {
   default-height: 400;
   default-width: 600;
   modal: true;
-Adw.PreferencesPage {
+  Adw.PreferencesPage  main {
+    title: _("Main");
+    icon-name: "preferences-system-symbolic";
     Adw.PreferencesGroup main_group {
-      title: _("Main Setting");
+      title: _("Main Settings");
+      description: "Just dummy test settings for now";
 
       Adw.ActionRow {
         title: _("Settings #1");
@@ -36,4 +39,38 @@ Adw.PreferencesPage {
       }
     }
   }
+  Adw.PreferencesPage  repo {
+    title: _("Repository");
+    icon-name: "network-server-symbolic";
+    Adw.PreferencesGroup repo_group {
+      title: _("Repository Settings");
+      description: _("The available and enabled repositories");
+      // Just boilerplate rows, will be added automatic later
+      Adw.ActionRow {
+        title: "Fedora";
+        subtitle: _("The fedora repo");
+        activatable-widget: repo_fedora;
+        Gtk.Switch repo_fedora {
+          valign: center;
+        }
+      }
+      Adw.ActionRow {
+        title: "Updates";
+        subtitle: _("The updates repo");
+        activatable-widget: repo_updates;
+        Gtk.Switch repo_updates {
+          valign: center;
+        }
+      }
+      Adw.ActionRow {
+        title: "RPMFusion";
+        subtitle: _("The  rpmfusion repo");
+        activatable-widget: repo_rpmfusion;
+        Gtk.Switch repo_rpmfusion {
+          valign: center;
+        }
+      }
+    }
+  }
+
 }
