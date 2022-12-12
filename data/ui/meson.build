@@ -6,7 +6,8 @@ blueprints = custom_target('blueprints',
     'queue_row.blp',
     'preferences.blp',
     'package_settings.blp',
-    'progress.blp'
+    'progress.blp',
+    'repository.blp'
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@']

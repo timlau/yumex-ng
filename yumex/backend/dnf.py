@@ -256,3 +256,9 @@ class Backend(DnfBase):
             if hasattr(found, attr):
                 return getattr(found, attr)
         return None
+
+    def get_repositories(self):
+        repos = self.repos.all()
+        for repo in repos:
+            if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
+                yield (repo.id, repo.name, repo.enabled)
