@@ -68,8 +68,13 @@ class YumexPackageView(Gtk.ColumnView):
             log(f"Execution time: (get-packages) {elapsed}")
             self.add_packages_to_store(pkgs)
             self.win.progress.hide()
+            # hide package setting sidebar
             self.win.sidebar.set_reveal_flap(False)
+            # refresh the package description for the selected package in the view
             self.on_selection_changed(self.selection, 0, 0)
+            # restore focus to search entry
+            if self.win.search_bar.get_search_mode():
+                self.win.search_entry.grab_focus()
 
         log(f"Loading packages : {pkg_filter}")
 

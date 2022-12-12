@@ -123,7 +123,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         Using GLib.idle_add
         """
         self.package_settings.set_active_filter(pkg_filter)
-        self.search_bar.set_search_mode(False)
         return False
 
     def create_label_center(self, label):
