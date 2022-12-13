@@ -12,8 +12,13 @@ potfiles:
 	@find data -iname *.blp >> po/POTFILES
 
 transifex-update:
-	tx pull 
 	po/update_potfile.sh 
 	tx push
 	git add po/*
+	git commit -m "i18n: updated yumex.pot"
+
+transifex-get:
+	tx pull
+	git add po/*
 	git commit -m "i18n: updated translations from transifex"
+
