@@ -10,28 +10,28 @@ template YumexPreferences: Adw.PreferencesWindow {
     title: _("Main");
     icon-name: "preferences-system-symbolic";
     Adw.PreferencesGroup main_group {
-      title: _("Main Settings");
+      title: "Main Settings";
       description: "Just dummy test settings for now";
 
       Adw.ActionRow {
-        title: _("Settings #1");
-        subtitle: _("This setting controls how to do somethine");
+        title: "Settings #1";
+        subtitle: "This setting controls how to do somethine";
         activatable-widget: pref_setting_01;
         Gtk.Switch pref_setting_01 {
           valign: center;
         }
       }
       Adw.ActionRow {
-        title: _("Settings #2");
-        subtitle: _("This setting controls how to do somethine");
+        title: "Settings #2";
+        subtitle: "This setting controls how to do somethine";
         activatable-widget: pref_setting_02;
         Gtk.Switch pref_setting_02 {
           valign: center;
         }
       }
       Adw.ActionRow {
-        title: _("Settings #3");
-        subtitle: _("This setting controls how to do somethine");
+        title: "Settings #3";
+        subtitle: "This setting controls how to do somethine";
         activatable-widget: pref_setting_03;
         Gtk.Switch pref_setting_03 {
           valign: center;
