@@ -22,7 +22,7 @@ from gi.repository import Gtk, Gio
 
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
-from yumex.backend.dnf import Backend
+from yumex.backend.dnf import Backend, DnfCallback
 from yumex.utils import log, RunAsync
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
@@ -49,7 +49,8 @@ class YumexPackageView(Gtk.ColumnView):
         self.selection.set_model(self.store)
         self.last_position = -1
         self.column_num = 0
-        self.backend = Backend()
+        callback = DnfCallback(self.win)
+        self.backend = Backend(callback)
         self.package_cache = YumexPackageCache(self.backend)
 
     @property

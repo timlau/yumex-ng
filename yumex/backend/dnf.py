@@ -27,6 +27,43 @@ import dnf.subject
 import hawkey
 
 from yumex.backend import YumexPackage, PackageState
+from yumex.utils import log
+
+
+class DnfCallback:
+    def __init__(self, win):
+        self.win = win
+        self.repo = MDProgress(self)
+
+    def set_title(self, txt):
+        self.win.progress.set_title(txt)
+
+    def set_subtitle(self, txt):
+        self.win.progress.set_subtitle(txt)
+
+
+class MDProgress(dnf.callback.DownloadProgress):
+    """Metadata Download callback handler."""
+
+    def __init__(self, main):
+        super(MDProgress, self).__init__()
+        self.main: DnfCallback = main
+        self._last_name = None
+
+    def start(self, total_files, total_size):
+        pass
+
+    def end(self, payload, status, msg):
+        name = str(payload)
+        if status == dnf.callback.STATUS_OK:
+            log(f"progress: {name} completed")
+
+    def progress(self, payload, done):
+        name = str(payload)
+        if name != self._last_name:
+            log(f"progress: {name} started")
+            self.main.set_subtitle(_(f"Downloading repository information for {name}"))
+            self._last_name = name
 
 
 class Packages:
@@ -188,7 +225,7 @@ class DnfBase(dnf.Base):
     class to encapsulate and extend the dnf.Base API
     """
 
-    def __init__(self, setup_sack=False):
+    def __init__(self, callback, setup_sack=False):
         dnf.Base.__init__(self)
         # setup the dnf cache
         RELEASEVER = dnf.rpm.detect_releasever(self.conf.installroot)
@@ -196,6 +233,8 @@ class DnfBase(dnf.Base):
         # read the repository infomation
         self._packages = None
         self.read_all_repos()
+        self.md_progress = callback.repo
+        self.repos.all().set_progress_bar(self.md_progress)
         if setup_sack:
             # populate the dnf sack
             self.fill_sack()
@@ -233,8 +272,8 @@ class Backend(DnfBase):
     Package backend base on dnf 4.x python API
     """
 
-    def __init__(self):
-        DnfBase.__init__(self)
+    def __init__(self, callback):
+        DnfBase.__init__(self, callback)
 
     def get_packages(self, pkg_filter: str) -> list[YumexPackage]:
         match pkg_filter:
