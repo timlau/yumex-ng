@@ -6,6 +6,11 @@ user:
 inst-deps:
 	sudo dnf install gtk4-devel libadwaita-devel meson blueprint-compiler python3-dnf 
 
+potfiles:
+	@echo "updating po/POTFILES with *.py & *.blp files"
+	@find yumex -iname *.py > po/POTFILES
+	@find data -iname *.blp >> po/POTFILES
+
 transifex-update:
 	tx pull 
 	po/update_potfile.sh 
