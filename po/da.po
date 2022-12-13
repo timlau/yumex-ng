@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 06:43+0100\n"
+"POT-Creation-Date: 2022-12-13 09:15+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
 "Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
@@ -21,99 +21,32 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: data/ui/package_view.blp:15
-msgid "name"
-msgstr "Navn"
+#: yumex/ui/queue_view.py:76
+msgid "Package will be deleted"
+msgstr "Pakken vil blive slettet"
 
-#: data/ui/package_view.blp:21
-msgid "version"
-msgstr "version"
+#: yumex/ui/queue_view.py:80
+msgid "Package will be installed"
+msgstr "Pakken vil blive installeret"
 
-#: data/ui/package_view.blp:27
-msgid "Arch."
-msgstr "Ark."
+#: yumex/ui/queue_view.py:84
+msgid "Package will be updated"
+msgstr "Pakken vil blive opdateret"
 
-#: data/ui/package_view.blp:33
-msgid "Size"
-msgstr "Størrelse"
+#: yumex/ui/pachage_view.py:82
+msgid "Loading Packages"
+msgstr "Indlæser pakker"
 
-#: data/ui/package_view.blp:39
-msgid "Description"
-msgstr "Beskrivelse"
+#: yumex/ui/pachage_view.py:83
+msgid "This make take a little while"
+msgstr "Dette kan tage et øjeblik"
 
-#: data/ui/package_view.blp:45
-msgid "repo"
-msgstr "kilde"
+#: yumex/backend/dnf.py:65
+#, python-brace-format
+msgid "Downloading repository information for {name}"
+msgstr "indlæser kilde information for {name}"
 
-#: data/ui/window.blp:6
-msgid "Yum Extender"
-msgstr "Yum Extender"
-
-#: data/ui/window.blp:32
-msgid "Select Package filters"
-msgstr "Vælg pakke filter"
-
-#: data/ui/window.blp:42
-msgid "Search"
-msgstr "Søg"
-
-#: data/ui/window.blp:58
-msgid "Main Menu"
-msgstr "Hovedmenu"
-
-#: data/ui/window.blp:69
-msgid "Apply"
-msgstr "Udfør"
-
-#: data/ui/window.blp:70
-msgid "Apply Package Actions"
-msgstr "Udfør pakke handlinger"
-
-#: data/ui/window.blp:94
-msgid "Packages"
-msgstr "Pakker"
-
-#: data/ui/window.blp:113
-msgid "Updates"
-msgstr "Opdateringer"
-
-#: data/ui/window.blp:114
-msgid "Show available updates"
-msgstr "Vis tilgængelige pakker"
-
-#: data/ui/window.blp:120
-msgid "Installed"
-msgstr "Instalerede"
-
-#: data/ui/window.blp:121
-msgid "Show installed packages"
-msgstr "Vis installerede pakker"
-
-#: data/ui/window.blp:127
-msgid "Available"
-msgstr "Tilgængelige"
-
-#: data/ui/window.blp:128
-msgid "Show available packages"
-msgstr "Vis tilgængelige pakker"
-
-#: data/ui/window.blp:152
-msgid "Groups"
-msgstr "Grupper"
-
-#: data/ui/window.blp:161
-msgid "Queue"
-msgstr "Kø"
-
-#: data/ui/window.blp:183
-msgid "Preferences"
-msgstr "Indstillinger"
-
-#: data/ui/window.blp:188
-msgid "About Yum Extender"
-msgstr "Om Yum Extender"
-
-#: yumex/main.py:100
+#: yumex/main.py:107
 msgid ""
 "\n"
 "<ul>\n"
@@ -125,10 +58,167 @@ msgstr ""
 "<li>Tidlig Version, ikke udgiver endnu</li>\n"
 "</ul>\n"
 
-#: yumex/main.py:107
+#: yumex/main.py:114
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 "\n"
 "Yum Extender er et pakke håndterings værktøj til at installere, opdatere og slette pakker\n"
+
+#: data/ui/package_settings.blp:9
+msgid "Package filter"
+msgstr "Pakke filtre"
+
+#: data/ui/package_settings.blp:14
+msgid "Updates"
+msgstr "Opdateringer"
+
+#: data/ui/package_settings.blp:25
+msgid "Installed"
+msgstr "Instalerede"
+
+#: data/ui/package_settings.blp:37
+msgid "Available"
+msgstr "Tilgængelige"
+
+#: data/ui/package_settings.blp:50
+msgid "Sorting"
+msgstr "Sortering"
+
+#: data/ui/package_settings.blp:55
+msgid "Sort by:"
+msgstr "Sorter efter:"
+
+#: data/ui/package_settings.blp:61
+msgid "Sort packages"
+msgstr "Sorter pakker"
+
+#: data/ui/package_settings.blp:81
+msgid "Name"
+msgstr "Navn"
+
+#: data/ui/package_settings.blp:82
+msgid "Arch"
+msgstr "Ark"
+
+#: data/ui/package_settings.blp:83 data/ui/package_view.blp:36
+msgid "Size"
+msgstr "Størrelse"
+
+#: data/ui/package_settings.blp:84
+msgid "Repo"
+msgstr "Kilder"
+
+#: data/ui/package_view.blp:18
+msgid "name"
+msgstr "Navn"
+
+#: data/ui/package_view.blp:24
+msgid "version"
+msgstr "version"
+
+#: data/ui/package_view.blp:30
+msgid "Arch."
+msgstr "Ark."
+
+#: data/ui/package_view.blp:42
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: data/ui/package_view.blp:48
+msgid "repo"
+msgstr "kilde"
+
+#: data/ui/package_view.blp:99
+msgid "Select All"
+msgstr "Vælg alle"
+
+#: data/ui/package_view.blp:100
+msgid "Deselect All"
+msgstr "Fravælg alle"
+
+#: data/ui/preferences.blp:5 data/ui/window.blp:193
+msgid "Preferences"
+msgstr "Indstillinger"
+
+#: data/ui/preferences.blp:10
+msgid "Main"
+msgstr ""
+
+#: data/ui/preferences.blp:13
+msgid "Main Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:17
+msgid "Settings #1"
+msgstr ""
+
+#: data/ui/preferences.blp:18 data/ui/preferences.blp:26
+#: data/ui/preferences.blp:34
+msgid "This setting controls how to do somethine"
+msgstr ""
+
+#: data/ui/preferences.blp:25
+msgid "Settings #2"
+msgstr ""
+
+#: data/ui/preferences.blp:33
+msgid "Settings #3"
+msgstr ""
+
+#: data/ui/preferences.blp:43
+msgid "Repository"
+msgstr "Kilder"
+
+#: data/ui/preferences.blp:46
+msgid "Repository Settings"
+msgstr "Kilde Indstillinger"
+
+#: data/ui/preferences.blp:47
+msgid "The available and enabled repositories"
+msgstr "De tilgængelige og aktive kilder"
+
+#: data/ui/window.blp:6
+msgid "Yum Extender"
+msgstr "Yum Extender"
+
+#: data/ui/window.blp:32
+msgid "Select Package filters"
+msgstr "Vælg pakke filter"
+
+#: data/ui/window.blp:41
+msgid "Search"
+msgstr "Søg"
+
+#: data/ui/window.blp:57
+msgid "Main Menu"
+msgstr "Hovedmenu"
+
+#: data/ui/window.blp:69
+msgid "Apply"
+msgstr "Udfør"
+
+#: data/ui/window.blp:72
+msgid "Apply Package Actions"
+msgstr "Udfør pakke handlinger"
+
+#: data/ui/window.blp:88
+msgid "Package Name"
+msgstr "Pakkenavn"
+
+#: data/ui/window.blp:99
+msgid "Packages"
+msgstr "Pakker"
+
+#: data/ui/window.blp:150
+msgid "Groups"
+msgstr "Grupper"
+
+#: data/ui/window.blp:159
+msgid "Queue"
+msgstr "Kø"
+
+#: data/ui/window.blp:198
+msgid "About Yum Extender"
+msgstr "Om Yum Extender"
