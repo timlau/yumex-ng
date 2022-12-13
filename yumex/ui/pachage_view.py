@@ -23,7 +23,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.backend.dnf import Backend, DnfCallback
-from yumex.utils import Logger, log, RunAsync
+from yumex.utils import log, RunAsync
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
@@ -82,20 +82,14 @@ class YumexPackageView(Gtk.ColumnView):
         self.win.progress.show()
         self.win.main_view.set_sensitive(False)
         st = time.time()
-        RunAsync(self.package_cache.get_packages, set_completed, pkg_filter)
+        RunAsync(self.package_cache.get_packages_by_filter, set_completed, pkg_filter)
 
     def search(self, txt, field="name"):
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
-            _pkgs = self.backend.search(txt, field=field)
-            pkgs = []
-            for pkg in _pkgs:
-                qpkg = self.queue_view.find_by_nevra(pkg.nevra)
-                if qpkg:
-                    pkgs.append(qpkg)
-                else:
-                    pkgs.append(pkg)
-
+            pkgs = self.package_cache.add_packages(
+                self.backend.search(txt, field=field)
+            )
             self.add_packages_to_store(pkgs)
 
     def add_packages_to_store(self, pkgs):
@@ -119,23 +113,6 @@ class YumexPackageView(Gtk.ColumnView):
         log(f" --> number of packages : {len(pkgs)}")
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
         log(f" --> Execution time (add_packages_to_store) : {elapsed}")
-
-    @Logger
-    def refresh_from_queue(self, changed):
-        for pkg in changed:
-            found, ndx = self.store.find_with_equal_func(pkg, self.search_by_nevra)
-            if found:
-                store_pkg = self.store[ndx]
-                store_pkg.queued = not store_pkg.queued
-            else:
-                log(f" ---> Not found : {pkg}")
-        self.refresh()
-
-    @staticmethod
-    def search_by_nevra(a, b):
-        if a is None or b is None:
-            return False
-        return a.nevra == b.nevra
 
     def sort(self):
         sort_attr = self.win.package_settings.get_sort_attr()
@@ -176,7 +153,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.refresh()
 
     def refresh(self):
-        self.selection.selection_changed(0, 30)
+        self.selection.selection_changed(0, len(self.store))
 
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):
@@ -254,6 +231,11 @@ class YumexPackageView(Gtk.ColumnView):
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""
         data = item.get_item()
+        checkbox = item.get_child()
+        if data.is_dep:
+            checkbox.set_sensitive(False)
+            return
+        checkbox.set_sensitive(True)
         data.queued = widget.get_active()
         if data.queued:
             self.queue_view.add(data)

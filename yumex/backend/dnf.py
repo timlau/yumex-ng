@@ -202,11 +202,11 @@ class Packages:
     def find_package(self, pkg: YumexPackage) -> dnf.package.Package:
         """Get the package from given package id."""
         q = self.query
-        if pkg.repo.startswith("@"):  # installed package
+        if pkg.state == PackageState.INSTALLED:  # installed package
             f = q.installed()
             f = f.filter(
                 name=pkg.name, version=pkg.version, release=pkg.release, arch=pkg.arch
-            )
+            ).run()
             if len(f) > 0:
                 return f[0]
             else:
@@ -215,7 +215,7 @@ class Packages:
             f = q.available()
             f = f.filter(
                 name=pkg.name, version=pkg.version, release=pkg.release, arch=pkg.arch
-            )
+            ).run()
             if len(f) > 0:
                 return f[0]
             else:
@@ -247,7 +247,7 @@ class DnfBase(dnf.Base):
         self._packages = Packages(self)  # Define a Packages object
 
     @property
-    def packages(self):
+    def packages(self) -> Packages:
         """property to get easy acceess to packages"""
         if not self._packages:
             self.setup_base()
@@ -367,17 +367,22 @@ class Backend(DnfBase):
         deps = []
         for pkg in store:
             dnf_pkg = self.packages.find_package(pkg)
-            nevra_dict[pkg.nevra] = pkg
-            match pkg.state:
-                case PackageState.INSTALLED:
-                    self.package_remove(dnf_pkg)
-                    log(f"add {str(dnf_pkg)} to transaction for removal")
-                case PackageState.UPDATE:
-                    self.package_upgrade(dnf_pkg)
-                    log(f"add {str(dnf_pkg)} to transaction for upgrade")
-                case PackageState.AVAILABLE:
-                    self.package_install(dnf_pkg)
-                    log(f"add {str(dnf_pkg)} to transaction for installation")
+            if dnf_pkg:
+                nevra_dict[pkg.nevra] = pkg
+                match pkg.state:
+                    case PackageState.INSTALLED:
+                        self.package_remove(dnf_pkg)
+                        log(f"BACKEND: add {str(dnf_pkg)} to transaction for removal")
+                    case PackageState.UPDATE:
+                        self.package_upgrade(dnf_pkg)
+                        log(f"BACKEND: add {str(dnf_pkg)} to transaction for upgrade")
+                    case PackageState.AVAILABLE:
+                        self.package_install(dnf_pkg)
+                        log(
+                            f"BACKEND: add {str(dnf_pkg)} to transaction for installation"
+                        )
+            else:
+                log(f"BACKEND: dnf package for {pkg} was not found")
         try:
             res = self.resolve(allow_erasing=True)
             log(f"BACKEND: depsolve completted : {res}")

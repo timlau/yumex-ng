@@ -20,7 +20,8 @@ from gi.repository import Gtk, Gio
 
 from yumex.constants import rootdir
 
-from yumex.backend import YumexPackage
+from yumex.backend import YumexPackage, YumexPackageCache
+from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import Logger, log  # noqa
 from yumex.backend import PackageState
 
@@ -37,35 +38,49 @@ class YumexQueueView(Gtk.ListView):
         self.store = Gio.ListStore.new(YumexPackage)
         self.selection.set_model(self.store)
 
+    @property
+    def cache(self) -> YumexPackageCache:
+        return self.win.package_view.package_cache
+
+    @property
+    def package_view(self) -> YumexPackageView:
+        return self.win.package_view
+
+    def contains(self, pkg):
+        return pkg in self.store
+
     @Logger
     def add(self, pkg):
         """Add package to queue"""
         if pkg not in self.store:
             self.store.insert_sorted(pkg, self.sort_by_state)
             deps = self.win.package_view.backend.depsolve(self.store)
-            for dep in deps:
+            for dep in self.cache.add_packages(deps):
                 if dep not in self.store:
+                    dep.queued = True
+                    dep.is_dep = True
                     self.store.insert_sorted(dep, self.sort_by_state)
-            self.win.package_view.refresh_from_queue(deps)
+            self.package_view.refresh()
 
     def remove(self, pkg):
         """Remove package from queue"""
         store = Gio.ListStore.new(YumexPackage)
-        changed = []
         for store_pkg in self.store:
             if store_pkg != pkg and not store_pkg.is_dep:
                 store.insert_sorted(store_pkg, self.sort_by_state)
             else:
-                changed.append(store_pkg)
+                store_pkg.queued = False
+                store_pkg.is_dep = False
         if len(store):
             deps = self.win.package_view.backend.depsolve(store)
-            for dep in deps:
+            for dep in self.cache.add_packages(deps):
                 if dep not in store:
+                    dep.queued = True
+                    dep.is_dep = True
                     store.insert_sorted(dep, self.sort_by_state)
-                    changed.append(dep)
         self.store = store
         self.selection.set_model(self.store)
-        self.win.package_view.refresh_from_queue(changed)
+        self.package_view.refresh()
 
     @staticmethod
     def sort_by_state(a, b):

@@ -99,8 +99,44 @@ class YumexPackageCache:
     def __init__(self, backend) -> None:
         self._packages = {}
         self.backend = backend
+        self.nerva_dict = {}
+        # preload installed packages into cache
+        self.get_packages_by_filter("installed")
 
-    def get_packages(self, pkgfilter, reset=False):
+    def get_packages_by_filter(self, pkgfilter, reset=False):
         if pkgfilter not in self._packages or reset:
-            self._packages[pkgfilter] = self.backend.get_packages(pkgfilter)
+            self._packages[pkgfilter] = list(
+                self.add_packages(self.backend.get_packages(pkgfilter))
+            )
         return self._packages[pkgfilter]
+
+    def add_packages(self, pkgs):
+        for pkg in pkgs:
+            if pkg.nevra not in self.nerva_dict:
+                self.nerva_dict[pkg.nevra] = pkg
+                yield pkg
+            else:
+                cached_pkg = self.nerva_dict[pkg.nevra]
+                if pkg.state != cached_pkg.state:
+                    self.update_state(cached_pkg, pkg)
+                # use the action from the newest pkg,
+                # to get queued deps, sorted the right way
+                cached_pkg.action = pkg.action
+                yield cached_pkg
+
+    def get_package(self, pkg):
+        if pkg.nevra not in self.nerva_dict:
+            self.nerva_dict[pkg.nevra] = pkg
+            return pkg
+        else:
+            return self.nerva_dict[pkg.nevra]
+
+    def update_state(self, current, new):
+        """update the state of the cached pkg"""
+        match (current.state, new.state):
+            case (PackageState.AVAILABLE, PackageState.UPDATE):
+                current.state = PackageState.UPDATE
+            case (PackageState.INSTALLED, PackageState.UPDATE):
+                current.state = PackageState.UPDATE
+            case (PackageState.AVAILABLE, PackageState.INSTALLED):
+                current.state = PackageState.INSTALLED
