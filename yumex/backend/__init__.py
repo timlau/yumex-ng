@@ -26,10 +26,19 @@ class PackageState(IntEnum):
     UPDATE = 1
     AVAILABLE = 2
     INSTALLED = 3
+    DOWNGRADE = 4
+
+
+class PackageAction(IntEnum):
+    DOWNGRADE = 10
+    ERASE = 20
+    INSTALL = 30
+    REINSTALL = 40
+    UPGRADE = 50
 
 
 class YumexPackage(GObject.GObject):
-    def __init__(self, pkg, state=PackageState.AVAILABLE):
+    def __init__(self, pkg, state=PackageState.AVAILABLE, action=0):
         super(YumexPackage, self).__init__()
         self.queued = False
         self.name = pkg.name
@@ -41,7 +50,9 @@ class YumexPackage(GObject.GObject):
         self.description = pkg.summary
         self.sizeB = int(pkg.size)
         self.state = state
+        self.is_dep = False
         self.ref_to = None
+        self.action = action
 
     def set_installed(self):
         self.repo = f"@{self.repo}"
@@ -79,6 +90,9 @@ class YumexPackage(GObject.GObject):
 
     def __repr__(self) -> str:
         return f"{self.nevra} : {self.repo}"
+
+    def __eq__(self, other) -> bool:
+        return self.nevra == other.nevra
 
 
 class YumexPackageCache:

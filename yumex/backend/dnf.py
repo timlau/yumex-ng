@@ -26,7 +26,9 @@ import dnf.conf
 import dnf.subject
 import hawkey
 
-from yumex.backend import YumexPackage, PackageState
+from gi.repository import Gio
+
+from yumex.backend import PackageAction, YumexPackage, PackageState
 from yumex.utils import log
 
 
@@ -266,6 +268,62 @@ class DnfBase(dnf.Base):
         conf.cachedir, self._system_cachedir = self.cachedir_fit()
         print("cachedir: %s" % conf.cachedir)
 
+    def get_transaction(self):
+        """Get current transaction"""
+        tx_list = []
+        replaces = {}
+        if self.transaction:
+            # build a reverse mapping to 'replaced_by'
+            # this is required to achieve reasonable speed
+            for tsi in self.transaction:
+                if tsi.action != dnf.transaction.PKG_OBSOLETED:
+                    continue
+                for i in tsi._item.getReplacedBy():
+                    replaces.setdefault(i, set()).add(tsi)
+
+            for tsi in self.transaction:
+                if tsi.action == dnf.transaction.PKG_DOWNGRADE:
+                    tx_list.append(
+                        YumexPackage(
+                            tsi.pkg,
+                            state=PackageState.INSTALLED,
+                            action=PackageAction.DOWNGRADE,
+                        )
+                    )
+                elif tsi.action == dnf.transaction.PKG_ERASE:
+                    tx_list.append(
+                        YumexPackage(
+                            tsi.pkg,
+                            state=PackageState.INSTALLED,
+                            action=PackageAction.ERASE,
+                        )
+                    )
+                elif tsi.action == dnf.transaction.PKG_INSTALL:
+                    tx_list.append(
+                        YumexPackage(
+                            tsi.pkg,
+                            state=PackageState.AVAILABLE,
+                            action=PackageAction.INSTALL,
+                        )
+                    )
+                elif tsi.action == dnf.transaction.PKG_REINSTALL:
+                    tx_list.append(
+                        YumexPackage(
+                            tsi.pkg,
+                            state=PackageState.INSTALLED,
+                            action=PackageAction.REINSTALL,
+                        )
+                    )
+                elif tsi.action == dnf.transaction.PKG_UPGRADE:
+                    tx_list.append(
+                        YumexPackage(
+                            tsi.pkg,
+                            state=PackageState.UPDATE,
+                            action=PackageAction.UPGRADE,
+                        )
+                    )
+        return tx_list
+
 
 class Backend(DnfBase):
     """
@@ -301,3 +359,33 @@ class Backend(DnfBase):
         for repo in repos:
             if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
                 yield (repo.id, repo.name, repo.enabled)
+
+    def depsolve(self, store: Gio.ListStore):
+        """build a trasaction and retrun the dependencies"""
+        self.reset(goal=True, sack=False, repos=False)  # clean current transaction
+        nevra_dict = {}
+        deps = []
+        for pkg in store:
+            dnf_pkg = self.packages.find_package(pkg)
+            nevra_dict[pkg.nevra] = pkg
+            match pkg.state:
+                case PackageState.INSTALLED:
+                    self.package_remove(dnf_pkg)
+                    log(f"add {str(dnf_pkg)} to transaction for removal")
+                case PackageState.UPDATE:
+                    self.package_upgrade(dnf_pkg)
+                    log(f"add {str(dnf_pkg)} to transaction for upgrade")
+                case PackageState.AVAILABLE:
+                    self.package_install(dnf_pkg)
+                    log(f"add {str(dnf_pkg)} to transaction for installation")
+        try:
+            res = self.resolve(allow_erasing=True)
+            log(f"BACKEND: depsolve completted : {res}")
+            for pkg in self.get_transaction():
+                if pkg.nevra not in nevra_dict:
+                    log(f"BACKEND: adding as dep : {pkg} ")
+                    pkg.is_dep = True
+                    deps.append(pkg)
+        except dnf.exceptions.DepsolveError as e:
+            log(f"BACKEND: depsolve failed : {str(e)}")
+        return deps

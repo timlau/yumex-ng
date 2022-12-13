@@ -65,3 +65,24 @@ spinner {
     color: @accent_color;
     -gtk-icon-size: 32px;
 }
+
+.dependency {
+    padding: 3px;
+    margin-right: 5px;
+    /* margin-top: 4px; */
+    /* margin-bottom: 4px; */
+    background-color: @warning_bg_color;
+    color: @warning_fg_color;
+    font-size: 0.6em;
+    /* border: 1px solid; */
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+.queue_row button {
+    padding: 0px;
+}
+
+.queue_row button image {
+    color: @error_color;
+}

@@ -21,7 +21,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 
 from yumex.backend import YumexPackage
-from yumex.utils import log
+from yumex.utils import Logger, log  # noqa
 from yumex.backend import PackageState
 
 
@@ -37,19 +37,39 @@ class YumexQueueView(Gtk.ListView):
         self.store = Gio.ListStore.new(YumexPackage)
         self.selection.set_model(self.store)
 
+    @Logger
     def add(self, pkg):
         """Add package to queue"""
         if pkg not in self.store:
-            self.store.insert_sorted(pkg, lambda a, b: a.state > b.state)
+            self.store.insert_sorted(pkg, self.sort_by_state)
+            deps = self.win.package_view.backend.depsolve(self.store)
+            for dep in deps:
+                if dep not in self.store:
+                    self.store.insert_sorted(dep, self.sort_by_state)
+            self.win.package_view.refresh_from_queue(deps)
 
     def remove(self, pkg):
         """Remove package from queue"""
-        if pkg in self.store:
-            found, ndx = self.store.find(pkg)
-            if found:
-                self.store.remove(ndx)
+        store = Gio.ListStore.new(YumexPackage)
+        changed = []
+        for store_pkg in self.store:
+            if store_pkg != pkg and not store_pkg.is_dep:
+                store.insert_sorted(store_pkg, self.sort_by_state)
             else:
-                log(f"{pkg} was not found in queue")
+                changed.append(store_pkg)
+        if len(store):
+            deps = self.win.package_view.backend.depsolve(store)
+            for dep in deps:
+                if dep not in store:
+                    store.insert_sorted(dep, self.sort_by_state)
+                    changed.append(dep)
+        self.store = store
+        self.selection.set_model(self.store)
+        self.win.package_view.refresh_from_queue(changed)
+
+    @staticmethod
+    def sort_by_state(a, b):
+        return (a.state + a.action) > (b.state + b.action)
 
     def find_by_nevra(self, nevra):
         for pkg in self.store:
@@ -70,6 +90,7 @@ class YumexQueueView(Gtk.ListView):
         data = item.get_item()
         row.text.set_label(data.nevra)
         row.pkg = data
+        row.dep.set_visible(data.is_dep)
         match data.state:
             case PackageState.INSTALLED:
                 row.icon.set_from_icon_name("edit-delete-symbolic")
@@ -91,6 +112,7 @@ class YumexQueueRow(Gtk.Box):
 
     icon = Gtk.Template.Child()
     text = Gtk.Template.Child()
+    dep = Gtk.Template.Child()
 
     def __init__(self, view, **kwargs):
         super().__init__(**kwargs)

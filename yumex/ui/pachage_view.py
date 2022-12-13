@@ -23,7 +23,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.backend.dnf import Backend, DnfCallback
-from yumex.utils import log, RunAsync
+from yumex.utils import Logger, log, RunAsync
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
@@ -60,10 +60,7 @@ class YumexPackageView(Gtk.ColumnView):
     def get_packages(self, pkg_filter="available"):
         def set_completed(result, error=False):
             self.win.main_view.set_sensitive(True)
-            pkgs = sorted(
-                result,
-                key=lambda n: n.name.lower(),
-            )
+            pkgs = result
             et = time.time()
             elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
             log(f"Execution time: (get-packages) {elapsed}")
@@ -122,6 +119,23 @@ class YumexPackageView(Gtk.ColumnView):
         log(f" --> number of packages : {len(pkgs)}")
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
         log(f" --> Execution time (add_packages_to_store) : {elapsed}")
+
+    @Logger
+    def refresh_from_queue(self, changed):
+        for pkg in changed:
+            found, ndx = self.store.find_with_equal_func(pkg, self.search_by_nevra)
+            if found:
+                store_pkg = self.store[ndx]
+                store_pkg.queued = not store_pkg.queued
+            else:
+                log(f" ---> Not found : {pkg}")
+        self.refresh()
+
+    @staticmethod
+    def search_by_nevra(a, b):
+        if a is None or b is None:
+            return False
+        return a.nevra == b.nevra
 
     def sort(self):
         sort_attr = self.win.package_settings.get_sort_attr()

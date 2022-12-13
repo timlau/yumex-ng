@@ -1,11 +1,20 @@
 using Gtk 4.0;
 
 template YumexQueueRow : Gtk.Box {
+    styles ["queue_row"]
     orientation: horizontal;
     Gtk.Image icon{
         margin-start: 10;
         margin-end: 10;
         icon-size: normal;
+    }
+
+    Gtk.Label dep {
+        visible: false;
+        valign: center;
+        halign: center;
+        label: "DEP";
+        styles ["dependency"]
     }
 
     Gtk.Label text {
@@ -14,8 +23,13 @@ template YumexQueueRow : Gtk.Box {
         label: "Some package";
     }
 
-    Gtk.Button {
-        styles ["flat"]
+    Gtk.Button remove {
+        visible: bind dep.visible inverted;
+        valign: center;
+        halign: center;
+        hexpand: false;
+        vexpand: false;
+        styles ["flat","circular"]
         icon-name: "user-trash-symbolic";
         clicked => on_delete_clicked();
     }
