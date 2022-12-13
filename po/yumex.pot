@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 06:54+0100\n"
+"POT-Creation-Date: 2022-12-13 09:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,28 +17,156 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/ui/package_view.blp:15
-msgid "name"
+#: yumex/ui/queue_view.py:76
+msgid "Package will be deleted"
 msgstr ""
 
-#: data/ui/package_view.blp:21
-msgid "version"
+#: yumex/ui/queue_view.py:80
+msgid "Package will be installed"
 msgstr ""
 
-#: data/ui/package_view.blp:27
-msgid "Arch."
+#: yumex/ui/queue_view.py:84
+msgid "Package will be updated"
 msgstr ""
 
-#: data/ui/package_view.blp:33
+#: yumex/ui/pachage_view.py:82
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:83
+msgid "This make take a little while"
+msgstr ""
+
+#: yumex/backend/dnf.py:65
+#, python-brace-format
+msgid "Downloading repository information for {name}"
+msgstr ""
+
+#: yumex/main.py:107
+msgid ""
+"\n"
+"<ul>\n"
+"<li>Early Build, not released yet</li>\n"
+"</ul>\n"
+msgstr ""
+
+#: yumex/main.py:114
+msgid ""
+"\n"
+"Yum Extender is a Package management to install, update and remove packages\n"
+msgstr ""
+
+#: data/ui/package_settings.blp:9
+msgid "Package filter"
+msgstr ""
+
+#: data/ui/package_settings.blp:14
+msgid "Updates"
+msgstr ""
+
+#: data/ui/package_settings.blp:25
+msgid "Installed"
+msgstr ""
+
+#: data/ui/package_settings.blp:37
+msgid "Available"
+msgstr ""
+
+#: data/ui/package_settings.blp:50
+msgid "Sorting"
+msgstr ""
+
+#: data/ui/package_settings.blp:55
+msgid "Sort by:"
+msgstr ""
+
+#: data/ui/package_settings.blp:61
+msgid "Sort packages"
+msgstr ""
+
+#: data/ui/package_settings.blp:81
+msgid "Name"
+msgstr ""
+
+#: data/ui/package_settings.blp:82
+msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:83 data/ui/package_view.blp:36
 msgid "Size"
 msgstr ""
 
-#: data/ui/package_view.blp:39
+#: data/ui/package_settings.blp:84
+msgid "Repo"
+msgstr ""
+
+#: data/ui/package_view.blp:18
+msgid "name"
+msgstr ""
+
+#: data/ui/package_view.blp:24
+msgid "version"
+msgstr ""
+
+#: data/ui/package_view.blp:30
+msgid "Arch."
+msgstr ""
+
+#: data/ui/package_view.blp:42
 msgid "Description"
 msgstr ""
 
-#: data/ui/package_view.blp:45
+#: data/ui/package_view.blp:48
 msgid "repo"
+msgstr ""
+
+#: data/ui/package_view.blp:99
+msgid "Select All"
+msgstr ""
+
+#: data/ui/package_view.blp:100
+msgid "Deselect All"
+msgstr ""
+
+#: data/ui/preferences.blp:5 data/ui/window.blp:193
+msgid "Preferences"
+msgstr ""
+
+#: data/ui/preferences.blp:10
+msgid "Main"
+msgstr ""
+
+#: data/ui/preferences.blp:13
+msgid "Main Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:17
+msgid "Settings #1"
+msgstr ""
+
+#: data/ui/preferences.blp:18 data/ui/preferences.blp:26
+#: data/ui/preferences.blp:34
+msgid "This setting controls how to do somethine"
+msgstr ""
+
+#: data/ui/preferences.blp:25
+msgid "Settings #2"
+msgstr ""
+
+#: data/ui/preferences.blp:33
+msgid "Settings #3"
+msgstr ""
+
+#: data/ui/preferences.blp:43
+msgid "Repository"
+msgstr ""
+
+#: data/ui/preferences.blp:46
+msgid "Repository Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:47
+msgid "The available and enabled repositories"
 msgstr ""
 
 #: data/ui/window.blp:6
@@ -49,11 +177,11 @@ msgstr ""
 msgid "Select Package filters"
 msgstr ""
 
-#: data/ui/window.blp:42
+#: data/ui/window.blp:41
 msgid "Search"
 msgstr ""
 
-#: data/ui/window.blp:58
+#: data/ui/window.blp:57
 msgid "Main Menu"
 msgstr ""
 
@@ -61,64 +189,26 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: data/ui/window.blp:70
+#: data/ui/window.blp:72
 msgid "Apply Package Actions"
 msgstr ""
 
-#: data/ui/window.blp:94
+#: data/ui/window.blp:88
+msgid "Package Name"
+msgstr ""
+
+#: data/ui/window.blp:99
 msgid "Packages"
 msgstr ""
 
-#: data/ui/window.blp:113
-msgid "Updates"
-msgstr ""
-
-#: data/ui/window.blp:114
-msgid "Show available updates"
-msgstr ""
-
-#: data/ui/window.blp:120
-msgid "Installed"
-msgstr ""
-
-#: data/ui/window.blp:121
-msgid "Show installed packages"
-msgstr ""
-
-#: data/ui/window.blp:127
-msgid "Available"
-msgstr ""
-
-#: data/ui/window.blp:128
-msgid "Show available packages"
-msgstr ""
-
-#: data/ui/window.blp:152
+#: data/ui/window.blp:150
 msgid "Groups"
 msgstr ""
 
-#: data/ui/window.blp:161
+#: data/ui/window.blp:159
 msgid "Queue"
 msgstr ""
 
-#: data/ui/window.blp:183
-msgid "Preferences"
-msgstr ""
-
-#: data/ui/window.blp:188
+#: data/ui/window.blp:198
 msgid "About Yum Extender"
-msgstr ""
-
-#: yumex/main.py:100
-msgid ""
-"\n"
-"<ul>\n"
-"<li>Early Build, not released yet</li>\n"
-"</ul>\n"
-msgstr ""
-
-#: yumex/main.py:107
-msgid ""
-"\n"
-"Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
