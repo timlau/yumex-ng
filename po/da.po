@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 09:15+0100\n"
+"POT-Creation-Date: 2022-12-13 09:35+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
 "Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
@@ -143,29 +143,12 @@ msgid "Preferences"
 msgstr "Indstillinger"
 
 #: data/ui/preferences.blp:10
-msgid "Main"
-msgstr ""
+msgid "Settings"
+msgstr "Indstillinger"
 
 #: data/ui/preferences.blp:13
-msgid "Main Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:17
-msgid "Settings #1"
-msgstr ""
-
-#: data/ui/preferences.blp:18 data/ui/preferences.blp:26
-#: data/ui/preferences.blp:34
-msgid "This setting controls how to do somethine"
-msgstr ""
-
-#: data/ui/preferences.blp:25
-msgid "Settings #2"
-msgstr ""
-
-#: data/ui/preferences.blp:33
-msgid "Settings #3"
-msgstr ""
+msgid "Application Settings"
+msgstr "Program instillinger"
 
 #: data/ui/preferences.blp:43
 msgid "Repository"
