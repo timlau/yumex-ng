@@ -222,14 +222,18 @@ class YumexPackageView(Gtk.ColumnView):
 
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""
-        pkg = item.get_item()
+        pkg: YumexPackage = item.get_item()
         checkbox = item.get_child()
         tip = get_package_selection_tooltip(pkg)
         checkbox.set_tooltip_text(tip)
+        # if a pkg is select as a dep, the the user can't deselect
         if pkg.is_dep:
             checkbox.set_sensitive(False)
         else:
             checkbox.set_sensitive(True)
+        if pkg.queue_action:  # package is being processed by queue (add/remove)
+            pkg.queue_action = False
+        else:  # the user has clicked on the widget
             pkg.queued = widget.get_active()
             if pkg.queued:
                 self.queue_view.add(pkg)

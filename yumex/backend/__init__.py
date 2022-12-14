@@ -41,6 +41,7 @@ class YumexPackage(GObject.GObject):
     def __init__(self, pkg, state=PackageState.AVAILABLE, action=0):
         super(YumexPackage, self).__init__()
         self.queued = False
+        self.queue_action = False  # package being procced by the queue
         self.name = pkg.name
         self.arch = pkg.arch
         self.epoch = pkg.epoch

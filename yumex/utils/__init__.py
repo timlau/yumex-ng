@@ -131,15 +131,19 @@ def format_number(number, SI=0, space=" "):
     return fmt % (float(number or 0), space, symbols[depth])
 
 
-def logged(func):
+def timed_parms(func):
     """
-    This decorator catch yum exceptions and send fatal signal to frontend
+    This decorator show the execution time of a function in the log
     """
 
     def new_func(*args, **kwargs):
-        log("LOGGED: %s started args: %s " % (func.__name__, repr(args[1:])))
+        name = func.__name__
+        call_args = repr(args[1:])
+        log(f">> starting {name} ({call_args})")
+        t_start = time.perf_counter()
         rc = func(*args, **kwargs)
-        log("LOGGED: %s ended" % func.__name__)
+        t_end = time.perf_counter()
+        log(f"<< {name} took {t_end - t_start:.4f} sec")
         return rc
 
     new_func.__name__ = func.__name__
@@ -155,11 +159,11 @@ def timed(func):
 
     def new_func(*args, **kwargs):
         name = func.__name__
-        log(f"TIMED: starting {name}")
+        log(f">> starting {name}")
         t_start = time.perf_counter()
         rc = func(*args, **kwargs)
         t_end = time.perf_counter()
-        log(f"TIMED: {name} took {t_end - t_start:.4f} sec")
+        log(f"<< {name} took {t_end - t_start:.4f} sec")
         return rc
 
     new_func.__name__ = func.__name__

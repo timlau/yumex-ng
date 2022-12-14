@@ -372,25 +372,25 @@ class Backend(DnfBase):
                 match pkg.state:
                     case PackageState.INSTALLED:
                         self.package_remove(dnf_pkg)
-                        log(f"BACKEND: add {str(dnf_pkg)} to transaction for removal")
+                        log(f"  BACKEND: add {str(dnf_pkg)} to transaction for removal")
                     case PackageState.UPDATE:
                         self.package_upgrade(dnf_pkg)
-                        log(f"BACKEND: add {str(dnf_pkg)} to transaction for upgrade")
+                        log(f"  BACKEND: add {str(dnf_pkg)} to transaction for upgrade")
                     case PackageState.AVAILABLE:
                         self.package_install(dnf_pkg)
                         log(
-                            f"BACKEND: add {str(dnf_pkg)} to transaction for installation"
+                            f"  BACKEND: add {str(dnf_pkg)} to transaction for installation"
                         )
             else:
-                log(f"BACKEND: dnf package for {pkg} was not found")
+                log(f"  BACKEND: dnf package for {pkg} was not found")
         try:
             res = self.resolve(allow_erasing=True)
-            log(f"BACKEND: depsolve completted : {res}")
+            log(f"  BACKEND: depsolve completted : {res}")
             for pkg in self.get_transaction():
                 if pkg.nevra not in nevra_dict:
-                    log(f"BACKEND: adding as dep : {pkg} ")
+                    log(f"  BACKEND: adding as dep : {pkg} ")
                     pkg.is_dep = True
                     deps.append(pkg)
         except dnf.exceptions.DepsolveError as e:
-            log(f"BACKEND: depsolve failed : {str(e)}")
+            log(f"  BACKEND: depsolve failed : {str(e)}")
         return deps

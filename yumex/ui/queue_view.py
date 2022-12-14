@@ -23,7 +23,7 @@ from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
-from yumex.utils import logged, log, timed  # noqa
+from yumex.utils import timed
 from yumex.backend import PackageState
 
 
@@ -50,7 +50,6 @@ class YumexQueueView(Gtk.ListView):
     def contains(self, pkg):
         return pkg in self.store
 
-    @logged
     @timed
     def add(self, pkg):
         """Add package to queue"""
@@ -61,9 +60,11 @@ class YumexQueueView(Gtk.ListView):
                 if dep not in self.store:
                     dep.queued = True
                     dep.is_dep = True
-                    self.store.insert_sorted(dep, self.sort_by_state)
+                    dep.queue_action = True
+                self.store.insert_sorted(dep, self.sort_by_state)
             self.package_view.refresh()
 
+    @timed
     def remove(self, pkg):
         """Remove package from queue"""
         store = Gio.ListStore.new(YumexPackage)
@@ -73,12 +74,14 @@ class YumexQueueView(Gtk.ListView):
             else:
                 store_pkg.queued = False
                 store_pkg.is_dep = False
+                store_pkg.queue_action = True
         if len(store):
             deps = self.win.package_view.backend.depsolve(store)
             for dep in self.cache.add_packages(deps):
                 if dep not in store:
                     dep.queued = True
                     dep.is_dep = True
+                    dep.queue_action = True
                     store.insert_sorted(dep, self.sort_by_state)
         self.store = store
         self.selection.set_model(self.store)
