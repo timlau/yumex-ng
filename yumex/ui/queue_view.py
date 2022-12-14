@@ -57,12 +57,11 @@ class YumexQueueView(Gtk.ListView):
             self.store.insert_sorted(pkg, self.sort_by_state)
             deps = self.win.package_view.backend.depsolve(self.store)
             for dep in self.cache.add_packages(deps):
-                if dep not in self.store:
-                    # add the new dep pkg to view
+                if dep not in self.store:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
-                    dep.queue_action = True
                     dep.ref_to = pkg
+                    dep.queue_action = True
                 self.store.insert_sorted(dep, self.sort_by_state)
             self.package_view.refresh()
 
@@ -71,16 +70,17 @@ class YumexQueueView(Gtk.ListView):
         """Remove package from queue"""
         store = Gio.ListStore.new(YumexPackage)
         for store_pkg in self.store:
+            # check if this package should be kept in the queue
             if store_pkg != pkg and not store_pkg.is_dep:
                 store.insert_sorted(store_pkg, self.sort_by_state)
-            else:  # reset properties for remove pkg
+            else:  # reset properties for pkg to not keep in queue
                 store_pkg.queued = False
                 store_pkg.is_dep = False
                 store_pkg.queue_action = True
-        if len(store):
+        if len(store):  # check if there something in the queue
             deps = self.win.package_view.backend.depsolve(store)
             for dep in self.cache.add_packages(deps):
-                if dep not in store:
+                if dep not in store:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
                     dep.queue_action = True
