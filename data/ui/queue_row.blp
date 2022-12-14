@@ -14,6 +14,7 @@ template YumexQueueRow : Gtk.Box {
         valign: center;
         halign: center;
         label: "DEP";
+        tooltip-text: _("Added as a dependency");
         styles ["dependency"]
     }
 
@@ -30,7 +31,8 @@ template YumexQueueRow : Gtk.Box {
         hexpand: false;
         vexpand: false;
         styles ["flat","circular"]
-        icon-name: "user-trash-symbolic";
+        icon-name: "edit-delete-symbolic";
+        tooltip-text: _("Remove item from queue");
         clicked => on_delete_clicked();
     }
 }

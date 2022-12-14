@@ -15,3 +15,28 @@
 # Copyright (C) 2022  Tim Lauridsen
 #
 #
+
+from yumex.backend import PackageState
+
+
+def get_package_selection_tooltip(pkg):
+    """set tooltip based on package state and if it is an denpency"""
+    tip = ""
+    if pkg.is_dep:
+        match pkg.state:
+            case PackageState.INSTALLED:
+                tip = _("Queued for deletion as a dependency")
+            case PackageState.AVAILABLE:
+                tip = _("Queued for installation as a dependency")
+            case PackageState.UPDATE:
+                tip = _("Queued for updating as a dependency")
+    else:
+        match pkg.state:
+            case PackageState.INSTALLED:
+                tip = _("Queued for deletion")
+            case PackageState.AVAILABLE:
+                tip = _("Queued for installation")
+            case PackageState.UPDATE:
+                tip = _("Queued for updating")
+
+    return tip

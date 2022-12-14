@@ -23,6 +23,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.backend.dnf import Backend, DnfCallback
+from yumex.ui import get_package_selection_tooltip
 from yumex.utils import log, RunAsync
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
@@ -110,7 +111,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.store = store
         self.selection.set_model(self.store)
         et = time.time()
-        log(f" --> number of packages : {len(pkgs)}")
+        log(f" --> number of packages : {len(list(pkgs))}")
         elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
         log(f" --> Execution time (add_packages_to_store) : {elapsed}")
 
@@ -230,14 +231,16 @@ class YumexPackageView(Gtk.ColumnView):
 
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""
-        data = item.get_item()
+        pkg = item.get_item()
         checkbox = item.get_child()
-        if data.is_dep:
+        tip = get_package_selection_tooltip(pkg)
+        checkbox.set_tooltip_text(tip)
+        if pkg.is_dep:
             checkbox.set_sensitive(False)
-            return
-        checkbox.set_sensitive(True)
-        data.queued = widget.get_active()
-        if data.queued:
-            self.queue_view.add(data)
         else:
-            self.queue_view.remove(data)
+            checkbox.set_sensitive(True)
+            pkg.queued = widget.get_active()
+            if pkg.queued:
+                self.queue_view.add(pkg)
+            else:
+                self.queue_view.remove(pkg)

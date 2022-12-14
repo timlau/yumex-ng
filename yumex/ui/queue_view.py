@@ -21,6 +21,7 @@ from gi.repository import Gtk, Gio
 from yumex.constants import rootdir
 
 from yumex.backend import YumexPackage, YumexPackageCache
+from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import Logger, log  # noqa
 from yumex.backend import PackageState
@@ -97,27 +98,30 @@ class YumexQueueView(Gtk.ListView):
         """setup ui for a list item"""
         row = YumexQueueRow(self)
         item.set_child(row)
+        item.set_activatable(False)
 
     @Gtk.Template.Callback()
     def on_queue_bind(self, widget, item):
         """setup data for a list item"""
         row = item.get_child()
-        data = item.get_item()
-        row.text.set_label(data.nevra)
-        row.pkg = data
-        row.dep.set_visible(data.is_dep)
-        match data.state:
+        pkg = item.get_item()
+        row.text.set_label(pkg.nevra)
+        row.pkg = pkg
+        row.dep.set_visible(pkg.is_dep)
+        # set pkg label tooltip bases on pkg state
+        tip = get_package_selection_tooltip(pkg)
+        row.text.set_tooltip_text(tip)
+        row.icon.set_tooltip_text(tip)
+        row.dep.set_tooltip_text(tip)
+        match pkg.state:
             case PackageState.INSTALLED:
                 row.icon.set_from_icon_name("edit-delete-symbolic")
-                row.icon.set_tooltip_text(_("Package will be deleted"))
                 row.icon.add_css_class("error")
             case PackageState.AVAILABLE:
                 row.icon.set_from_icon_name("emblem-default-symbolic")
-                row.icon.set_tooltip_text(_("Package will be installed"))
                 row.icon.add_css_class("success")
             case PackageState.UPDATE:
                 row.icon.set_from_icon_name("emblem-synchronizing-symbolic")
-                row.icon.set_tooltip_text(_("Package will be updated"))
                 row.icon.add_css_class("accent")
 
 
