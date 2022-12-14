@@ -100,8 +100,6 @@ class YumexPackageCache:
         self._packages = {}
         self.backend = backend
         self.nerva_dict = {}
-        # preload installed packages into cache
-        self.get_packages_by_filter("installed")
 
     def get_packages_by_filter(self, pkgfilter, reset=False):
         if pkgfilter not in self._packages or reset:
