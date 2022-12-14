@@ -58,9 +58,11 @@ class YumexQueueView(Gtk.ListView):
             deps = self.win.package_view.backend.depsolve(self.store)
             for dep in self.cache.add_packages(deps):
                 if dep not in self.store:
+                    # add the new dep pkg to view
                     dep.queued = True
                     dep.is_dep = True
                     dep.queue_action = True
+                    dep.ref_to = pkg
                 self.store.insert_sorted(dep, self.sort_by_state)
             self.package_view.refresh()
 
@@ -71,9 +73,10 @@ class YumexQueueView(Gtk.ListView):
         for store_pkg in self.store:
             if store_pkg != pkg and not store_pkg.is_dep:
                 store.insert_sorted(store_pkg, self.sort_by_state)
-            else:
+            else:  # reset properties for remove pkg
                 store_pkg.queued = False
                 store_pkg.is_dep = False
+                store_pkg.ref_to = None
                 store_pkg.queue_action = True
         if len(store):
             deps = self.win.package_view.backend.depsolve(store)
@@ -81,6 +84,7 @@ class YumexQueueView(Gtk.ListView):
                 if dep not in store:
                     dep.queued = True
                     dep.is_dep = True
+                    dep.ref_to = pkg
                     dep.queue_action = True
                     store.insert_sorted(dep, self.sort_by_state)
         self.store = store

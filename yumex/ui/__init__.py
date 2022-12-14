@@ -22,14 +22,17 @@ from yumex.backend import PackageState
 def get_package_selection_tooltip(pkg):
     """set tooltip based on package state and if it is an denpency"""
     tip = ""
+    name = ""
     if pkg.is_dep:
+        if pkg.ref_to:
+            name = f" ({str(pkg.ref_to.nevra)})"
         match pkg.state:
             case PackageState.INSTALLED:
-                tip = _("Queued for deletion as a dependency")
+                tip = _(f"Queued for deletion as a dependency {name}")
             case PackageState.AVAILABLE:
-                tip = _("Queued for installation as a dependency")
+                tip = _(f"Queued for installation as a dependency {name}")
             case PackageState.UPDATE:
-                tip = _("Queued for updating as a dependency")
+                tip = _(f"Queued for updating as a dependency {name}")
     else:
         match pkg.state:
             case PackageState.INSTALLED:
