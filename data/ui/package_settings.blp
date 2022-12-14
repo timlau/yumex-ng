@@ -11,17 +11,6 @@ template YumexPackageSettings : Gtk.Box {
         margin-start: 20;
         margin-end: 20;
         Adw.ActionRow {
-            title: _("Updates");
-            // subtitle: _("This setting controls how to do somethine");
-            activatable-widget: filter_updates;
-            styles ["package-filter-row"]
-            [prefix]
-            Gtk.CheckButton filter_updates {
-            name: "updates";
-            toggled =>  on_package_filter_toggled();
-            }
-        }
-        Adw.ActionRow {
             title: _("Installed");
             // subtitle: _("This setting controls how to do somethine");
             activatable-widget: filter_installed;
@@ -34,6 +23,17 @@ template YumexPackageSettings : Gtk.Box {
             }
         }
         Adw.ActionRow {
+            title: _("Updates");
+            // subtitle: _("This setting controls how to do somethine");
+            activatable-widget: filter_updates;
+            styles ["package-filter-row"]
+            [prefix]
+            Gtk.CheckButton filter_updates {
+              name: "updates";
+              toggled =>  on_package_filter_toggled();
+            }
+        }
+        Adw.ActionRow {
             title: _("Available");
             // subtitle: _("This setting controls how to do somethine");
             activatable-widget: filter_available;
@@ -43,6 +43,17 @@ template YumexPackageSettings : Gtk.Box {
             name: "available";
             group: filter_updates;
             toggled =>  on_package_filter_toggled();
+            }
+        }
+        Adw.ActionRow {
+            title: _("Search");
+            sensitive: false;
+            activatable-widget: filter_search;
+            styles ["package-filter-row"]
+            [prefix]
+            Gtk.CheckButton filter_search { 
+              name: "available";
+              group: filter_updates;
             }
         }
     }

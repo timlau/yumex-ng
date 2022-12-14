@@ -26,6 +26,7 @@ class YumexPackageSettings(Gtk.Box):
     filter_available = Gtk.Template.Child()
     filter_installed = Gtk.Template.Child()
     filter_updates = Gtk.Template.Child()
+    filter_search = Gtk.Template.Child()
     sort_by = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
@@ -48,6 +49,7 @@ class YumexPackageSettings(Gtk.Box):
         self.filter_available.set_active(False)
         self.filter_installed.set_active(False)
         self.filter_updates.set_active(False)
+        self.filter_search.set_active(True)
 
     def get_sort_attr(self):
         selected = self.sort_by.get_selected()
