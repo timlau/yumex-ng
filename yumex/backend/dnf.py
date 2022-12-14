@@ -58,12 +58,12 @@ class MDProgress(dnf.callback.DownloadProgress):
     def end(self, payload, status, msg):
         name = str(payload)
         if status == dnf.callback.STATUS_OK:
-            log(f"progress: {name} completed")
+            log(f" --> progress: {name} completed")
 
     def progress(self, payload, done):
         name = str(payload)
         if name != self._last_name:
-            log(f"progress: {name} started")
+            log(f" --> progress: {name} started")
             self.main.set_subtitle(_(f"Downloading repository information for {name}"))
             self._last_name = name
 

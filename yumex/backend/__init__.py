@@ -31,10 +31,10 @@ class PackageState(IntEnum):
 
 class PackageAction(IntEnum):
     DOWNGRADE = 10
-    ERASE = 20
+    UPGRADE = 20
     INSTALL = 30
     REINSTALL = 40
-    UPGRADE = 50
+    ERASE = 50
 
 
 class YumexPackage(GObject.GObject):
