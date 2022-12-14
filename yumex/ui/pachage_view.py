@@ -54,7 +54,6 @@ class YumexPackageView(Gtk.ColumnView):
     def queue_view(self):
         return self.win.queue_view
 
-    @timed
     def get_packages(self, pkg_filter="available"):
         def set_completed(result, error=False):
             self.win.main_view.set_sensitive(True)
