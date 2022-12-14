@@ -23,7 +23,7 @@ from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
-from yumex.utils import Logger, log  # noqa
+from yumex.utils import logged, log, timed  # noqa
 from yumex.backend import PackageState
 
 
@@ -50,7 +50,8 @@ class YumexQueueView(Gtk.ListView):
     def contains(self, pkg):
         return pkg in self.store
 
-    @Logger
+    @logged
+    @timed
     def add(self, pkg):
         """Add package to queue"""
         if pkg not in self.store:

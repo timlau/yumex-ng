@@ -20,6 +20,7 @@ import sys
 import logging
 import traceback
 import threading
+import time
 
 from gi.repository import GLib
 
@@ -130,18 +131,38 @@ def format_number(number, SI=0, space=" "):
     return fmt % (float(number or 0), space, symbols[depth])
 
 
-def Logger(func):
+def logged(func):
     """
     This decorator catch yum exceptions and send fatal signal to frontend
     """
 
-    def newFunc(*args, **kwargs):
-        log("%s started args: %s " % (func.__name__, repr(args[1:])))
+    def new_func(*args, **kwargs):
+        log("LOGGED: %s started args: %s " % (func.__name__, repr(args[1:])))
         rc = func(*args, **kwargs)
-        log("%s ended" % func.__name__)
+        log("LOGGED: %s ended" % func.__name__)
         return rc
 
-    newFunc.__name__ = func.__name__
-    newFunc.__doc__ = func.__doc__
-    newFunc.__dict__.update(func.__dict__)
-    return newFunc
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
+
+
+def timed(func):
+    """
+    This decorator show the execution time of a function in the log
+    """
+
+    def new_func(*args, **kwargs):
+        name = func.__name__
+        log(f"TIMED: starting {name}")
+        t_start = time.perf_counter()
+        rc = func(*args, **kwargs)
+        t_end = time.perf_counter()
+        log(f"TIMED: {name} took {t_end - t_start:.4f} sec")
+        return rc
+
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func

@@ -11,12 +11,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
 # Copyright (C) 2022  Tim Lauridsen
 #
-#
-
-import time
 
 from gi.repository import Gtk, Gio
 
@@ -24,7 +20,7 @@ from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip
-from yumex.utils import log, RunAsync
+from yumex.utils import log, RunAsync, timed
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
@@ -58,13 +54,11 @@ class YumexPackageView(Gtk.ColumnView):
     def queue_view(self):
         return self.win.queue_view
 
+    @timed
     def get_packages(self, pkg_filter="available"):
         def set_completed(result, error=False):
             self.win.main_view.set_sensitive(True)
             pkgs = result
-            et = time.time()
-            elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
-            log(f"Execution time: (get-packages) {elapsed}")
             self.add_packages_to_store(pkgs)
             self.win.progress.hide()
             # hide package setting sidebar
@@ -82,9 +76,9 @@ class YumexPackageView(Gtk.ColumnView):
 
         self.win.progress.show()
         self.win.main_view.set_sensitive(False)
-        st = time.time()
         RunAsync(self.package_cache.get_packages_by_filter, set_completed, pkg_filter)
 
+    @timed
     def search(self, txt, field="name"):
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
@@ -93,9 +87,9 @@ class YumexPackageView(Gtk.ColumnView):
             )
             self.add_packages_to_store(pkgs)
 
+    @timed
     def add_packages_to_store(self, pkgs):
         log("Adding packages to store")
-        st = time.time()
         # create a new store and add packages (big speed improvement)
         store = Gio.ListStore.new(YumexPackage)
         # for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
@@ -110,10 +104,7 @@ class YumexPackageView(Gtk.ColumnView):
         store = self.sort_by(store, sort_attr)
         self.store = store
         self.selection.set_model(self.store)
-        et = time.time()
         log(f" --> number of packages : {len(list(pkgs))}")
-        elapsed = time.strftime("%H:%M:%S", time.gmtime(et - st))
-        log(f" --> Execution time (add_packages_to_store) : {elapsed}")
 
     def sort(self):
         sort_attr = self.win.package_settings.get_sort_attr()
