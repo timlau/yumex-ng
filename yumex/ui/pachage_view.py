@@ -132,15 +132,23 @@ class YumexPackageView(Gtk.ColumnView):
         item.set_css_classes(current_styles)
 
     def select_all(self, state: bool):
+        to_add = []
+        to_delete = []
         for pkg in self.store:
             if state:
                 if not pkg.queued:
+                    pkg.queue_action = True
                     pkg.queued = True
-                    self.queue_view.add(pkg)
+                    to_add.append(pkg)
             else:
                 if pkg.queued:
+                    pkg.queue_action = True
                     pkg.queued = False
-                    self.queue_view.remove(pkg)
+                    to_delete.append(pkg)
+        if to_add:
+            self.queue_view.add_packages(to_add)
+        if to_delete:
+            self.queue_view.remove_packages(to_add)
         self.refresh()
 
     def refresh(self):
@@ -249,6 +257,6 @@ class YumexPackageView(Gtk.ColumnView):
         else:  # the user has clicked on the widget
             pkg.queued = widget.get_active()
             if pkg.queued:
-                self.queue_view.add(pkg)
+                self.queue_view.add_package(pkg)
             else:
-                self.queue_view.remove(pkg)
+                self.queue_view.remove_package(pkg)

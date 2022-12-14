@@ -50,28 +50,35 @@ class YumexQueueView(Gtk.ListView):
     def contains(self, pkg):
         return pkg in self.store
 
-    @timed
-    def add(self, pkg):
-        """Add package to queue"""
-        if pkg not in self.store:
-            self.store.insert_sorted(pkg, self.sort_by_state)
-            deps = self.win.package_view.backend.depsolve(self.store)
-            for dep in self.cache.add_packages(deps):
-                if dep not in self.store:  # new dep not in queue
-                    dep.queued = True
-                    dep.is_dep = True
-                    dep.ref_to = pkg
-                    dep.queue_action = True
-                self.store.insert_sorted(dep, self.sort_by_state)
-            self.package_view.refresh()
+    def add_package(self, pkg):
+        self.add_packages([pkg])
 
     @timed
-    def remove(self, pkg):
+    def add_packages(self, pkgs):
+        """Add package to queue"""
+        for pkg in pkgs:
+            if pkg not in self.store:
+                self.store.insert_sorted(pkg, self.sort_by_state)
+        deps = self.win.package_view.backend.depsolve(self.store)
+        for dep in self.cache.add_packages(deps):
+            if dep not in self.store:  # new dep not in queue
+                dep.queued = True
+                dep.is_dep = True
+                dep.ref_to = pkg
+                dep.queue_action = True
+            self.store.insert_sorted(dep, self.sort_by_state)
+        self.package_view.refresh()
+
+    def remove_package(self, pkg):
+        self.remove_packages([pkg])
+
+    @timed
+    def remove_packages(self, pkgs):
         """Remove package from queue"""
         store = Gio.ListStore.new(YumexPackage)
         for store_pkg in self.store:
             # check if this package should be kept in the queue
-            if store_pkg != pkg and not store_pkg.is_dep:
+            if store_pkg not in pkgs and not store_pkg.is_dep:
                 store.insert_sorted(store_pkg, self.sort_by_state)
             else:  # reset properties for pkg to not keep in queue
                 store_pkg.queued = False
@@ -141,8 +148,8 @@ class YumexQueueRow(Gtk.Box):
 
     def __init__(self, view, **kwargs):
         super().__init__(**kwargs)
-        self.view = view
-        self.pkg = None
+        self.view: YumexQueueView = view
+        self.pkg: YumexPackage = None
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, button):
@@ -151,5 +158,5 @@ class YumexQueueRow(Gtk.Box):
         row = button.get_parent()
         pkg = row.pkg
         if pkg:
-            row.view.remove(pkg)
+            row.view.remove_package(pkg)
             pkg.queued = False
