@@ -54,7 +54,7 @@ class YumexPackageSettings(Gtk.Box):
 
     def get_info_type(self):
         selected = self.info_type.get_selected()
-        return ["description", "files"][selected]
+        return ["description", "files", "update_info"][selected]
 
     def get_sort_attr(self):
         selected = self.sort_by.get_selected()
@@ -63,13 +63,6 @@ class YumexPackageSettings(Gtk.Box):
     @Gtk.Template.Callback()
     def on_sorting_activated(self, widget):
         log(f"Sorting activated: {widget}")
-
-    @Gtk.Template.Callback()
-    def on_resort_clicked(self, widget):
-        log("Sorting activated")
-        self.win.package_view.sort()
-        self.win.package_view.refresh()
-        self.win.sidebar.set_reveal_flap(False)
 
     @Gtk.Template.Callback()
     def on_package_filter_toggled(self, button):
@@ -92,3 +85,24 @@ class YumexPackageSettings(Gtk.Box):
                 log(f"package_filter not found : {pkg_filter}")
         self.current_pkg_filter = pkg_filter
         self.previuos_pkg_filter = pkg_filter
+
+    @Gtk.Template.Callback()
+    def on_info_type_notify(self, widget, data):
+        """capture the Notify for the selected property is changed"""
+        match data.name:
+            case "selected":
+                log(f"package info changed {self.info_type.get_selected()}")
+                self.win.package_view.on_selection_changed(
+                    self.win.package_view.get_model(), 0, 0
+                )
+                self.win.sidebar.set_reveal_flap(False)
+
+    @Gtk.Template.Callback()
+    def on_sort_by_notify(self, widget, data):
+        """capture the Notify for the selected property is changed"""
+        match data.name:
+            case "selected":
+                log(f"sort_by changed {self.sort_by.get_selected()}")
+                self.win.package_view.sort()
+                self.win.package_view.refresh()
+                self.win.sidebar.set_reveal_flap(False)

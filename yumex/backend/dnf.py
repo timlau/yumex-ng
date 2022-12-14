@@ -25,6 +25,7 @@ import dnf.const
 import dnf.conf
 import dnf.subject
 import hawkey
+import itertools
 
 from gi.repository import Gio
 
@@ -42,6 +43,42 @@ class DnfCallback:
 
     def set_subtitle(self, txt):
         self.win.progress.set_subtitle(txt)
+
+
+class UpdateInfo:
+    """Wrapper class for dnf update advisories on a given po."""
+
+    UPDINFO_MAIN = ["id", "title", "type", "description"]
+
+    def __init__(self, po):
+        self.po = po
+
+    @staticmethod
+    def advisories_iter(po):
+        # FIXME: hawkey.package.get_advisories() is not public API
+        return itertools.chain(
+            po.get_advisories(hawkey.LT), po.get_advisories(hawkey.GT | hawkey.EQ)
+        )
+
+    def advisories_list(self):
+        """list containing advisory information."""
+        results = []
+        for adv in self.advisories_iter(self.po):
+            e = {}
+            # main fields
+            for field in UpdateInfo.UPDINFO_MAIN:
+                e[field] = getattr(adv, field)
+            dt = getattr(adv, "updated")
+            e["updated"] = dt.isoformat(" ")
+            # TODO manage packages
+            # references
+            refs = []
+            for ref in adv.references:
+                ref_tuple = [ref.type, ref.id, ref.title, ref.url]
+                refs.append(ref_tuple)
+            e["references"] = refs
+            results.append(e)
+        return results
 
 
 class MDProgress(dnf.callback.DownloadProgress):
@@ -348,17 +385,21 @@ class Backend(DnfBase):
         return self.packages.search(txt, field=field)
 
     def get_package_info(self, pkg: YumexPackage, attr: str) -> Union[str, None]:
-        found = self.packages.find_package(pkg)
-        log(f" BACKEND: pkg: {found} attribute : {attr}")
-        if found:
+        dnf_pkg = self.packages.find_package(pkg)
+        log(f" BACKEND: pkg: {dnf_pkg} attribute : {attr}")
+        if dnf_pkg:
             match attr:
                 case "description":
                     return pkg.description
                 case "files":
-                    return "\n".join(found.files)
+                    return dnf_pkg.files
+                case "update_info":
+                    updinfo = UpdateInfo(dnf_pkg)
+                    value = updinfo.advisories_list()
+                    return value
                 case _:
-                    if hasattr(found, attr):
-                        return getattr(found, attr)
+                    if hasattr(dnf_pkg, attr):
+                        return getattr(dnf_pkg, attr)
         return None
 
     def get_repositories(self):

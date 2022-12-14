@@ -67,22 +67,8 @@ template YumexPackageSettings : Gtk.Box {
             model: sort_attr;
             styles ["sorting-row"]
             activated => on_sorting_activated();
+            notify => on_sort_by_notify();
        }
-        Adw.ActionRow {
-            title: _("Sort packages");
-            // subtitle: _("This setting controls how to do somethine");
-            activatable-widget: sort_resort;
-            styles ["package-filter-row"]
-            [suffix]
-            Gtk.Button sort_resort { 
-                hexpand: false;
-                vexpand: false;
-                valign: center;
-                halign: center;
-                icon-name: "system-run-symbolic";
-                clicked => on_resort_clicked();
-            }
-        }
     }
     Adw.PreferencesGroup {
         title: _("Package info.");
@@ -93,7 +79,7 @@ template YumexPackageSettings : Gtk.Box {
             title: _("Show:");
             model: info_types;
             styles ["sorting-row"]
-            activated => on_sorting_activated();
+            notify => on_info_type_notify();
        }
     }
 
@@ -113,6 +99,7 @@ Gtk.StringList info_types{
     strings [
         _("Description"),
         _("Filelist"),
+        _("Update Info"),
     ]
 }
 
