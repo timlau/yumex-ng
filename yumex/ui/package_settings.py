@@ -28,6 +28,7 @@ class YumexPackageSettings(Gtk.Box):
     filter_updates = Gtk.Template.Child()
     filter_search = Gtk.Template.Child()
     sort_by = Gtk.Template.Child()
+    info_type = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -50,6 +51,10 @@ class YumexPackageSettings(Gtk.Box):
         self.filter_installed.set_active(False)
         self.filter_updates.set_active(False)
         self.filter_search.set_active(True)
+
+    def get_info_type(self):
+        selected = self.info_type.get_selected()
+        return ["description", "files"][selected]
 
     def get_sort_attr(self):
         selected = self.sort_by.get_selected()

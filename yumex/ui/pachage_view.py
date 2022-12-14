@@ -214,10 +214,11 @@ class YumexPackageView(Gtk.ColumnView):
         selection = widget.get_selection()
         ndx = selection.get_nth(0)
         pkg = self.store[ndx]
-        desc = self.backend.get_package_info(pkg, "description")
-        if not desc:
-            desc = ""
-        self.win.package_info.set_label(desc)
+        info_type = self.win.package_settings.get_info_type()
+        pkg_info = self.backend.get_package_info(pkg, info_type)
+        if not pkg_info:
+            pkg_info = ""
+        self.win.package_info.set_label(pkg_info)
 
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""

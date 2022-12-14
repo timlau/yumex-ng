@@ -349,9 +349,16 @@ class Backend(DnfBase):
 
     def get_package_info(self, pkg: YumexPackage, attr: str) -> Union[str, None]:
         found = self.packages.find_package(pkg)
+        log(f" BACKEND: pkg: {found} attribute : {attr}")
         if found:
-            if hasattr(found, attr):
-                return getattr(found, attr)
+            match attr:
+                case "description":
+                    return pkg.description
+                case "files":
+                    return "\n".join(found.files)
+                case _:
+                    if hasattr(found, attr):
+                        return getattr(found, attr)
         return None
 
     def get_repositories(self):

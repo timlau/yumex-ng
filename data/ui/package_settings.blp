@@ -84,6 +84,19 @@ template YumexPackageSettings : Gtk.Box {
             }
         }
     }
+    Adw.PreferencesGroup {
+        title: _("Package info.");
+        hexpand: false;
+        margin-start: 20;
+        margin-end: 20;
+        Adw.ComboRow info_type {
+            title: _("Show:");
+            model: info_types;
+            styles ["sorting-row"]
+            activated => on_sorting_activated();
+       }
+    }
+
 }
 
 
@@ -95,3 +108,11 @@ Gtk.StringList sort_attr{
         _("Repo")
     ]
 }
+
+Gtk.StringList info_types{
+    strings [
+        _("Description"),
+        _("Filelist"),
+    ]
+}
+
