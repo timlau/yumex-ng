@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Yum Extender
+Comment=Install, update and remove applications
+Exec=yumex
+Icon=@APP_ID@
+Terminal=false
+Type=Application
+Categories=System;Settings;X-Red-Hat-Base;X-Fedora;
+StartupNotify=true
+Encoding=UTF-8
+GenericName=Software Installer
