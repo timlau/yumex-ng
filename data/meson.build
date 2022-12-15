@@ -47,4 +47,21 @@ if desktop_utils.found()
   )
 endif
 
+appstream_file = i18n.merge_file(
+  input: configure_file(
+    input: '@0@.appdata.xml.in.in'.format(APPLICATION_ID),
+    output: '@BASENAME@',
+    configuration: conf,
+  ),
+  output: '@0@.appdata.xml'.format(APPLICATION_ID),
+  po_dir: '../po',
+  install: true,
+  install_dir: join_paths(get_option('datadir'), 'appdata')
+)
 
+appstream_util = find_program('appstream-util', required: false)
+if appstream_util.found()
+  test('Validate appstream file', appstream_util,
+    args: ['validate', appstream_file.full_path()]
+  )
+endif
