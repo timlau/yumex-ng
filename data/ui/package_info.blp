@@ -9,7 +9,6 @@ template YumexPackageInfo: Gtk.Box {
     margin-start: 20;
     margin-end: 20;
     Adw.PreferencesGroup description_grp {
-        // title: _("Package information");
         visible: false;
         Adw.ActionRow info{
             title: "";
@@ -17,10 +16,9 @@ template YumexPackageInfo: Gtk.Box {
         }
     }
     Adw.PreferencesGroup update_info_grp {
-        // title: _("Update information");
         visible: false;
         Adw.ActionRow {
-            title: "Release";
+            title: _("Advisory ID");
             [suffix]
             Gtk.Label release {
                 label: "FEDORA-2022-57c9a56e84";
@@ -28,7 +26,7 @@ template YumexPackageInfo: Gtk.Box {
             }
         }
         Adw.ActionRow {
-            title: "Type";
+            title: _("Advisory Type");
             [suffix]
             Gtk.Label type {
                 label: "Bugfix";
@@ -36,7 +34,7 @@ template YumexPackageInfo: Gtk.Box {
             }
         }
         Adw.ActionRow {
-            title: "Issued";
+            title: _("Advisory Issued");
             [suffix]
             Gtk.Label issued {
                 label: "2022-12-08 12:07:07";
@@ -46,6 +44,18 @@ template YumexPackageInfo: Gtk.Box {
         Adw.ActionRow desc {
             title: "";
             styles ["accent"]
+        }
+        Adw.ActionRow references {
+            title: "";
+            [preffix]
+            Adw.PreferencesGroup ref_grp {
+                title: _("Bugzilla References");
+                margin-start: 10;
+                margin-end: 10;
+                margin-bottom: 5;
+                // references Adw.ActionRow are added here
+            }
+
         }
     }
 }

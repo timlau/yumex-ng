@@ -15,7 +15,7 @@
 #
 
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Adw
 
 from yumex.constants import rootdir
 import hawkey
@@ -39,10 +39,13 @@ class YumexPackageInfo(Gtk.Box):
     desc = Gtk.Template.Child()
     description_grp = Gtk.Template.Child()
     update_info_grp = Gtk.Template.Child()
+    ref_grp = Gtk.Template.Child()
+    references = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win = win
+        self._ref_rows = []
 
     def update(self, info_type, pkg_info):
         info = self.format(info_type, pkg_info)
@@ -85,3 +88,19 @@ class YumexPackageInfo(Gtk.Box):
             self.issued.set_label(issued)
             description = pkg_info["description"]
             self.desc.set_title(description)
+            refs = pkg_info["references"]
+            # remove the previous added rows
+            for row in self._ref_rows:
+                self.ref_grp.remove(row)
+            self._ref_rows = []
+            if refs:
+                for ref in refs:
+                    num, bug_id, bug_desc, bug_link = ref
+                    txt = f'<a href="{bug_link}">{bug_id}</a> - {bug_desc}'
+                    row = Adw.ActionRow()
+                    row.set_title(txt)
+                    self.ref_grp.add(row)
+                    self._ref_rows.append(row)
+                self.references.set_visible(True)
+            else:
+                self.references.set_visible(False)
