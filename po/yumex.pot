@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 09:35+0100\n"
+"POT-Creation-Date: 2022-12-15 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,58 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: yumex/ui/queue_view.py:76
-msgid "Package will be deleted"
+#: yumex/ui/__init__.py:31
+#, python-brace-format
+msgid "Queued for deletion as a dependency {name}"
 msgstr ""
 
-#: yumex/ui/queue_view.py:80
-msgid "Package will be installed"
+#: yumex/ui/__init__.py:33
+#, python-brace-format
+msgid "Queued for installation as a dependency {name}"
 msgstr ""
 
-#: yumex/ui/queue_view.py:84
-msgid "Package will be updated"
+#: yumex/ui/__init__.py:35
+#, python-brace-format
+msgid "Queued for updating as a dependency {name}"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:82
+#: yumex/ui/__init__.py:39
+msgid "Queued for deletion"
+msgstr ""
+
+#: yumex/ui/__init__.py:41
+msgid "Queued for installation"
+msgstr ""
+
+#: yumex/ui/__init__.py:43
+msgid "Queued for updating"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:73
 msgid "Loading Packages"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:83
+#: yumex/ui/pachage_view.py:74
 msgid "This make take a little while"
 msgstr ""
 
-#: yumex/backend/dnf.py:65
+#: yumex/ui/package_info.py:24
+msgid "Bugfix"
+msgstr ""
+
+#: yumex/ui/package_info.py:25
+msgid "New Package"
+msgstr ""
+
+#: yumex/ui/package_info.py:26
+msgid "Security"
+msgstr ""
+
+#: yumex/ui/package_info.py:27
+msgid "Enhancement"
+msgstr ""
+
+#: yumex/backend/dnf.py:104
 #, python-brace-format
 msgid "Downloading repository information for {name}"
 msgstr ""
@@ -56,50 +87,6 @@ msgid ""
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 
-#: data/ui/package_settings.blp:9
-msgid "Package filter"
-msgstr ""
-
-#: data/ui/package_settings.blp:14
-msgid "Updates"
-msgstr ""
-
-#: data/ui/package_settings.blp:25
-msgid "Installed"
-msgstr ""
-
-#: data/ui/package_settings.blp:37
-msgid "Available"
-msgstr ""
-
-#: data/ui/package_settings.blp:50
-msgid "Sorting"
-msgstr ""
-
-#: data/ui/package_settings.blp:55
-msgid "Sort by:"
-msgstr ""
-
-#: data/ui/package_settings.blp:61
-msgid "Sort packages"
-msgstr ""
-
-#: data/ui/package_settings.blp:81
-msgid "Name"
-msgstr ""
-
-#: data/ui/package_settings.blp:82
-msgid "Arch"
-msgstr ""
-
-#: data/ui/package_settings.blp:83 data/ui/package_view.blp:36
-msgid "Size"
-msgstr ""
-
-#: data/ui/package_settings.blp:84
-msgid "Repo"
-msgstr ""
-
 #: data/ui/package_view.blp:18
 msgid "name"
 msgstr ""
@@ -112,7 +99,11 @@ msgstr ""
 msgid "Arch."
 msgstr ""
 
-#: data/ui/package_view.blp:42
+#: data/ui/package_view.blp:36 data/ui/package_settings.blp:93
+msgid "Size"
+msgstr ""
+
+#: data/ui/package_view.blp:42 data/ui/package_settings.blp:100
 msgid "Description"
 msgstr ""
 
@@ -128,7 +119,7 @@ msgstr ""
 msgid "Deselect All"
 msgstr ""
 
-#: data/ui/preferences.blp:5 data/ui/window.blp:193
+#: data/ui/preferences.blp:5 data/ui/window.blp:189
 msgid "Preferences"
 msgstr ""
 
@@ -152,16 +143,92 @@ msgstr ""
 msgid "The available and enabled repositories"
 msgstr ""
 
-#: data/ui/window.blp:6
+#: data/ui/package_settings.blp:9
+msgid "Package filter"
+msgstr ""
+
+#: data/ui/package_settings.blp:14
+msgid "Installed"
+msgstr ""
+
+#: data/ui/package_settings.blp:26
+msgid "Updates"
+msgstr ""
+
+#: data/ui/package_settings.blp:37
+msgid "Available"
+msgstr ""
+
+#: data/ui/package_settings.blp:49 data/ui/window.blp:41
+msgid "Search"
+msgstr ""
+
+#: data/ui/package_settings.blp:61
+msgid "Sorting"
+msgstr ""
+
+#: data/ui/package_settings.blp:66
+msgid "Sort by:"
+msgstr ""
+
+#: data/ui/package_settings.blp:74
+msgid "Package info."
+msgstr ""
+
+#: data/ui/package_settings.blp:79
+msgid "Show:"
+msgstr ""
+
+#: data/ui/package_settings.blp:91
+msgid "Name"
+msgstr ""
+
+#: data/ui/package_settings.blp:92
+msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:94
+msgid "Repo"
+msgstr ""
+
+#: data/ui/package_settings.blp:101
+msgid "Filelist"
+msgstr ""
+
+#: data/ui/package_settings.blp:102
+msgid "Update Info"
+msgstr ""
+
+#: data/ui/queue_row.blp:17
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:35
+msgid "Remove item from queue"
+msgstr ""
+
+#: data/ui/package_info.blp:21
+msgid "Advisory ID"
+msgstr ""
+
+#: data/ui/package_info.blp:29
+msgid "Advisory Type"
+msgstr ""
+
+#: data/ui/package_info.blp:37
+msgid "Advisory Issued"
+msgstr ""
+
+#: data/ui/package_info.blp:52
+msgid "Bugzilla References"
+msgstr ""
+
+#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
 msgid "Yum Extender"
 msgstr ""
 
 #: data/ui/window.blp:32
 msgid "Select Package filters"
-msgstr ""
-
-#: data/ui/window.blp:41
-msgid "Search"
 msgstr ""
 
 #: data/ui/window.blp:57
@@ -184,14 +251,22 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: data/ui/window.blp:150
+#: data/ui/window.blp:146
 msgid "Groups"
 msgstr ""
 
-#: data/ui/window.blp:159
+#: data/ui/window.blp:155
 msgid "Queue"
 msgstr ""
 
-#: data/ui/window.blp:198
+#: data/ui/window.blp:194
 msgid "About Yum Extender"
+msgstr ""
+
+#: data/dk.yumex.Yumex.desktop.in.in:4
+msgid "Install, update and remove applications"
+msgstr ""
+
+#: data/dk.yumex.Yumex.desktop.in.in:11
+msgid "Software Installer"
 msgstr ""
