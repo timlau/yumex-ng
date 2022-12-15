@@ -1213,9 +1213,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.262057"
-     inkscape:cx="37.515351"
-     inkscape:cy="66.817281"
+     inkscape:zoom="2.2871063"
+     inkscape:cx="-205.71846"
+     inkscape:cy="102.53131"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -1433,7 +1433,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Devel"
-     style="display:inline;opacity:0.75;mix-blend-mode:overlay;fill:#ff5555;stroke:#ff2a2a"
+     style="display:inline;opacity:1;mix-blend-mode:soft-light;fill:#ff5555;stroke:#ff2a2a"
      sodipodi:insensitive="true">
     <g
        id="g4072"
