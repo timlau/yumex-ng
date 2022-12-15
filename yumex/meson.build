@@ -29,7 +29,6 @@ run_target('run',
 yumex_sources = [
   '__init__.py',
   'main.py',
-  'constants.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_sources, subdir: 'yumex')
 
@@ -48,13 +47,13 @@ PY_INSTALLDIR.install_sources(yumex_ui_modules, subdir: 'yumex/ui')
 
 yumex_backend_modules = [
 'backend/__init__.py',
-'backend/dnf.py',
+'backend/dnf.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
 
 
 yumex_utils_modules = [
-'utils/__init__.py',
+'utils/__init__.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
