@@ -17,7 +17,7 @@ dependency('libadwaita-1', version: '>= 1.2.alpha')
 dependency('pygobject-3.0', version: '>= 3.42.0')
 
 # Python installation directory
-PY_INSTALLDIR = python.find_installation('python3', required: true, modules: ['lxml'])
+PY_INSTALLDIR = python.find_installation('python3', required: true)
 
 # Check if python3 is installed
 if not PY_INSTALLDIR.found()
@@ -62,6 +62,6 @@ subdir('po')
 
 gnome.post_install(
   glib_compile_schemas: true,
-#   gtk_update_icon_cache: true,
-#  update_desktop_database: true,
+  gtk_update_icon_cache: true,
+  update_desktop_database: true,
 )
