@@ -67,18 +67,21 @@ class YumexPackageInfo(Gtk.Box):
                 return "\n".join(pkg_info)
             case "update_info":
                 # a list of update_info dicts
-                return pkg_info[0]
+                if pkg_info:
+                    return pkg_info[0]
+                else:
+                    return None
 
     def add_decription(self, txt):
-        print(txt)
-        self.info.set_label(txt)
+        self.info.set_title(txt)
 
     def add_update_info(self, pkg_info):
-        release = pkg_info["id"]
-        self.release.set_label(release)
-        upd_type = ADVISORY_TYPES[pkg_info["type"]]
-        self.type.set_label(upd_type)
-        issued = pkg_info["updated"]
-        self.issued.set_label(issued)
-        description = pkg_info["description"]
-        self.desc.set_label(description)
+        if pkg_info:
+            release = pkg_info["id"]
+            self.release.set_label(release)
+            upd_type = ADVISORY_TYPES[pkg_info["type"]]
+            self.type.set_label(upd_type)
+            issued = pkg_info["updated"]
+            self.issued.set_label(issued)
+            description = pkg_info["description"]
+            self.desc.set_title(description)

@@ -3,26 +3,21 @@ using Adw 1;
 
 template YumexPackageInfo: Gtk.Box {
     orientation: vertical;
+    hexpand: true;
+    margin-top: 10;
+    margin-bottom: 10;
+    margin-start: 20;
+    margin-end: 20;
     Adw.PreferencesGroup description_grp {
-        title: _("Package information");
+        // title: _("Package information");
         visible: false;
-        Adw.ActionRow {
+        Adw.ActionRow info{
             title: "";
-            [prefix]
-            Gtk.Label info {
-                halign: start;
-                hexpand: true;
-                xalign: 0.0;
-                valign: start;
-                // width-chars: 40;
-                wrap-mode: word;
-                wrap: true;
-                styles ["accent"]
-            }
+            styles ["accent"]
         }
     }
     Adw.PreferencesGroup update_info_grp {
-        title: _("Update information");
+        // title: _("Update information");
         visible: false;
         Adw.ActionRow {
             title: "Release";
@@ -48,13 +43,9 @@ template YumexPackageInfo: Gtk.Box {
                 styles ["accent"]
             }
         }
-        Adw.ActionRow {
+        Adw.ActionRow desc {
             title: "";
-            [prefix]
-            Gtk.Label desc {
-                xalign: 0.0;
-                styles ["accent"]
-            }
+            styles ["accent"]
         }
     }
 }
