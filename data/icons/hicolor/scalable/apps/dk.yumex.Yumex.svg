@@ -6,9 +6,9 @@
    height="96"
    id="svg2408"
    sodipodi:version="0.32"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    version="1.0"
-   sodipodi:docname="dk.yumex.Yumex-devel.svg"
+   sodipodi:docname="dk.yumex.Yumex.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    style="display:inline"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -1213,18 +1213,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="14.031126"
-     inkscape:cx="48.60622"
-     inkscape:cy="33.782036"
+     inkscape:zoom="11.262057"
+     inkscape:cx="37.515351"
+     inkscape:cy="75.430273"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer2"
      showgrid="false"
      showborder="true"
      inkscape:showpageshadow="false"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-global="false"
      showguides="false"
@@ -1433,11 +1433,13 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Devel"
-     style="display:inline;fill:#ff5555;stroke:#ff2a2a">
+     style="display:inline;opacity:1;mix-blend-mode:overlay;fill:#ff5555;stroke:#ff2a2a"
+     sodipodi:insensitive="true">
     <g
        id="g4072"
        sodipodi:insensitive="true"
-       inkscape:label="devel-stipes">
+       inkscape:label="devel-stipes"
+       style="mix-blend-mode:lighten">
       <path
          id="rect1381"
          style="fill:#ffcc00;fill-opacity:1;stroke:none"
@@ -1454,7 +1456,8 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Arrow Symbol"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <g
        id="g4591"
        inkscape:label="arrow_grp">
