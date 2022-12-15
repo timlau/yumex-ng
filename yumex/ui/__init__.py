@@ -43,3 +43,10 @@ def get_package_selection_tooltip(pkg):
                 tip = _("Queued for updating")
 
     return tip
+
+
+UPDATE_INFO_TEMPLATE = """Release: {}   Type: {}   Issued: {}
+
+Description:
+{}
+"""

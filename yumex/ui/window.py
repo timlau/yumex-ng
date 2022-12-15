@@ -22,6 +22,7 @@ from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
+from yumex.ui.package_info import YumexPackageInfo
 from yumex.utils import log
 
 
@@ -43,7 +44,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     search_entry = Gtk.Template.Child()
     sidebar_button = Gtk.Template.Child("sidebar-button")
     package_paned = Gtk.Template.Child()
-    package_info = Gtk.Template.Child()
+    update_info_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -97,6 +98,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
         self.package_settings = YumexPackageSettings(self)
         self.sidebar.set_flap(self.package_settings)
+        self.package_info = YumexPackageInfo(self)
+        self.update_info_box.append(self.package_info)
 
     def setup_groups_page(self):
         """Setup the groups page"""

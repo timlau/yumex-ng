@@ -9,6 +9,7 @@
     <file preprocess="xml-stripblanks">ui/package_settings.ui</file>
     <file preprocess="xml-stripblanks">ui/progress.ui</file>
     <file preprocess="xml-stripblanks">ui/repository.ui</file>
+    <file preprocess="xml-stripblanks">ui/package_info.ui</file>
     <file>style.css</file>
   </gresource>
 </gresources>

@@ -217,29 +217,17 @@ class YumexPackageView(Gtk.ColumnView):
         data = item.get_item()  # get the model item, connected to current ListItem
         label.set_active(data.queued)  # Update Gtk.Label with data from model item
 
-    def get_pkg_info(self, pkg):
+    def set_pkg_info(self, pkg):
         info_type = self.win.package_settings.get_info_type()
         pkg_info = self.backend.get_package_info(pkg, info_type)
-        match info_type:
-            case "description":
-                # a string
-                return pkg_info
-            case "files":
-                # list of filename
-                return "\n".join(pkg_info)
-            case "update_info":
-                # a list of update_info dicts
-                # FIXME: do some real formating in pango markup
-                return str(pkg_info)
-        return ""
+        self.win.package_info.update(info_type, pkg_info)
 
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):
         selection = widget.get_selection()
         ndx = selection.get_nth(0)
         pkg = self.store[ndx]
-        pkg_info = self.get_pkg_info(pkg)
-        self.win.package_info.set_label(pkg_info)
+        self.set_pkg_info(pkg)
 
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""

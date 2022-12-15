@@ -1,0 +1,61 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexPackageInfo: Gtk.Box {
+    orientation: vertical;
+    Adw.PreferencesGroup description_grp {
+        title: _("Package information");
+        visible: false;
+        Adw.ActionRow {
+            title: "";
+            [prefix]
+            Gtk.Label info {
+                halign: start;
+                hexpand: true;
+                xalign: 0.0;
+                valign: start;
+                // width-chars: 40;
+                wrap-mode: word;
+                wrap: true;
+                styles ["accent"]
+            }
+        }
+    }
+    Adw.PreferencesGroup update_info_grp {
+        title: _("Update information");
+        visible: false;
+        Adw.ActionRow {
+            title: "Release";
+            [suffix]
+            Gtk.Label release {
+                label: "FEDORA-2022-57c9a56e84";
+                styles ["accent"]
+            }
+        }
+        Adw.ActionRow {
+            title: "Type";
+            [suffix]
+            Gtk.Label type {
+                label: "Bugfix";
+                styles ["accent"]
+            }
+        }
+        Adw.ActionRow {
+            title: "Issued";
+            [suffix]
+            Gtk.Label issued {
+                label: "2022-12-08 12:07:07";
+                styles ["accent"]
+            }
+        }
+        Adw.ActionRow {
+            title: "";
+            [prefix]
+            Gtk.Label desc {
+                xalign: 0.0;
+                styles ["accent"]
+            }
+        }
+    }
+}
+
