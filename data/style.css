@@ -79,10 +79,11 @@ spinner {
     text-transform: uppercase;
 }
 
-.queue_row button {
+/* .queue_row button {
     padding: 0px;
-}
+} */
 
 .queue_row button image {
     color: @error_color;
+    outline-offset: 2px;
 }
