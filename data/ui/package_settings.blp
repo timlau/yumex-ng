@@ -14,7 +14,7 @@ template YumexPackageSettings : Gtk.Box {
             title: _("Installed");
             // subtitle: _("This setting controls how to do somethine");
             activatable-widget: filter_installed;
-            styles ["package-filter-row"]
+            styles ["package-filter-row", "checkmark"]
             [prefix]
             Gtk.CheckButton filter_installed { 
             name: "installed";
@@ -26,7 +26,7 @@ template YumexPackageSettings : Gtk.Box {
             title: _("Updates");
             // subtitle: _("This setting controls how to do somethine");
             activatable-widget: filter_updates;
-            styles ["package-filter-row"]
+            styles ["package-filter-row", 'checkmark']
             [prefix]
             Gtk.CheckButton filter_updates {
               name: "updates";
@@ -37,7 +37,7 @@ template YumexPackageSettings : Gtk.Box {
             title: _("Available");
             // subtitle: _("This setting controls how to do somethine");
             activatable-widget: filter_available;
-            styles ["package-filter-row"]
+            styles ["package-filter-row", "checkmark"]
             [prefix]
             Gtk.CheckButton filter_available { 
             name: "available";
@@ -49,7 +49,7 @@ template YumexPackageSettings : Gtk.Box {
             title: _("Search");
             sensitive: false;
             activatable-widget: filter_search;
-            styles ["package-filter-row"]
+            styles ["package-filter-row", "checkmark"]
             [prefix]
             Gtk.CheckButton filter_search { 
               name: "available";

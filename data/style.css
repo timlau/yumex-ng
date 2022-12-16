@@ -87,3 +87,8 @@ spinner {
     color: @error_color;
     outline-offset: 2px;
 }
+
+/* Change icon on package filter when selected */
+.checkmark radio:checked {
+    -gtk-icon-source: -gtk-icontheme('emblem-ok-symbolic');
+}
