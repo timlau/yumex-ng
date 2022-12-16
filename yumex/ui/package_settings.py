@@ -29,6 +29,8 @@ class YumexPackageSettings(Gtk.Box):
     filter_search = Gtk.Template.Child()
     sort_by = Gtk.Template.Child()
     info_type = Gtk.Template.Child()
+    show_icon = Gtk.Template.Child()
+    sort_icon = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -36,6 +38,8 @@ class YumexPackageSettings(Gtk.Box):
         self.setting = win.settings
         self.current_pkg_filter = None
         self.previuos_pkg_filter = None
+        self.show_icon.set_from_icon_name("diagnostics-symbolic")
+        self.sort_icon.set_from_icon_name("view-sort-descending-rtl-symbolic")
 
     def set_active_filter(self, pkg_filter):
         match pkg_filter:
