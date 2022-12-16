@@ -33,10 +33,6 @@ template YumexMainWindow : Adw.ApplicationWindow {
             tooltip-text: _("Select Package filters");
           }
           [start]
-          Gtk.Separator {
-            styles ["spacer"]
-          }
-          [start]
           ToggleButton search_button {
             icon-name: "system-search";
             tooltip-text: _("Search");
@@ -58,10 +54,6 @@ template YumexMainWindow : Adw.ApplicationWindow {
             tooltip-text: _("Main Menu");
             icon-name: "open-menu-symbolic";
             menu-model: main-menu;
-          }
-          [end]
-          Gtk.Separator {
-            styles ["spacer"]
           }
           [end]
           Button apply-button {
