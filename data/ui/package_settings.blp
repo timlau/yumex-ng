@@ -58,41 +58,33 @@ template YumexPackageSettings : Gtk.Box {
         }
     }
     Adw.PreferencesGroup {
-        title: _("Sorting");
+        title: _("View Settings");
         hexpand: false;
         margin-start: 20;
         margin-end: 20;
         Adw.ComboRow sort_by {
             model: sort_attr;
             styles ["sorting-row"]
-            tooltip-text: _("Select what attribute to sort by");
             activated => on_sorting_activated();
             notify => on_sort_by_notify();
             [prefix]
             Gtk.Image  sort_icon {
+                tooltip-text: _("Select what attribute to sort by");
 
             }
        }
-    }
-    Adw.PreferencesGroup {
-        title: _("Package info.");
-        hexpand: false;
-        margin-start: 20;
-        margin-end: 20;
-        Adw.ComboRow info_type {
+       Adw.ComboRow info_type {
             model: info_types;
             styles ["sorting-row"]
-            tooltip-text: _("Select what package into to show");
             notify => on_info_type_notify();
             [prefix]
             Gtk.Image  show_icon {
+                tooltip-text: _("Select what package into to show");
 
             }
        }
     }
-
 }
-
 
 Gtk.StringList sort_attr{
     strings [
