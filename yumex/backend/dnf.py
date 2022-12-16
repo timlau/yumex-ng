@@ -70,8 +70,7 @@ class UpdateInfo:
                 e[field] = getattr(adv, field)
             dt = getattr(adv, "updated")
             e["updated"] = dt.isoformat(" ")
-            # TODO manage packages
-            # references
+            # manage packages references
             refs = []
             for ref in adv.references:
                 ref_tuple = [ref.type, ref.id, ref.title, ref.url]
