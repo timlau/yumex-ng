@@ -14,8 +14,8 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/test-pass-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/server-pick-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/flatpak-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/list-large-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/playback-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/resources-symbolic.svg</file>
     <file>style.css</file>
   </gresource>
 </gresources>
