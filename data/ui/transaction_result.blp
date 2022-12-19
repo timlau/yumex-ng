@@ -1,0 +1,63 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexTransactionResult : Adw.Window {
+    default-width: 700;
+    default-height: 700;
+
+    Gtk.Box main_content{
+        orientation: vertical;
+        Adw.HeaderBar titlebar {
+          centering-policy: strict;
+          show-end-title-buttons: false;
+            [title]
+            Gtk.Label {
+                label: _("Transaction Result");
+            }
+            [start]
+            Gtk.Button cancel{
+                label: _("Cancel");
+                clicked => on_cancel_clicked();
+            }
+            [end]
+            Gtk.Button confirm {
+                label: _("Confirm");
+                styles ["destructive-action"]
+                clicked => on_confirm_clicked();
+            }
+        }        
+        Gtk.Box {
+            orientation: vertical;
+            margin-start: 20;
+            margin-end: 20;
+            margin-top: 20;
+            margin-bottom: 20;
+            Gtk.Frame {
+                Gtk.ScrolledWindow {
+                    Gtk.ListView result_view {
+                        margin-start: 10;
+                        margin-end: 10;
+                        margin-top: 10;
+                        margin-bottom: 10;
+                        name: "result_view";
+                        hexpand: true;
+                        vexpand: true;
+                        model: selection;
+                        factory: result_factory;
+                        single-click-activate: false;
+                        styles ["data-list"]
+                    }
+                }
+            }
+        }
+    }
+}
+
+Gtk.NoSelection selection {
+
+}
+
+Gtk.SignalListItemFactory result_factory {
+    setup => on_setup();
+    bind => on_bind();
+}

@@ -76,6 +76,8 @@ class YumexPackageInfo(Gtk.Box):
                     return None
 
     def add_decription(self, txt):
+        if not txt:
+            txt = ""
         self.info.set_title(txt)
 
     def add_update_info(self, pkg_info):

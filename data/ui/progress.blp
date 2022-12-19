@@ -2,7 +2,7 @@ using Gtk 4.0;
 using Adw 1;
 
 template YumexProgress : Adw.Window {
-    default-width: 600;
+    default-width: 700;
     default-height: 150;
     hide-on-close: true;
     styles ["progress_window"]  
@@ -30,20 +30,21 @@ template YumexProgress : Adw.Window {
                     styles ["progress_title"]
                 }
                 Gtk.Label subtitle {
-                    hexpand: true;
-                    vexpand: true;
-                    valign: start;
+                    margin-bottom: 20;
                     xalign: 0.0;
                     wrap: true;
-                    width-chars: 50;
-                    styles ["progress_subtitle"]
-                    label: "this is the subtitle";
+                    styles ["progress_subtitle"]                    
+                }
+                Gtk.ProgressBar progress {
+                    visible: false;
+                    fraction: 0.0;
                 }
             }
             
             Gtk.Box {
                 vexpand: true;
                 Gtk.Spinner {
+                    valign: start;
                     spinning: true;
                 }
             }

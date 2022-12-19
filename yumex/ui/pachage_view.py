@@ -42,6 +42,9 @@ class YumexPackageView(Gtk.ColumnView):
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.win = window
+        self.setup()
+
+    def setup(self):
         self.store = Gio.ListStore.new(YumexPackage)
         self.selection.set_model(self.store)
         self.last_position = -1
@@ -49,6 +52,11 @@ class YumexPackageView(Gtk.ColumnView):
         callback = DnfCallback(self.win)
         self.backend = Backend(callback)
         self.package_cache = YumexPackageCache(self.backend)
+
+    def reset(self):
+        log("Reset Package View")
+        self.queue_view.reset()
+        self.setup()
 
     @property
     def queue_view(self):

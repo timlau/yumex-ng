@@ -369,6 +369,10 @@ class Backend(DnfBase):
     def __init__(self, callback):
         DnfBase.__init__(self, callback)
 
+    def reset_backend(self):
+        self.reset(goal=True, repos=True, sack=True)
+        self.setup_base()
+
     def get_packages(self, pkg_filter: str) -> list[YumexPackage]:
         match pkg_filter:
             case "available":

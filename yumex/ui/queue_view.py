@@ -37,6 +37,10 @@ class YumexQueueView(Gtk.ListView):
         self.store = Gio.ListStore.new(YumexPackage)
         self.selection.set_model(self.store)
 
+    def reset(self):
+        self.store = Gio.ListStore.new(YumexPackage)
+        self.selection.set_model(self.store)
+
     @property
     def cache(self) -> YumexPackageCache:
         return self.win.package_view.package_cache
@@ -93,6 +97,9 @@ class YumexQueueView(Gtk.ListView):
         self.store = store
         self.selection.set_model(self.store)
         self.package_view.refresh()
+
+    def get_queued(self) -> list[YumexPackage]:
+        return [pkg for pkg in self.store if not pkg.is_dep]
 
     @staticmethod
     def sort_by_state(a, b):

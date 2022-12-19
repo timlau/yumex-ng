@@ -95,6 +95,18 @@ class YumexPackage(GObject.GObject):
     def __eq__(self, other) -> bool:
         return self.nevra == other.nevra
 
+    @property
+    def id(self):
+        nevra_r = (
+            self.name,
+            self.epoch,
+            self.version,
+            self.release,
+            self.arch,
+            self.repo[1:],
+        )
+        return ",".join([str(elem) for elem in nevra_r])
+
 
 class YumexPackageCache:
     def __init__(self, backend) -> None:

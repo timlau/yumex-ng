@@ -16,6 +16,7 @@
 import re
 
 from gi.repository import Gtk, Adw, Gio, GLib
+from yumex.backend.daemon import YumexRootBackend
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.pachage_view import YumexPackageView
@@ -23,6 +24,7 @@ from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
+from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
 
 
@@ -52,6 +54,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings = Gio.Settings(app_id)
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
+        self.root_backend = None
         # save settings on windows close
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
@@ -140,10 +143,40 @@ class YumexMainWindow(Adw.ApplicationWindow):
         lbl.add_css_class("accent")
         return lbl
 
+    def run_transaction(self, confirm: bool):
+        GLib.idle_add(self._run_transaction, confirm)
+
+    def _run_transaction(self, confirm: bool):
+        log(f"confirm : {confirm}")
+        rc, msgs = self.root_backend.run_transaction(confirm)
+        print(rc, msgs)
+        if rc:
+            # reset everything
+            self.package_view.reset()
+            self.package_settings.unselect_all()
+            self.search_bar.set_search_mode(False)
+            self.package_settings.set_active_filter("installed")
+        self.root_backend = None
+        return False
+
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
-        self.show_message("Apply changes is not implemented yet")
+
+        def on_close(widget):
+            confirm = transaction_result.confirm
+            self.run_transaction(confirm)
+
+        self.root_backend = YumexRootBackend(self.progress)
+        queued = self.queue_view.get_queued()
+        if queued:
+            rc, result_dict = self.root_backend.build_transaction(queued)
+            if rc:
+                transaction_result = YumexTransactionResult(self)
+                transaction_result.connect("close-request", on_close)
+                transaction_result.show_result(result_dict)
+            else:
+                pass  # TODO: handle transaction cant reolve
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):

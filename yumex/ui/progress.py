@@ -25,6 +25,7 @@ class YumexProgress(Adw.Window):
 
     title = Gtk.Template.Child()
     subtitle = Gtk.Template.Child()
+    progress = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -35,9 +36,19 @@ class YumexProgress(Adw.Window):
 
     def hide(self):
         self.close()
+        self.set_title("")
+        self.set_subtitle("")
 
     def set_title(self, title: str):
         self.title.set_label(title)
+        self.set_subtitle("")
+        self.set_progress(0.0)
+        self.progress.set_visible(False)
 
     def set_subtitle(self, title: str):
         self.subtitle.set_label(title)
+
+    def set_progress(self, frac):
+        if frac >= 0.0 and frac <= 1.0:
+            self.progress.set_visible(True)
+            self.progress.set_fraction(frac)
