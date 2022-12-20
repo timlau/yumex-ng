@@ -1,7 +1,7 @@
 
 APPNAME = yumex
 DATADIR = /usr/share
-PYTHON = python3 
+PYTHON = python3
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
 VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)
@@ -16,6 +16,9 @@ BUILDDIR= $(CURDIR)/build
 all:
 	@echo "Nothing to do, use a specific target"
 
+clean:
+	@rm -rf *.tar.gz
+
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
@@ -23,8 +26,8 @@ archive:
 	@cp ${APPNAME}-$(VERSION).tar.gz ${BUILDDIR}/SOURCES
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
-	
-test-cleanup:	
+
+test-cleanup:
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
 	@echo "Cleanup the git release-test local branch"
 	@git checkout -f
@@ -35,7 +38,7 @@ show-vars:
 	@echo ${GITDATE}
 	@echo ${BUMPED_MINOR}
 	@echo ${NEW_VER}-${NEW_REL}
-	
+
 test-release:
 	@git checkout -b release-test
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
@@ -47,7 +50,7 @@ test-release:
 	# Build RPMS
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${NEW_VER}.tar.gz
 	@$(MAKE) test-cleanup
-	
+
 rpm:
 	@$(MAKE) archive
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
@@ -63,7 +66,7 @@ user:
 	ninja -C builddir run
 
 inst-deps:
-	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf 
+	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf
 
 potfiles:
 	@echo "updating po/POTFILES with *.py, .in & *.blp files"
@@ -72,7 +75,7 @@ potfiles:
 	@find data -iname *.in.in >> po/POTFILES
 
 transifex-update:
-	po/update_potfile.sh 
+	po/update_potfile.sh
 	tx push
 	git add po/*
 	git commit -m "i18n: updated yumex.pot"
