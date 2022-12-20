@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2022 Tim Lauridsen <tim.lauridsenatgmail.com> -->
+<component type="desktop-application">
+  <id>d@APP_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Yum Extender</name>
+  <summary>Graphical package manager</summary>
+  <developer_name>Tim Lauridsen</developer_name>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+
+  <description>
+    <p>
+      Yum Extender is a graphical package management application. It allows you to search and browse for packages to install,
+      remove and update on your computer.
+    </p>
+    <p>It is designed to give you full control over the packages on your computer and to be used by all users.</p>
+    <p>Features:</p>
+    <ul>
+      <li>Browse packages available for installation or update</li>
+      <li>Browse packages installed on your computer</li>
+      <li>Search packages by name, summary, description</li>
+    </ul>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/timlau/yumex-ng/raw/main/data/gfx/yumex-ng-main.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-ng/raw/main/data/gfx/yumex-ng-package-setting.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/timlau/yumex-ng/raw/main/data/gfx/yumex-ng-queue.png</image>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="4.9.0" date="2023-02-1" type="devel"><description>
+        <p>Yum Extender 4.9.0 is a total rewrite using a modern toolchain </p>
+        <ul>
+          <li>New fresh scalable UI using Gtk4 and Libadwaita</li>
+          <li>Using dnf directly for readonly actions</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+
+  <url type="homepage">https://github.com/timlau/yumex-ng</url>
+  <url type="bugtracker">https://github.com/timlau/yumex-ng/issues</url>
+  <!-- <url type="help">https://yumex-dnf.readthedocs.io/en/latest/</url> -->
+
+  <update_contact>tim.lauridsen_AT_gmail.com</update_contact>
+
+  <keywords>
+    <keyword>yumex</keyword>
+    <keyword>yumex-dnf</keyword>
+    <keyword>Package Manager</keyword>
+  </keywords>
+
+  <contentrating type="oars-1.1">
+    <contentattribute id="violence-cartoon">none</contentattribute>
+    <contentattribute id="violence-fantasy">none</contentattribute>
+    <contentattribute id="violence-realistic">none</contentattribute>
+    <contentattribute id="violence-bloodshed">none</contentattribute>
+    <contentattribute id="violence-sexual">none</contentattribute>
+    <contentattribute id="violence-desecration">none</contentattribute>
+    <contentattribute id="violence-slavery">none</contentattribute>
+    <contentattribute id="violence-worship">none</contentattribute>
+    <contentattribute id="drugs-alcohol">none</contentattribute>
+    <contentattribute id="drugs-narcotics">none</contentattribute>
+    <contentattribute id="drugs-tobacco">none</contentattribute>
+    <contentattribute id="sex-nudity">none</contentattribute>
+    <contentattribute id="sex-themes">none</contentattribute>
+    <contentattribute id="sex-homosexuality">none</contentattribute>
+    <contentattribute id="sex-prostitution">none</contentattribute>
+    <contentattribute id="sex-adultery">none</contentattribute>
+    <contentattribute id="sex-appearance">none</contentattribute>
+    <contentattribute id="language-profanity">none</contentattribute>
+    <contentattribute id="language-humor">none</contentattribute>
+    <contentattribute id="language-discrimination">none</contentattribute>
+    <contentattribute id="social-chat">none</contentattribute>
+    <contentattribute id="social-info">none</contentattribute>
+    <contentattribute id="social-audio">none</contentattribute>
+    <contentattribute id="social-location">none</contentattribute>
+    <contentattribute id="social-contacts">none</contentattribute>
+    <contentattribute id="money-purchasing">none</contentattribute>
+    <contentattribute id="money-gambling">none</contentattribute>
+  </contentrating>
+</component>
+

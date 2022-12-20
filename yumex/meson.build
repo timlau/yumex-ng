@@ -5,6 +5,13 @@ configure_file(
 )
 
 configure_file(
+  input:  meson.project_name() + '.in',
+  output: meson.project_name(),
+  configuration: conf,
+  install_dir: get_option('bindir')
+)
+
+configure_file(
   input: 'constants.py.in',
   output: 'constants.py',
   configuration: configuration_data({
@@ -42,12 +49,16 @@ yumex_ui_modules = [
 'ui/package_info.py',
 'ui/queue_view.py',
 'ui/window.py',
+'ui/preferences.py',
+'ui/progress.py',
+'ui/transaction_result.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_ui_modules, subdir: 'yumex/ui')
 
 yumex_backend_modules = [
 'backend/__init__.py',
-'backend/dnf.py'
+'backend/dnf.py',
+'backend/daemon.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
 

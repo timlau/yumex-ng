@@ -12,8 +12,8 @@ i18n = import('i18n')
 python = import('python')
 
 dependency('glib-2.0')
-dependency('gtk4', version: '>= 4.5.0')
-dependency('libadwaita-1', version: '>= 1.2.alpha')
+dependency('gtk4', version: '>= 4.8.0')
+dependency('libadwaita-1', version: '>= 1.2')
 dependency('pygobject-3.0', version: '>= 3.42.0')
 
 # Python installation directory

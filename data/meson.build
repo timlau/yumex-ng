@@ -1,5 +1,7 @@
 gnome = import('gnome')
 
+METAINFO_DIR = join_paths(get_option('prefix'), get_option('datadir'), 'metainfo')
+
 subdir('ui')
 subdir('icons')
 
@@ -49,14 +51,14 @@ endif
 
 appstream_file = i18n.merge_file(
   input: configure_file(
-    input: '@0@.appdata.xml.in.in'.format(APPLICATION_ID),
+    input: '@0@.metainfo.xml.in.in'.format(APPLICATION_ID),
     output: '@BASENAME@',
     configuration: conf,
   ),
-  output: '@0@.appdata.xml'.format(APPLICATION_ID),
+  output: '@0@.metainfo.xml'.format(APPLICATION_ID),
   po_dir: '../po',
   install: true,
-  install_dir: join_paths(get_option('datadir'), 'appdata')
+  install_dir: METAINFO_DIR
 )
 
 appstream_util = find_program('appstream-util', required: false)
