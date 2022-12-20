@@ -18,6 +18,7 @@
 
 
 import sys
+import argparse
 
 from gi.repository import Gtk, Gdk, Gio, Adw, GLib  # noqa: F401
 
@@ -39,9 +40,12 @@ class YumexApplication(Adw.Application):
     settings = Gio.Settings.new(app_id)
 
     def __init__(self):
-        super().__init__(application_id=app_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
+        super().__init__(
+            application_id=app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
+        )
         self.set_resource_base_path(rootdir)
         self.style_manager = Adw.StyleManager.get_default()
+        self.args = None
 
     def do_activate(self):
         """Called when the application is activated.
@@ -69,6 +73,15 @@ class YumexApplication(Adw.Application):
         self.win.present()
         # click the Availble package filter, without looking the UI
         self.win.load_packages("installed")
+
+    def do_command_line(self, args):
+        parser = argparse.ArgumentParser(prog="app")
+        parser.add_argument("-d", "--debug", action="store_true")
+        self.args = parser.parse_args(args.get_arguments()[1:])
+        setup_logging(debug=self.args.debug)
+        log(f" commmand-line : {self.args}")
+        self.activate()
+        return 0
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.
@@ -135,7 +148,5 @@ Yum Extender is a Package management to install, update and remove packages
 
 def main():
     """The application's entry point."""
-    setup_logging()
-    log("yumex is running")
     app = YumexApplication()
     return app.run(sys.argv)

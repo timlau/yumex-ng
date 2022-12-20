@@ -28,8 +28,8 @@ from gi.repository import GLib
 from yumex.constants import build_type
 
 
-def setup_logging():
-    if build_type == "debug":
+def setup_logging(debug=False):
+    if build_type == "debug" or debug:
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
