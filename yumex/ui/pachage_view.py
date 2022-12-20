@@ -232,10 +232,13 @@ class YumexPackageView(Gtk.ColumnView):
 
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):
-        selection = widget.get_selection()
-        ndx = selection.get_nth(0)
-        pkg = self.store[ndx]
-        self.set_pkg_info(pkg)
+        if len(self.store) > 0:
+            selection = widget.get_selection()
+            ndx = selection.get_nth(0)
+            pkg = self.store[ndx]
+            self.set_pkg_info(pkg)
+        else:
+            self.win.package_info.clear()
 
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""

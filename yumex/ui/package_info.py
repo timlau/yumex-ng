@@ -47,6 +47,12 @@ class YumexPackageInfo(Gtk.Box):
         self.win = win
         self._ref_rows = []
 
+    def clear(self):
+        """clear the package info"""
+        self.add_decription("")
+        self.update_info_grp.set_visible(False)
+        self.description_grp.set_visible(True)
+
     def update(self, info_type, pkg_info):
         info = self.format(info_type, pkg_info)
         # print(info_type, info)
