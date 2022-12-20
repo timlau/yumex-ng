@@ -114,7 +114,6 @@ class YumexRootBackend(Client):
                 log(" --> RootBackendError : can't get lock ")
                 return False, {"errors": _("Dnf is locked by another process")}
         except DaemonError as e:
-            print(f" --> RootBackendError : exception : {e}")
             self.Unlock()
             return False, {"errors": _("Exception in Dnf Backend\n") + str(e)}
 
@@ -140,7 +139,6 @@ class YumexRootBackend(Client):
                 self.Unlock()
                 return False, "transaction canceled"
         except DaemonError as e:
-            print(f" --> RootBackendError : exception : {e}")
             self.Unlock()
             return False, _("Exception in Dnf Backend\n") + str(e)
 

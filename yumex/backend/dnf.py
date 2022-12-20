@@ -302,7 +302,6 @@ class DnfBase(dnf.Base):
         conf = self.conf
         conf.substitutions["releasever"] = dnf.rpm.detect_releasever("/")
         conf.cachedir, self._system_cachedir = self.cachedir_fit()
-        print("cachedir: %s" % conf.cachedir)
 
     def get_transaction(self):
         """Get current transaction"""

@@ -149,7 +149,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def _run_transaction(self, confirm: bool):
         log(f"confirm : {confirm}")
         rc, msgs = self.root_backend.run_transaction(confirm)
-        print(rc, msgs)
         if rc:
             # reset everything
             self.package_view.reset()

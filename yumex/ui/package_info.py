@@ -55,7 +55,6 @@ class YumexPackageInfo(Gtk.Box):
 
     def update(self, info_type, pkg_info):
         info = self.format(info_type, pkg_info)
-        # print(info_type, info)
         match info_type:
             case "update_info":
                 self.add_update_info(info)
