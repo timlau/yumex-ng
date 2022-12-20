@@ -52,6 +52,10 @@ rpm:
 	@$(MAKE) archive
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
+test-copr:
+	@$(MAKE) test-release
+	copr-cli build yumex-ng $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+
 
 user:
 	meson setup builddir --prefix="$(shell pwd)/builddir" --buildtype=debug --wipe
