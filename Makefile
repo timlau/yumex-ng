@@ -75,6 +75,7 @@ potfiles:
 	@find data -iname *.in.in >> po/POTFILES
 
 transifex-update:
+	@$(MAKE) potfiles
 	po/update_potfile.sh
 	tx push
 	git add po/*
