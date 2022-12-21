@@ -74,12 +74,12 @@ template YumexMainWindow : Adw.ApplicationWindow {
             key-capture-widget: YumexMainWindow;
 
             child: Gtk.SearchEntry search_entry {
-                max-width-chars: 40;
-                search-delay: 500;
-                search-changed => on_search_changed();
-                activate => on_search_activate();
-                placeholder-text: _("Package Name");
-              };
+              max-width-chars: 40;
+              search-delay: 500;
+              search-changed => on_search_changed();
+              activate => on_search_activate();
+              placeholder-text: _("Package Name");
+            };
           }
 
 
@@ -92,30 +92,30 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Packages");
               icon-name: "flatpak-symbolic";
               child: Adw.Flap sidebar {
-                  reveal-flap: bind sidebar-button.active bidirectional;
-                  transition-type: over;
-                  fold-policy: always;
-                  // [flap]
-                  // package_filter will be added here
-                  [separator]
-                    Gtk.Separator {}
-                  [content]
-                  Adw.Clamp clamp_packages{
-                    maximum-size: 1024;
+                reveal-flap: bind sidebar-button.active bidirectional;
+                transition-type: over;
+                fold-policy: always;
+                // [flap]
+                // package_filter will be added here
+                [separator]
+                  Gtk.Separator {}
+                [content]
+                Adw.Clamp clamp_packages{
+                  maximum-size: 1024;
 
-                    Gtk.Frame {
-                      margin-top: 20;
-                      margin-bottom:  20;
-                      margin-start: 10;
-                      margin-end: 10;
-                      Gtk.Paned package_paned {
-                        orientation: vertical;
-                        wide-handle: true;
+                  Gtk.Frame {
+                    margin-top: 20;
+                    margin-bottom:  20;
+                    margin-start: 10;
+                    margin-end: 10;
+                    Gtk.Paned package_paned {
+                      orientation: vertical;
+                      wide-handle: true;
 
-                        Gtk.ScrolledWindow content_packages  {
-                          styles ["package_list"]
-                          hexpand: true;
-                          vexpand: true;
+                      Gtk.ScrolledWindow content_packages  {
+                        styles ["package_list"]
+                        hexpand: true;
+                        vexpand: true;
                           // package_view is added here
                         }
                         Gtk.ScrolledWindow content_desc {
@@ -152,16 +152,16 @@ template YumexMainWindow : Adw.ApplicationWindow {
               child: Gtk.Box {
                 orientation: vertical;
                 Adw.Clamp {
-                    maximum-size: 1024;
-                    Gtk.Frame {
-                      margin-top: 20;
-                      margin-bottom:  20;
-                      margin-start: 10;
-                      margin-end: 10;
-                      Gtk.ScrolledWindow content_queue  {
-                        // queue_view is added here
-                      }
+                  maximum-size: 1024;
+                  Gtk.Frame {
+                    margin-top: 20;
+                    margin-bottom:  20;
+                    margin-start: 10;
+                    margin-end: 10;
+                    Gtk.ScrolledWindow content_queue  {
+                      // queue_view is added here
                     }
+                  }
                 }
               };
             }
