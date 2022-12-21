@@ -158,6 +158,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.root_backend = None
         return False
 
+    def on_sidebar(self, *args):
+        self.sidebar.set_reveal_flap(not self.sidebar.get_reveal_flap())
+
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""

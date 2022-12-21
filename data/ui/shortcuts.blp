@@ -1,0 +1,33 @@
+using Gtk 4.0;
+
+ShortcutsWindow help_overlay {
+  ShortcutsSection {
+    section-name: "shortcuts";
+    max-height: 12;
+
+    ShortcutsGroup {
+      title: _("General");
+
+      ShortcutsShortcut {
+        title: _("Keyboard shortcuts");
+        action-name: "win.show-help-overlay";
+      }
+    }
+    ShortcutsGroup {
+      title: _("Package View");
+
+      ShortcutsShortcut {
+        title: _("Show/Hide Sidebar");
+        action-name: "app.sidebar";
+      }
+      ShortcutsShortcut {
+        title: _("Select All");
+        action-name: "app.select_all";
+      }
+      ShortcutsShortcut {
+        title: _("Deselect All");
+        action-name: "app.deselect_all";
+      }
+    }
+  }
+}

@@ -9,7 +9,8 @@ blueprints = custom_target('blueprints',
     'progress.blp',
     'repository.blp',
     'package_info.blp',
-    'transaction_result.blp'
+    'transaction_result.blp',
+    'shortcuts.blp'
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@']

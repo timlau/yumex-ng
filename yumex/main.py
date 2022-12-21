@@ -67,8 +67,12 @@ class YumexApplication(Adw.Application):
         # create app actions
         self.create_action("about", self.on_about)
         self.create_action("preferences", self.on_preferences)
-        self.create_action("select_all", self.win.on_selectall_activate)
-        self.create_action("deselect_all", self.win.on_deselectall_activate)
+        self.create_action("select_all", self.win.on_selectall_activate, ["<Ctrl>A"])
+        self.create_action(
+            "deselect_all", self.win.on_deselectall_activate, ["<Shift><Ctrl>A"]
+        )
+        self.create_action("sidebar", self.win.on_sidebar, ["F9"])
+        # self.create_action("sidebar", self.win.on_sidebar)
         log(f"dark mode: {self.style_manager.get_dark()}")
         self.win.present()
         # click the Availble package filter, without looking the UI
@@ -93,7 +97,8 @@ class YumexApplication(Adw.Application):
             shortcuts: an optional list of accelerators
         """
         action = Gio.SimpleAction.new(name, None)
-        action.connect("activate", callback)
+        if callback:
+            action.connect("activate", callback)
         self.add_action(action)
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)

@@ -31,6 +31,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
             // icon-name: "applications-utilities-symbolic";
             icon-name: "dock-left-symbolic";
             tooltip-text: _("Select Package filters");
+            action-name: "app.sidebar";
           }
           [start]
           ToggleButton search_button {
@@ -92,7 +93,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Packages");
               icon-name: "flatpak-symbolic";
               child: Adw.Flap sidebar {
-                reveal-flap: bind sidebar-button.active bidirectional;
+                reveal-flap: false;
                 transition-type: over;
                 fold-policy: always;
                 // [flap]
@@ -180,12 +181,15 @@ template YumexMainWindow : Adw.ApplicationWindow {
 menu main-menu {
   section {
     item {
-      label: _("Preferences");
+      label: _("_Preferences");
       action: "app.preferences";
     }
-
     item {
-      label: _("About Yum Extender");
+      label: _("Keyboard Shortcuts");
+      action: "win.show-help-overlay";
+    }
+    item {
+      label: _("_About Yum Extender");
       action: "app.about";
     }
   }
