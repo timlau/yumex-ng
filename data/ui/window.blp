@@ -13,7 +13,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
       trigger: "<Ctrl>q";
       action: "action(window.close)";
     }
-  } 
+  }
 
   Adw.ToastOverlay toast_overlay {
     Adw.Leaflet leaflet {
@@ -42,7 +42,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                 trigger: "<Ctrl>F";
                 action: "activate";
               }
-            } 
+            }
           }
 
           [title]
@@ -72,7 +72,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
           Gtk.SearchBar search_bar {
             search-mode-enabled: bind search_button.active bidirectional;
             key-capture-widget: YumexMainWindow;
-            
+
             child: Gtk.SearchEntry search_entry {
                 max-width-chars: 40;
                 search-delay: 500;
@@ -100,7 +100,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                   [separator]
                     Gtk.Separator {}
                   [content]
-                  Adw.Clamp clamp_packages{ 
+                  Adw.Clamp clamp_packages{
                     maximum-size: 1024;
 
                     Gtk.Frame {
@@ -111,7 +111,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                       Gtk.Paned package_paned {
                         orientation: vertical;
                         wide-handle: true;
-                        
+
                         Gtk.ScrolledWindow content_packages  {
                           styles ["package_list"]
                           hexpand: true;
@@ -129,7 +129,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                         }
                       }
 
-                    }                
+                    }
                   }
                 };
             }
@@ -137,8 +137,9 @@ template YumexMainWindow : Adw.ApplicationWindow {
             Adw.ViewStackPage {
               name: "groups";
               title: _("Groups");
+              visible: false;
               icon-name: "resources-symbolic";
-              child: Gtk.Box content_groups { 
+              child: Gtk.Box content_groups {
                 orientation: vertical;
               };
             }
@@ -148,7 +149,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
               title: _("Queue");
               icon-name: "test-pass-symbolic";
 
-              child: Gtk.Box {  
+              child: Gtk.Box {
                 orientation: vertical;
                 Adw.Clamp {
                     maximum-size: 1024;
