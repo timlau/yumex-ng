@@ -98,6 +98,9 @@ class YumexQueueView(Gtk.ListView):
         self.selection.set_model(self.store)
         self.package_view.refresh()
 
+    def clear_all(self):
+        self.remove_packages(self.store)
+
     def get_queued(self) -> list[YumexPackage]:
         return [pkg for pkg in self.store if not pkg.is_dep]
 

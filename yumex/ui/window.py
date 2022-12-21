@@ -158,6 +158,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.root_backend = None
         return False
 
+    def on_clear_queue(self, *args):
+        """app.clear_queue action handler"""
+        self.queue_view.clear_all()
+
     def on_sidebar(self, *args):
         self.sidebar.set_reveal_flap(not self.sidebar.get_reveal_flap())
 
@@ -248,7 +252,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_deselectall_activate(self, *_args):
         """handler for deselect all on selection column right click menu"""
-        self.package_view.select_all(False)
+        active_page = self.stack.get_visible_child_name()
+        match active_page:
+            case "packages":
+                self.package_view.select_all(False)
+            case "queue":
+                self.queue_view.clear_all()
 
     def show_on_packages_page(self, show=False):
         """show/hide widget only used on packages page"""

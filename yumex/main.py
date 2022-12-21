@@ -72,6 +72,7 @@ class YumexApplication(Adw.Application):
             "deselect_all", self.win.on_deselectall_activate, ["<Shift><Ctrl>A"]
         )
         self.create_action("sidebar", self.win.on_sidebar, ["F9"])
+        self.create_action("clear_queue", self.win.on_clear_queue)
         self.create_action(
             "filter_installed",
             self.win.on_filter_installed,
