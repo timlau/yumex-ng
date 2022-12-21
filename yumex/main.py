@@ -66,7 +66,7 @@ class YumexApplication(Adw.Application):
 
         # create app actions
         self.create_action("about", self.on_about)
-        self.create_action("preferences", self.on_preferences)
+        self.create_action("preferences", self.on_preferences, ["<Ctrl>comma"])
         self.create_action("select_all", self.win.on_selectall_activate, ["<Ctrl>A"])
         self.create_action(
             "deselect_all", self.win.on_deselectall_activate, ["<Shift><Ctrl>A"]
