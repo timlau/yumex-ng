@@ -4,7 +4,6 @@ ShortcutsWindow help_overlay {
   ShortcutsSection {
     section-name: "shortcuts";
     max-height: 12;
-
     ShortcutsGroup {
       title: _("General");
 
@@ -19,7 +18,6 @@ ShortcutsWindow help_overlay {
     }
     ShortcutsGroup {
       title: _("Package View");
-
       ShortcutsShortcut {
         title: _("Show/Hide Sidebar");
         action-name: "app.sidebar";
@@ -31,6 +29,21 @@ ShortcutsWindow help_overlay {
       ShortcutsShortcut {
         title: _("Deselect All");
         action-name: "app.deselect_all";
+      }
+    }
+    ShortcutsGroup {
+      title: _("Package Filters");
+      ShortcutsShortcut {
+        title: _("Show Installed");
+        action-name: "app.filter_installed";
+      }
+      ShortcutsShortcut {
+        title: _("Show updates");
+        action-name: "app.filter_updates";
+      }
+      ShortcutsShortcut {
+        title: _("Show All");
+        action-name: "app.filter_available";
       }
     }
   }

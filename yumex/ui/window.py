@@ -161,6 +161,21 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_sidebar(self, *args):
         self.sidebar.set_reveal_flap(not self.sidebar.get_reveal_flap())
 
+    def on_filter_installed(self, *args):
+        button = self.package_settings.filter_installed
+        button.set_active(True)
+        self.package_settings.on_package_filter_activated(button)
+
+    def on_filter_updates(self, *args):
+        button = self.package_settings.filter_updates
+        button.set_active(True)
+        self.package_settings.on_package_filter_activated(button)
+
+    def on_filter_available(self, *args):
+        button = self.package_settings.filter_available
+        button.set_active(True)
+        self.package_settings.on_package_filter_activated(button)
+
     @Gtk.Template.Callback()
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""

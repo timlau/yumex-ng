@@ -6,56 +6,57 @@ template YumexPackageSettings : Gtk.Box {
     orientation: vertical;
     width-request: 250;
     Adw.PreferencesGroup package_filter {
-        title: _("Package filter");
-        hexpand: false;
-        margin-start: 20;
-        margin-end: 20;
-        Adw.ActionRow {
-            title: _("Installed");
-            // subtitle: _("This setting controls how to do somethine");
-            activatable-widget: filter_installed;
-            styles ["package-filter-row", "checkmark"]
-            [prefix]
-            Gtk.CheckButton filter_installed { 
-            name: "installed";
-            group: filter_updates;
-            toggled =>  on_package_filter_toggled();
-            }
+      title: _("Package filter");
+      hexpand: false;
+      margin-start: 20;
+      margin-end: 20;
+      Adw.ActionRow {
+        title: _("Installed");
+        // subtitle: _("This setting controls how to do somethine");
+        activatable-widget: filter_installed;
+        styles ["package-filter-row", "checkmark"]
+        [prefix]
+        Gtk.CheckButton filter_installed {
+          name: "installed";
+          group: filter_updates;
+          action-name: "app.filter_installed";
         }
-        Adw.ActionRow {
-            title: _("Updates");
-            // subtitle: _("This setting controls how to do somethine");
-            activatable-widget: filter_updates;
-            styles ["package-filter-row", 'checkmark']
-            [prefix]
-            Gtk.CheckButton filter_updates {
-              name: "updates";
-              toggled =>  on_package_filter_toggled();
-            }
+      }
+      Adw.ActionRow {
+        title: _("Updates");
+        // subtitle: _("This setting controls how to do somethine");
+        activatable-widget: filter_updates;
+        styles ["package-filter-row", 'checkmark']
+        [prefix]
+        Gtk.CheckButton filter_updates {
+          name: "updates";
+          action-name: "app.filter_updates";
         }
-        Adw.ActionRow {
-            title: _("All");
-            // subtitle: _("This setting controls how to do somethine");
-            activatable-widget: filter_available;
-            styles ["package-filter-row", "checkmark"]
-            [prefix]
-            Gtk.CheckButton filter_available { 
-            name: "available";
-            group: filter_updates;
-            toggled =>  on_package_filter_toggled();
-            }
+      }
+      Adw.ActionRow {
+        title: _("All");
+        // subtitle: _("This setting controls how to do somethine");
+        activatable-widget: filter_available;
+        styles ["package-filter-row", "checkmark"]
+        [prefix]
+        Gtk.CheckButton filter_available {
+          name: "available";
+          group: filter_updates;
+          action-name: "app.filter_available";
         }
-        Adw.ActionRow {
-            title: _("Search");
-            sensitive: false;
-            activatable-widget: filter_search;
-            styles ["package-filter-row", "checkmark"]
-            [prefix]
-            Gtk.CheckButton filter_search { 
-              name: "available";
-              group: filter_updates;
-            }
+      }
+      Adw.ActionRow {
+        title: _("Search");
+        sensitive: false;
+        activatable-widget: filter_search;
+        styles ["package-filter-row", "checkmark"]
+        [prefix]
+        Gtk.CheckButton filter_search {
+          name: "available";
+          group: filter_updates;
+          action-name: "app.filter_search";
         }
+      }
     }
     Adw.PreferencesGroup {
         title: _("View Settings");

@@ -54,7 +54,7 @@ class YumexApplication(Adw.Application):
         necessary.
         """
 
-        self.win = self.props.active_window
+        self.win: YumexMainWindow = self.props.active_window
         if not self.win:
             self.win = YumexMainWindow(
                 application=self,
@@ -72,6 +72,22 @@ class YumexApplication(Adw.Application):
             "deselect_all", self.win.on_deselectall_activate, ["<Shift><Ctrl>A"]
         )
         self.create_action("sidebar", self.win.on_sidebar, ["F9"])
+        self.create_action(
+            "filter_installed",
+            self.win.on_filter_installed,
+            ["<Alt>I"],
+        )
+        self.create_action(
+            "filter_updates",
+            self.win.on_filter_updates,
+            ["<Alt>U"],
+        )
+        self.create_action(
+            "filter_available",
+            self.win.on_filter_available,
+            ["<Alt>A"],
+        )
+        self.create_action("filter_search", None)
         # self.create_action("sidebar", self.win.on_sidebar)
         log(f"dark mode: {self.style_manager.get_dark()}")
         self.win.present()

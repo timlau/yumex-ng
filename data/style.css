@@ -89,6 +89,12 @@ spinner {
 }
 
 /* Change icon on package filter when selected */
-.checkmark radio:checked {
+.checkmark check {
+    border-radius: 100%;
+}
+
+/* Change icon on package filter when selected */
+.checkmark check:checked {
     -gtk-icon-source: -gtk-icontheme('emblem-ok-symbolic');
+    border-radius: 100%;
 }
