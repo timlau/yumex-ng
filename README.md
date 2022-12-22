@@ -33,6 +33,7 @@ It is pretty early in development, but the basics are working
 
 - No group support
 - No history support
+- Automatic download and approval of new GPG keys for repositories
 - Changing enabled repositories in preferences
  
 
