@@ -49,6 +49,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.selection.set_model(self.store)
         self.last_position = -1
         self.column_num = 0
+        self._last_selected_pkg: YumexPackage = None
         callback = DnfCallback(self.win)
         self.backend = Backend(callback)
         self.package_cache = YumexPackageCache(self.backend)
@@ -226,9 +227,19 @@ class YumexPackageView(Gtk.ColumnView):
         label.set_active(data.queued)  # Update Gtk.Label with data from model item
 
     def set_pkg_info(self, pkg):
+        def completed(pkg_info, error=False):
+            self.win.package_info.update(info_type, pkg_info)
+
+        if self._last_selected_pkg and pkg == self._last_selected_pkg:
+            return
+        self._last_selected_pkg = pkg
         info_type = self.win.package_settings.get_info_type()
-        pkg_info = self.backend.get_package_info(pkg, info_type)
-        self.win.package_info.update(info_type, pkg_info)
+        RunAsync(
+            self.backend.get_package_info,
+            completed,
+            pkg,
+            info_type,
+        )
 
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):

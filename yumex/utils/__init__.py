@@ -66,8 +66,7 @@ class RunAsync(threading.Thread):
     def target(self, *args, **kwargs):
         result = None
         error = None
-
-        log(f"Running async job [{self.task_func}].")
+        log(f">> Running async job : {self.task_func.__name__}.")
 
         try:
             result = self.task_func(*args, **kwargs)
@@ -84,6 +83,7 @@ class RunAsync(threading.Thread):
 
             log([str(exception), traceback_info])
         self.source_id = GLib.idle_add(self.callback, result, error)
+        log(f"<< Completed async job : {self.task_func.__name__}.")
         return self.source_id
 
 

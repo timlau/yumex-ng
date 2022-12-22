@@ -21,7 +21,7 @@ from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
-from yumex.utils import timed
+from yumex.utils import RunAsync, timed
 from yumex.backend import PackageState
 
 
@@ -58,18 +58,23 @@ class YumexQueueView(Gtk.ListView):
     @timed
     def add_packages(self, pkgs):
         """Add package to queue"""
+
+        def completed(deps, error=None):
+            for dep in self.cache.add_packages(deps):
+                if dep not in self.store:  # new dep not in queue
+                    dep.queued = True
+                    dep.is_dep = True
+                    dep.ref_to = pkg
+                    dep.queue_action = True
+                self.store.insert_sorted(dep, self.sort_by_state)
+            self.package_view.refresh()
+            self.win.set_sensitive(True)
+
         for pkg in pkgs:
             if pkg not in self.store:
                 self.store.insert_sorted(pkg, self.sort_by_state)
-        deps = self.win.package_view.backend.depsolve(self.store)
-        for dep in self.cache.add_packages(deps):
-            if dep not in self.store:  # new dep not in queue
-                dep.queued = True
-                dep.is_dep = True
-                dep.ref_to = pkg
-                dep.queue_action = True
-            self.store.insert_sorted(dep, self.sort_by_state)
-        self.package_view.refresh()
+        self.win.set_sensitive(False)
+        RunAsync(self.win.package_view.backend.depsolve, completed, self.store)
 
     def remove_package(self, pkg):
         self.remove_packages([pkg])
@@ -77,6 +82,19 @@ class YumexQueueView(Gtk.ListView):
     @timed
     def remove_packages(self, pkgs):
         """Remove package from queue"""
+
+        def completed(deps, error=None):
+            for dep in self.cache.add_packages(deps):
+                if dep not in store:  # new dep not in queue
+                    dep.queued = True
+                    dep.is_dep = True
+                    dep.queue_action = True
+                    store.insert_sorted(dep, self.sort_by_state)
+            self.store = store
+            self.selection.set_model(self.store)
+            self.package_view.refresh()
+            self.win.set_sensitive(True)
+
         store = Gio.ListStore.new(YumexPackage)
         for store_pkg in self.store:
             # check if this package should be kept in the queue
@@ -87,16 +105,10 @@ class YumexQueueView(Gtk.ListView):
                 store_pkg.is_dep = False
                 store_pkg.queue_action = True
         if len(store):  # check if there something in the queue
-            deps = self.win.package_view.backend.depsolve(store)
-            for dep in self.cache.add_packages(deps):
-                if dep not in store:  # new dep not in queue
-                    dep.queued = True
-                    dep.is_dep = True
-                    dep.queue_action = True
-                    store.insert_sorted(dep, self.sort_by_state)
-        self.store = store
-        self.selection.set_model(self.store)
-        self.package_view.refresh()
+            self.win.set_sensitive(False)
+            RunAsync(self.win.package_view.backend.depsolve, completed, store)
+        else:
+            completed([])
 
     def clear_all(self):
         self.remove_packages(self.store)

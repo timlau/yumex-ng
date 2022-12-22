@@ -282,6 +282,10 @@ class DnfBase(dnf.Base):
         self.fill_sack()
         self._packages = Packages(self)  # Define a Packages object
 
+    def package_remove(self, pkg):
+        """FIXME: overloaded from base, base is not public and dont handle deps"""
+        self._goal.erase(pkg, clean_deps=True)
+
     @property
     def packages(self) -> Packages:
         """property to get easy acceess to packages"""
@@ -317,9 +321,6 @@ class DnfBase(dnf.Base):
                     replaces.setdefault(i, set()).add(tsi)
 
             for tsi in self.transaction:
-                log(
-                    f" BACKEND: --> (get_transaction) processing tsi pkg: {tsi.pkg} action: {tsi.action}"
-                )
                 match tsi.action:
                     case dnf.transaction.PKG_DOWNGRADE:
                         tx_list.append(
