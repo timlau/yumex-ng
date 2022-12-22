@@ -81,7 +81,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def setup_gui(self):
         """Setup the gui"""
         self.progress = YumexProgress(self)
-        self.progress.set_transient_for(self)
         self.setup_package_page()
         self.setup_groups_page()
         self.setup_queue()
@@ -148,6 +147,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def _run_transaction(self, confirm: bool):
         log(f"confirm : {confirm}")
+        self.progress.show()
+        self.progress.set_title(_("Running Transaction"))
         rc, msgs = self.root_backend.run_transaction(confirm)
         if rc:
             # reset everything
@@ -156,6 +157,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.search_bar.set_search_mode(False)
             self.package_settings.set_active_filter("installed")
         self.root_backend = None
+        self.progress.hide()
         return False
 
     def on_clear_queue(self, *args):

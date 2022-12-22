@@ -32,6 +32,7 @@ class YumexProgress(Adw.Window):
         self.win = win
 
     def show(self):
+        self.set_transient_for(self.win)
         self.present()
 
     def hide(self):
