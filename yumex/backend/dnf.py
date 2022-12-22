@@ -317,46 +317,54 @@ class DnfBase(dnf.Base):
                     replaces.setdefault(i, set()).add(tsi)
 
             for tsi in self.transaction:
-                if tsi.action == dnf.transaction.PKG_DOWNGRADE:
-                    tx_list.append(
-                        YumexPackage(
-                            tsi.pkg,
-                            state=PackageState.INSTALLED,
-                            action=PackageAction.DOWNGRADE,
+                log(
+                    f" BACKEND: --> (get_transaction) processing tsi pkg: {tsi.pkg} action: {tsi.action}"
+                )
+                match tsi.action:
+                    case dnf.transaction.PKG_DOWNGRADE:
+                        tx_list.append(
+                            YumexPackage(
+                                tsi.pkg,
+                                state=PackageState.INSTALLED,
+                                action=PackageAction.DOWNGRADE,
+                            )
                         )
-                    )
-                elif tsi.action == dnf.transaction.PKG_ERASE:
-                    tx_list.append(
-                        YumexPackage(
-                            tsi.pkg,
-                            state=PackageState.INSTALLED,
-                            action=PackageAction.ERASE,
+                    case dnf.transaction.PKG_ERASE:
+                        tx_list.append(
+                            YumexPackage(
+                                tsi.pkg,
+                                state=PackageState.INSTALLED,
+                                action=PackageAction.ERASE,
+                            )
                         )
-                    )
-                elif tsi.action == dnf.transaction.PKG_INSTALL:
-                    tx_list.append(
-                        YumexPackage(
-                            tsi.pkg,
-                            state=PackageState.AVAILABLE,
-                            action=PackageAction.INSTALL,
+                    case dnf.transaction.PKG_INSTALL:
+                        tx_list.append(
+                            YumexPackage(
+                                tsi.pkg,
+                                state=PackageState.AVAILABLE,
+                                action=PackageAction.INSTALL,
+                            )
                         )
-                    )
-                elif tsi.action == dnf.transaction.PKG_REINSTALL:
-                    tx_list.append(
-                        YumexPackage(
-                            tsi.pkg,
-                            state=PackageState.INSTALLED,
-                            action=PackageAction.REINSTALL,
+                    case dnf.transaction.PKG_REINSTALL:
+                        tx_list.append(
+                            YumexPackage(
+                                tsi.pkg,
+                                state=PackageState.INSTALLED,
+                                action=PackageAction.REINSTALL,
+                            )
                         )
-                    )
-                elif tsi.action == dnf.transaction.PKG_UPGRADE:
-                    tx_list.append(
-                        YumexPackage(
-                            tsi.pkg,
-                            state=PackageState.UPDATE,
-                            action=PackageAction.UPGRADE,
+                    case dnf.transaction.PKG_UPGRADE:
+                        tx_list.append(
+                            YumexPackage(
+                                tsi.pkg,
+                                state=PackageState.UPDATE,
+                                action=PackageAction.UPGRADE,
+                            )
                         )
-                    )
+                    case _:
+                        log(" BACKEND: unhandled transaction found: {tsi.action}")
+        if replaces:
+            log(f" BACKEND: replaces found {replaces}")
         return tx_list
 
 
@@ -422,25 +430,28 @@ class Backend(DnfBase):
                 match pkg.state:
                     case PackageState.INSTALLED:
                         self.package_remove(dnf_pkg)
-                        log(f"  BACKEND: add {str(dnf_pkg)} to transaction for removal")
+                        log(f" BACKEND: add {str(dnf_pkg)} to transaction for removal")
                     case PackageState.UPDATE:
                         self.package_upgrade(dnf_pkg)
-                        log(f"  BACKEND: add {str(dnf_pkg)} to transaction for upgrade")
+                        log(f" BACKEND: add {str(dnf_pkg)} to transaction for upgrade")
                     case PackageState.AVAILABLE:
                         self.package_install(dnf_pkg)
                         log(
-                            f"  BACKEND: add {str(dnf_pkg)} to transaction for installation"
+                            f" BACKEND: add {str(dnf_pkg)} to transaction for installation"
                         )
             else:
-                log(f"  BACKEND: dnf package for {pkg} was not found")
+                log(f" BACKEND: dnf package for {pkg} was not found")
         try:
             res = self.resolve(allow_erasing=True)
-            log(f"  BACKEND: depsolve completted : {res}")
+            log(f" BACKEND: depsolve completted : {res}")
             for pkg in self.get_transaction():
                 if pkg.nevra not in nevra_dict:
-                    log(f"  BACKEND: adding as dep : {pkg} ")
+                    log(f" BACKEND: adding as dep : {pkg} ")
                     pkg.is_dep = True
                     deps.append(pkg)
+                else:
+                    log(f" BACKEND: skipping already in transaction : {pkg} ")
+
         except dnf.exceptions.DepsolveError as e:
-            log(f"  BACKEND: depsolve failed : {str(e)}")
+            log(f" BACKEND: depsolve failed : {str(e)}")
         return deps
