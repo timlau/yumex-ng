@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 19:16+0100\n"
+"POT-Creation-Date: 2022-12-23 18:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,11 +60,15 @@ msgstr ""
 msgid "Enhancement"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:81
-msgid "Loading Packages"
+#: yumex/ui/package_info.py:65
+msgid "no update information found"
 msgstr ""
 
 #: yumex/ui/pachage_view.py:82
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:83
 msgid "This make take a little while"
 msgstr ""
 
@@ -80,17 +84,12 @@ msgstr ""
 msgid "Packages for updating"
 msgstr ""
 
-#: yumex/backend/dnf.py:103
-#, python-brace-format
-msgid "Downloading repository information for {name}"
+#: yumex/ui/window.py:151 yumex/backend/daemon.py:24
+msgid "Running Transaction"
 msgstr ""
 
 #: yumex/backend/daemon.py:19
 msgid "Building Transaction"
-msgstr ""
-
-#: yumex/backend/daemon.py:24
-msgid "Running Transaction"
 msgstr ""
 
 #: yumex/backend/daemon.py:26
@@ -151,7 +150,12 @@ msgstr ""
 msgid "Exception in Dnf Backend\n"
 msgstr ""
 
-#: yumex/main.py:120
+#: yumex/backend/dnf.py:103
+#, python-brace-format
+msgid "Downloading repository information for {name}"
+msgstr ""
+
+#: yumex/main.py:145
 msgid ""
 "\n"
 "<ul>\n"
@@ -159,7 +163,7 @@ msgid ""
 "</ul>\n"
 msgstr ""
 
-#: yumex/main.py:127
+#: yumex/main.py:152
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
@@ -177,11 +181,11 @@ msgstr ""
 msgid "Arch."
 msgstr ""
 
-#: data/ui/package_view.blp:36 data/ui/package_settings.blp:93
+#: data/ui/package_view.blp:36 data/ui/package_settings.blp:94
 msgid "Size"
 msgstr ""
 
-#: data/ui/package_view.blp:42 data/ui/package_settings.blp:100
+#: data/ui/package_view.blp:42 data/ui/package_settings.blp:101
 msgid "Description"
 msgstr ""
 
@@ -189,11 +193,11 @@ msgstr ""
 msgid "repo"
 msgstr ""
 
-#: data/ui/package_view.blp:99
+#: data/ui/package_view.blp:99 data/ui/shortcuts.blp:30
 msgid "Select All"
 msgstr ""
 
-#: data/ui/package_view.blp:100
+#: data/ui/package_view.blp:100 data/ui/shortcuts.blp:34
 msgid "Deselect All"
 msgstr ""
 
@@ -213,43 +217,43 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: data/ui/package_settings.blp:49 data/ui/window.blp:38
+#: data/ui/package_settings.blp:49 data/ui/window.blp:39
 msgid "Search"
 msgstr ""
 
-#: data/ui/package_settings.blp:61
+#: data/ui/package_settings.blp:62
 msgid "View Settings"
 msgstr ""
 
-#: data/ui/package_settings.blp:72
+#: data/ui/package_settings.blp:73
 msgid "Select what attribute to sort by"
 msgstr ""
 
-#: data/ui/package_settings.blp:82
+#: data/ui/package_settings.blp:83
 msgid "Select what package information to show"
 msgstr ""
 
-#: data/ui/package_settings.blp:91
+#: data/ui/package_settings.blp:92
 msgid "Name"
 msgstr ""
 
-#: data/ui/package_settings.blp:92
+#: data/ui/package_settings.blp:93
 msgid "Arch"
 msgstr ""
 
-#: data/ui/package_settings.blp:94
+#: data/ui/package_settings.blp:95
 msgid "Repo"
 msgstr ""
 
-#: data/ui/package_settings.blp:101
+#: data/ui/package_settings.blp:102
 msgid "Filelist"
 msgstr ""
 
-#: data/ui/package_settings.blp:102
+#: data/ui/package_settings.blp:103
 msgid "Update Info"
 msgstr ""
 
-#: data/ui/preferences.blp:5 data/ui/window.blp:182
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
 msgid "Preferences"
 msgstr ""
 
@@ -290,36 +294,48 @@ msgstr ""
 msgid "Select Package filters"
 msgstr ""
 
-#: data/ui/window.blp:54
+#: data/ui/window.blp:55
 msgid "Main Menu"
 msgstr ""
 
-#: data/ui/window.blp:62
+#: data/ui/window.blp:63
 msgid "Apply"
 msgstr ""
 
-#: data/ui/window.blp:65
+#: data/ui/window.blp:66
 msgid "Apply Package Actions"
 msgstr ""
 
-#: data/ui/window.blp:81
+#: data/ui/window.blp:82
 msgid "Package Name"
 msgstr ""
 
-#: data/ui/window.blp:92
+#: data/ui/window.blp:93
 msgid "Packages"
 msgstr ""
 
-#: data/ui/window.blp:139
+#: data/ui/window.blp:140
 msgid "Groups"
 msgstr ""
 
-#: data/ui/window.blp:148
+#: data/ui/window.blp:150
 msgid "Queue"
 msgstr ""
 
-#: data/ui/window.blp:187
-msgid "About Yum Extender"
+#: data/ui/window.blp:171
+msgid "Remove all from queue"
+msgstr ""
+
+#: data/ui/window.blp:194
+msgid "_Preferences"
+msgstr ""
+
+#: data/ui/window.blp:198
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: data/ui/window.blp:202
+msgid "_About Yum Extender"
 msgstr ""
 
 #: data/ui/transaction_result.blp:15
@@ -348,6 +364,50 @@ msgstr ""
 
 #: data/ui/package_info.blp:52
 msgid "Bugzilla References"
+msgstr ""
+
+#: data/ui/shortcuts.blp:8
+msgid "General"
+msgstr ""
+
+#: data/ui/shortcuts.blp:11
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: data/ui/shortcuts.blp:19
+msgid "Apply Actions"
+msgstr ""
+
+#: data/ui/shortcuts.blp:24
+msgid "Package View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:26
+msgid "Show/Hide Sidebar"
+msgstr ""
+
+#: data/ui/shortcuts.blp:39
+msgid "Package Filters"
+msgstr ""
+
+#: data/ui/shortcuts.blp:41
+msgid "Show Installed"
+msgstr ""
+
+#: data/ui/shortcuts.blp:45
+msgid "Show updates"
+msgstr ""
+
+#: data/ui/shortcuts.blp:49
+msgid "Show All"
+msgstr ""
+
+#: data/ui/shortcuts.blp:54
+msgid "Queue View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:56
+msgid "Clear Queue"
 msgstr ""
 
 #: data/dk.yumex.Yumex.desktop.in.in:4

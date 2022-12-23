@@ -1,17 +1,17 @@
-yumex/ui/progress.py
 yumex/ui/preferences.py
-yumex/ui/window.py
 yumex/ui/__init__.py
 yumex/ui/queue_view.py
 yumex/ui/package_info.py
 yumex/ui/package_settings.py
 yumex/ui/pachage_view.py
 yumex/ui/transaction_result.py
+yumex/ui/progress.py
+yumex/ui/window.py
 yumex/constants.py
 yumex/__init__.py
 yumex/backend/__init__.py
-yumex/backend/dnf.py
 yumex/backend/daemon.py
+yumex/backend/dnf.py
 yumex/utils/__init__.py
 yumex/main.py
 data/ui/package_view.blp
@@ -24,5 +24,6 @@ data/ui/queue_row.blp
 data/ui/window.blp
 data/ui/transaction_result.blp
 data/ui/package_info.blp
+data/ui/shortcuts.blp
 data/dk.yumex.Yumex.desktop.in.in
 data/dk.yumex.Yumex.metainfo.xml.in.in
