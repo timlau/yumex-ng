@@ -14,6 +14,7 @@
 # Copyright (C) 2022  Tim Lauridsen
 
 import re
+from time import sleep
 
 from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import YumexRootBackend
@@ -25,7 +26,7 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import log
+from yumex.utils import RunAsync, log
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -185,24 +186,53 @@ class YumexMainWindow(Adw.ApplicationWindow):
         button.set_active(True)
         self.package_settings.on_package_filter_activated(button)
 
-    @Gtk.Template.Callback()
+    def on_testing(self, *args):
+        """Used to test gui stuff <Shift><Ctrl>T to activate"""
+
+        def completed(result, error=None):
+            self.progress.hide()
+
+        RunAsync(self._testing, completed)
+
+    def _testing(self):
+        self.progress.show()
+        self.progress.set_title("Testing the progress dialog")
+        self.progress.set_subtitle(
+            "this is a long text, there should split into two lines"
+            "this is a long text, there should split into two lines"
+        )
+        frac = 0.0
+        for x in range(10):
+            self.progress.set_progress(frac)
+            frac += 0.1
+            sleep(0.5)
+        self.progress.set_subtitle("this is a sort text")
+        for x in range(10):
+            self.progress.set_progress(frac)
+            frac -= 0.1
+            sleep(0.5)
+
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
 
         def on_close(widget):
             confirm = transaction_result.confirm
             self.run_transaction(confirm)
+            self.progress.hide()
 
         self.root_backend = YumexRootBackend(self.progress)
         queued = self.queue_view.get_queued()
         if queued:
+            self.progress.show()
+            self.progress.set_title(_("Building Transaction"))
             rc, result_dict = self.root_backend.build_transaction(queued)
             if rc:
                 transaction_result = YumexTransactionResult(self)
                 transaction_result.connect("close-request", on_close)
                 transaction_result.show_result(result_dict)
             else:
-                pass  # TODO: handle transaction cant reolve
+                self.progress.hide()
+                # TODO: handle transaction cant reolve
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):

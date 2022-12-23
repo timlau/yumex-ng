@@ -92,8 +92,10 @@ class YumexApplication(Adw.Application):
         self.create_action(
             "apply_actions", self.win.on_apply_actions_clicked, ["<Alt>X"]
         )
-        # self.create_action("sidebar", self.win.on_sidebar)
-        log(f"dark mode: {self.style_manager.get_dark()}")
+
+        # call a test function to test gui code, should not be enabled, if not testing
+        # self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])
+
         self.win.present()
         # click the Availble package filter, without looking the UI
         self.win.load_packages("installed")
