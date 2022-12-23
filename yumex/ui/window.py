@@ -165,7 +165,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.queue_view.clear_all()
 
     def on_sidebar(self, *args):
-        self.sidebar.set_reveal_flap(not self.sidebar.get_reveal_flap())
+        state = not self.sidebar.get_reveal_flap()
+        self.sidebar.set_reveal_flap(state)
+        if state:
+            self.package_settings.set_focus()
 
     def on_filter_installed(self, *args):
         button = self.package_settings.filter_installed
