@@ -1,7 +1,7 @@
 %global app_id dk.yumex.Yumex
 
 Name:     yumex
-Version:  4.99.0
+Version:  4.99.1
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -46,7 +46,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %build
 %meson
-%meson_build 
+%meson_build
 
 %install
 %meson_install
@@ -68,7 +68,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f  %{name}.lang
-%doc README.md 
+%doc README.md
 %license LICENSE
 %{_datadir}/%{name}
 %{_bindir}/%{name}
@@ -79,6 +79,9 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %changelog
+
+* Tue Dec 20 2022 Tim Lauridsen <timlau@fedoraproject.org> 4.99.1-1
+- the 4.99.1 release
 
 * Tue Dec 20 2022 Tim Lauridsen <timlau@fedoraproject.org> 4.99.0-1
 - initial release (dev)
