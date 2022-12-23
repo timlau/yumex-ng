@@ -27,12 +27,17 @@ archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
 
+copr-release:
+	@rpmbuild --define '_topdir $(BUILDDIR)' -ts ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
+	@copr-cli build yumex-ng $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
+
 release:
 	@git commit -a -m "bumped release to $(VERSION)"
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
 	@git push origin
 	@$(MAKE) archive
+	@$(MAKE) copr-release
 
 test-cleanup:
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
@@ -71,6 +76,9 @@ user:
 	meson setup builddir --prefix="$(shell pwd)/builddir" --buildtype=debug --wipe
 	ninja -C builddir install
 	ninja -C builddir run
+
+inst-buildtools:
+	sudo dnf install @fedora-packager copr-cli
 
 inst-deps:
 	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf
