@@ -5,51 +5,53 @@ template YumexProgress : Adw.Window {
     default-width: 700;
     default-height: 150;
     hide-on-close: true;
-    styles ["progress_window"]  
+    styles ["progress_window"]
 
     Gtk.Box {
-        orientation: vertical;
-        margin-top: 20;        
-        margin-bottom: 20;        
-        margin-start: 20;        
-        margin-end: 20; 
+      orientation: vertical;
+      margin-top: 20;
+      margin-bottom: 20;
+      margin-start: 20;
+      margin-end: 20;
+      Gtk.Box {
+        orientation: horizontal;
+        hexpand: true;
+        vexpand: true;
+        margin-start: 30;
+        margin-end: 30;
+        margin-top: 10;
+        margin-bottom: 10;
         Gtk.Box {
-            orientation: horizontal;
+          orientation: vertical;
+          Gtk.Label title {
             hexpand: true;
+            xalign: 0.0;
+            margin-bottom: 5;
+            styles ["progress_title"]
+          }
+          Gtk.Label subtitle {
+            margin-bottom: 20;
+            xalign: 0.0;
+            wrap: true;
+            styles ["progress_subtitle"]
+          }
+          Gtk.ProgressBar progress {
+            visible: false;
             vexpand: true;
-            margin-start: 30;
-            margin-end: 30;
-            margin-top: 10;
-            margin-bottom: 10;
-            Gtk.Box {
-                orientation: vertical;
-                Gtk.Label title {
-                    hexpand: true;
-                    xalign: 0.0;
-                    margin-bottom: 5;
-                    styles ["progress_title"]
-                }
-                Gtk.Label subtitle {
-                    margin-bottom: 20;
-                    xalign: 0.0;
-                    wrap: true;
-                    styles ["progress_subtitle"]                    
-                }
-                Gtk.ProgressBar progress {
-                    visible: false;
-                    fraction: 0.0;
-                }
-            }
-            
-            Gtk.Box {
-                vexpand: true;
-                Gtk.Spinner {
-                    valign: start;
-                    spinning: true;
-                }
-            }
+            valign: end;
+            fraction: 0.0;
+          }
         }
 
-    }
-  
+        Gtk.Box {
+            vexpand: true;
+            Gtk.Spinner {
+                valign: start;
+                spinning: true;
+            }
+        }
+      }
+
+  }
+
 }
