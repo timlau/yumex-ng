@@ -283,8 +283,15 @@ class DnfBase(dnf.Base):
         self._packages = Packages(self)  # Define a Packages object
 
     def package_remove(self, pkg):
-        """FIXME: overloaded from base, base is not public and dont handle deps"""
+        """FIXME: dnf.Base.package_remove is not public API and don't handle deps
+        So we overload it and use the clean_deps=True, to handle deps removal
+
+        We don't need all checks, that dnf does internally because we already know
+        that the package is install
+        """
+
         self._goal.erase(pkg, clean_deps=True)
+        return 1
 
     @property
     def packages(self) -> Packages:
