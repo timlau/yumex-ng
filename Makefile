@@ -27,6 +27,13 @@ archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@echo "The archive is in ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz"
 
+release:
+	@git commit -a -m "bumped release to $(VERSION)"
+	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
+	@git push --tags origin
+	@git push origin
+	@$(MAKE) archive
+
 test-cleanup:
 	@rm -rf ${APPNAME}-${VERSION}.test.tar.gz
 	@echo "Cleanup the git release-test local branch"
