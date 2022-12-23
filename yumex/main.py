@@ -89,6 +89,9 @@ class YumexApplication(Adw.Application):
             ["<Alt>A"],
         )
         self.create_action("filter_search", None)
+        self.create_action(
+            "apply_actions", self.win.on_apply_actions_clicked, ["<Alt>X"]
+        )
         # self.create_action("sidebar", self.win.on_sidebar)
         log(f"dark mode: {self.style_manager.get_dark()}")
         self.win.present()
