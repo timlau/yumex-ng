@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 09:35+0100\n"
+"POT-Creation-Date: 2022-12-23 18:16+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
 "Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
@@ -21,17 +21,52 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: yumex/ui/queue_view.py:76
-msgid "Package will be deleted"
-msgstr "Pakken vil blive slettet"
+#: yumex/ui/__init__.py:31
+#, python-brace-format
+msgid "Queued for deletion as a dependency {name}"
+msgstr "I kø, for sletning, som en afhængighed {name}"
 
-#: yumex/ui/queue_view.py:80
-msgid "Package will be installed"
-msgstr "Pakken vil blive installeret"
+#: yumex/ui/__init__.py:33
+#, python-brace-format
+msgid "Queued for installation as a dependency {name}"
+msgstr "I kø, for installation, som en afhængighed {name}"
 
-#: yumex/ui/queue_view.py:84
-msgid "Package will be updated"
-msgstr "Pakken vil blive opdateret"
+#: yumex/ui/__init__.py:35
+#, python-brace-format
+msgid "Queued for updating as a dependency {name}"
+msgstr "I kø, for opdatering, som en afhængighed {name}"
+
+#: yumex/ui/__init__.py:39
+msgid "Queued for deletion"
+msgstr "I kø, for sletning"
+
+#: yumex/ui/__init__.py:41
+msgid "Queued for installation"
+msgstr "I kø, for installation"
+
+#: yumex/ui/__init__.py:43
+msgid "Queued for updating"
+msgstr "I kø, for opdatering"
+
+#: yumex/ui/package_info.py:24
+msgid "Bugfix"
+msgstr "Fejlrettelse"
+
+#: yumex/ui/package_info.py:25
+msgid "New Package"
+msgstr "Ny Pakke"
+
+#: yumex/ui/package_info.py:26
+msgid "Security"
+msgstr "Sikkerhed"
+
+#: yumex/ui/package_info.py:27
+msgid "Enhancement"
+msgstr "Udvildelse"
+
+#: yumex/ui/package_info.py:65
+msgid "no update information found"
+msgstr "Ingen information om opdateing"
 
 #: yumex/ui/pachage_view.py:82
 msgid "Loading Packages"
@@ -41,12 +76,90 @@ msgstr "Indlæser pakker"
 msgid "This make take a little while"
 msgstr "Dette kan tage et øjeblik"
 
-#: yumex/backend/dnf.py:65
+#: yumex/ui/transaction_result.py:51
+msgid "Packages for installation"
+msgstr "Pakker for installation"
+
+#: yumex/ui/transaction_result.py:53
+msgid "Packages for deletion"
+msgstr "Pakker for sletning"
+
+#: yumex/ui/transaction_result.py:55
+msgid "Packages for updating"
+msgstr "Pakker for opdatering"
+
+#: yumex/ui/window.py:151 yumex/backend/daemon.py:24
+msgid "Running Transaction"
+msgstr "Kører Transaktion"
+
+#: yumex/backend/daemon.py:19
+msgid "Building Transaction"
+msgstr "Bygger Transaktion"
+
+#: yumex/backend/daemon.py:26
+msgid "Applying Transaction"
+msgstr "Udfører Transaktion"
+
+#: yumex/backend/daemon.py:30
+msgid "Checking package signatures"
+msgstr "Checker pakke signatur"
+
+#: yumex/backend/daemon.py:32 yumex/backend/daemon.py:34
+msgid "Download Packages"
+msgstr "Henter Pakker"
+
+#: yumex/backend/daemon.py:44
+#, python-brace-format
+msgid "Erasing : {pkg_name}"
+msgstr "Sletter : {pkg_name}"
+
+#: yumex/backend/daemon.py:46
+#, python-brace-format
+msgid "Installing : {pkg_name}"
+msgstr "Installerer : {pkg_name}"
+
+#: yumex/backend/daemon.py:48
+#, python-brace-format
+msgid "Updating : {pkg_name}"
+msgstr "Opdaterer : {pkg_name}"
+
+#: yumex/backend/daemon.py:52
+#, python-brace-format
+msgid "Verifying : {pkg_name}"
+msgstr "Verifisere : {pkg_name}"
+
+#: yumex/backend/daemon.py:54
+#, python-brace-format
+msgid "Running scriptlets : {pkg_name}"
+msgstr "Kører scriptlets : {pkg_name}"
+
+#: yumex/backend/daemon.py:65
+msgid "Downloading Packages"
+msgstr "Henter Pakker"
+
+#: yumex/backend/daemon.py:72
+#, python-brace-format
+msgid "Downloading : {name}"
+msgstr "Henter : {name}"
+
+#: yumex/backend/daemon.py:111
+msgid "Couldn't build transaction\n"
+msgstr "Kunne ikke bygge transaktionen\n"
+
+#: yumex/backend/daemon.py:115
+msgid "Dnf is locked by another process"
+msgstr "Dnf er låst af en anden process"
+
+#: yumex/backend/daemon.py:118 yumex/backend/daemon.py:143
+msgid "Exception in Dnf Backend\n"
+msgstr "Fejl hændelse i Dnf Backend\n"
+
+#: yumex/backend/dnf.py:103
 #, python-brace-format
 msgid "Downloading repository information for {name}"
 msgstr "indlæser kilde information for {name}"
 
-#: yumex/main.py:107
+#: yumex/main.py:145
 msgid ""
 "\n"
 "<ul>\n"
@@ -58,57 +171,13 @@ msgstr ""
 "<li>Tidlig Version, ikke udgiver endnu</li>\n"
 "</ul>\n"
 
-#: yumex/main.py:114
+#: yumex/main.py:152
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 "\n"
 "Yum Extender er et pakke håndterings værktøj til at installere, opdatere og slette pakker\n"
-
-#: data/ui/package_settings.blp:9
-msgid "Package filter"
-msgstr "Pakke filtre"
-
-#: data/ui/package_settings.blp:14
-msgid "Updates"
-msgstr "Opdateringer"
-
-#: data/ui/package_settings.blp:25
-msgid "Installed"
-msgstr "Instalerede"
-
-#: data/ui/package_settings.blp:37
-msgid "Available"
-msgstr "Tilgængelige"
-
-#: data/ui/package_settings.blp:50
-msgid "Sorting"
-msgstr "Sortering"
-
-#: data/ui/package_settings.blp:55
-msgid "Sort by:"
-msgstr "Sorter efter:"
-
-#: data/ui/package_settings.blp:61
-msgid "Sort packages"
-msgstr "Sorter pakker"
-
-#: data/ui/package_settings.blp:81
-msgid "Name"
-msgstr "Navn"
-
-#: data/ui/package_settings.blp:82
-msgid "Arch"
-msgstr "Ark"
-
-#: data/ui/package_settings.blp:83 data/ui/package_view.blp:36
-msgid "Size"
-msgstr "Størrelse"
-
-#: data/ui/package_settings.blp:84
-msgid "Repo"
-msgstr "Kilder"
 
 #: data/ui/package_view.blp:18
 msgid "name"
@@ -122,7 +191,11 @@ msgstr "version"
 msgid "Arch."
 msgstr "Ark."
 
-#: data/ui/package_view.blp:42
+#: data/ui/package_view.blp:36 data/ui/package_settings.blp:94
+msgid "Size"
+msgstr "Størrelse"
+
+#: data/ui/package_view.blp:42 data/ui/package_settings.blp:101
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -130,15 +203,67 @@ msgstr "Beskrivelse"
 msgid "repo"
 msgstr "kilde"
 
-#: data/ui/package_view.blp:99
+#: data/ui/package_view.blp:99 data/ui/shortcuts.blp:30
 msgid "Select All"
 msgstr "Vælg alle"
 
-#: data/ui/package_view.blp:100
+#: data/ui/package_view.blp:100 data/ui/shortcuts.blp:34
 msgid "Deselect All"
 msgstr "Fravælg alle"
 
-#: data/ui/preferences.blp:5 data/ui/window.blp:193
+#: data/ui/package_settings.blp:9
+msgid "Package filter"
+msgstr "Pakke filtre"
+
+#: data/ui/package_settings.blp:14
+msgid "Installed"
+msgstr "Instalerede"
+
+#: data/ui/package_settings.blp:26
+msgid "Updates"
+msgstr "Opdateringer"
+
+#: data/ui/package_settings.blp:37
+msgid "All"
+msgstr "Alle"
+
+#: data/ui/package_settings.blp:49 data/ui/window.blp:39
+msgid "Search"
+msgstr "Søg"
+
+#: data/ui/package_settings.blp:62
+msgid "View Settings"
+msgstr "Oversigts indstilliger"
+
+#: data/ui/package_settings.blp:73
+msgid "Select what attribute to sort by"
+msgstr "Vælg sorterings attribut"
+
+#: data/ui/package_settings.blp:83
+msgid "Select what package information to show"
+msgstr "Vælg pakke informations type"
+
+#: data/ui/package_settings.blp:92
+msgid "Name"
+msgstr "Navn"
+
+#: data/ui/package_settings.blp:93
+msgid "Arch"
+msgstr "Ark."
+
+#: data/ui/package_settings.blp:95
+msgid "Repo"
+msgstr "Kilder"
+
+#: data/ui/package_settings.blp:102
+msgid "Filelist"
+msgstr "Filliste"
+
+#: data/ui/package_settings.blp:103
+msgid "Update Info"
+msgstr "Opdaterings info."
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
 msgid "Preferences"
 msgstr "Indstillinger"
 
@@ -162,46 +287,209 @@ msgstr "Kilde Indstillinger"
 msgid "The available and enabled repositories"
 msgstr "De tilgængelige og aktive kilder"
 
-#: data/ui/window.blp:6
+#: data/ui/queue_row.blp:17
+msgid "Added as a dependency"
+msgstr "Tilføjet som afhængighed"
+
+#: data/ui/queue_row.blp:35
+msgid "Remove item from queue"
+msgstr "Slet element fra køen"
+
+#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
 msgid "Yum Extender"
 msgstr "Yum Extender"
 
-#: data/ui/window.blp:32
+#: data/ui/window.blp:33
 msgid "Select Package filters"
 msgstr "Vælg pakke filter"
 
-#: data/ui/window.blp:41
-msgid "Search"
-msgstr "Søg"
-
-#: data/ui/window.blp:57
+#: data/ui/window.blp:55
 msgid "Main Menu"
 msgstr "Hovedmenu"
 
-#: data/ui/window.blp:69
+#: data/ui/window.blp:63
 msgid "Apply"
 msgstr "Udfør"
 
-#: data/ui/window.blp:72
+#: data/ui/window.blp:66
 msgid "Apply Package Actions"
 msgstr "Udfør pakke handlinger"
 
-#: data/ui/window.blp:88
+#: data/ui/window.blp:82
 msgid "Package Name"
 msgstr "Pakkenavn"
 
-#: data/ui/window.blp:99
+#: data/ui/window.blp:93
 msgid "Packages"
 msgstr "Pakker"
 
-#: data/ui/window.blp:150
+#: data/ui/window.blp:140
 msgid "Groups"
 msgstr "Grupper"
 
-#: data/ui/window.blp:159
+#: data/ui/window.blp:150
 msgid "Queue"
 msgstr "Kø"
 
+#: data/ui/window.blp:171
+msgid "Remove all from queue"
+msgstr "Slet alt fra køen"
+
+#: data/ui/window.blp:194
+msgid "_Preferences"
+msgstr "Egenskaber"
+
 #: data/ui/window.blp:198
-msgid "About Yum Extender"
+msgid "Keyboard Shortcuts"
+msgstr "Tastatur Genveje"
+
+#: data/ui/window.blp:202
+msgid "_About Yum Extender"
 msgstr "Om Yum Extender"
+
+#: data/ui/transaction_result.blp:15
+msgid "Transaction Result"
+msgstr "Rasultat af transaktionen"
+
+#: data/ui/transaction_result.blp:19
+msgid "Cancel"
+msgstr "Afbryd"
+
+#: data/ui/transaction_result.blp:24
+msgid "Confirm"
+msgstr "Bekræft"
+
+#: data/ui/package_info.blp:21
+msgid "Advisory ID"
+msgstr "Adviserings ID"
+
+#: data/ui/package_info.blp:29
+msgid "Advisory Type"
+msgstr "Adviseringstype"
+
+#: data/ui/package_info.blp:37
+msgid "Advisory Issued"
+msgstr "Adviserings udstedelse"
+
+#: data/ui/package_info.blp:52
+msgid "Bugzilla References"
+msgstr "Bugzilla Referancer"
+
+#: data/ui/shortcuts.blp:8
+msgid "General"
+msgstr "Generelle"
+
+#: data/ui/shortcuts.blp:11
+msgid "Keyboard shortcuts"
+msgstr "Tastatur genveje"
+
+#: data/ui/shortcuts.blp:19
+msgid "Apply Actions"
+msgstr "Udfør Handlinger"
+
+#: data/ui/shortcuts.blp:24
+msgid "Package View"
+msgstr "Pakke Oversigt"
+
+#: data/ui/shortcuts.blp:26
+msgid "Show/Hide Sidebar"
+msgstr "Vis/Skjul Sidebjælke"
+
+#: data/ui/shortcuts.blp:39
+msgid "Package Filters"
+msgstr "Pakke Filtre"
+
+#: data/ui/shortcuts.blp:41
+msgid "Show Installed"
+msgstr "Vis installered"
+
+#: data/ui/shortcuts.blp:45
+msgid "Show updates"
+msgstr "Vis opdateringer"
+
+#: data/ui/shortcuts.blp:49
+msgid "Show All"
+msgstr "Vis alle"
+
+#: data/ui/shortcuts.blp:54
+msgid "Queue View"
+msgstr "Kø oversigt"
+
+#: data/ui/shortcuts.blp:56
+msgid "Clear Queue"
+msgstr "Slet Køen"
+
+#: data/dk.yumex.Yumex.desktop.in.in:4
+msgid "Install, update and remove applications"
+msgstr "Installer, opdater og slet applikationer"
+
+#: data/dk.yumex.Yumex.desktop.in.in:10
+msgid "Software Installer"
+msgstr "Software Installer"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:8
+msgid "Graphical package manager"
+msgstr "Grafisk pakke værktøj"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:9
+msgid "Tim Lauridsen"
+msgstr "Tim Lauridsen"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:13
+msgid ""
+"Yum Extender is a graphical package management application. It allows you to"
+" search and browse for packages to install, remove and update on your "
+"computer."
+msgstr ""
+"Yum Extender er en grafisk pakke håndterings application. Som gør det muligt"
+" af søge og gennese pakker for installation, sletning og opdatering på din "
+"computer"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:17
+msgid ""
+"It is designed to give you full control over the packages on your computer "
+"and to be used by all users."
+msgstr ""
+"Den er designet til at give brugeren control over pakkerne installeret på "
+"din computer og blive brugt af alle slags brugere"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:18
+msgid "Features:"
+msgstr "Funktioner:"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:20
+msgid "Browse packages available for installation or update"
+msgstr "Gennemse tilgængelige pakker for installation eller opdatering"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:21
+msgid "Browse packages installed on your computer"
+msgstr "Gennemse pakker installeret på din computer"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:22
+msgid "Search packages by name, summary, description"
+msgstr "Søgning i pakker efter navn, beskrivelse m.m"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:39
+msgid "Yum Extender 4.9.0 is a total rewrite using a modern toolchain"
+msgstr "Yum Extender 4.99.0 er et total redesign med moderne værktøjer"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:41
+msgid "New fresh scalable UI using Gtk4 and Libadwaita"
+msgstr "Ny frisk skalerbar bruger grænseflade ved brug af Gtk4 og Libadwaita"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:42
+msgid "Using dnf directly for readonly actions"
+msgstr "Bruger dnf direkte til handling som ikke ændre på systemmet."
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:55
+msgid "yumex"
+msgstr "yumex"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:56
+msgid "yumex-dnf"
+msgstr "yumex-dnf"
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:57
+msgid "Package Manager"
+msgstr "Pakke håndterings værktøj"

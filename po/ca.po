@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 06:43+0100\n"
+"POT-Creation-Date: 2022-12-23 18:16+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>, 2022\n"
 "Language-Team: Catalan (https://www.transifex.com/timlau/teams/16939/ca/)\n"
@@ -21,99 +21,145 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: data/ui/package_view.blp:15
-msgid "name"
-msgstr "nom"
-
-#: data/ui/package_view.blp:21
-msgid "version"
-msgstr "versió"
-
-#: data/ui/package_view.blp:27
-msgid "Arch."
-msgstr "Arquitectura"
-
-#: data/ui/package_view.blp:33
-msgid "Size"
-msgstr "Mida"
-
-#: data/ui/package_view.blp:39
-msgid "Description"
-msgstr "Descripció"
-
-#: data/ui/package_view.blp:45
-msgid "repo"
-msgstr "dipòsit"
-
-#: data/ui/window.blp:6
-msgid "Yum Extender"
-msgstr "Yum Extender"
-
-#: data/ui/window.blp:32
-msgid "Select Package filters"
+#: yumex/ui/__init__.py:31
+#, python-brace-format
+msgid "Queued for deletion as a dependency {name}"
 msgstr ""
 
-#: data/ui/window.blp:42
-msgid "Search"
+#: yumex/ui/__init__.py:33
+#, python-brace-format
+msgid "Queued for installation as a dependency {name}"
 msgstr ""
 
-#: data/ui/window.blp:58
-msgid "Main Menu"
-msgstr "Menú principal"
-
-#: data/ui/window.blp:69
-msgid "Apply"
-msgstr "Aplica"
-
-#: data/ui/window.blp:70
-msgid "Apply Package Actions"
-msgstr "Aplica les accions del paquet"
-
-#: data/ui/window.blp:94
-msgid "Packages"
-msgstr "Paquets"
-
-#: data/ui/window.blp:113
-msgid "Updates"
+#: yumex/ui/__init__.py:35
+#, python-brace-format
+msgid "Queued for updating as a dependency {name}"
 msgstr ""
 
-#: data/ui/window.blp:114
-msgid "Show available updates"
+#: yumex/ui/__init__.py:39
+msgid "Queued for deletion"
 msgstr ""
 
-#: data/ui/window.blp:120
-msgid "Installed"
+#: yumex/ui/__init__.py:41
+msgid "Queued for installation"
 msgstr ""
 
-#: data/ui/window.blp:121
-msgid "Show installed packages"
+#: yumex/ui/__init__.py:43
+msgid "Queued for updating"
 msgstr ""
 
-#: data/ui/window.blp:127
-msgid "Available"
+#: yumex/ui/package_info.py:24
+msgid "Bugfix"
 msgstr ""
 
-#: data/ui/window.blp:128
-msgid "Show available packages"
+#: yumex/ui/package_info.py:25
+msgid "New Package"
 msgstr ""
 
-#: data/ui/window.blp:152
-msgid "Groups"
-msgstr "Grups"
+#: yumex/ui/package_info.py:26
+msgid "Security"
+msgstr ""
 
-#: data/ui/window.blp:161
-msgid "Queue"
-msgstr "Cua"
+#: yumex/ui/package_info.py:27
+msgid "Enhancement"
+msgstr ""
 
-#: data/ui/window.blp:183
-msgid "Preferences"
-msgstr "Preferències"
+#: yumex/ui/package_info.py:65
+msgid "no update information found"
+msgstr ""
 
-#: data/ui/window.blp:188
-msgid "About Yum Extender"
-msgstr "Quant al Yum Extender"
+#: yumex/ui/pachage_view.py:82
+msgid "Loading Packages"
+msgstr ""
 
-#: yumex/main.py:100
+#: yumex/ui/pachage_view.py:83
+msgid "This make take a little while"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:51
+msgid "Packages for installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:53
+msgid "Packages for deletion"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:55
+msgid "Packages for updating"
+msgstr ""
+
+#: yumex/ui/window.py:151 yumex/backend/daemon.py:24
+msgid "Running Transaction"
+msgstr ""
+
+#: yumex/backend/daemon.py:19
+msgid "Building Transaction"
+msgstr ""
+
+#: yumex/backend/daemon.py:26
+msgid "Applying Transaction"
+msgstr ""
+
+#: yumex/backend/daemon.py:30
+msgid "Checking package signatures"
+msgstr ""
+
+#: yumex/backend/daemon.py:32 yumex/backend/daemon.py:34
+msgid "Download Packages"
+msgstr ""
+
+#: yumex/backend/daemon.py:44
+#, python-brace-format
+msgid "Erasing : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:46
+#, python-brace-format
+msgid "Installing : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:48
+#, python-brace-format
+msgid "Updating : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:52
+#, python-brace-format
+msgid "Verifying : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:54
+#, python-brace-format
+msgid "Running scriptlets : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:65
+msgid "Downloading Packages"
+msgstr ""
+
+#: yumex/backend/daemon.py:72
+#, python-brace-format
+msgid "Downloading : {name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:111
+msgid "Couldn't build transaction\n"
+msgstr ""
+
+#: yumex/backend/daemon.py:115
+msgid "Dnf is locked by another process"
+msgstr ""
+
+#: yumex/backend/daemon.py:118 yumex/backend/daemon.py:143
+msgid "Exception in Dnf Backend\n"
+msgstr ""
+
+#: yumex/backend/dnf.py:103
+#, python-brace-format
+msgid "Downloading repository information for {name}"
+msgstr ""
+
+#: yumex/main.py:145
 msgid ""
 "\n"
 "<ul>\n"
@@ -125,10 +171,320 @@ msgstr ""
 "<li>Construcció primerenca, encara no publicada</li>\n"
 "</ul>\n"
 
-#: yumex/main.py:107
+#: yumex/main.py:152
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 "\n"
 "El Yum Extender és un gestor per instal·lar, actualitzar i suprimir paquets.\n"
+
+#: data/ui/package_view.blp:18
+msgid "name"
+msgstr "nom"
+
+#: data/ui/package_view.blp:24
+msgid "version"
+msgstr "versió"
+
+#: data/ui/package_view.blp:30
+msgid "Arch."
+msgstr "Arquitectura"
+
+#: data/ui/package_view.blp:36 data/ui/package_settings.blp:94
+msgid "Size"
+msgstr "Mida"
+
+#: data/ui/package_view.blp:42 data/ui/package_settings.blp:101
+msgid "Description"
+msgstr "Descripció"
+
+#: data/ui/package_view.blp:48
+msgid "repo"
+msgstr "dipòsit"
+
+#: data/ui/package_view.blp:99 data/ui/shortcuts.blp:30
+msgid "Select All"
+msgstr ""
+
+#: data/ui/package_view.blp:100 data/ui/shortcuts.blp:34
+msgid "Deselect All"
+msgstr ""
+
+#: data/ui/package_settings.blp:9
+msgid "Package filter"
+msgstr ""
+
+#: data/ui/package_settings.blp:14
+msgid "Installed"
+msgstr ""
+
+#: data/ui/package_settings.blp:26
+msgid "Updates"
+msgstr ""
+
+#: data/ui/package_settings.blp:37
+msgid "All"
+msgstr ""
+
+#: data/ui/package_settings.blp:49 data/ui/window.blp:39
+msgid "Search"
+msgstr ""
+
+#: data/ui/package_settings.blp:62
+msgid "View Settings"
+msgstr ""
+
+#: data/ui/package_settings.blp:73
+msgid "Select what attribute to sort by"
+msgstr ""
+
+#: data/ui/package_settings.blp:83
+msgid "Select what package information to show"
+msgstr ""
+
+#: data/ui/package_settings.blp:92
+msgid "Name"
+msgstr ""
+
+#: data/ui/package_settings.blp:93
+msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:95
+msgid "Repo"
+msgstr ""
+
+#: data/ui/package_settings.blp:102
+msgid "Filelist"
+msgstr ""
+
+#: data/ui/package_settings.blp:103
+msgid "Update Info"
+msgstr ""
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
+msgid "Preferences"
+msgstr "Preferències"
+
+#: data/ui/preferences.blp:10
+msgid "Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:13
+msgid "Application Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:43
+msgid "Repository"
+msgstr ""
+
+#: data/ui/preferences.blp:46
+msgid "Repository Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:47
+msgid "The available and enabled repositories"
+msgstr ""
+
+#: data/ui/queue_row.blp:17
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:35
+msgid "Remove item from queue"
+msgstr ""
+
+#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
+msgid "Yum Extender"
+msgstr "Yum Extender"
+
+#: data/ui/window.blp:33
+msgid "Select Package filters"
+msgstr ""
+
+#: data/ui/window.blp:55
+msgid "Main Menu"
+msgstr "Menú principal"
+
+#: data/ui/window.blp:63
+msgid "Apply"
+msgstr "Aplica"
+
+#: data/ui/window.blp:66
+msgid "Apply Package Actions"
+msgstr "Aplica les accions del paquet"
+
+#: data/ui/window.blp:82
+msgid "Package Name"
+msgstr ""
+
+#: data/ui/window.blp:93
+msgid "Packages"
+msgstr "Paquets"
+
+#: data/ui/window.blp:140
+msgid "Groups"
+msgstr "Grups"
+
+#: data/ui/window.blp:150
+msgid "Queue"
+msgstr "Cua"
+
+#: data/ui/window.blp:171
+msgid "Remove all from queue"
+msgstr ""
+
+#: data/ui/window.blp:194
+msgid "_Preferences"
+msgstr ""
+
+#: data/ui/window.blp:198
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: data/ui/window.blp:202
+msgid "_About Yum Extender"
+msgstr ""
+
+#: data/ui/transaction_result.blp:15
+msgid "Transaction Result"
+msgstr ""
+
+#: data/ui/transaction_result.blp:19
+msgid "Cancel"
+msgstr ""
+
+#: data/ui/transaction_result.blp:24
+msgid "Confirm"
+msgstr ""
+
+#: data/ui/package_info.blp:21
+msgid "Advisory ID"
+msgstr ""
+
+#: data/ui/package_info.blp:29
+msgid "Advisory Type"
+msgstr ""
+
+#: data/ui/package_info.blp:37
+msgid "Advisory Issued"
+msgstr ""
+
+#: data/ui/package_info.blp:52
+msgid "Bugzilla References"
+msgstr ""
+
+#: data/ui/shortcuts.blp:8
+msgid "General"
+msgstr ""
+
+#: data/ui/shortcuts.blp:11
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: data/ui/shortcuts.blp:19
+msgid "Apply Actions"
+msgstr ""
+
+#: data/ui/shortcuts.blp:24
+msgid "Package View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:26
+msgid "Show/Hide Sidebar"
+msgstr ""
+
+#: data/ui/shortcuts.blp:39
+msgid "Package Filters"
+msgstr ""
+
+#: data/ui/shortcuts.blp:41
+msgid "Show Installed"
+msgstr ""
+
+#: data/ui/shortcuts.blp:45
+msgid "Show updates"
+msgstr ""
+
+#: data/ui/shortcuts.blp:49
+msgid "Show All"
+msgstr ""
+
+#: data/ui/shortcuts.blp:54
+msgid "Queue View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:56
+msgid "Clear Queue"
+msgstr ""
+
+#: data/dk.yumex.Yumex.desktop.in.in:4
+msgid "Install, update and remove applications"
+msgstr ""
+
+#: data/dk.yumex.Yumex.desktop.in.in:10
+msgid "Software Installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:8
+msgid "Graphical package manager"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:9
+msgid "Tim Lauridsen"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:13
+msgid ""
+"Yum Extender is a graphical package management application. It allows you to"
+" search and browse for packages to install, remove and update on your "
+"computer."
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:17
+msgid ""
+"It is designed to give you full control over the packages on your computer "
+"and to be used by all users."
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:18
+msgid "Features:"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:20
+msgid "Browse packages available for installation or update"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:21
+msgid "Browse packages installed on your computer"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:22
+msgid "Search packages by name, summary, description"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:39
+msgid "Yum Extender 4.9.0 is a total rewrite using a modern toolchain"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:41
+msgid "New fresh scalable UI using Gtk4 and Libadwaita"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:42
+msgid "Using dnf directly for readonly actions"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:55
+msgid "yumex"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:56
+msgid "yumex-dnf"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:57
+msgid "Package Manager"
+msgstr ""
