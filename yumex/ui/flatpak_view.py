@@ -43,12 +43,25 @@ class YumexFlatpakView(Gtk.ListView):
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item):
-        row = Adw.ActionRow()
+        row = YumexFlatpakRow(self)
         item.set_child(row)
 
     @Gtk.Template.Callback()
     def on_row_bind(self, widget, item):
         row = item.get_child()
         pkg = item.get_item()
+        row.pkg = pkg
         row.set_title(pkg.name)
         row.set_subtitle(pkg.summary)
+
+
+@Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_row.ui")
+class YumexFlatpakRow(Adw.ActionRow):
+    __gtype_name__ = "YumexFlatpakRow"
+
+    icon = Gtk.Template.Child()
+
+    def __init__(self, view, **kwargs):
+        super().__init__(**kwargs)
+        self.view: YumexFlatpakView = view
+        self.pkg: FlatpakPackage = None
