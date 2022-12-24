@@ -20,6 +20,7 @@ from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import YumexRootBackend
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
+from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.package_settings import YumexPackageSettings
@@ -39,6 +40,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     main_view = Gtk.Template.Child()
     content_groups = Gtk.Template.Child()
     content_queue = Gtk.Template.Child()
+    content_flatpaks = Gtk.Template.Child()
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
     stack = Gtk.Template.Child("view_stack")
@@ -85,6 +87,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_package_page()
         self.setup_groups_page()
         self.setup_queue()
+        self.setup_flatpaks()
+
+    def setup_flatpaks(self):
+        self.flatpak_view = YumexFlatpakView(self)
+        self.content_flatpaks.set_child(self.flatpak_view)
 
     def setup_package_page(self):
         """Setup the packages page"""
