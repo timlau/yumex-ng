@@ -33,13 +33,21 @@ class FlatpakType(IntEnum):
 class FlatpakPackage(GObject.GObject):
     """wrapper for a"""
 
-    def __init__(self, ref):
+    def __init__(self, ref, is_user=True):
         super(FlatpakPackage, self).__init__()
         self.ref = ref
+        self.is_user = is_user
 
     @property
     def name(self):
         return self.ref.get_appdata_name()
+
+    @property
+    def location(self):
+        if self.is_user:
+            return "user"
+        else:
+            return "system"
 
     @property
     def version(self):
@@ -81,7 +89,10 @@ class FlatpakBackend:
     def get_installed(self, user=True, system=True):
         refs = []
         if user:
-            refs += self.user.list_installed_refs()
+            refs += [FlatpakPackage(ref) for ref in self.user.list_installed_refs()]
         if system:
-            refs += self.system.list_installed_refs()
-        return [FlatpakPackage(ref) for ref in refs]
+            refs += [
+                FlatpakPackage(ref, is_user=False)
+                for ref in self.system.list_installed_refs()
+            ]
+        return refs

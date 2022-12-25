@@ -14,6 +14,9 @@
 # Copyright (C) 2022  Tim Lauridsen
 #
 
+import os
+
+from pathlib import Path
 from gi.repository import Gtk, Gio, Adw
 
 from yumex.constants import rootdir
@@ -37,9 +40,20 @@ class YumexFlatpakView(Gtk.ListView):
         self.store = Gio.ListStore.new(FlatpakPackage)
         self.selection.set_model(self.store)
         self.backend = FlatpakBackend()
+        self.icons_paths = self.get_icon_paths()
         for elem in self.backend.get_installed(user=True):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
+
+    def get_icon_paths(self):
+        return [f"{path}/icons/" for path in os.environ["XDG_DATA_DIRS"].split(":")]
+
+    def find_icon(self, pkg):
+        for path in self.icons_paths:
+            files = list(Path(f"{path}").rglob(f"{pkg.id}.*"))
+            if files:
+                return files[0].as_posix()
+        return None
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item):
@@ -51,6 +65,11 @@ class YumexFlatpakView(Gtk.ListView):
         row = item.get_child()
         pkg = item.get_item()
         row.pkg = pkg
+        icon_file = self.find_icon(pkg)
+        if icon_file:
+            row.icon.set_from_file(icon_file)
+        row.user.set_label(pkg.location)
+        row.origin.set_label(pkg.origin)
         row.set_title(pkg.name)
         row.set_subtitle(pkg.summary)
 
@@ -60,6 +79,8 @@ class YumexFlatpakRow(Adw.ActionRow):
     __gtype_name__ = "YumexFlatpakRow"
 
     icon = Gtk.Template.Child()
+    user = Gtk.Template.Child()
+    origin = Gtk.Template.Child()
 
     def __init__(self, view, **kwargs):
         super().__init__(**kwargs)

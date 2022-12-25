@@ -98,3 +98,25 @@ spinner {
     -gtk-icon-source: -gtk-icontheme('emblem-ok-symbolic');
     border-radius: 100%;
 }
+
+.flatpak_icon {
+    -gtk-icon-size: 48px;
+}
+
+.flatpak_tag {
+    /* padding: 5px; */
+    margin-top: 5px;
+    margin-right: 5px;
+    padding: 2px 10px;
+    background-color: @accent_bg_color;
+    color: @accent_fg_color;
+    font-size: 0.6em;
+    font-strech: extra-condensed;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.origin {
+    background-color: @success_bg_color;
+    color: @success_fg_color;
+}

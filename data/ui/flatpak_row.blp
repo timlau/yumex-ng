@@ -4,9 +4,23 @@ using Adw 1;
 template YumexFlatpakRow : Adw.ActionRow {
     [prefix]
     Gtk.Image icon {
-        margin-start: 10;
-        margin-end: 10;
-        icon-size: normal;
+        height-request: 72;
+        icon-size: large;
+        styles ["icon-dropshadow","flatpak_icon"]
     }
-
+    [suffix]
+    Gtk.Box {
+      orientation: horizontal;
+      hexpand: false;
+      vexpand: false;
+      valign: start;
+      Gtk.Label user {
+        label: "system";
+        styles ["flatpak_tag"]
+      }
+      Gtk.Label origin {
+        label: "";
+        styles ["flatpak_tag","origin"]
+      }
+    }
 }
