@@ -103,7 +103,7 @@ spinner {
     -gtk-icon-size: 48px;
 }
 
-.flatpak_tag {
+.tag {
     /* padding: 5px; */
     margin-top: 5px;
     margin-right: 5px;
