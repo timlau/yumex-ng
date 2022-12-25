@@ -120,3 +120,9 @@ spinner {
     background-color: @success_bg_color;
     color: @success_fg_color;
 }
+
+.flatpak_update {
+    -gtk-icon-size: 24px;
+    margin-right: 10px;
+    margin-top: 16px;
+}

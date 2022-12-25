@@ -33,10 +33,11 @@ class FlatpakType(IntEnum):
 class FlatpakPackage(GObject.GObject):
     """wrapper for a"""
 
-    def __init__(self, ref, is_user=True):
+    def __init__(self, ref, is_user=True, is_update=False):
         super(FlatpakPackage, self).__init__()
         self.ref = ref
         self.is_user = is_user
+        self.is_update = is_update
 
     @property
     def name(self):
@@ -85,14 +86,29 @@ class FlatpakBackend:
     def __init__(self):
         self.user = Flatpak.Installation.new_user()
         self.system = Flatpak.Installation.new_system()
+        self.updates = self.get_updates()
+
+    def get_updates(self):
+        updates = [ref.get_name() for ref in self.user.list_installed_refs_for_update()]
+        updates += [
+            ref.get_name() for ref in self.system.list_installed_refs_for_update()
+        ]
+        return updates
 
     def get_installed(self, user=True, system=True):
         refs = []
         if user:
-            refs += [FlatpakPackage(ref) for ref in self.user.list_installed_refs()]
+            refs += [self._get_package(ref) for ref in self.user.list_installed_refs()]
         if system:
             refs += [
-                FlatpakPackage(ref, is_user=False)
+                self._get_package(ref, is_user=False)
                 for ref in self.system.list_installed_refs()
             ]
         return refs
+
+    def _get_package(self, ref, is_user=True):
+        if ref.get_name() in self.updates:
+            is_update = True
+        else:
+            is_update = False
+        return FlatpakPackage(ref, is_user=is_user, is_update=is_update)

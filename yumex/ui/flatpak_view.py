@@ -63,13 +63,14 @@ class YumexFlatpakView(Gtk.ListView):
     @Gtk.Template.Callback()
     def on_row_bind(self, widget, item):
         row = item.get_child()
-        pkg = item.get_item()
+        pkg: FlatpakPackage = item.get_item()
         row.pkg = pkg
         icon_file = self.find_icon(pkg)
         if icon_file:
             row.icon.set_from_file(icon_file)
         row.user.set_label(pkg.location)
         row.origin.set_label(pkg.origin)
+        row.update.set_visible(pkg.is_update)
         row.set_title(f"{pkg.name} - {pkg.version}")
         row.set_subtitle(pkg.summary)
 
@@ -80,6 +81,7 @@ class YumexFlatpakRow(Adw.ActionRow):
 
     icon = Gtk.Template.Child()
     user = Gtk.Template.Child()
+    update = Gtk.Template.Child()
     origin = Gtk.Template.Child()
 
     def __init__(self, view, **kwargs):
