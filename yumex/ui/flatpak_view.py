@@ -70,7 +70,7 @@ class YumexFlatpakView(Gtk.ListView):
             row.icon.set_from_file(icon_file)
         row.user.set_label(pkg.location)
         row.origin.set_label(pkg.origin)
-        row.set_title(pkg.name)
+        row.set_title(f"{pkg.name} - {pkg.version}")
         row.set_subtitle(pkg.summary)
 
 
