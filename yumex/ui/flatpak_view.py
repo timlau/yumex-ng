@@ -25,7 +25,8 @@ from yumex.backend.flatpak import (
     FlatpakBackend,
     FlatpakPackage,
     FlatpakType,
-)  # noqa: F401
+)
+from yumex.utils import log, RunAsync  # noqa: F401
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_view.ui")
@@ -37,10 +38,13 @@ class YumexFlatpakView(Gtk.ListView):
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.win = window
+        self.icons_paths = self.get_icon_paths()
+        self.reset()
+
+    def reset(self):
         self.store = Gio.ListStore.new(FlatpakPackage)
         self.selection.set_model(self.store)
-        self.backend = FlatpakBackend()
-        self.icons_paths = self.get_icon_paths()
+        self.backend = FlatpakBackend(self.win)
         for elem in self.backend.get_installed(user=True):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
@@ -54,6 +58,30 @@ class YumexFlatpakView(Gtk.ListView):
             if files:
                 return files[0].as_posix()
         return None
+
+    def update(self, *args):
+        # self.backend.do_update(self.store)
+        def completed(deps, error=None):
+            self.reset()
+
+        RunAsync(self.backend.do_update, completed, self.store)
+
+    def install(self, *args):
+        # self.backend.do_update(self.store)
+        def completed(deps, error=None):
+            self.reset()
+
+        RunAsync(
+            self.backend.do_install, completed, "app/org.xfce.ristretto/x86_64/stable"
+        )
+
+    def remove(self, *args):
+        # self.backend.do_update(self.store)
+        def completed(deps, error=None):
+            self.reset()
+
+        selected = self.selection.get_selected_item()
+        RunAsync(self.backend.do_remove, completed, repr(selected))
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item):

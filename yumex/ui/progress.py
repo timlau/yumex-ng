@@ -26,6 +26,8 @@ class YumexProgress(Adw.Window):
     title = Gtk.Template.Child()
     subtitle = Gtk.Template.Child()
     progress = Gtk.Template.Child()
+    ok_button = Gtk.Template.Child()
+    spinner = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -33,6 +35,7 @@ class YumexProgress(Adw.Window):
 
     def show(self):
         self.set_transient_for(self.win)
+        self.spinner.set_visible(True)
         self.present()
 
     def hide(self):
@@ -49,7 +52,16 @@ class YumexProgress(Adw.Window):
     def set_subtitle(self, title: str):
         self.subtitle.set_label(title)
 
+    def show_button(self):
+        self.spinner.set_visible(False)
+        self.ok_button.set_visible(True)
+
     def set_progress(self, frac):
         if frac >= 0.0 and frac <= 1.0:
             self.progress.set_visible(True)
             self.progress.set_fraction(frac)
+
+    @Gtk.Template.Callback()
+    def on_ok_clicked(self, *args):
+        self.ok_button.set_visible(False)
+        self.hide()

@@ -22,6 +22,8 @@ gi.require_version("Flatpak", "1.0")
 from enum import IntEnum  # noqa : E402
 from gi.repository import Flatpak, GObject  # noqa : E402
 
+from yumex.utils import log  # noqa : E402
+
 
 class FlatpakType(IntEnum):
     APP = 1
@@ -82,18 +84,104 @@ class FlatpakPackage(GObject.GObject):
         return self.ref.format_ref()
 
 
+class FlatpakTransaction:
+    def __init__(self, backend):
+        self.win = backend.win
+        self.backend = backend
+        self.transaction = Flatpak.Transaction.new_for_installation(self.backend.user)
+        self.num_actions = 0
+        self.current_action = 0
+        self.transaction.connect("ready", self.on_ready)
+        self.transaction.connect("new-operation", self.on_new_operation)
+        self.transaction.connect("operation-done", self.operation_done)
+
+    def on_ready(self, transaction):
+        log(" FLATPAK: ready")
+        self.num_actions = len(transaction.get_operations())
+        self.current_action = 0
+        self.elem_progress = 1.0 / self.num_actions
+        return True  # confirm transaction
+
+    def on_changed(self, progress):
+        cur_progress = progress.get_progress()
+        total_progress = (self.current_action - 1) * self.elem_progress + (
+            (cur_progress / 100.0) * self.elem_progress
+        )
+        self.win.progress.set_progress(total_progress)
+
+    def on_new_operation(self, transaction, operation, progress):
+        log(" FLATPAK: new-operation")
+        self.current_action += 1
+        progress.connect("changed", self.on_changed)
+        ref = operation.get_ref()
+        self.win.progress.set_subtitle(ref)
+        log(f" FLATPAK: {ref}")
+
+    def operation_done(self, transaction, operation, commit, result):
+        log(" FLATPAK: operation-done")
+        if self.current_action == self.num_actions:
+            log(" FLATPAK: everyting is Done")
+
+    def add_install(self, to_inst):
+        self.transaction.add_install("flathub", to_inst, None)
+        log(f" FLATPAK: adding {to_inst} for install")
+
+    def add_remove(self, to_remove):
+        self.transaction.add_uninstall(to_remove)
+        log(f" FLATPAK: adding {to_remove} for uninstall")
+
+    def add_update(self, pkg):
+        self.transaction.add_update(pkg.ref.format_ref(), None, None)
+        log(f" FLATPAK: adding {pkg.id} for update")
+
+    def run(self):
+        log(" FLATPAK: Running Transaction")
+        self.win.progress.show()
+        self.win.progress.set_title(_("Running Flatpak Transaction"))
+        self.transaction.run()
+        self.win.progress.set_title(_("Flatpak Transaction Completed"))
+        self.win.progress.show_button()
+        log(" FLATPAK: Running Transaction Ended")
+
+
 class FlatpakBackend:
-    def __init__(self):
+    def __init__(self, win):
+        self.win = win
         self.user = Flatpak.Installation.new_user()
         self.system = Flatpak.Installation.new_system()
-        self.updates = self.get_updates()
+        self.updates = self._get_updates()
 
-    def get_updates(self):
+    def _get_updates(self):
         updates = [ref.get_name() for ref in self.user.list_installed_refs_for_update()]
         updates += [
             ref.get_name() for ref in self.system.list_installed_refs_for_update()
         ]
         return updates
+
+    def _get_package(self, ref, is_user=True):
+        if ref.get_name() in self.updates:
+            is_update = True
+        else:
+            is_update = False
+        return FlatpakPackage(ref, is_user=is_user, is_update=is_update)
+
+    def do_update(self, pkgs: list[FlatpakPackage]):
+        transaction = FlatpakTransaction(self)
+        for pkg in pkgs:
+            if pkg.is_update:
+                transaction.add_update(pkg)
+                log(f" FLATPAK: adding {pkg.id} for update")
+        transaction.run()
+
+    def do_install(self, to_inst):
+        transaction = FlatpakTransaction(self)
+        transaction.add_install(to_inst)
+        transaction.run()
+
+    def do_remove(self, to_remove):
+        transaction = FlatpakTransaction(self)
+        transaction.add_remove(to_remove)
+        transaction.run()
 
     def get_installed(self, user=True, system=True):
         refs = []
@@ -105,10 +193,3 @@ class FlatpakBackend:
                 for ref in self.system.list_installed_refs()
             ]
         return refs
-
-    def _get_package(self, ref, is_user=True):
-        if ref.get_name() in self.updates:
-            is_update = True
-        else:
-            is_update = False
-        return FlatpakPackage(ref, is_user=is_user, is_update=is_update)
