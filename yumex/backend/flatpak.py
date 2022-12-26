@@ -85,10 +85,19 @@ class FlatpakPackage(GObject.GObject):
 
 
 class FlatpakTransaction:
-    def __init__(self, backend):
+    def __init__(self, backend, system=True):
         self.win = backend.win
         self.backend = backend
-        self.transaction = Flatpak.Transaction.new_for_installation(self.backend.user)
+        if system:
+            log(" FLATPAK: setup system transaction")
+            self.transaction = Flatpak.Transaction.new_for_installation(
+                self.backend.system
+            )
+        else:
+            log(" FLATPAK: setup user transaction")
+            self.transaction = Flatpak.Transaction.new_for_installation(
+                self.backend.user
+            )
         self.num_actions = 0
         self.current_action = 0
         self.transaction.connect("ready", self.on_ready)
@@ -178,10 +187,17 @@ class FlatpakBackend:
         transaction.add_install(to_inst)
         transaction.run()
 
-    def do_remove(self, to_remove):
-        transaction = FlatpakTransaction(self)
-        transaction.add_remove(to_remove)
-        transaction.run()
+    def do_remove(self, pkg: FlatpakPackage):
+        if pkg.location == "user":
+            transaction = FlatpakTransaction(self, system=False)
+        else:
+            transaction = FlatpakTransaction(self, system=True)
+        to_remove = repr(pkg)
+        try:
+            transaction.add_remove(to_remove)
+            transaction.run()
+        except Exception as e:
+            print(e)
 
     def get_installed(self, user=True, system=True):
         refs = []

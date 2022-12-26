@@ -81,7 +81,7 @@ class YumexFlatpakView(Gtk.ListView):
             self.reset()
 
         selected = self.selection.get_selected_item()
-        RunAsync(self.backend.do_remove, completed, repr(selected))
+        RunAsync(self.backend.do_remove, completed, selected)
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item):
