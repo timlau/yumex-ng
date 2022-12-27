@@ -87,6 +87,7 @@ class YumexFlatpakView(Gtk.ListView):
             if flatpak_installer.confirm:
                 RunAsync(self.backend.do_install, completed, ref, source, location)
 
+        self.win.stack.set_visible_child_name("flatpaks")
         flatpak_installer = YumexFlatpakInstaller(self.win)
         remotes = Gtk.StringList.new()
         for remote in self.backend.get_remotes():

@@ -90,7 +90,9 @@ class YumexApplication(Adw.Application):
         )
         self.create_action("filter_search", None)
         self.create_action("flatpak_update", self.win.flatpak_view.update)
-        self.create_action("flatpak_install", self.win.flatpak_view.install)
+        self.create_action(
+            "flatpak_install", self.win.flatpak_view.install, ["<Ctrl>I"]
+        )
         self.create_action("flatpak_remove", self.win.flatpak_view.remove)
         self.create_action(
             "apply_actions", self.win.on_apply_actions_clicked, ["<Alt>X"]

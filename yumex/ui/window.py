@@ -315,6 +315,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "packages":
                 self.show_on_packages_page(show=True)
                 self.package_view.refresh()
+            case "flatpaks":
+                self.show_on_packages_page(show=False)
             case "groups":
                 self.show_on_packages_page(show=False)
             case "queue":
