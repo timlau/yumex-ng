@@ -45,9 +45,16 @@ template YumexProgress : Adw.Window {
 
         Gtk.Box {
             vexpand: true;
-            Gtk.Spinner {
+            Gtk.Spinner spinner {
                 valign: start;
                 spinning: true;
+            }
+            Gtk.Button ok_button {
+                label: "Ok";
+                visible: false;
+                valign: end;
+                styles ["accent"]
+                clicked => on_ok_clicked();
             }
         }
       }

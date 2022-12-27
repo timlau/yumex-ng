@@ -136,6 +136,46 @@ template YumexMainWindow : Adw.ApplicationWindow {
             }
 
             Adw.ViewStackPage {
+              name: "flatpaks";
+              title: _("Flatpaks");
+              icon-name: "resources-symbolic";
+              child: Adw.Clamp {
+                maximum-size: 1024;
+                Gtk.Frame {
+                  margin-top: 20;
+                  margin-bottom:  20;
+                  margin-start: 10;
+                  margin-end: 10;
+
+                  Gtk.Box {
+                    orientation: vertical;
+                    Gtk.ScrolledWindow content_flatpaks  {
+                      // flatpak_view is added here
+                    }
+                    Gtk.ActionBar {
+                      Gtk.Button {
+                        icon-name: "emblem-synchronizing-symbolic";
+                        action-name: "app.flatpak_update";
+                        tooltip-text: _("Update All Flatpaks");
+                      }
+                      Gtk.Button {
+                        icon-name: "document-new-symbolic";
+                        action-name: "app.flatpak_install";
+                        tooltip-text: _("install new flatpak");
+                      }
+                      Gtk.Button {
+                        icon-name: "edit-delete-symbolic";
+                        action-name: "app.flatpak_remove";
+                        tooltip-text: _("uninstall selected flatpak");
+                      }
+                    }
+
+                  }
+                }
+              };
+            }
+
+            Adw.ViewStackPage {
               name: "groups";
               title: _("Groups");
               visible: false;

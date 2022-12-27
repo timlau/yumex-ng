@@ -1,0 +1,47 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexFlatpakRow : Adw.ActionRow {
+    [prefix]
+    Gtk.Image icon {
+        height-request: 72;
+        icon-size: large;
+        styles ["icon-dropshadow","flatpak_icon"]
+    }
+
+    [suffix]
+    Gtk.Box {
+      orientation: vertical;
+      Gtk.Box {
+        orientation: horizontal;
+        hexpand: false;
+        vexpand: false;
+        valign: start;
+        Gtk.Label user {
+          styles ["tag"]
+        }
+        Gtk.Label origin {
+          styles ["tag","origin"]
+        }
+      }
+      Gtk.Box {
+        orientation: horizontal;
+        hexpand: false;
+        vexpand: false;
+        halign: end;
+        valign: end;
+        Gtk.Image update {
+          visible: false;
+          icon-name: "emblem-synchronizing-symbolic";
+          tooltip-text: _("Update is available");
+          styles ["success","flatpak_update"]
+        }
+        Gtk.Button {
+          icon-name: "user-trash-symbolic" ;
+          tooltip-text: _("Uninstall flatpak");
+          clicked => on_delete_clicked();
+          styles ["flat","error","circular"]
+        }
+      }
+    }
+}

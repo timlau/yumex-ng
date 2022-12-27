@@ -20,13 +20,14 @@ from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import YumexRootBackend
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
+from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import RunAsync, log
+from yumex.utils import RunAsync, log  # noqa : F401
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -39,6 +40,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     main_view = Gtk.Template.Child()
     content_groups = Gtk.Template.Child()
     content_queue = Gtk.Template.Child()
+    content_flatpaks = Gtk.Template.Child()
     main_menu = Gtk.Template.Child("main-menu")
     sidebar = Gtk.Template.Child()
     stack = Gtk.Template.Child("view_stack")
@@ -85,6 +87,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_package_page()
         self.setup_groups_page()
         self.setup_queue()
+        self.setup_flatpaks()
+
+    def setup_flatpaks(self):
+        self.flatpak_view = YumexFlatpakView(self)
+        self.content_flatpaks.set_child(self.flatpak_view)
 
     def setup_package_page(self):
         """Setup the packages page"""
@@ -192,7 +199,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         def completed(result, error=None):
             self.progress.hide()
 
-        RunAsync(self._testing, completed)
+        # RunAsync(self._testing, completed)
 
     def _testing(self):
         self.progress.show()

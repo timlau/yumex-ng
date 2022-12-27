@@ -1,0 +1,70 @@
+using Gtk 4.0;
+using Adw 1;
+
+template YumexFlatpakInstaller : Adw.Window {
+    default-width: 700;
+    default-height: 150;
+    styles ["flatpak_installer"]
+
+    Gtk.Box {
+      orientation: vertical;
+      Adw.HeaderBar titlebar {
+        centering-policy: strict;
+        show-end-title-buttons: false;
+          [title]
+          Gtk.Label {
+            label: _("Install Flatpak");
+          }
+          [start]
+          Gtk.Button cancel{
+            label: _("Cancel");
+            clicked => on_cancel_clicked();
+          }
+          [end]
+          Gtk.Button confirm {
+            label: _("Confirm");
+            styles ["destructive-action"]
+            clicked => on_ok_clicked();
+          }
+      }
+
+      Gtk.ListBox list {
+        margin-top: 20;
+        margin-bottom: 20;
+        margin-start: 20;
+        margin-end: 20;
+        selection-mode: none;
+        styles ["boxed-list"]
+        Adw.EntryRow id {
+          title: _("Flatpak id");
+
+
+        }
+        Adw.ComboRow source {
+          title: _("Source");
+          model: sources;
+        }
+        Adw.ComboRow location {
+          title: _("Install location");
+          model: locations;
+          notify => on_location_notify();
+        }
+
+      }
+    }
+}
+
+
+Gtk.StringList locations {
+    strings [
+        "user",
+        "system"
+    ]
+}
+
+Gtk.StringList sources {
+    strings [
+        "flathub",
+        "fedora"
+    ]
+}
