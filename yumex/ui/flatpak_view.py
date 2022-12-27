@@ -98,7 +98,7 @@ class YumexFlatpakView(Gtk.ListView):
         # flatpak_installer.id.set_text("org.xfce.ristretto")
         flatpak_installer.present()
 
-    def remove(self, pkg=None, *args):
+    def remove(self, action, pkg=None):
         # self.backend.do_update(self.store)
         def completed(rc, error=None):
             self.win.progress.hide()
@@ -110,6 +110,10 @@ class YumexFlatpakView(Gtk.ListView):
         def response(dialog, result, *args):
             if result == "uninstall":
                 RunAsync(self.backend.do_remove, completed, selected)
+
+        # don't do Ctrl-X is flatpaks page is not visible
+        if not self.win.stack.get_visible_child_name() == "flatpaks":
+            return
 
         if pkg:
             selected = pkg
@@ -164,4 +168,4 @@ class YumexFlatpakRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, widget):
-        self.view.remove(pkg=self.pkg)
+        self.view.remove(None, pkg=self.pkg)

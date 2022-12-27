@@ -31,6 +31,29 @@ class YumexFlatpakInstaller(Adw.Window):
         super().__init__(**kwargs)
         self.win = win
         self.confirm = False
+        self.read_clipboard()
+
+    def read_clipboard(self):
+        """If the the clipboard contains
+
+        flatpak install flathub <some id>
+
+        then use these values
+        """
+
+        def callback(obj, res, *args):
+            text = clb.read_text_finish(res)
+            if text and text.startswith("flatpak install"):
+                words = text.split(" ")
+                self.id.set_text(words[3])
+                ndx = 0
+                for source in self.source.get_model():
+                    if source == words[2]:
+                        self.source.set_selected(ndx)
+                    ndx += 1
+
+        clb = self.win.get_clipboard()
+        clb.read_text_async(None, callback)
 
     @property
     def backend(self):
