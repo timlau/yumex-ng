@@ -8,9 +8,6 @@ from yumex.utils import log  # noqa: F401
 class YumexPreferences(Adw.PreferencesWindow):
     __gtype_name__ = "YumexPreferences"
 
-    pref_setting_01 = Gtk.Template.Child()
-    pref_setting_02 = Gtk.Template.Child()
-    pref_setting_03 = Gtk.Template.Child()
     fp_source = Gtk.Template.Child()
     fp_location = Gtk.Template.Child()
 
@@ -24,13 +21,6 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     def setup(self):
         self.setup_flatpak()
-        flags = ["pref_setting_01", "pref_setting_02", "pref_setting_03"]
-        for flag in flags:
-            pref = flag.replace("_", "-")
-            state = self.settings.get_boolean(pref)
-            switch = getattr(self, flag)
-            switch.set_active(state)
-            switch.connect("state-set", self.on_setting_changed, pref)
         # get repositories and add them
         repos = self.win.package_view.backend.get_repositories()
         for id, name, enabled in repos:

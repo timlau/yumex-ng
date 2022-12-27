@@ -23,35 +23,6 @@ template YumexPreferences: Adw.PreferencesWindow {
       }
     }
 
-    Adw.PreferencesGroup main_group {
-      title: _("Application Settings");
-      description: "Just dummy test settings for now";
-
-      Adw.ActionRow {
-        title: "Settings #1";
-        subtitle: "This setting controls how to do somethine";
-        activatable-widget: pref_setting_01;
-        Gtk.Switch pref_setting_01 {
-          valign: center;
-        }
-      }
-      Adw.ActionRow {
-        title: "Settings #2";
-        subtitle: "This setting controls how to do somethine";
-        activatable-widget: pref_setting_02;
-        Gtk.Switch pref_setting_02 {
-          valign: center;
-        }
-      }
-      Adw.ActionRow {
-        title: "Settings #3";
-        subtitle: "This setting controls how to do somethine";
-        activatable-widget: pref_setting_03;
-        Gtk.Switch pref_setting_03 {
-          valign: center;
-        }
-      }
-    }
   }
   Adw.PreferencesPage  repo {
     title: _("Repository");
