@@ -27,7 +27,7 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import RunAsync, log
+from yumex.utils import RunAsync, log  # noqa : F401
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -199,7 +199,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         def completed(result, error=None):
             self.progress.hide()
 
-        RunAsync(self._testing, completed)
+        # RunAsync(self._testing, completed)
 
     def _testing(self):
         self.progress.show()

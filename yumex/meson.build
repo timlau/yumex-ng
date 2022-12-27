@@ -51,14 +51,17 @@ yumex_ui_modules = [
 'ui/window.py',
 'ui/preferences.py',
 'ui/progress.py',
-'ui/transaction_result.py'
+'ui/transaction_result.py',
+'ui/flatpak_view.py',
+'ui/flatpak_installer.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_ui_modules, subdir: 'yumex/ui')
 
 yumex_backend_modules = [
 'backend/__init__.py',
 'backend/dnf.py',
-'backend/daemon.py'
+'backend/daemon.py',
+'backend/flatpak.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
 

@@ -28,6 +28,8 @@ from yumex.backend.flatpak import (
 )
 from yumex.utils import log, RunAsync  # noqa: F401
 
+from yumex.ui.flatpak_installer import YumexFlatpakInstaller
+
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_view.ui")
 class YumexFlatpakView(Gtk.ListView):
@@ -62,22 +64,46 @@ class YumexFlatpakView(Gtk.ListView):
     def update(self, *args):
         # self.backend.do_update(self.store)
         def completed(deps, error=None):
+            self.win.progress.hide()
             self.reset()
 
         RunAsync(self.backend.do_update, completed, self.store)
 
     def install(self, *args):
         # self.backend.do_update(self.store)
-        def completed(deps, error=None):
+        def completed(*args):
+            self.win.progress.hide()
+            # Translator: {id} is variable and should not be changed
+            self.win.show_message(_(f"{id} is now installed"), timeout=5)
             self.reset()
 
-        RunAsync(
-            self.backend.do_install, completed, "app/org.xfce.ristretto/x86_64/stable"
-        )
+        def on_close(*args):
+            global id
+            id = flatpak_installer.id.get_text()
+            arch = self.backend.get_arch()
+            branch = "stable"
+            ref = f"app/{id}/{arch}/{branch}".lower()
+            location = flatpak_installer.location.get_selected_item().get_string()
+            source = flatpak_installer.source.get_selected_item().get_string()
+            if flatpak_installer.confirm:
+                RunAsync(self.backend.do_install, completed, ref, source, location)
+
+        flatpak_installer = YumexFlatpakInstaller(self.win)
+        remotes = Gtk.StringList.new()
+        for remote in self.backend.get_remotes():
+            remotes.append(remote)
+        flatpak_installer.source.set_model(remotes)
+        flatpak_installer.set_transient_for(self.win)
+        flatpak_installer.connect("close-request", on_close)
+        flatpak_installer.id.set_text("org.xfce.ristretto")
+        flatpak_installer.present()
 
     def remove(self, *args):
         # self.backend.do_update(self.store)
         def completed(deps, error=None):
+            self.win.progress.hide()
+            # Translator: {selected.id} is variable and should not be changed
+            self.win.show_message(_(f"{selected.id} is now removed"), timeout=5)
             self.reset()
 
         selected = self.selection.get_selected_item()

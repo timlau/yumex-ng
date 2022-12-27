@@ -109,7 +109,7 @@ class FlatpakTransaction:
         self.num_actions = len(transaction.get_operations())
         self.current_action = 0
         self.elem_progress = 1.0 / self.num_actions
-        return True  # confirm transaction
+        return True
 
     def on_changed(self, progress):
         cur_progress = progress.get_progress()
@@ -131,8 +131,8 @@ class FlatpakTransaction:
         if self.current_action == self.num_actions:
             log(" FLATPAK: everyting is Done")
 
-    def add_install(self, to_inst):
-        self.transaction.add_install("flathub", to_inst, None)
+    def add_install(self, to_inst, source):
+        self.transaction.add_install(source, to_inst, None)
         log(f" FLATPAK: adding {to_inst} for install")
 
     def add_remove(self, to_remove):
@@ -148,8 +148,8 @@ class FlatpakTransaction:
         self.win.progress.show()
         self.win.progress.set_title(_("Running Flatpak Transaction"))
         self.transaction.run()
-        self.win.progress.set_title(_("Flatpak Transaction Completed"))
-        self.win.progress.show_button()
+        # self.win.progress.set_title(_("Flatpak Transaction Completed"))
+        # self.win.progress.show_button()
         log(" FLATPAK: Running Transaction Ended")
 
 
@@ -159,6 +159,15 @@ class FlatpakBackend:
         self.user = Flatpak.Installation.new_user()
         self.system = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
+
+    def get_remotes(self, system=False):
+        if system:
+            return sorted([remote.get_name() for remote in self.system.list_remotes()])
+        else:
+            return sorted([remote.get_name() for remote in self.user.list_remotes()])
+
+    def get_arch(self):
+        return Flatpak.get_default_arch()
 
     def _get_updates(self):
         updates = [ref.get_name() for ref in self.user.list_installed_refs_for_update()]
@@ -182,10 +191,18 @@ class FlatpakBackend:
                 log(f" FLATPAK: adding {pkg.id} for update")
         transaction.run()
 
-    def do_install(self, to_inst):
-        transaction = FlatpakTransaction(self)
-        transaction.add_install(to_inst)
-        transaction.run()
+    def do_install(self, to_inst, source, location):
+        if location == "user":
+            transaction = FlatpakTransaction(self, system=False)
+        else:
+            transaction = FlatpakTransaction(self, system=True)
+        try:
+            transaction.add_install(to_inst, source)
+            transaction.run()
+        except Exception as e:
+            log(str(e))
+            msg = str(e).split(":")[-1]
+            self.win.show_message(f"{msg}", timeout=5)
 
     def do_remove(self, pkg: FlatpakPackage):
         if pkg.location == "user":
@@ -197,7 +214,9 @@ class FlatpakBackend:
             transaction.add_remove(to_remove)
             transaction.run()
         except Exception as e:
-            print(e)
+            log(str(e))
+            msg = str(e).split(":")[-1]
+            self.win.show_message(f"{msg}", timeout=5)
 
     def get_installed(self, user=True, system=True):
         refs = []

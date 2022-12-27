@@ -12,7 +12,8 @@ blueprints = custom_target('blueprints',
     'transaction_result.blp',
     'shortcuts.blp',
     'flatpak_view.blp',
-    'flatpak_row.blp'
+    'flatpak_row.blp',
+    'flatpak_installer.blp'
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@']
