@@ -141,7 +141,7 @@ class YumexApplication(Adw.Application):
             developer_name="Tim Lauridsen",
             website="https://yumex.dk",
             support_url="",
-            issue_url="https://github.com/timlau/yumex-ng",
+            issue_url="https://github.com/timlau/yumex-ng/issues",
             developers=["Tim Lauridsen"],
             artists=[],
             designers=[],
