@@ -95,7 +95,7 @@ class YumexFlatpakView(Gtk.ListView):
         flatpak_installer.source.set_model(remotes)
         flatpak_installer.set_transient_for(self.win)
         flatpak_installer.connect("close-request", on_close)
-        flatpak_installer.id.set_text("org.xfce.ristretto")
+        # flatpak_installer.id.set_text("org.xfce.ristretto")
         flatpak_installer.present()
 
     def remove(self, pkg=None, *args):
