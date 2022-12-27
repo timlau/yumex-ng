@@ -28,6 +28,8 @@ Requires: python3-gobject
 Requires: python3-dnf
 Requires: libadwaita
 Requires: gtk4
+Requires: flatpak-libs
+
 
 Obsoletes: yumex-dnf <= 4.5.1
 
