@@ -148,8 +148,6 @@ class FlatpakTransaction:
         self.win.progress.show()
         self.win.progress.set_title(_("Running Flatpak Transaction"))
         self.transaction.run()
-        # self.win.progress.set_title(_("Flatpak Transaction Completed"))
-        # self.win.progress.show_button()
         log(" FLATPAK: Running Transaction Ended")
 
 

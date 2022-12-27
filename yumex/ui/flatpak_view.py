@@ -98,7 +98,7 @@ class YumexFlatpakView(Gtk.ListView):
         flatpak_installer.id.set_text("org.xfce.ristretto")
         flatpak_installer.present()
 
-    def remove(self, *args):
+    def remove(self, pkg=None, *args):
         # self.backend.do_update(self.store)
         def completed(deps, error=None):
             self.win.progress.hide()
@@ -106,8 +106,27 @@ class YumexFlatpakView(Gtk.ListView):
             self.win.show_message(_(f"{selected.id} is now removed"), timeout=5)
             self.reset()
 
-        selected = self.selection.get_selected_item()
-        RunAsync(self.backend.do_remove, completed, selected)
+        def response(dialog, result, *args):
+            print(result)
+            if result == "uninstall":
+                RunAsync(self.backend.do_remove, completed, selected)
+
+        if pkg:
+            selected = pkg
+        else:
+            selected = self.selection.get_selected_item()
+        dialog = Adw.MessageDialog.new(
+            self.win,
+            _("Uninstall Flatpak"),
+            _(f"Do you want to uninstall\n\n{selected.id}"),
+        )
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("uninstall", _("Uninstall"))
+        dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_default_response("cancel")
+        dialog.set_close_response("cancel")
+        dialog.connect("response", response)
+        dialog.present()
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item):
@@ -142,3 +161,8 @@ class YumexFlatpakRow(Adw.ActionRow):
         super().__init__(**kwargs)
         self.view: YumexFlatpakView = view
         self.pkg: FlatpakPackage = None
+
+    @Gtk.Template.Callback()
+    def on_delete_clicked(self, widget):
+        print(self.pkg)
+        self.view.remove(pkg=self.pkg)

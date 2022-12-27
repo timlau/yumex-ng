@@ -159,14 +159,14 @@ template YumexMainWindow : Adw.ApplicationWindow {
                         tooltip-text: _("Update All Flatpaks");
                       }
                       Gtk.Button {
-                        icon-name: "emblem-default-symbolic";
+                        icon-name: "document-new-symbolic";
                         action-name: "app.flatpak_install";
-                        tooltip-text: _("install org.xfce.ristretto");
+                        tooltip-text: _("install new flatpak");
                       }
                       Gtk.Button {
                         icon-name: "edit-delete-symbolic";
                         action-name: "app.flatpak_remove";
-                        tooltip-text: _("remove selected flatpak");
+                        tooltip-text: _("uninstall selected flatpak");
                       }
                     }
 

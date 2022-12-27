@@ -36,6 +36,12 @@ template YumexFlatpakRow : Adw.ActionRow {
           tooltip-text: _("Update is available");
           styles ["success","flatpak_update"]
         }
+        Gtk.Button {
+          icon-name: "user-trash-symbolic" ;
+          tooltip-text: _("Uninstall flatpak");
+          clicked => on_delete_clicked();
+          styles ["flat","error","circular"]
+        }
       }
     }
 }
