@@ -43,5 +43,11 @@
 		<key name="pref-setting-03" type="b">
 			<default>true</default>
 		</key>
+		<key name="fp-location" type="s">
+			<default>"user"</default>
+		</key>
+		<key name="fp-source" type="s">
+			<default>"flathub"</default>
+		</key>
 	</schema>
 </schemalist>

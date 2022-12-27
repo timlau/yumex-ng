@@ -9,6 +9,20 @@ template YumexPreferences: Adw.PreferencesWindow {
   Adw.PreferencesPage  main {
     title: _("Settings");
     icon-name: "preferences-system-symbolic";
+    Adw.PreferencesGroup flatpak {
+      title: _("Flatpak Settings");
+      Adw.ComboRow fp_location {
+        title: "Default Location";
+        model: fp_locations;
+        notify => on_location_notify();
+      }
+      Adw.ComboRow fp_source {
+        title: "Default source";
+        model: fp_sources;
+        notify => on_source_notify();
+      }
+    }
+
     Adw.PreferencesGroup main_group {
       title: _("Application Settings");
       description: "Just dummy test settings for now";
@@ -51,3 +65,16 @@ template YumexPreferences: Adw.PreferencesWindow {
 
 }
 
+Gtk.StringList fp_locations {
+    strings [
+        "user",
+        "system"
+    ]
+}
+
+Gtk.StringList fp_sources {
+    strings [
+        "flathub",
+        "fedora"
+    ]
+}

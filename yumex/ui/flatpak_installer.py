@@ -31,7 +31,16 @@ class YumexFlatpakInstaller(Adw.Window):
         super().__init__(**kwargs)
         self.win = win
         self.confirm = False
+        self.setup_location()
         self.read_clipboard()
+
+    def setup_location(self):
+        fp_location = self.win.settings.get_string("fp-location")
+        ndx = 0
+        for location in self.location.get_model():
+            if location.get_string() == fp_location:
+                self.location.set_selected(ndx)
+            ndx += 1
 
     def read_clipboard(self):
         """If the the clipboard contains
@@ -48,7 +57,14 @@ class YumexFlatpakInstaller(Adw.Window):
                 self.id.set_text(words[3])
                 ndx = 0
                 for source in self.source.get_model():
-                    if source == words[2]:
+                    if source.get_string() == words[2]:
+                        self.source.set_selected(ndx)
+                    ndx += 1
+            else:
+                fp_source = self.win.settings.get_string("fp-source")
+                ndx = 0
+                for source in self.source.get_model():
+                    if source.get_string() == fp_source:
                         self.source.set_selected(ndx)
                     ndx += 1
 
