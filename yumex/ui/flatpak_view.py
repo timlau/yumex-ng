@@ -70,7 +70,8 @@ class YumexFlatpakView(Gtk.ListView):
         RunAsync(self.backend.do_update, completed, self.store)
 
     def install(self, *args):
-        # self.backend.do_update(self.store)
+        """install a new flatpak"""
+
         def completed(rc, *args):
             self.win.progress.hide()
             # Translator: {id} is variable and should not be changed

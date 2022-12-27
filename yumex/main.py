@@ -97,6 +97,9 @@ class YumexApplication(Adw.Application):
         self.create_action(
             "apply_actions", self.win.on_apply_actions_clicked, ["<Alt>X"]
         )
+        self.create_action("page_one", self.win.on_actions, ["<Alt>1"])
+        self.create_action("page_two", self.win.on_actions, ["<Alt>2"])
+        self.create_action("page_three", self.win.on_actions, ["<Alt>3"])
 
         # call a test function to test gui code, should not be enabled, if not testing
         # self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])

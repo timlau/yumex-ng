@@ -204,11 +204,18 @@ class FlatpakBackend:
 
     def do_update(self, pkgs: list[FlatpakPackage]):
         transaction = FlatpakTransaction(self)
-        for pkg in pkgs:
-            if pkg.is_update:
+        user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
+        system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
+        if user_updates:
+            transaction = FlatpakTransaction(system=False)
+            for pkg in user_updates:
                 transaction.add_update(pkg)
-                log(f" FLATPAK: adding {pkg.id} for update")
-        transaction.run()
+            transaction.run()
+        if system_updates:
+            transaction = FlatpakTransaction(system=True)
+            for pkg in system_updates:
+                transaction.add_update(pkg)
+            transaction.run()
 
     def do_install(self, to_inst, source, location):
         if location == "user":

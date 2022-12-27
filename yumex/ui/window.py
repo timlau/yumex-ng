@@ -307,6 +307,16 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.search_bar.set_visible(show)
         self.sidebar_button.set_visible(show)
 
+    def on_actions(self, action, *args):
+        """Generic action handler"""
+        match action.get_name():
+            case "page_one":
+                self.stack.set_visible_child_name("packages")
+            case "page_two":
+                self.stack.set_visible_child_name("flatpaks")
+            case "page_three":
+                self.stack.set_visible_child_name("queue")
+
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
         active_name = self.stack.get_visible_child_name()
