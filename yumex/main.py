@@ -154,7 +154,9 @@ class YumexApplication(Adw.Application):
             release_notes=_(
                 """
 <ul>
-<li>Early Build, not released yet</li>
+<li>First development build</li>
+<li>search and browser packages</li>
+<li>install, update and remove packages</li>
 </ul>
 """
             ),
