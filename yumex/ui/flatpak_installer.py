@@ -62,3 +62,13 @@ class YumexFlatpakInstaller(Adw.Window):
                 for remote in self.backend.get_remotes(system=system):
                     remotes.append(remote)
                 self.source.set_model(remotes)
+
+    @Gtk.Template.Callback()
+    def on_apply(self, widget):
+        key = widget.get_text()
+        remote = self.source.get_selected_item().get_string()
+        id = self.backend.find(remote, key)
+        if id:
+            widget.set_text(id)
+        else:
+            widget.set_text("")

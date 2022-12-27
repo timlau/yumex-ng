@@ -158,6 +158,27 @@ class FlatpakBackend:
         self.system = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
 
+    def find(self, source, key):
+        refs = self.user.list_remote_refs_sync(source)
+        for ref in refs:
+            if ref.get_kind() == Flatpak.RefKind.APP:
+                if key in ref.get_name():
+                    return ref.get_name()
+        return None
+
+    def find_ref(self, source, key):
+        refs = self.user.list_remote_refs_sync(source)
+        found = None
+        for ref in refs:
+            if ref.get_kind() == Flatpak.RefKind.APP:
+                if key in ref.get_name():
+                    found = ref
+                    break
+        if found:
+            ref = f"app/{found.get_name()}/{found.get_arch()}/{found.get_branch()}"
+            return ref
+        return None
+
     def get_remotes(self, system=False):
         if system:
             return sorted([remote.get_name() for remote in self.system.list_remotes()])

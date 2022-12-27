@@ -80,11 +80,9 @@ class YumexFlatpakView(Gtk.ListView):
         def on_close(*args):
             global id
             id = flatpak_installer.id.get_text()
-            arch = self.backend.get_arch()
-            branch = "stable"
-            ref = f"app/{id}/{arch}/{branch}".lower()
-            location = flatpak_installer.location.get_selected_item().get_string()
             source = flatpak_installer.source.get_selected_item().get_string()
+            ref = self.backend.find_ref(source, id)
+            location = flatpak_installer.location.get_selected_item().get_string()
             if flatpak_installer.confirm:
                 RunAsync(self.backend.do_install, completed, ref, source, location)
 

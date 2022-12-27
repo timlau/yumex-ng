@@ -37,7 +37,8 @@ template YumexFlatpakInstaller : Adw.Window {
         styles ["boxed-list"]
         Adw.EntryRow id {
           title: _("Flatpak id");
-
+          show-apply-button: true;
+          apply => on_apply();
 
         }
         Adw.ComboRow source {
