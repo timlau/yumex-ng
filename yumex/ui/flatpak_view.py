@@ -107,7 +107,6 @@ class YumexFlatpakView(Gtk.ListView):
             self.reset()
 
         def response(dialog, result, *args):
-            print(result)
             if result == "uninstall":
                 RunAsync(self.backend.do_remove, completed, selected)
 
@@ -164,5 +163,4 @@ class YumexFlatpakRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, widget):
-        print(self.pkg)
         self.view.remove(pkg=self.pkg)
