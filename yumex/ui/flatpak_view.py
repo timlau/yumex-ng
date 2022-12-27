@@ -71,10 +71,11 @@ class YumexFlatpakView(Gtk.ListView):
 
     def install(self, *args):
         # self.backend.do_update(self.store)
-        def completed(*args):
+        def completed(rc, *args):
             self.win.progress.hide()
             # Translator: {id} is variable and should not be changed
-            self.win.show_message(_(f"{id} is now installed"), timeout=5)
+            if rc:
+                self.win.show_message(_(f"{id} is now installed"), timeout=5)
             self.reset()
 
         def on_close(*args):
@@ -98,10 +99,11 @@ class YumexFlatpakView(Gtk.ListView):
 
     def remove(self, pkg=None, *args):
         # self.backend.do_update(self.store)
-        def completed(deps, error=None):
+        def completed(rc, error=None):
             self.win.progress.hide()
             # Translator: {selected.id} is variable and should not be changed
-            self.win.show_message(_(f"{selected.id} is now removed"), timeout=5)
+            if rc:
+                self.win.show_message(_(f"{selected.id} is now removed"), timeout=5)
             self.reset()
 
         def response(dialog, result, *args):

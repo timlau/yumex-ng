@@ -217,11 +217,12 @@ class FlatpakBackend:
             transaction = FlatpakTransaction(self, system=True)
         try:
             transaction.add_install(to_inst, source)
-            transaction.run()
+            return transaction.run()
         except Exception as e:
             log(str(e))
             msg = str(e).split(":")[-1]
             self.win.show_message(f"{msg}", timeout=5)
+            return False
 
     def do_remove(self, pkg: FlatpakPackage):
         if pkg.location == "user":
@@ -231,11 +232,12 @@ class FlatpakBackend:
         to_remove = repr(pkg)
         try:
             transaction.add_remove(to_remove)
-            transaction.run()
+            return transaction.run()
         except Exception as e:
             log(str(e))
             msg = str(e).split(":")[-1]
             self.win.show_message(f"{msg}", timeout=5)
+            return False
 
     def get_installed(self, user=True, system=True):
         refs = []
