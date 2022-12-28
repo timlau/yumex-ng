@@ -16,7 +16,7 @@
 from gi.repository import Gtk
 
 from yumex.constants import rootdir
-from yumex.utils import log  # noqa: F401
+from yumex.utils import log
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/package_settings.ui")

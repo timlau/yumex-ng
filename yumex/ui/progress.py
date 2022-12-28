@@ -13,10 +13,9 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-from gi.repository import Gtk, Adw  # noqa: F401
+from gi.repository import Gtk, Adw
 
-from yumex.constants import rootdir  # noqa: F401
-from yumex.utils import log  # noqa: F401
+from yumex.constants import rootdir
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/progress.ui")

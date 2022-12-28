@@ -1,7 +1,7 @@
-from gi.repository import Gtk, Adw, GObject, Gio  # noqa: F401
+from gi.repository import Gtk, Adw, GObject, Gio
 
-from yumex.constants import rootdir  # noqa: F401
-from yumex.utils import log, format_number  # noqa: F401
+from yumex.constants import rootdir
+from yumex.utils import format_number
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/transaction_result.ui")

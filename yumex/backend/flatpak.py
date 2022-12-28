@@ -12,17 +12,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2022  Tim Lauridsen
-#
 
 """ backend for handling flatpak"""
-import gi
 
-gi.require_version("Flatpak", "1.0")
+from enum import IntEnum
+from gi.repository import Flatpak, GObject
 
-from enum import IntEnum  # noqa : E402
-from gi.repository import Flatpak, GObject  # noqa : E402
-
-from yumex.utils import log  # noqa : E402
+from yumex.utils import log
 
 
 class FlatpakType(IntEnum):

@@ -27,7 +27,7 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import RunAsync, log  # noqa : F401
+from yumex.utils import log
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")

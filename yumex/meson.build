@@ -16,7 +16,6 @@ configure_file(
   output: 'constants.py',
   configuration: configuration_data({
     'APP_ID': APPLICATION_ID,
-    'RELEASE_VER': meson.project_version(),
     'VERSION': meson.project_version() ,
     'BUILD_TYPE': get_option('buildtype'),
     'PKGDATA_DIR': PKGDATA_DIR,

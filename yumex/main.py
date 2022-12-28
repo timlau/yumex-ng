@@ -20,15 +20,14 @@
 import sys
 import argparse
 
-from gi.repository import Gtk, Gdk, Gio, Adw, GLib  # noqa: F401
+from gi.repository import Gtk, Gio, Adw
 
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log
-from yumex.constants import (  # noqa: F401
+from yumex.constants import (
     rootdir,
     app_id,
-    rel_ver,
     version,
 )
 
