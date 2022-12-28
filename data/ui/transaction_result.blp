@@ -4,6 +4,7 @@ using Adw 1;
 template YumexTransactionResult : Adw.Window {
     default-width: 700;
     default-height: 700;
+    modal: true;
 
     Gtk.Box main_content{
         orientation: vertical;
@@ -25,7 +26,7 @@ template YumexTransactionResult : Adw.Window {
                 styles ["destructive-action"]
                 clicked => on_confirm_clicked();
             }
-        }        
+        }
         Gtk.Box {
             orientation: vertical;
             margin-start: 20;
