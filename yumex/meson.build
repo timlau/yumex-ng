@@ -43,7 +43,7 @@ PY_INSTALLDIR.install_sources(yumex_sources, subdir: 'yumex')
 # Install ui Python modules
 yumex_ui_modules = [
 'ui/__init__.py',
-'ui/flatpak_installer.py'
+'ui/flatpak_installer.py',
 'ui/flatpak_view.py',
 'ui/pachage_view.py',
 'ui/package_info.py',
@@ -52,7 +52,7 @@ yumex_ui_modules = [
 'ui/progress.py',
 'ui/queue_view.py',
 'ui/transaction_result.py',
-'ui/window.py',
+'ui/window.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_ui_modules, subdir: 'yumex/ui')
 
