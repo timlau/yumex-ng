@@ -199,16 +199,15 @@ class FlatpakBackend:
         return FlatpakPackage(ref, is_user=is_user, is_update=is_update)
 
     def do_update_all(self, pkgs: list[FlatpakPackage]):
-        transaction = FlatpakTransaction(self)
         user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
         system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
         if user_updates:
-            transaction = FlatpakTransaction(system=False)
+            transaction = FlatpakTransaction(self, system=False)
             for pkg in user_updates:
                 transaction.add_update(pkg)
             transaction.run()
         if system_updates:
-            transaction = FlatpakTransaction(system=True)
+            transaction = FlatpakTransaction(self, system=True)
             for pkg in system_updates:
                 transaction.add_update(pkg)
             transaction.run()
@@ -247,9 +246,8 @@ class FlatpakBackend:
             transaction = FlatpakTransaction(self, system=False)
         else:
             transaction = FlatpakTransaction(self, system=True)
-        to_update = repr(pkg)
         try:
-            transaction.add_update(to_update)
+            transaction.add_update(pkg)
             return transaction.run()
         except Exception as e:
             log(str(e))
