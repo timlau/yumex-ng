@@ -62,7 +62,7 @@ class YumexFlatpakView(Gtk.ListView):
                 return files[0].as_posix()
         return None
 
-    def update_all(self, *args):
+    def update_all(self):
         # self.backend.do_update(self.store)
         def completed(deps, error=None):
             self.win.progress.hide()
@@ -108,7 +108,7 @@ class YumexFlatpakView(Gtk.ListView):
         # flatpak_installer.id.set_text("org.xfce.ristretto")
         flatpak_installer.present()
 
-    def remove(self, action, pkg=None):
+    def remove(self, pkg=None):
         # self.backend.do_update(self.store)
         def completed(rc, error=None):
             self.win.progress.hide()
@@ -178,7 +178,7 @@ class YumexFlatpakRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, widget):
-        self.view.remove(None, pkg=self.pkg)
+        self.view.remove(pkg=self.pkg)
 
     @Gtk.Template.Callback()
     def on_update_clicked(self, widget):

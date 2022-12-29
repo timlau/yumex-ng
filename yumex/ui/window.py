@@ -65,6 +65,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.setup_gui()
 
+    @property
+    def active_page(self):
+        return self.stack.get_visible_child_name()
+
     def save_window_props(self, *args):
         """Save windows and column information on windows close"""
         win_size = self.get_default_size()
@@ -287,16 +291,15 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.package_view.search(search_txt)
         self.package_settings.current_pkg_filter = "search"
 
-    def on_selectall_activate(self, *_args):
+    def on_selectall_activate(self):
         """handler for select all on selection column right click menu"""
         # select all work only on updates pkg_filter
         if self.package_settings.current_pkg_filter in ["updates", "search"]:
             self.package_view.select_all(True)
 
-    def on_deselectall_activate(self, *_args):
+    def on_deselectall_activate(self):
         """handler for deselect all on selection column right click menu"""
-        active_page = self.stack.get_visible_child_name()
-        match active_page:
+        match self.active_page:
             case "packages":
                 self.package_view.select_all(False)
             case "queue":
@@ -309,7 +312,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.sidebar_button.set_visible(show)
 
     def on_actions(self, action, *args):
-        """Generic action handler"""
+        """Generic action dispatcher"""
         match action.get_name():
             case "page_one":
                 self.stack.set_visible_child_name("packages")
@@ -317,12 +320,36 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.stack.set_visible_child_name("flatpaks")
             case "page_three":
                 self.stack.set_visible_child_name("queue")
+            case "apply_actions":
+                self.on_apply_actions_clicked()
+            case "flatpak_remove":
+                self.flatpak_view.remove()
+            case "flatpak_install":
+                self.flatpak_view.install()
+            case "flatpak_update":
+                self.flatpak_view.update_all()
+            case "filter_installed":
+                self.on_filter_installed()
+            case "filter_updates":
+                self.on_filter_updates()
+            case "filter_available":
+                self.on_filter_available()
+            case "clear_queue":
+                self.on_clear_queue()
+            case "sidebar":
+                self.on_sidebar()
+            case "deselect_all":
+                self.on_deselectall_activate()
+            case "select_all":
+                self.on_selectall_activate()
+            case _:
+                log(f"ERROR: action: {action.get_name()} not defined")
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
-        active_name = self.stack.get_visible_child_name()
-        log(f"stack changed : {active_name}")
-        match active_name:
+        active_page = self.active_page
+        log(f"stack changed : {active_page}")
+        match active_page:
             case "packages":
                 self.show_on_packages_page(show=True)
                 self.apply_button.set_visible(True)

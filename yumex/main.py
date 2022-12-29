@@ -66,36 +66,20 @@ class YumexApplication(Adw.Application):
         # create app actions
         self.create_action("about", self.on_about)
         self.create_action("preferences", self.on_preferences, ["<Ctrl>comma"])
-        self.create_action("select_all", self.win.on_selectall_activate, ["<Ctrl>A"])
-        self.create_action(
-            "deselect_all", self.win.on_deselectall_activate, ["<Shift><Ctrl>A"]
-        )
-        self.create_action("sidebar", self.win.on_sidebar, ["F9"])
-        self.create_action("clear_queue", self.win.on_clear_queue)
-        self.create_action(
-            "filter_installed",
-            self.win.on_filter_installed,
-            ["<Alt>I"],
-        )
-        self.create_action(
-            "filter_updates",
-            self.win.on_filter_updates,
-            ["<Alt>U"],
-        )
-        self.create_action(
-            "filter_available",
-            self.win.on_filter_available,
-            ["<Alt>A"],
-        )
+
+        # windows related actions
+        self.create_action("select_all", self.win.on_actions, ["<Ctrl>A"])
+        self.create_action("deselect_all", self.win.on_actions, ["<Shift><Ctrl>A"])
+        self.create_action("sidebar", self.win.on_actions, ["F9"])
+        self.create_action("clear_queue", self.win.on_actions)
+        self.create_action("filter_installed", self.win.on_actions, ["<Alt>I"])
+        self.create_action("filter_updates", self.win.on_actions, ["<Alt>U"])
+        self.create_action("filter_available", self.win.on_actions, ["<Alt>A"])
         self.create_action("filter_search", None)
-        self.create_action("flatpak_update", self.win.flatpak_view.update_all)
-        self.create_action(
-            "flatpak_install", self.win.flatpak_view.install, ["<Ctrl>I"]
-        )
-        self.create_action("flatpak_remove", self.win.flatpak_view.remove, ["<Ctrl>X"])
-        self.create_action(
-            "apply_actions", self.win.on_apply_actions_clicked, ["<Alt>X"]
-        )
+        self.create_action("flatpak_update", self.win.on_actions)
+        self.create_action("flatpak_install", self.win.on_actions, ["<Ctrl>I"])
+        self.create_action("flatpak_remove", self.win.on_actions, ["<Ctrl>X"])
+        self.create_action("apply_actions", self.win.on_actions, ["<Alt>X"])
         self.create_action("page_one", self.win.on_actions, ["<Alt>1"])
         self.create_action("page_two", self.win.on_actions, ["<Alt>2"])
         self.create_action("page_three", self.win.on_actions, ["<Alt>3"])
