@@ -33,6 +33,7 @@ class YumexFlatpakInstaller(Adw.Window):
         self.confirm = False
         self.setup_location()
         self.read_clipboard()
+        self.id.grab_focus()
 
     def setup_location(self):
         fp_location = self.win.settings.get_string("fp-location")
