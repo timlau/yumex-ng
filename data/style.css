@@ -110,8 +110,8 @@ spinner {
     padding: 2px 10px;
     background-color: @accent_bg_color;
     color: @accent_fg_color;
-    font-size: 0.6em;
-    font-strech: extra-condensed;
+    font-size: 0.7em;
+    font-stretch: condensed;
     border-radius: 10px;
     text-transform: uppercase;
 }
