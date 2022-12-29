@@ -29,12 +29,12 @@ template YumexFlatpakRow : Adw.ActionRow {
         hexpand: false;
         vexpand: false;
         halign: end;
-        valign: end;
-        Gtk.Image update {
+        Gtk.Button update {
           visible: false;
           icon-name: "emblem-synchronizing-symbolic";
           tooltip-text: _("Update is available");
-          styles ["success","flatpak_update"]
+          styles ["success","flat","circular"]
+          clicked => on_update_clicked();
         }
         Gtk.Button {
           icon-name: "user-trash-symbolic" ;

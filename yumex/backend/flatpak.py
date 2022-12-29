@@ -198,7 +198,7 @@ class FlatpakBackend:
             is_update = False
         return FlatpakPackage(ref, is_user=is_user, is_update=is_update)
 
-    def do_update(self, pkgs: list[FlatpakPackage]):
+    def do_update_all(self, pkgs: list[FlatpakPackage]):
         transaction = FlatpakTransaction(self)
         user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
         system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
@@ -235,6 +235,21 @@ class FlatpakBackend:
         to_remove = repr(pkg)
         try:
             transaction.add_remove(to_remove)
+            return transaction.run()
+        except Exception as e:
+            log(str(e))
+            msg = str(e).split(":")[-1]
+            self.win.show_message(f"{msg}", timeout=5)
+            return False
+
+    def do_update(self, pkg: FlatpakPackage):
+        if pkg.location == "user":
+            transaction = FlatpakTransaction(self, system=False)
+        else:
+            transaction = FlatpakTransaction(self, system=True)
+        to_update = repr(pkg)
+        try:
+            transaction.add_update(to_update)
             return transaction.run()
         except Exception as e:
             log(str(e))

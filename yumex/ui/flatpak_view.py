@@ -61,13 +61,21 @@ class YumexFlatpakView(Gtk.ListView):
                 return files[0].as_posix()
         return None
 
-    def update(self, *args):
+    def update_all(self, *args):
         # self.backend.do_update(self.store)
         def completed(deps, error=None):
             self.win.progress.hide()
             self.reset()
 
-        RunAsync(self.backend.do_update, completed, self.store)
+        RunAsync(self.backend.do_update_all, completed, self.store)
+
+    def update(self, pkg):
+        # self.backend.do_update(self.store)
+        def completed(deps, error=None):
+            self.win.progress.hide()
+            self.reset()
+
+        RunAsync(self.backend.do_update, completed, pkg)
 
     def install(self, *args):
         """install a new flatpak"""
@@ -170,3 +178,7 @@ class YumexFlatpakRow(Adw.ActionRow):
     @Gtk.Template.Callback()
     def on_delete_clicked(self, widget):
         self.view.remove(None, pkg=self.pkg)
+
+    @Gtk.Template.Callback()
+    def on_update_clicked(self, widget):
+        self.view.update(self.pkg)
