@@ -44,12 +44,12 @@ class YumexFlatpakView(Gtk.ListView):
 
     def reset(self):
         self.store = Gio.ListStore.new(FlatpakPackage)
-        self.selection.set_model(self.store)
         self.backend = FlatpakBackend(self.win)
         for elem in self.backend.get_installed(user=True):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
         self.store.sort(lambda a, b: a.name > b.name)
+        self.selection.set_model(self.store)
         self.selection.set_selected(0)
 
     def get_icon_paths(self):
