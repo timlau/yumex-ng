@@ -50,6 +50,7 @@ class YumexFlatpakView(Gtk.ListView):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
         self.store.sort(lambda a, b: a.name > b.name)
+        self.selection.set_selected(0)
 
     def get_icon_paths(self):
         return [f"{path}/icons/" for path in os.environ["XDG_DATA_DIRS"].split(":")]
