@@ -50,6 +50,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     sidebar_button = Gtk.Template.Child("sidebar-button")
     package_paned = Gtk.Template.Child()
     update_info_box = Gtk.Template.Child()
+    apply_button = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -324,10 +325,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
         match active_name:
             case "packages":
                 self.show_on_packages_page(show=True)
+                self.apply_button.set_visible(True)
                 self.package_view.refresh()
             case "flatpaks":
                 self.show_on_packages_page(show=False)
+                self.apply_button.set_visible(False)
             case "groups":
                 self.show_on_packages_page(show=False)
             case "queue":
                 self.show_on_packages_page(show=False)
+                self.apply_button.set_visible(True)
