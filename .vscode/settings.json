@@ -4,7 +4,8 @@
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": false,
     "python.analysis.diagnosticSeverityOverrides": {
-        "reportUndefinedVariable": "none"
+        "reportUndefinedVariable": "none",
+        "reportMissingModuleSource": "none",
     },
     "mesonbuild.configureOnOpen": false,
     "files.associations": {
