@@ -100,6 +100,17 @@ class FlatpakTransaction:
         self.transaction.connect("new-operation", self.on_new_operation)
         self.transaction.connect("operation-done", self.operation_done)
 
+    def _parse_operation(self, opration_type):
+        match opration_type.get_operation_type():
+            case Flatpak.TransactionOperationType.INSTALL:
+                return _("Installing")
+            case Flatpak.TransactionOperationType.UNINSTALL:
+                return _("Uninstalling")
+            case Flatpak.TransactionOperationType.UPDATE:
+                return _("Updating")
+            case _:
+                return "Unknown operation"
+
     def on_ready(self, transaction):
         log(" FLATPAK: ready")
         self.num_actions = len(transaction.get_operations())
@@ -119,8 +130,10 @@ class FlatpakTransaction:
         self.current_action += 1
         progress.connect("changed", self.on_changed)
         ref = operation.get_ref()
-        self.win.progress.set_subtitle(ref)
-        log(f" FLATPAK: {ref}")
+        operation_type = self._parse_operation(operation)
+        msg = f"{operation_type} {ref}"
+        self.win.progress.set_subtitle(msg)
+        log(f" FLATPAK: {msg}")
 
     def operation_done(self, transaction, operation, commit, result):
         log(" FLATPAK: operation-done")
