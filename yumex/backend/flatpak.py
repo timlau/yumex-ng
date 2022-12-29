@@ -109,7 +109,7 @@ class FlatpakTransaction:
             case Flatpak.TransactionOperationType.UPDATE:
                 return _("Updating")
             case _:
-                return "Unknown operation"
+                return ""
 
     def on_ready(self, transaction):
         log(" FLATPAK: ready")
