@@ -171,7 +171,7 @@ class FlatpakBackend:
         refs = self.user.list_remote_refs_sync(source)
         for ref in refs:
             if ref.get_kind() == Flatpak.RefKind.APP:
-                if key in ref.get_name():
+                if key.lower() in ref.get_name().lower():
                     return ref.get_name()
         return None
 
