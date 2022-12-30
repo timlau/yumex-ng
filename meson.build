@@ -16,6 +16,18 @@ dependency('gtk4', version: '>= 4.8.0')
 dependency('libadwaita-1', version: '>= 1.2')
 dependency('pygobject-3.0', version: '>= 3.42.0')
 
+
+if get_option('buildtype') == 'debug'
+  VCS_TAG = run_command('git', 'rev-parse', '--short', 'HEAD', check: true).stdout().strip()
+  if VCS_TAG == ''
+    VERSION_SUFFIX = '-devel'
+  else
+    VERSION_SUFFIX = '-git@0@'.format(VCS_TAG)
+  endif
+else
+  VERSION_SUFFIX = ''
+endif
+
 # Python installation directory
 PY_INSTALLDIR = python.find_installation('python3', required: true)
 
