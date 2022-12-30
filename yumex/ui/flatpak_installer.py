@@ -97,13 +97,8 @@ class YumexFlatpakInstaller(Adw.Window):
         match data.name:
             case "selected":
                 location = self.location.get_selected_item()
-                match location.get_string():
-                    case "user":
-                        system = False
-                    case "system":
-                        system = True
                 remotes = Gtk.StringList.new()
-                for remote in self.backend.get_remotes(system=system):
+                for remote in self.backend.get_remotes(location=location.get_string()):
                     remotes.append(remote)
                 self.source.set_model(remotes)
 

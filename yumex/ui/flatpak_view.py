@@ -22,6 +22,7 @@ from yumex.constants import rootdir
 
 from yumex.backend.flatpak import (
     FlatpakBackend,
+    FlatpakLocation,
     FlatpakPackage,
     FlatpakType,
 )
@@ -45,7 +46,7 @@ class YumexFlatpakView(Gtk.ListView):
     def reset(self):
         self.store = Gio.ListStore.new(FlatpakPackage)
         self.backend = FlatpakBackend(self.win)
-        for elem in self.backend.get_installed(user=True):
+        for elem in self.backend.get_installed(location=FlatpakLocation.BOTH):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
         self.store.sort(lambda a, b: a.name > b.name)
@@ -100,7 +101,7 @@ class YumexFlatpakView(Gtk.ListView):
         self.win.stack.set_visible_child_name("flatpaks")
         flatpak_installer = YumexFlatpakInstaller(self.win)
         remotes = Gtk.StringList.new()
-        for remote in self.backend.get_remotes():
+        for remote in self.backend.get_remotes(location=FlatpakLocation.USER):
             remotes.append(remote)
         flatpak_installer.source.set_model(remotes)
         flatpak_installer.set_transient_for(self.win)
