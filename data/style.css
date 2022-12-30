@@ -103,6 +103,11 @@ spinner {
     -gtk-icon-size: 48px;
 }
 
+.icon36 {
+    -gtk-icon-size: 36px;
+}
+
+
 .tag {
     /* padding: 5px; */
     margin-top: 5px;

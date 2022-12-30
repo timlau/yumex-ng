@@ -40,6 +40,10 @@ template YumexFlatpakInstaller : Adw.Window {
           title: _("Flatpak id");
           show-apply-button: true;
           apply => on_apply();
+          [prefix]
+          Gtk.Image icon {
+            styles ["icon36"]
+          }
 
         }
         Adw.ComboRow source {

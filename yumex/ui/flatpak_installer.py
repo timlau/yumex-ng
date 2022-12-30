@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
+from pathlib import Path
 from gi.repository import Gtk, Adw
 from yumex.backend.flatpak import FlatpakBackend
 
@@ -24,9 +25,10 @@ from yumex.utils import log
 class YumexFlatpakInstaller(Adw.Window):
     __gtype_name__ = "YumexFlatpakInstaller"
 
-    id = Gtk.Template.Child()
-    source = Gtk.Template.Child()
-    location = Gtk.Template.Child()
+    id: Adw.EntryRow = Gtk.Template.Child()
+    source: Adw.ComboRow = Gtk.Template.Child()
+    location: Adw.ComboRow = Gtk.Template.Child()
+    icon: Gtk.Image = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -35,6 +37,7 @@ class YumexFlatpakInstaller(Adw.Window):
         self.setup_location()
         self.read_clipboard()
         self.id.grab_focus()
+        self.icon.set_from_icon_name("flatpak-symbolic")
 
     def setup_location(self):
         fp_location = self.win.settings.get_string("fp-location")
@@ -104,12 +107,23 @@ class YumexFlatpakInstaller(Adw.Window):
                     remotes.append(remote)
                 self.source.set_model(remotes)
 
+    def _set_icon(self, id: str, remote_name: str):
+        icon_path = self.backend.get_icon_path(remote_name)
+        icon_file = Path(f"{icon_path}/{id}.png")
+        if icon_file.exists():
+            self.icon.set_from_file(icon_file.as_posix())
+        else:
+            self.icon.set_from_icon_name("flatpak-symbolic")
+
     @Gtk.Template.Callback()
     def on_apply(self, widget):
         key = widget.get_text()
-        remote = self.source.get_selected_item().get_string()
-        id = self.backend.find(remote, key)
+        remote_name = self.source.get_selected_item().get_string()
+        id = self.backend.find(remote_name, key)
         if id:
             widget.set_text(id)
+            self._set_icon(id, remote_name)
+
         else:
             widget.set_text("")
+            self._set_icon("", remote_name)  # reset icon

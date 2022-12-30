@@ -163,8 +163,8 @@ class FlatpakTransaction:
 class FlatpakBackend:
     def __init__(self, win):
         self.win = win
-        self.user = Flatpak.Installation.new_user()
-        self.system = Flatpak.Installation.new_system()
+        self.user: Flatpak.Installation = Flatpak.Installation.new_user()
+        self.system: Flatpak.Installation = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
 
     def find(self, source, key):
@@ -186,6 +186,13 @@ class FlatpakBackend:
         if found:
             ref = f"app/{found.get_name()}/{found.get_arch()}/{found.get_branch()}"
             return ref
+        return None
+
+    def get_icon_path(self, remote_name: str):
+        remote = self.user.get_remote_by_name(remote_name)
+        if remote:
+            appstream_dir = remote.get_appstream_dir().get_path()
+            return f"{appstream_dir}/icons/flatpak/128x128/"
         return None
 
     def get_remotes(self, system=False):
