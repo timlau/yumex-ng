@@ -1,4 +1,5 @@
 %global app_id dk.yumex.Yumex
+%global app_build release
 
 Name:     yumex
 Version:  4.99.1
@@ -47,7 +48,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %build
-%meson
+%meson --buildtype=%{app_build}
 %meson_build
 
 %install
