@@ -14,6 +14,7 @@
 # Copyright (C) 2022  Tim Lauridsen
 
 from gi.repository import Gtk, Adw
+from yumex.backend.flatpak import FlatpakBackend
 
 from yumex.constants import rootdir
 from yumex.utils import log
@@ -73,7 +74,7 @@ class YumexFlatpakInstaller(Adw.Window):
         clb.read_text_async(None, callback)
 
     @property
-    def backend(self):
+    def backend(self) -> FlatpakBackend:
         return self.win.flatpak_view.backend
 
     @Gtk.Template.Callback()
