@@ -13,18 +13,20 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-""" backend for handling flatpak"""
+""" backend for handling flatpaks"""
 
 from enum import IntEnum, StrEnum, auto
 from gi.repository import Flatpak, GObject
 
+
 from yumex.utils import log
 
-FlatpakRefString = str
-FlatpakRef = Flatpak.Ref
+from yumex.utils.types import FlatpakRefString, FlatpakRef, MainWindow
 
 
 class FlatpakType(IntEnum):
+    """flatpak type"""
+
     APP = 1
     RUNTIME = 2
     LOCALE = 3
@@ -32,13 +34,15 @@ class FlatpakType(IntEnum):
 
 
 class FlatpakLocation(StrEnum):
+    """flatpak install location"""
+
     USER = auto()
     SYSTEM = auto()
-    BOTH = auto()
+    BOTH = auto()  # used only as a filter, where we want both locations
 
 
 class FlatpakPackage(GObject.GObject):
-    """wrapper for a"""
+    """wrapper for a installed flatpak"""
 
     def __init__(self, ref: FlatpakRef, location: FlatpakLocation, is_update=False):
         super(FlatpakPackage, self).__init__()
@@ -47,31 +51,38 @@ class FlatpakPackage(GObject.GObject):
         self.location = location
 
     @property
-    def is_user(self):
+    def is_user(self) -> bool:
+        """return if the flatpak is installed in user context"""
         return self.location == FlatpakLocation.USER
 
     @property
     def name(self) -> str:
+        """return the application name (not id) : ex. Contrast"""
         return self.ref.get_appdata_name()
 
     @property
     def version(self) -> str:
+        """return the flatpak version"""
         return self.ref.get_appdata_version()
 
     @property
     def summary(self) -> str:
+        """return the flatpak summary"""
         return self.ref.get_appdata_summary()
 
     @property
     def origin(self) -> str:
+        """return the origin remote"""
         return self.ref.get_origin()
 
     @property
     def id(self) -> str:
+        """return the name/id: ex. org.gnome.design.Contrast"""
         return self.ref.get_name()
 
     @property
     def type(self) -> FlatpakType:
+        """the ref type as Enum (runtime/app/locale)"""
         ref_kind = self.ref.get_kind()
         match ref_kind:
             case Flatpak.RefKind.APP:
@@ -82,13 +93,14 @@ class FlatpakPackage(GObject.GObject):
                     pak_type = FlatpakType.LOCALE
         return pak_type
 
-    def __repr__(self) -> str:
+    def __repr__(self) -> FlatpakRefString:
+        """return the ref as string: ex. app/org.gnome.design.Contrast/x86_64/stable"""
         return self.ref.format_ref()
 
 
 class FlatpakBackend:
-    def __init__(self, win):
-        self.win = win
+    def __init__(self, win: MainWindow):
+        self.win: MainWindow = win
         self.user: Flatpak.Installation = Flatpak.Installation.new_user()
         self.system: Flatpak.Installation = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
