@@ -18,7 +18,7 @@ dependency('pygobject-3.0', version: '>= 3.42.0')
 
 
 if get_option('buildtype') == 'debug'
-  VCS_TAG = run_command('git', 'rev-parse', '--short', 'HEAD', check: true).stdout().strip()
+  VCS_TAG = run_command('date','+%Y%m%d', check: true).stdout().strip()
   if VCS_TAG == ''
     VERSION_SUFFIX = '-devel'
   else
