@@ -14,6 +14,7 @@ Source0:  https://github.com/timlau/yumex-ng/releases/download/%{name}-%{version
 BuildArch: noarch
 BuildRequires: python3-devel
 BuildRequires: meson
+BuildRequires: git
 BuildRequires: blueprint-compiler >= 0.4.0
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
