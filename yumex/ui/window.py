@@ -325,19 +325,22 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Generic action dispatcher"""
         match action.get_name():
             case "page_one":
-                self.stack.set_visible_child_name("packages")
+                self.stack.set_visible_child_name(Page.PACKAGES)
             case "page_two":
-                self.stack.set_visible_child_name("flatpaks")
+                self.stack.set_visible_child_name(Page.FLATPAKS)
             case "page_three":
-                self.stack.set_visible_child_name("queue")
+                self.stack.set_visible_child_name(Page.QUEUE)
             case "apply_actions":
-                self.on_apply_actions_clicked()
+                if self.active_page in [Page.PACKAGES, Page.QUEUE]:
+                    self.on_apply_actions_clicked()
             case "flatpak_remove":
-                self.flatpak_view.remove()
+                if self.active_page == Page.FLATPAKS:
+                    self.flatpak_view.remove()
             case "flatpak_install":
                 self.flatpak_view.install()
             case "flatpak_update":
-                self.flatpak_view.update_all()
+                if self.active_page == Page.FLATPAKS:
+                    self.flatpak_view.update_all()
             case "filter_installed":
                 if self.active_page == Page.PACKAGES:
                     self.on_filter_installed()
@@ -348,13 +351,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 if self.active_page == Page.PACKAGES:
                     self.on_filter_available()
             case "clear_queue":
-                self.on_clear_queue()
+                if self.active_page == Page.QUEUE:
+                    self.on_clear_queue()
             case "sidebar":
-                self.on_sidebar()
+                if self.active_page == Page.PACKAGES:
+                    self.on_sidebar()
             case "deselect_all":
-                self.on_deselectall_activate()
+                if self.active_page in [Page.PACKAGES, Page.QUEUE]:
+                    self.on_deselectall_activate()
             case "select_all":
-                self.on_selectall_activate()
+                if self.active_page in [Page.PACKAGES, Page.QUEUE]:
+                    self.on_selectall_activate()
             case _:
                 log(f"ERROR: action: {action.get_name()} not defined")
 

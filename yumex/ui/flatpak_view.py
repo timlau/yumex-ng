@@ -122,10 +122,6 @@ class YumexFlatpakView(Gtk.ListView):
             if result == "uninstall":
                 RunAsync(self.backend.do_remove, completed, selected)
 
-        # don't do Ctrl-X is flatpaks page is not visible
-        if not self.win.stack.get_visible_child_name() == "flatpaks":
-            return
-
         if pkg:
             selected = pkg
         else:
