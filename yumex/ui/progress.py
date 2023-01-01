@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, GLib
 
 from yumex.constants import rootdir
 
@@ -33,29 +33,47 @@ class YumexProgress(Adw.Window):
         self.win = win
 
     def show(self):
+        GLib.idle_add(self._show)
+
+    def _show(self):
         self.set_transient_for(self.win)
         self.spinner.set_visible(True)
         self.present()
 
     def hide(self):
+        GLib.idle_add(self._hide)
+
+    def _hide(self):
         self.close()
         self.set_title("")
         self.set_subtitle("")
 
     def set_title(self, title: str):
+        GLib.idle_add(self._set_title, title)
+
+    def _set_title(self, title: str):
         self.title.set_label(title)
         self.set_subtitle("")
         self.set_progress(0.0)
         self.progress.set_visible(False)
 
     def set_subtitle(self, title: str):
+        GLib.idle_add(self._set_subtitle, title)
+
+    def _set_subtitle(self, title: str):
         self.subtitle.set_label(title)
 
     def show_button(self):
+        GLib.idle_add(self._show_button)
+
+    def _show_button(self):
         self.spinner.set_visible(False)
         self.ok_button.set_visible(True)
 
-    def set_progress(self, frac):
+    def set_progress(self, frac: float):
+        GLib.idle_add(self._set_progress, frac)
+
+    def _set_progress(self, frac: float):
         if frac >= 0.0 and frac <= 1.0:
             self.progress.set_visible(True)
             self.progress.set_fraction(frac)
