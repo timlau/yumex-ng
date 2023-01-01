@@ -13,10 +13,15 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-from gi.repository import GObject
+from gi.repository import GObject, Gio
 from yumex.utils import format_number
 
-from enum import IntEnum
+from enum import IntEnum, StrEnum, auto
+
+from typing import Protocol, Union
+
+
+from yumex.ui.package_settings import InfoType, PackageFilter
 
 
 class PackageState(IntEnum):
@@ -32,6 +37,12 @@ class PackageAction(IntEnum):
     INSTALL = 30
     REINSTALL = 40
     ERASE = 50
+
+
+class SearchField(StrEnum):
+    NAME = auto()
+    ARCH = auto()
+    REPONAME = auto()
 
 
 class YumexPackage(GObject.GObject):
@@ -105,10 +116,32 @@ class YumexPackage(GObject.GObject):
         return ",".join([str(elem) for elem in nevra_r])
 
 
+class PackageBackend(Protocol):
+    """protocol class for a package backend"""
+
+    def reset_backend(self) -> None:
+        ...
+
+    def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
+        ...
+
+    def search(self, txt: str, field: SearchField) -> list[YumexPackage]:
+        ...
+
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
+        ...
+
+    def get_repositories(self) -> list[str]:
+        ...
+
+    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
+        ...
+
+
 class YumexPackageCache:
-    def __init__(self, backend) -> None:
+    def __init__(self, backend: PackageBackend) -> None:
         self._packages = {}
-        self.backend = backend
+        self.backend: PackageBackend = backend
         self.nerva_dict = {}
 
     def get_packages_by_filter(self, pkgfilter, reset=False):

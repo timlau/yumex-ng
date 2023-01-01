@@ -421,7 +421,7 @@ class Backend(DnfBase):
             if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
                 yield (repo.id, repo.name, repo.enabled)
 
-    def depsolve(self, store: Gio.ListStore):
+    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
         """build a trasaction and retrun the dependencies"""
         self.reset(goal=True, sack=False, repos=False)  # clean current transaction
         nevra_dict = {}

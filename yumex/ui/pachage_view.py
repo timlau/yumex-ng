@@ -17,7 +17,9 @@ from gi.repository import Gtk, Gio
 
 from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
-from yumex.backend.dnf import Backend, DnfCallback
+
+# from yumex.backend.dnf import Backend, DnfCallback
+from yumex.backend.dnf5 import Backend
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.package_settings import InfoType, PackageFilter, SortType
 from yumex.utils import log, RunAsync, timed
@@ -50,8 +52,8 @@ class YumexPackageView(Gtk.ColumnView):
         self.last_position = -1
         self.column_num = 0
         self._last_selected_pkg: YumexPackage = None
-        callback = DnfCallback(self.win)
-        self.backend = Backend(callback)
+        # callback = DnfCallback(self.win)
+        self.backend = Backend()
         self.package_cache = YumexPackageCache(self.backend)
 
     def reset(self):
