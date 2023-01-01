@@ -24,7 +24,7 @@ from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
-from yumex.ui.package_settings import YumexPackageSettings
+from yumex.ui.package_settings import PackageFilter, YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
@@ -142,11 +142,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.toast_overlay.add_toast(toast)
         return toast
 
-    def load_packages(self, pkg_filter: str):
+    def load_packages(self, pkg_filter: PackageFilter):
         """Trigger the activation of a given pkg filter"""
         GLib.idle_add(self._load_packages, pkg_filter)
 
-    def _load_packages(self, pkg_filter: str):
+    def _load_packages(self, pkg_filter: PackageFilter):
         """Helper for Trigger the activation of a given pkg filter
         Using GLib.idle_add
         """
@@ -262,7 +262,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         search_txt = widget.get_text()
         log(f"search changed : {search_txt}")
         if search_txt == "":
-            if self.package_settings.current_pkg_filter == "search":
+            if self.package_settings.current_pkg_filter == PackageFilter.SEARCH:
                 # self.last_pkg_filer.activate()
                 self.load_packages(self.package_settings.previuos_pkg_filter)
                 return False
@@ -270,7 +270,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             # remove selection in package filter (sidebar)
             self.package_settings.unselect_all()
             self.package_view.search(search_txt)
-            self.package_settings.current_pkg_filter = "search"
+            self.package_settings.current_pkg_filter = PackageFilter.SEARCH
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
@@ -299,12 +299,15 @@ class YumexMainWindow(Adw.ApplicationWindow):
             # remove selection in package filter (sidebar)
             self.package_settings.unselect_all()
             self.package_view.search(search_txt)
-        self.package_settings.current_pkg_filter = "search"
+        self.package_settings.current_pkg_filter = PackageFilter.SEARCH
 
     def on_selectall_activate(self):
         """handler for select all on selection column right click menu"""
         # select all work only on updates pkg_filter
-        if self.package_settings.current_pkg_filter in ["updates", "search"]:
+        if self.package_settings.current_pkg_filter in [
+            PackageFilter.UPDATES,
+            PackageFilter.SEARCH,
+        ]:
             self.package_view.select_all(True)
 
     def on_deselectall_activate(self):

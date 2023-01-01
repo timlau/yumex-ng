@@ -13,10 +13,19 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
+from enum import StrEnum, auto
 from gi.repository import Gtk
 
 from yumex.constants import rootdir
 from yumex.utils import log
+
+
+class PackageFilter(StrEnum):
+    INSTALLED = auto()
+    UPDATES = auto()
+    AVAILABLE = auto()
+    ALL = AVAILABLE
+    SEARCH = auto()
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/package_settings.ui")
@@ -37,21 +46,21 @@ class YumexPackageSettings(Gtk.Box):
         super().__init__(**kwargs)
         self.win = win
         self.setting = win.settings
-        self.current_pkg_filter = None
-        self.previuos_pkg_filter = None
+        self.current_pkg_filter: PackageFilter = None
+        self.previuos_pkg_filter: PackageFilter = None
         self.show_icon.set_from_icon_name("diagnostics-symbolic")
         self.sort_icon.set_from_icon_name("view-sort-descending-rtl-symbolic")
 
     def set_focus(self):
         self.installed_row.grab_focus()
 
-    def set_active_filter(self, pkg_filter):
+    def set_active_filter(self, pkg_filter: PackageFilter):
         match pkg_filter:
-            case "updates":
+            case PackageFilter.UPDATES:
                 self.filter_updates.activate()
-            case "installed":
+            case PackageFilter.INSTALLED:
                 self.filter_installed.activate()
-            case "available":
+            case PackageFilter.AVAILABLE:
                 self.filter_available.activate()
 
     def unselect_all(self):
@@ -75,13 +84,13 @@ class YumexPackageSettings(Gtk.Box):
     def on_package_filter_activated(self, button):
         entry = self.win.search_bar.get_child()
         entry.set_text("")
-        pkg_filter = button.get_name()
+        pkg_filter: PackageFilter = PackageFilter(button.get_name())
         match pkg_filter:
-            case "available":
+            case PackageFilter.AVAILABLE:
                 self.win.package_view.get_packages("available")
-            case "installed":
+            case PackageFilter.INSTALLED:
                 self.win.package_view.get_packages("installed")
-            case "updates":
+            case PackageFilter.UPDATES:
                 self.win.package_view.get_packages("updates")
             case _:
                 log(f"package_filter not found : {pkg_filter}")
