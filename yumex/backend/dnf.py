@@ -27,6 +27,7 @@ import itertools
 from gi.repository import Gio
 
 from yumex.backend import PackageAction, YumexPackage, PackageState
+from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils import log
 
 
@@ -385,13 +386,13 @@ class Backend(DnfBase):
         self.reset(goal=True, repos=True, sack=True)
         self.setup_base()
 
-    def get_packages(self, pkg_filter: str) -> list[YumexPackage]:
+    def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         match pkg_filter:
-            case "available":
+            case PackageFilter.AVAILABLE:
                 return self.packages.available
-            case "installed":
+            case PackageFilter.INSTALLED:
                 return self.packages.installed
-            case "updates":
+            case PackageFilter.UPDATES:
                 return self.packages.updates
             case _:
                 return []
@@ -399,22 +400,19 @@ class Backend(DnfBase):
     def search(self, txt: str, field: str = "name") -> list[YumexPackage]:
         return self.packages.search(txt, field=field)
 
-    def get_package_info(self, pkg: YumexPackage, attr: str) -> Union[str, None]:
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
         dnf_pkg = self.packages.find_package(pkg)
         log(f" BACKEND: pkg: {dnf_pkg} attribute : {attr}")
         if dnf_pkg:
             match attr:
-                case "description":
+                case InfoType.DESCRIPTION:
                     return pkg.description
-                case "files":
+                case InfoType.FILES:
                     return dnf_pkg.files
-                case "update_info":
+                case InfoType.UPDATE_INFO:
                     updinfo = UpdateInfo(dnf_pkg)
                     value = updinfo.advisories_list()
                     return value
-                case _:
-                    if hasattr(dnf_pkg, attr):
-                        return getattr(dnf_pkg, attr)
         return None
 
     def get_repositories(self):

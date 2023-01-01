@@ -19,6 +19,7 @@ from yumex.constants import rootdir
 from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip
+from yumex.ui.package_settings import InfoType, PackageFilter, SortType
 from yumex.utils import log, RunAsync, timed
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
@@ -62,7 +63,7 @@ class YumexPackageView(Gtk.ColumnView):
     def queue_view(self):
         return self.win.queue_view
 
-    def get_packages(self, pkg_filter="available"):
+    def get_packages(self, pkg_filter: PackageFilter):
         def set_completed(result, error=False):
             self.win.main_view.set_sensitive(True)
             pkgs = result
@@ -114,20 +115,20 @@ class YumexPackageView(Gtk.ColumnView):
         log(f" --> number of packages : {len(list(pkgs))}")
 
     def sort(self):
-        sort_attr = self.win.package_settings.get_sort_attr()
+        sort_attr = SortType(self.win.package_settings.get_sort_attr())
         log(f" --> sorting by : {sort_attr}")
         self.store = self.sort_by(self.store, sort_attr)
 
     @staticmethod
-    def sort_by(store: Gio.ListStore, attr: str) -> Gio.ListStore:
+    def sort_by(store: Gio.ListStore, attr: SortType) -> Gio.ListStore:
         match attr:
-            case "name":
+            case SortType.NAME:
                 store.sort(lambda a, b: a.name.lower() > b.name.lower())
-            case "arch":
+            case SortType.ARCH:
                 store.sort(lambda a, b: a.arch > b.arch)
-            case "size":
+            case SortType.SIZE:
                 store.sort(lambda a, b: a.sizeB > b.sizeB)
-            case "repo":
+            case SortType.REPO:
                 store.sort(lambda a, b: a.repo > b.repo)
         return store
 
@@ -232,7 +233,7 @@ class YumexPackageView(Gtk.ColumnView):
         if self._last_selected_pkg and pkg == self._last_selected_pkg:
             return
         self._last_selected_pkg = pkg
-        info_type = self.win.package_settings.get_info_type()
+        info_type = InfoType(self.win.package_settings.get_info_type())
         RunAsync(
             self.backend.get_package_info,
             completed,

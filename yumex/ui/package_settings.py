@@ -28,6 +28,21 @@ class PackageFilter(StrEnum):
     SEARCH = auto()
 
 
+# ["description", "files", "update_info"]
+class InfoType(StrEnum):
+    DESCRIPTION = auto()
+    FILES = auto()
+    UPDATE_INFO = auto()
+
+
+# ["name", "arch", "size", "repo"]
+class SortType(StrEnum):
+    NAME = auto()
+    ARCH = auto()
+    SIZE = auto()
+    REPO = auto()
+
+
 @Gtk.Template(resource_path=f"{rootdir}/ui/package_settings.ui")
 class YumexPackageSettings(Gtk.Box):
     __gtype_name__ = "YumexPackageSettings"
@@ -69,13 +84,13 @@ class YumexPackageSettings(Gtk.Box):
         self.filter_updates.set_active(False)
         self.filter_search.set_active(True)
 
-    def get_info_type(self):
+    def get_info_type(self) -> InfoType:
         selected = self.info_type.get_selected()
-        return ["description", "files", "update_info"][selected]
+        return list(InfoType)[selected]
 
-    def get_sort_attr(self):
+    def get_sort_attr(self) -> SortType:
         selected = self.sort_by.get_selected()
-        return ["name", "arch", "size", "repo"][selected]
+        return list(SortType)[selected]
 
     @Gtk.Template.Callback()
     def on_sorting_activated(self, widget):
@@ -85,15 +100,7 @@ class YumexPackageSettings(Gtk.Box):
         entry = self.win.search_bar.get_child()
         entry.set_text("")
         pkg_filter: PackageFilter = PackageFilter(button.get_name())
-        match pkg_filter:
-            case PackageFilter.AVAILABLE:
-                self.win.package_view.get_packages("available")
-            case PackageFilter.INSTALLED:
-                self.win.package_view.get_packages("installed")
-            case PackageFilter.UPDATES:
-                self.win.package_view.get_packages("updates")
-            case _:
-                log(f"package_filter not found : {pkg_filter}")
+        self.win.package_view.get_packages(pkg_filter)
         self.current_pkg_filter = pkg_filter
         self.previuos_pkg_filter = pkg_filter
 

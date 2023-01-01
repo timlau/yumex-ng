@@ -18,6 +18,8 @@ from gi.repository import Gtk, Adw
 from yumex.constants import rootdir
 import hawkey
 
+from yumex.ui.package_settings import InfoType
+
 ADVISORY_TYPES = {
     hawkey.ADVISORY_BUGFIX: _("Bugfix"),
     hawkey.ADVISORY_UNKNOWN: _("New Package"),
@@ -51,10 +53,10 @@ class YumexPackageInfo(Gtk.Box):
         self.update_info_grp.set_visible(False)
         self.description_grp.set_visible(True)
 
-    def update(self, info_type, pkg_info):
+    def update(self, info_type: InfoType, pkg_info):
         info = self.format(info_type, pkg_info)
         match info_type:
-            case "update_info":
+            case InfoType.UPDATE_INFO:
                 if info:
                     self.add_update_info(info)
                     self.update_info_grp.set_visible(True)
@@ -68,15 +70,15 @@ class YumexPackageInfo(Gtk.Box):
                 self.update_info_grp.set_visible(False)
                 self.description_grp.set_visible(True)
 
-    def format(self, info_type, pkg_info):
+    def format(self, info_type: InfoType, pkg_info):
         match info_type:
-            case "description":
+            case InfoType.DESCRIPTION:
                 # a string
                 return pkg_info
-            case "files":
+            case InfoType.FILES:
                 # list of filename
                 return "\n".join(pkg_info)
-            case "update_info":
+            case InfoType.UPDATE_INFO:
                 # a list of update_info dicts
                 if pkg_info:
                     return pkg_info[0]
