@@ -80,6 +80,10 @@ user:
 inst-buildtools:
 	sudo dnf install @fedora-packager copr-cli
 
+inst-deps-dnf5:
+	sudo dnf copr enable rpmsoftwaremanagement/dnf5-unstable
+	sudo dnf install dnf5 dnf5-plugins python3-libdnf5
+
 inst-deps:
 	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf
 
