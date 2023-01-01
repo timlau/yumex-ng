@@ -12,4 +12,7 @@
         "*.py.in": "python"
     },
     "css.validate": false,
+    "python.analysis.exclude": [
+        "**/builddir"
+    ]
 }
