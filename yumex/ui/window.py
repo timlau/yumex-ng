@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
+from enum import StrEnum, auto
 import re
 from time import sleep
 
@@ -28,6 +29,13 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
+
+
+class Page(StrEnum):
+    PACKAGES = auto()
+    FLATPAKS = auto()
+    QUEUE = auto()
+    GROUPS = auto()
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -66,8 +74,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_gui()
 
     @property
-    def active_page(self):
-        return self.stack.get_visible_child_name()
+    def active_page(self) -> Page:
+        return Page(self.stack.get_visible_child_name())
 
     def save_window_props(self, *args):
         """Save windows and column information on windows close"""
@@ -302,9 +310,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_deselectall_activate(self):
         """handler for deselect all on selection column right click menu"""
         match self.active_page:
-            case "packages":
+            case Page.PACKAGES:
                 self.package_view.select_all(False)
-            case "queue":
+            case Page.QUEUE:
                 self.queue_view.clear_all()
 
     def show_on_packages_page(self, show=False):
@@ -331,11 +339,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "flatpak_update":
                 self.flatpak_view.update_all()
             case "filter_installed":
-                self.on_filter_installed()
+                if self.active_page == Page.PACKAGES:
+                    self.on_filter_installed()
             case "filter_updates":
-                self.on_filter_updates()
+                if self.active_page == Page.PACKAGES:
+                    self.on_filter_updates()
             case "filter_available":
-                self.on_filter_available()
+                if self.active_page == Page.PACKAGES:
+                    self.on_filter_available()
             case "clear_queue":
                 self.on_clear_queue()
             case "sidebar":
@@ -352,15 +363,15 @@ class YumexMainWindow(Adw.ApplicationWindow):
         active_page = self.active_page
         log(f"stack changed : {active_page}")
         match active_page:
-            case "packages":
+            case Page.PACKAGES:
                 self.show_on_packages_page(show=True)
                 self.apply_button.set_visible(True)
                 self.package_view.refresh()
-            case "flatpaks":
+            case Page.FLATPAKS:
                 self.show_on_packages_page(show=False)
                 self.apply_button.set_visible(False)
-            case "groups":
+            case Page.GROUPS:
                 self.show_on_packages_page(show=False)
-            case "queue":
+            case Page.QUEUE:
                 self.show_on_packages_page(show=False)
                 self.apply_button.set_visible(True)
