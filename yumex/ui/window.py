@@ -17,7 +17,7 @@ import re
 from time import sleep
 
 from gi.repository import Gtk, Adw, Gio, GLib
-from yumex.backend.daemon import YumexRootBackend
+from yumex.backend.daemon import TransactionResult, YumexRootBackend
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.flatpak_view import YumexFlatpakView
@@ -127,7 +127,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.queue_view = YumexQueueView(self)
         self.content_queue.set_child(self.queue_view)
 
-    def show_message(self, title, timeout=1):
+    def show_message(self, title, timeout=5):
         """Create a toast with text and a given timeout"""
         toast = Adw.Toast(title=title)
         toast.set_timeout(timeout)
@@ -159,16 +159,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
         GLib.idle_add(self._run_transaction, confirm)
 
     def _run_transaction(self, confirm: bool):
-        log(f"confirm : {confirm}")
         self.progress.show()
         self.progress.set_title(_("Running Transaction"))
-        rc, msgs = self.root_backend.run_transaction(confirm)
-        if rc:
+        result: TransactionResult = self.root_backend.run_transaction(confirm)
+        if result.completed:
             # reset everything
             self.package_view.reset()
             self.package_settings.unselect_all()
             self.search_bar.set_search_mode(False)
             self.package_settings.set_active_filter("installed")
+            self.show_message(_("Transaction completted succesfully"))
+        else:
+            self.show_message(result.error)
         self.root_backend = None
         self.progress.hide()
         return False
@@ -237,14 +239,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if queued:
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
-            rc, result_dict = self.root_backend.build_transaction(queued)
-            if rc:
+            result: TransactionResult = self.root_backend.build_transaction(queued)
+            if result.completed:
                 transaction_result = YumexTransactionResult(self)
                 transaction_result.connect("close-request", on_close)
-                transaction_result.show_result(result_dict)
+                transaction_result.show_result(result.data)
             else:
                 self.progress.hide()
-                # TODO: handle transaction cant reolve
+                self.show_message(result.error)
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):

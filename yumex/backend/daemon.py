@@ -13,11 +13,34 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
+from dataclasses import dataclass, field
 from dnfdaemon.client import Client, DaemonError
 from yumex.backend import PackageState, YumexPackage
 
 from yumex.ui.progress import YumexProgress
 from yumex.utils import log
+
+
+@dataclass
+class Result:
+    """Result from a dnfdaemon transaction
+    contains a state of the transaction and the the data
+    """
+
+    completed: bool
+    data: list = field(default_factory=list)
+
+
+@dataclass
+class TransactionResult:
+    """transaction result object
+    contains a state of the transaction and the the data
+    or an error string is transaction failed
+    """
+
+    completed: bool
+    data: dict = field(default_factory=dict)
+    error: str = ""
 
 
 class YumexRootBackend(Client):
@@ -71,17 +94,15 @@ class YumexRootBackend(Client):
                 log(f" --> on_RPMProgress : {package} : {action}")
 
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp):
-        # do stuff here
+        # TODO: Handle GPG key inport verification
         pass
 
     def on_DownloadStart(self, num_files, num_bytes):
         """Starting a new parallel download batch"""
-        # do stuff here
         self.progress.set_title(_("Downloading Packages"))
 
     def on_DownloadProgress(self, name, frac, total_frac, total_files):
         """Progress for a single instance in the batch"""
-        # do stuff here
         if total_frac - self.dnl_frac > 0.01:
             self.dnl_frac = total_frac
             self.progress.set_subtitle(_(f"Downloading : {name}"))
@@ -89,12 +110,10 @@ class YumexRootBackend(Client):
 
     def on_DownloadEnd(self, name, status, msg):
         """Download of af single instace ended"""
-        # do stuff here
         pass
 
     def on_RepoMetaDataProgress(self, name, frac):
         """Repository Metadata Download progress"""
-        # do stuff here
         log(f" --> on_RepoMetaDataProgress : {name} : {frac}")
 
     def lock(self):
@@ -103,36 +122,43 @@ class YumexRootBackend(Client):
     def unlock(self):
         self.Unlock()
 
-    def build_transaction(self, pkgs: list[YumexPackage]):
+    def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         try:
             if self.Lock():
                 self.ClearTransaction()
                 for pkg in pkgs:
                     match pkg.state:
                         case PackageState.AVAILABLE:
-                            rc, err_msgs = self.AddTransaction(pkg.id, "install")
+                            result = Result(*self.AddTransaction(pkg.id, "install"))
                         case PackageState.UPDATE:
-                            rc, err_msgs = self.AddTransaction(pkg.id, "update")
+                            result = Result(*self.AddTransaction(pkg.id, "update"))
                         case PackageState.INSTALLED:
-                            rc, err_msgs = self.AddTransaction(pkg.id, "remove")
-                    if not rc:
-                        log(f" --> RootBackendError : {err_msgs[0]}")
-                rc, result = self.BuildTransaction()
-                if rc:
-                    return True, self.build_result(result)
+                            result = Result(*self.AddTransaction(pkg.id, "remove"))
+                    if not result.completed:
+                        log(f" --> RootBackendError : {result.data[0]}")
+                result = Result(*self.BuildTransaction())
+                print(result)
+                if result.completed:
+                    return TransactionResult(True, data=self.build_result(result.data))
                 else:
                     log(" --> RootBackendError : BuildTransaction failled ")
-                    return False, {
-                        "errors": _("Couldn't build transaction\n") + "\n".join(result)
-                    }
+                    return TransactionResult(
+                        False,
+                        error=_("Couldn't build transaction\n")
+                        + "\n".join(result.data),
+                    )
             else:
                 log(" --> RootBackendError : can't get lock ")
-                return False, {"errors": _("Dnf is locked by another process")}
+                return TransactionResult(
+                    False, error=_("Dnf is locked by another process")
+                )
         except DaemonError as e:
             self.Unlock()
-            return False, {"errors": _("Exception in Dnf Backend\n") + str(e)}
+            return TransactionResult(
+                False, error=_("Exception in Dnf Backend\n") + e.message
+            )
 
-    def build_result(self, result):
+    def build_result(self, result: list[str, list]) -> dict:
         result_dict = {}
         for action, pkgs in result:
             result_dict[action] = [
@@ -140,22 +166,26 @@ class YumexRootBackend(Client):
             ]
         return result_dict
 
-    def run_transaction(self, confirm):
+    def run_transaction(self, confirm) -> TransactionResult:
         try:
             if confirm:
                 rc, msgs = self.RunTransaction()
                 self.Unlock()
                 if rc == 0:
-                    return True, msgs
+                    return TransactionResult(True, data={"msgs": msgs})
                 else:
-                    return False, msgs
+                    return TransactionResult(False, error="\n".join(msgs))
             else:
                 self.ClearTransaction()
                 self.Unlock()
-                return False, "transaction canceled"
+                return TransactionResult(
+                    False, error=_("Transaction cancelled by user")
+                )
         except DaemonError as e:
             self.Unlock()
-            return False, _("Exception in Dnf Backend\n") + str(e)
+            return TransactionResult(
+                False, error=_("Exception in Dnf Backend : ") + str(e.message)
+            )
 
     @staticmethod
     def id_to_nevra(id):
