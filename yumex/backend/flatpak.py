@@ -16,7 +16,7 @@
 """ backend for handling flatpaks"""
 
 from enum import IntEnum, StrEnum, auto
-from gi.repository import Flatpak, GObject
+from gi.repository import Flatpak, GObject, GLib
 
 
 from yumex.utils import log
@@ -184,9 +184,9 @@ class FlatpakBackend:
         try:
             transaction.add_install(to_inst, source)
             return transaction.run()
-        except Exception as e:
-            log(str(e))
-            msg = str(e).split(":")[-1]
+        except GLib.GError as e:
+            msg = e.message
+            log(msg)
             self.win.show_message(f"{msg}", timeout=5)
             return False
 
@@ -197,9 +197,9 @@ class FlatpakBackend:
         try:
             transaction.add_remove(to_remove)
             return transaction.run()
-        except Exception as e:
-            log(str(e))
-            msg = str(e).split(":")[-1]
+        except GLib.GError as e:
+            msg = e.message
+            log(msg)
             self.win.show_message(f"{msg}", timeout=5)
             return False
 
@@ -209,9 +209,9 @@ class FlatpakBackend:
         try:
             transaction.add_update(pkg)
             return transaction.run()
-        except Exception as e:
-            log(str(e))
-            msg = str(e).split(":")[-1]
+        except GLib.GError as e:
+            msg = e.message
+            log(msg)
             self.win.show_message(f"{msg}", timeout=5)
             return False
 
@@ -297,18 +297,18 @@ class FlatpakTransaction:
 
     def add_install(self, to_inst: FlatpakRefString, source: str) -> None:
         """add ref sting to transaction for install"""
-        self.transaction.add_install(source, to_inst, None)
         log(f" FLATPAK: adding {to_inst} for install")
+        self.transaction.add_install(source, to_inst, None)
 
     def add_remove(self, to_remove: FlatpakRefString) -> None:
         """add ref sting to transaction for uninstall"""
-        self.transaction.add_uninstall(to_remove)
         log(f" FLATPAK: adding {to_remove} for uninstall")
+        self.transaction.add_uninstall(to_remove)
 
     def add_update(self, pkg: FlatpakPackage) -> None:
         """add pkg to transaction for update"""
-        self.transaction.add_update(pkg.ref.format_ref(), None, None)
         log(f" FLATPAK: adding {pkg.id} for update")
+        self.transaction.add_update(pkg.ref.format_ref(), None, None)
 
     def run(self) -> None:
         """run the tranaction"""

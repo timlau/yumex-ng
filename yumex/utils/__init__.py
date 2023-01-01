@@ -56,7 +56,8 @@ class RunAsync(threading.Thread):
         self.task_func = task_func
 
         self.callback = callback if callback else lambda r, e: None
-        self.daemon = kwargs.pop("daemon", True)
+        # self.daemon = kwargs.pop("daemon", True)
+        self.daemon = False
 
         self.start()
 
@@ -70,15 +71,14 @@ class RunAsync(threading.Thread):
         except Exception as exception:
             log(
                 "Error while running async job: "
-                f"{self.task_func}\nException: {exception}"
+                f"{self.task_func}\nException: {exception.message}"
             )
 
             error = exception
             _ex_type, _ex_value, trace = sys.exc_info()
             traceback.print_tb(trace)
-            traceback_info = "\n".join(traceback.format_tb(trace))
-
-            log([str(exception), traceback_info])
+            # traceback_info = "\n".join(traceback.format_tb(trace))
+            # log([str(exception), traceback_info])
         self.source_id = GLib.idle_add(self.callback, result, error)
         log(f"<< Completed async job : {self.task_func.__name__}.")
         return self.source_id
