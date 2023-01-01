@@ -87,7 +87,7 @@ class YumexPackage(GObject.GObject):
         return f"{self.name}-{self.evr}.{self.arch}"
 
     def __repr__(self) -> str:
-        return f"{self.nevra} : {self.repo}"
+        return f"YumexPackage({self.nevra} : {self.repo})"
 
     def __eq__(self, other) -> bool:
         return self.nevra == other.nevra
