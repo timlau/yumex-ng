@@ -367,9 +367,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
-        active_page = self.active_page
-        log(f"stack changed : {active_page}")
-        match active_page:
+        log(f"stack changed : {self.active_page}")
+        match self.active_page:
             case Page.PACKAGES:
                 self.show_on_packages_page(show=True)
                 self.apply_button.set_visible(True)
