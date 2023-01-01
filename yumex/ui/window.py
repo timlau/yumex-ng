@@ -365,6 +365,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "select_all":
                 if self.active_page in [Page.PACKAGES, Page.QUEUE]:
                     self.on_selectall_activate()
+            case "toggle_selection":
+                if self.active_page == Page.PACKAGES:
+                    self.package_view.toggle_selected()
             case _:
                 log(f"ERROR: action: {action.get_name()} not defined")
 

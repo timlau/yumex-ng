@@ -163,6 +163,12 @@ class YumexPackageView(Gtk.ColumnView):
     def refresh(self):
         self.selection.selection_changed(0, len(self.store))
 
+    def toggle_selected(self):
+        if len(self.store) > 0:
+            pkg: YumexPackage = self.selection.get_selected_item()
+            pkg.queued = not pkg.queued
+            self.refresh()
+
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):
         check = Gtk.CheckButton()
@@ -244,9 +250,7 @@ class YumexPackageView(Gtk.ColumnView):
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):
         if len(self.store) > 0:
-            selection = widget.get_selection()
-            ndx = selection.get_nth(0)
-            pkg = self.store[ndx]
+            pkg: YumexPackage = self.selection.get_selected_item()
             self.set_pkg_info(pkg)
         else:
             self.win.package_info.clear()
