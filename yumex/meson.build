@@ -16,7 +16,7 @@ configure_file(
   output: 'constants.py',
   configuration: configuration_data({
     'APP_ID': APPLICATION_ID,
-    'VERSION': meson.project_version() + VERSION_SUFFIX,
+    'VERSION': meson.project_version() + VERSION_SUFFIX+" ("+BACKEND+")",
     'BUILD_TYPE': get_option('buildtype'),
     'PKGDATA_DIR': PKGDATA_DIR,
     'LOCALE_DIR': conf.get('LOCALE_DIR'),
