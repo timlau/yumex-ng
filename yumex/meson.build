@@ -60,15 +60,18 @@ yumex_backend_modules = [
 'backend/__init__.py',
 'backend/daemon.py',
 'backend/dnf.py',
-'backend/flatpak.py',
 'backend/dnf5.py'
+'backend/flatpak.py',
+'backend/interface.py',
+'backend/presenter.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
 
 
 yumex_utils_modules = [
 'utils/__init__.py',
-'utils/types.py'
+'utils/types.py',
+'utils/enums.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
