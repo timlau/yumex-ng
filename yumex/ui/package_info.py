@@ -18,7 +18,7 @@ from gi.repository import Gtk, Adw
 from yumex.constants import rootdir
 import hawkey
 
-from yumex.ui.package_settings import InfoType
+from yumex.utils.enums import InfoType
 
 ADVISORY_TYPES = {
     hawkey.ADVISORY_BUGFIX: _("Bugfix"),

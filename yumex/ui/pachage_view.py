@@ -21,7 +21,7 @@ from yumex.backend import YumexPackage, YumexPackageCache
 # from yumex.backend.dnf import Backend, DnfCallback
 from yumex.backend.dnf5 import Backend
 from yumex.ui import get_package_selection_tooltip
-from yumex.ui.package_settings import InfoType, PackageFilter, SortType
+from yumex.utils.enums import InfoType, PackageFilter, SortType
 from yumex.utils import log, RunAsync, timed
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]

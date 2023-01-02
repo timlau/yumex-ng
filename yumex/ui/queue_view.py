@@ -21,7 +21,7 @@ from yumex.backend import YumexPackage, YumexPackageCache
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import RunAsync, timed
-from yumex.backend import PackageState
+from yumex.utils.enums import PackageState
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/queue_view.ui")

@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-from yumex.backend import PackageState
+from yumex.utils.enums import PackageState
 
 
 def get_package_selection_tooltip(pkg):

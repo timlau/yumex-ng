@@ -24,11 +24,12 @@ from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
-from yumex.ui.package_settings import PackageFilter, YumexPackageSettings
+from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
+from yumex.utils.enums import PackageFilter
 
 
 class Page(StrEnum):

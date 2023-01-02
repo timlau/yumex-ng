@@ -16,33 +16,11 @@
 from gi.repository import GObject, Gio
 from yumex.utils import format_number
 
-from enum import IntEnum, StrEnum, auto
-
 from typing import Protocol, Union
 
 
 from yumex.ui.package_settings import InfoType, PackageFilter
-
-
-class PackageState(IntEnum):
-    UPDATE = 1
-    AVAILABLE = 2
-    INSTALLED = 3
-    DOWNGRADE = 4
-
-
-class PackageAction(IntEnum):
-    DOWNGRADE = 10
-    UPGRADE = 20
-    INSTALL = 30
-    REINSTALL = 40
-    ERASE = 50
-
-
-class SearchField(StrEnum):
-    NAME = auto()
-    ARCH = auto()
-    REPONAME = auto()
+from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
 
 
 class YumexPackage(GObject.GObject):

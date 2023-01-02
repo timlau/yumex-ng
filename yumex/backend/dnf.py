@@ -26,9 +26,11 @@ import itertools
 
 from gi.repository import Gio
 
-from yumex.backend import PackageAction, YumexPackage, PackageState
+from yumex.backend import YumexPackage
 from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils import log
+
+from yumex.utils.enums import PackageAction, PackageState
 
 
 class DnfCallback:

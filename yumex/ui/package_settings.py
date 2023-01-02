@@ -13,34 +13,11 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-from enum import StrEnum, auto
 from gi.repository import Gtk
 
 from yumex.constants import rootdir
 from yumex.utils import log
-
-
-class PackageFilter(StrEnum):
-    INSTALLED = auto()
-    UPDATES = auto()
-    AVAILABLE = auto()
-    ALL = AVAILABLE
-    SEARCH = auto()
-
-
-# ["description", "files", "update_info"]
-class InfoType(StrEnum):
-    DESCRIPTION = auto()
-    FILES = auto()
-    UPDATE_INFO = auto()
-
-
-# ["name", "arch", "size", "repo"]
-class SortType(StrEnum):
-    NAME = auto()
-    ARCH = auto()
-    SIZE = auto()
-    REPO = auto()
+from yumex.utils.enums import PackageFilter, SortType, InfoType
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/package_settings.ui")
