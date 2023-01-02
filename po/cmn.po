@@ -1,8 +1,8 @@
 # Yum Extender (yumex) POT file
-# Copyright (C) 2022 Tim Lauridsen
+# Copyright (C) 2023 Tim Lauridsen
 # This file is distributed under the GNU GPLv3 license.
 # Tim Lauridsen, 2022.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
