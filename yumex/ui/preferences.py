@@ -75,7 +75,7 @@ class YumexPreferences(Adw.PreferencesWindow):
             system = True
         else:
             system = False
-        remotes = self.win.flatpak_view.backend.get_remotes(system=system)
+        remotes = self.win.flatpak_view.backend.get_remotes(location=system)
         model = Gtk.StringList.new()
         for remote in remotes:
             model.append(remote)
