@@ -5,8 +5,11 @@ from gi.repository import Gio
 
 from libdnf5.base import Base
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
-from libdnf5.repo import RepoQuery  # noqa : F401
-from libdnf5.common import QueryCmp_NEQ
+from libdnf5.repo import RepoQuery, Repo  # noqa : F401
+from libdnf5.common import (
+    QueryCmp_NEQ,
+    QueryCmp_NOT_IGLOB,
+)
 
 from yumex.backend import SearchField, YumexPackage, PackageState
 from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
@@ -141,7 +144,6 @@ class Backend(Base):
             query.filter_available()
         query.filter_nevra([pkg.nevra])
         pkgs = list(query)
-        print(pkg.nevra, pkgs)
         if not pkgs:
             return None
         dnf_pkg = pkgs[0]
@@ -158,8 +160,11 @@ class Backend(Base):
                     return None
         return None
 
-    def get_repositories(self) -> list[str]:  # TODO: Implement
-        return ["fedora"]
+    def get_repositories(self) -> list[tuple[str, str, bool]]:  # TODO: Implement
+        query = RepoQuery(self)
+        query.filter_id("*-source", QueryCmp_NOT_IGLOB)
+        query.filter_id("*-debuginfo", QueryCmp_NOT_IGLOB)
+        return [(repo.get_id(), repo.get_name(), repo.is_enabled()) for repo in query]
 
     def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
         return None  # TODO: implement
