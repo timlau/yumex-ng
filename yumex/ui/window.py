@@ -19,6 +19,7 @@ from time import sleep
 
 from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
+from yumex.backend.presenter import YumexPresenter
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.flatpak_view import YumexFlatpakView
@@ -72,6 +73,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
+        self.presenter = YumexPresenter(self)
         self.setup_gui()
 
     @property
@@ -109,7 +111,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_package_page(self):
         """Setup the packages page"""
-        self.package_view = YumexPackageView(self)
+        self.package_view = YumexPackageView(self, self.presenter)
         self.content_packages.set_child(self.package_view)
         # set columns width from settings and calc clamp width
         clamp_width = 100

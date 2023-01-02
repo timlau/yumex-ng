@@ -13,13 +13,8 @@
 #
 # Copyright (C) 2022  Tim Lauridsen
 
-from gi.repository import GObject, Gio
+from gi.repository import GObject
 from yumex.utils import format_number
-
-from typing import Protocol, Union
-
-
-from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
 
 
@@ -92,70 +87,3 @@ class YumexPackage(GObject.GObject):
             self.repo[1:],
         )
         return ",".join([str(elem) for elem in nevra_r])
-
-
-class PackageBackend(Protocol):
-    """protocol class for a package backend"""
-
-    def reset_backend(self) -> None:
-        ...
-
-    def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
-        ...
-
-    def search(self, txt: str, field: SearchField) -> list[YumexPackage]:
-        ...
-
-    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
-        ...
-
-    def get_repositories(self) -> list[str]:
-        ...
-
-    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
-        ...
-
-
-class YumexPackageCache:
-    def __init__(self, backend: PackageBackend) -> None:
-        self._packages = {}
-        self.backend: PackageBackend = backend
-        self.nerva_dict = {}
-
-    def get_packages_by_filter(self, pkgfilter, reset=False):
-        if pkgfilter not in self._packages or reset:
-            self._packages[pkgfilter] = list(
-                self.add_packages(self.backend.get_packages(pkgfilter))
-            )
-        return self._packages[pkgfilter]
-
-    def add_packages(self, pkgs):
-        for pkg in pkgs:
-            if pkg.nevra not in self.nerva_dict:
-                self.nerva_dict[pkg.nevra] = pkg
-                yield pkg
-            else:
-                cached_pkg = self.nerva_dict[pkg.nevra]
-                if pkg.state != cached_pkg.state:
-                    self.update_state(cached_pkg, pkg)
-                # use the action from the newest pkg,
-                # to get queued deps, sorted the right way
-                cached_pkg.action = pkg.action
-                yield cached_pkg
-
-    def get_package(self, pkg):
-        if pkg.nevra not in self.nerva_dict:
-            self.nerva_dict[pkg.nevra] = pkg
-            return pkg
-        else:
-            return self.nerva_dict[pkg.nevra]
-
-    def update_state(self, current, new):
-        """update the state of the cached pkg"""
-        match (current.state, new.state):
-            case (PackageState.AVAILABLE, PackageState.UPDATE):
-                current.state = PackageState.UPDATE
-            case (PackageState.INSTALLED, PackageState.UPDATE):
-                current.state = PackageState.UPDATE
-            case (PackageState.AVAILABLE, PackageState.INSTALLED):
-                current.state = PackageState.INSTALLED

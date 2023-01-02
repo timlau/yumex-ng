@@ -12,6 +12,7 @@ from libdnf5.common import (
 )
 
 from yumex.backend import SearchField, YumexPackage, PackageState
+from yumex.backend.interface import Presenter
 from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
 
 PackageTuple = namedtuple(
@@ -78,8 +79,9 @@ class UpdateInfo:
 
 
 class Backend(Base):
-    def __init__(self, *args) -> None:
+    def __init__(self, presenter: Presenter, *args) -> None:
         super().__init__(*args)
+        self.presenter: Presenter = presenter
         self.load_config_from_file()
         self.setup()
         self.reset_backend()
