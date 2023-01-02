@@ -17,6 +17,16 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "local build and run (DNF5)",
+            "type": "shell",
+            "command": "${workspaceFolder}/local.sh DNF5",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            }
         }
     ]
 }
