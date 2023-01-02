@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Protocol, Union
+from typing import Protocol
 from gi.repository import Gio
 
 from yumex.backend import YumexPackage
@@ -45,7 +45,7 @@ class PackageBackend(Protocol):
     def search(self, txt: str, field: SearchField) -> list[YumexPackage]:
         ...
 
-    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         ...
 
     def get_repositories(self) -> list[str]:

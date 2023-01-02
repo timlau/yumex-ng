@@ -14,7 +14,7 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 from collections import namedtuple
-from typing import Union
+from typing import Generator
 
 from gi.repository import Gio
 
@@ -45,7 +45,7 @@ PackageTuple = namedtuple(
 )
 
 
-def get_yumex_package(pkg: Package):
+def get_yumex_package(pkg: Package) -> YumexPackage:
     name = pkg.get_name()
     arch = pkg.get_arch()
     version = pkg.get_version()
@@ -125,7 +125,9 @@ class Backend(Base):
         query.filter_upgrades()
         return query
 
-    def _get_yumex_packages(self, query: PackageQuery):
+    def _get_yumex_packages(
+        self, query: PackageQuery
+    ) -> Generator[YumexPackage, None, None]:
         for pkg in query:
             ypkg: YumexPackage = get_yumex_package(pkg)
             if pkg.is_installed():
@@ -153,7 +155,7 @@ class Backend(Base):
             case PackageFilter.UPDATES:
                 return list(self._get_yumex_packages(self.updates))
 
-    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         query = PackageQuery(self)
         if pkg.state == PackageState.AVAILABLE:
             query.filter_available()
@@ -177,7 +179,7 @@ class Backend(Base):
                     return None
         return None
 
-    def get_repositories(self) -> list[tuple[str, str, bool]]:  # TODO: Implement
+    def get_repositories(self) -> list[tuple[str, str, bool]]:
         query = RepoQuery(self)
         query.filter_id("*-source", QueryCmp_NOT_IGLOB)
         query.filter_id("*-debuginfo", QueryCmp_NOT_IGLOB)
