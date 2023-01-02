@@ -23,6 +23,7 @@ localedir = "@LOCALE_DIR@"
 
 version = "@VERSION@"
 build_type = "@BUILD_TYPE@"
+backend = "@BACKEND@"
 
 
 # package column names, for save/load values from setting

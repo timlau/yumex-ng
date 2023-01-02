@@ -20,6 +20,7 @@ configure_file(
     'BUILD_TYPE': get_option('buildtype'),
     'PKGDATA_DIR': PKGDATA_DIR,
     'LOCALE_DIR': conf.get('LOCALE_DIR'),
+    'BACKEND': BACKEND,
   }),
   install: true,
   install_dir: PY_INSTALLDIR.get_install_dir() / 'yumex',
