@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 #
 #
 
@@ -25,11 +25,7 @@ from gi.repository import Gtk, Gio, Adw
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log
-from yumex.constants import (
-    rootdir,
-    app_id,
-    version,
-)
+from yumex.constants import rootdir, app_id, version, backend
 
 
 class YumexApplication(Adw.Application):
@@ -131,9 +127,9 @@ class YumexApplication(Adw.Application):
             designers=[],
             documenters=[],
             translator_credits="",
-            copyright="© 2022 Tim Lauridsen",
+            copyright="© 2023 Tim Lauridsen",
             license_type=Gtk.License.GPL_3_0,
-            version=version,
+            version=f"{version} ({backend})",
             release_notes_version=version,
             release_notes=_(
                 """

@@ -11,27 +11,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 
 from gi.repository import GObject
 from yumex.utils import format_number
-
-from enum import IntEnum
-
-
-class PackageState(IntEnum):
-    UPDATE = 1
-    AVAILABLE = 2
-    INSTALLED = 3
-    DOWNGRADE = 4
-
-
-class PackageAction(IntEnum):
-    DOWNGRADE = 10
-    UPGRADE = 20
-    INSTALL = 30
-    REINSTALL = 40
-    ERASE = 50
+from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
 
 
 class YumexPackage(GObject.GObject):
@@ -103,48 +87,3 @@ class YumexPackage(GObject.GObject):
             self.repo[1:],
         )
         return ",".join([str(elem) for elem in nevra_r])
-
-
-class YumexPackageCache:
-    def __init__(self, backend) -> None:
-        self._packages = {}
-        self.backend = backend
-        self.nerva_dict = {}
-
-    def get_packages_by_filter(self, pkgfilter, reset=False):
-        if pkgfilter not in self._packages or reset:
-            self._packages[pkgfilter] = list(
-                self.add_packages(self.backend.get_packages(pkgfilter))
-            )
-        return self._packages[pkgfilter]
-
-    def add_packages(self, pkgs):
-        for pkg in pkgs:
-            if pkg.nevra not in self.nerva_dict:
-                self.nerva_dict[pkg.nevra] = pkg
-                yield pkg
-            else:
-                cached_pkg = self.nerva_dict[pkg.nevra]
-                if pkg.state != cached_pkg.state:
-                    self.update_state(cached_pkg, pkg)
-                # use the action from the newest pkg,
-                # to get queued deps, sorted the right way
-                cached_pkg.action = pkg.action
-                yield cached_pkg
-
-    def get_package(self, pkg):
-        if pkg.nevra not in self.nerva_dict:
-            self.nerva_dict[pkg.nevra] = pkg
-            return pkg
-        else:
-            return self.nerva_dict[pkg.nevra]
-
-    def update_state(self, current, new):
-        """update the state of the cached pkg"""
-        match (current.state, new.state):
-            case (PackageState.AVAILABLE, PackageState.UPDATE):
-                current.state = PackageState.UPDATE
-            case (PackageState.INSTALLED, PackageState.UPDATE):
-                current.state = PackageState.UPDATE
-            case (PackageState.AVAILABLE, PackageState.INSTALLED):
-                current.state = PackageState.INSTALLED

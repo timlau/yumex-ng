@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 
 from enum import StrEnum, auto
 import re
@@ -19,16 +19,18 @@ from time import sleep
 
 from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
+from yumex.backend.presenter import YumexPresenter
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
-from yumex.ui.package_settings import PackageFilter, YumexPackageSettings
+from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
+from yumex.utils.enums import PackageFilter
 
 
 class Page(StrEnum):
@@ -71,6 +73,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
+        self.presenter = YumexPresenter(self)
         self.setup_gui()
 
     @property
@@ -108,7 +111,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_package_page(self):
         """Setup the packages page"""
-        self.package_view = YumexPackageView(self)
+        self.package_view = YumexPackageView(self, self.presenter)
         self.content_packages.set_child(self.package_view)
         # set columns width from settings and calc clamp width
         clamp_width = 100

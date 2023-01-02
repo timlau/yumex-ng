@@ -11,14 +11,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 
 from gi.repository import Gtk, Adw
 
 from yumex.constants import rootdir
 import hawkey
 
-from yumex.ui.package_settings import InfoType
+from yumex.utils.enums import InfoType
 
 ADVISORY_TYPES = {
     hawkey.ADVISORY_BUGFIX: _("Bugfix"),

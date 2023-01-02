@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 
 from time import time
 from typing import Union
@@ -26,9 +26,11 @@ import itertools
 
 from gi.repository import Gio
 
-from yumex.backend import PackageAction, YumexPackage, PackageState
+from yumex.backend import YumexPackage
 from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils import log
+
+from yumex.utils.enums import PackageAction, PackageState
 
 
 class DnfCallback:
@@ -421,7 +423,7 @@ class Backend(DnfBase):
             if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
                 yield (repo.id, repo.name, repo.enabled)
 
-    def depsolve(self, store: Gio.ListStore):
+    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
         """build a trasaction and retrun the dependencies"""
         self.reset(goal=True, sack=False, repos=False)  # clean current transaction
         nevra_dict = {}

@@ -11,9 +11,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 
-from yumex.backend import PackageState
+from yumex.utils.enums import PackageState
 
 
 def get_package_selection_tooltip(pkg):

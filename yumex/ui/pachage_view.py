@@ -11,15 +11,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2022  Tim Lauridsen
+# Copyright (C) 2023  Tim Lauridsen
 
 from gi.repository import Gtk, Gio
+from yumex.backend.interface import Presenter
 
 from yumex.constants import rootdir
-from yumex.backend import YumexPackage, YumexPackageCache
-from yumex.backend.dnf import Backend, DnfCallback
+from yumex.backend import YumexPackage
+
+# from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip
-from yumex.ui.package_settings import InfoType, PackageFilter, SortType
+from yumex.utils.enums import InfoType, PackageFilter, SortType
 from yumex.utils import log, RunAsync, timed
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
@@ -39,9 +41,10 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(self, window, **kwargs):
+    def __init__(self, window, presenter: Presenter, **kwargs):
         super().__init__(**kwargs)
         self.win = window
+        self.presenter = presenter
         self.setup()
 
     def setup(self):
@@ -50,14 +53,21 @@ class YumexPackageView(Gtk.ColumnView):
         self.last_position = -1
         self.column_num = 0
         self._last_selected_pkg: YumexPackage = None
-        callback = DnfCallback(self.win)
-        self.backend = Backend(callback)
-        self.package_cache = YumexPackageCache(self.backend)
+
+    @property
+    def backend(self):
+        return self.presenter.backend
+
+    @property
+    def package_cache(self):
+        return self.presenter.package_cache
 
     def reset(self):
         log("Reset Package View")
         self.queue_view.reset()
         self.setup()
+        self.presenter.reset_backend()
+        self.presenter.reset_cache()
 
     @property
     def queue_view(self):
