@@ -30,10 +30,6 @@ from yumex.backend.interface import Presenter
 from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
 
 
-def get_yumex_package(pkg: Package) -> YumexPackage:
-    return YumexPackage.from_dnf5(pkg)
-
-
 class UpdateInfo:
     """Wrapper class for dnf update advisories on a given po."""
 
@@ -99,12 +95,14 @@ class Backend(Base):
         return query
 
     def _get_yumex_packages(
-        self, query: PackageQuery
+        self, query: PackageQuery, state=PackageState.AVAILABLE
     ) -> Generator[YumexPackage, None, None]:
         for pkg in query:
-            ypkg: YumexPackage = get_yumex_package(pkg)
+            ypkg: YumexPackage = YumexPackage.from_dnf5(pkg)
             if pkg.is_installed():
                 ypkg.set_installed()
+            if state == PackageState.UPDATE:
+                ypkg.set_update(None)
             yield ypkg
 
     def search(self, key: str, field: SearchField) -> list[YumexPackage]:
@@ -126,7 +124,9 @@ class Backend(Base):
             case PackageFilter.INSTALLED:
                 return list(self._get_yumex_packages(self.installed))
             case PackageFilter.UPDATES:
-                return list(self._get_yumex_packages(self.updates))
+                return list(
+                    self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
+                )
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         query = PackageQuery(self)
