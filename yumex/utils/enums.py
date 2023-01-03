@@ -36,6 +36,7 @@ class SearchField(StrEnum):
     NAME = auto()
     ARCH = auto()
     REPONAME = auto()
+    SUMMARY = auto()
 
 
 class PackageFilter(StrEnum):

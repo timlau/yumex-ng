@@ -30,7 +30,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
-from yumex.utils.enums import PackageFilter
+from yumex.utils.enums import PackageFilter, SearchField
 
 
 class Page(StrEnum):
@@ -279,10 +279,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_search_activate(self, widget):
         """handler for enter pressed in the seach entry"""
         allowed_field_map = {
-            "name": "name",
-            "arch": "arch",
-            "repo": "reponame",
-            "desc": "summary",
+            "name": SearchField.NAME,
+            "arch": SearchField.ARCH,
+            "repo": SearchField.REPONAME,
+            "desc": SearchField.SUMMARY,
         }
         search_txt = widget.get_text()
         log(f"search activate : {search_txt}")

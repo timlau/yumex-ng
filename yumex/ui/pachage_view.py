@@ -21,7 +21,7 @@ from yumex.backend import YumexPackage
 
 # from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip
-from yumex.utils.enums import InfoType, PackageFilter, SortType
+from yumex.utils.enums import InfoType, PackageFilter, SearchField, SortType
 from yumex.utils import log, RunAsync, timed
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
@@ -97,7 +97,7 @@ class YumexPackageView(Gtk.ColumnView):
         RunAsync(self.package_cache.get_packages_by_filter, set_completed, pkg_filter)
 
     @timed
-    def search(self, txt, field="name"):
+    def search(self, txt, field=SearchField.NAME):
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
             pkgs = self.package_cache.add_packages(
