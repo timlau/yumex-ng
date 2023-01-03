@@ -14,5 +14,7 @@
     "css.validate": false,
     "python.analysis.exclude": [
         "**/builddir"
-    ]
+    ],
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file"
 }
