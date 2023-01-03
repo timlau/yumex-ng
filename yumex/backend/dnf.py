@@ -30,7 +30,7 @@ from yumex.backend import YumexPackage
 from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils import log
 
-from yumex.utils.enums import PackageAction, PackageState
+from yumex.utils.enums import PackageAction, PackageState, SearchField
 
 
 class DnfCallback:
@@ -218,15 +218,15 @@ class Packages:
                 recent.append(po)
         return recent
 
-    def search(self, txt: str, field="name"):
+    def search(self, txt: str, field=SearchField.NAME):
         q = self.query.available()
         # field like *txt* and arch != src
         match field:
-            case "name":
+            case SearchField.NAME:
                 fdict = {f"{field}__substr": txt, "arch__neq": "src"}
-            case "summary":
+            case SearchField.SUMMARY:
                 fdict = {f"{field}__substr": txt, "arch__neq": "src"}
-            case _:
+            case SearchField.REPONAME, SearchField.ARCH:
                 fdict = {f"{field}": txt}
 
         try:
