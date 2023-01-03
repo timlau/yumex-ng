@@ -13,7 +13,6 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from collections import namedtuple
 from typing import Generator
 
 from gi.repository import Gio
@@ -30,35 +29,9 @@ from yumex.backend import SearchField, YumexPackage, PackageState
 from yumex.backend.interface import Presenter
 from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
 
-PackageTuple = namedtuple(
-    "package",
-    [
-        "name",
-        "arch",
-        "version",
-        "release",
-        "epoch",
-        "reponame",
-        "summary",
-        "size",
-    ],
-)
-
 
 def get_yumex_package(pkg: Package) -> YumexPackage:
-    name = pkg.get_name()
-    arch = pkg.get_arch()
-    version = pkg.get_version()
-    release = pkg.get_release()
-    epoch = pkg.get_epoch()
-    if pkg.is_installed():
-        reponame = pkg.get_from_repo_id()
-    else:
-        reponame = pkg.get_repo_id()
-    summary = pkg.get_summary()
-    size = pkg.get_package_size()
-    po = PackageTuple(name, arch, version, release, epoch, reponame, summary, size)
-    return YumexPackage(po)
+    return YumexPackage.from_dnf5(pkg)
 
 
 class UpdateInfo:

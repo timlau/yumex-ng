@@ -19,26 +19,62 @@ from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: 
 
 
 class YumexPackage(GObject.GObject):
-    def __init__(self, pkg, state=PackageState.AVAILABLE, action=0):
+    def __init__(self, *args, **kwargs):
         super(YumexPackage, self).__init__()
-        self.queued = False
-        self.queue_action = False  # package being procced by the queue
-        self.name = pkg.name
-        self.arch = pkg.arch
-        self.epoch = pkg.epoch
-        self.release = pkg.release
-        self.version = pkg.version
-        self.repo = pkg.reponame
-        self.description = pkg.summary
-        self.sizeB = int(pkg.size)
-        self.state = state
-        self.is_dep = False
-        self.ref_to = None
-        self.action = action
+        self.name: str = kwargs.pop("name")
+        self.arch: str = kwargs.pop("arch")
+        self.epoch: str = kwargs.pop("epoch")
+        self.release: str = kwargs.pop("release")
+        self.version: str = kwargs.pop("version")
+        self.repo: str = kwargs.pop("repo")
+        self.description: str = kwargs.pop("description")
+        self.sizeB: int = kwargs.pop("size")
+        self.state: PackageState = kwargs.pop("state", PackageState.AVAILABLE)
+        self.action: PackageAction = kwargs.pop("state", PackageAction.NONE)
+        self.is_dep: bool = False
+        self.ref_to: YumexPackage = None
+        self.queued: bool = False
+        self.queue_action: bool = False
+
+    @classmethod
+    def from_dnf4(cls, pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE):
+        return cls(
+            name=pkg.name,
+            arch=pkg.arch,
+            epoch=pkg.epoch,
+            release=pkg.release,
+            version=pkg.version,
+            repo=pkg.reponame,
+            description=pkg.summary,
+            size=int(pkg.size),
+            state=state,
+            action=action,
+        )
+
+    @classmethod
+    def from_dnf5(cls, pkg):
+        if pkg.is_installed():
+            state = PackageState.INSTALLED
+        else:
+            state = PackageState.AVAILABLE
+        return cls(
+            name=pkg.get_name(),
+            arch=pkg.get_arch(),
+            epoch=pkg.get_epoch(),
+            release=pkg.get_release(),
+            version=pkg.get_version(),
+            repo=pkg.get_repo_id(),
+            description=pkg.get_summary(),
+            size=pkg.get_install_size(),
+            state=state,
+        )
+
+    @property
+    def installed(self):
+        return self.state == PackageState.INSTALLED
 
     def set_installed(self):
         self.repo = f"@{self.repo}"
-        self.installed = True
         self.state = PackageState.INSTALLED
 
     def set_update(self, inst_pkg):

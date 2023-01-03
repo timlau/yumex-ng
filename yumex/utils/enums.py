@@ -24,6 +24,7 @@ class PackageState(IntEnum):
 
 
 class PackageAction(IntEnum):
+    NONE = 0
     DOWNGRADE = 10
     UPGRADE = 20
     INSTALL = 30
