@@ -110,14 +110,14 @@ class Backend(Base):
         query.filter_available()
         match field:
             case SearchField.NAME:
-                log("DNF5 search name")
                 query.filter_name([key], QueryCmp_ICONTAINS)
                 query.filter_arch("src", QueryCmp_NEQ)
-                print("\n".join([str(pkg) for pkg in query]))
             case SearchField.ARCH:
-                query.filter_arch(key)
+                query.filter_arch([key])
             case SearchField.REPO:
-                query.filter_repo_id(key)
+                query.filter_repo_id([key])
+            case SearchField.SUMMARY:
+                query.filter_summary([key], QueryCmp_ICONTAINS)
             case _:
                 log(f"Search field : [{field}] not supported in dnf5 backend")
         return self._get_yumex_packages(query)
