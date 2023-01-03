@@ -20,14 +20,12 @@ from gi.repository import Gio
 from libdnf5.base import Base
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
-from libdnf5.common import (
-    QueryCmp_NEQ,
-    QueryCmp_NOT_IGLOB,
-)
+from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS
 
 from yumex.backend import SearchField, YumexPackage, PackageState
 from yumex.backend.interface import Presenter
 from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
+from yumex.utils import log
 
 
 class UpdateInfo:
@@ -105,16 +103,23 @@ class Backend(Base):
                 ypkg.set_update(None)
             yield ypkg
 
-    def search(self, key: str, field: SearchField) -> list[YumexPackage]:
+    def search(
+        self, key: str, field: SearchField = SearchField.NAME
+    ) -> list[YumexPackage]:
         query = PackageQuery(self)
+        query.filter_available()
         match field:
             case SearchField.NAME:
-                query.filter_name(key)
+                log("DNF5 search name")
+                query.filter_name([key], QueryCmp_ICONTAINS)
                 query.filter_arch("src", QueryCmp_NEQ)
+                print("\n".join([str(pkg) for pkg in query]))
             case SearchField.ARCH:
                 query.filter_arch(key)
             case SearchField.REPONAME:
                 query.filter_repo_id(key)
+            case _:
+                log(f"Search field : [{field}] not supported in dnf5 backend")
         return self._get_yumex_packages(query)
 
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
