@@ -55,15 +55,18 @@ class YumexPackage(GObject.GObject):
     def from_dnf5(cls, pkg):
         if pkg.is_installed():
             state = PackageState.INSTALLED
+            repo = pkg.get_from_repo_id()
         else:
             state = PackageState.AVAILABLE
+            repo = pkg.get_repo_id()
+
         return cls(
             name=pkg.get_name(),
             arch=pkg.get_arch(),
             epoch=pkg.get_epoch(),
             release=pkg.get_release(),
             version=pkg.get_version(),
-            repo=pkg.get_repo_id(),
+            repo=repo,
             description=pkg.get_summary(),
             size=pkg.get_install_size(),
             state=state,
@@ -78,8 +81,9 @@ class YumexPackage(GObject.GObject):
         self.state = PackageState.INSTALLED
 
     def set_update(self, inst_pkg):
-        self.ref_to = YumexPackage(inst_pkg)
-        self.ref_to.state = PackageState.INSTALLED
+        if inst_pkg:
+            self.ref_to = YumexPackage(inst_pkg)
+            self.ref_to.state = PackageState.INSTALLED
         self.state = PackageState.UPDATE
 
     @property
