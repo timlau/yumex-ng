@@ -281,7 +281,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         allowed_field_map = {
             "name": SearchField.NAME,
             "arch": SearchField.ARCH,
-            "repo": SearchField.REPONAME,
+            "repo": SearchField.REPO,
             "desc": SearchField.SUMMARY,
         }
         search_txt = widget.get_text()

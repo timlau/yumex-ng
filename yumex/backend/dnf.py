@@ -226,7 +226,9 @@ class Packages:
                 fdict = {f"{field}__substr": txt, "arch__neq": "src"}
             case SearchField.SUMMARY:
                 fdict = {f"{field}__substr": txt, "arch__neq": "src"}
-            case SearchField.REPONAME, SearchField.ARCH:
+            case SearchField.REPO:
+                fdict = {"reponame": txt}
+            case SearchField.ARCH:
                 fdict = {f"{field}": txt}
 
         try:

@@ -35,7 +35,7 @@ class PackageAction(IntEnum):
 class SearchField(StrEnum):
     NAME = auto()
     ARCH = auto()
-    REPONAME = auto()
+    REPO = auto()
     SUMMARY = auto()
 
 

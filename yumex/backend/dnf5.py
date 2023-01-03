@@ -116,7 +116,7 @@ class Backend(Base):
                 print("\n".join([str(pkg) for pkg in query]))
             case SearchField.ARCH:
                 query.filter_arch(key)
-            case SearchField.REPONAME:
+            case SearchField.REPO:
                 query.filter_repo_id(key)
             case _:
                 log(f"Search field : [{field}] not supported in dnf5 backend")
