@@ -83,7 +83,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 
 %changelog
 
-* Tue Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
+* Wed Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
 - the 4.99.2 release
 
 * Tue Dec 20 2022 Tim Lauridsen <timlau@fedoraproject.org> 4.99.1-1
