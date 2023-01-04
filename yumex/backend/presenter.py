@@ -13,8 +13,10 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
+from yumex.backend import YumexPackage
 from yumex.constants import backend
 from yumex.backend.interface import PackageBackend
+from yumex.utils import log
 
 if backend == "DNF5":
     from yumex.backend.dnf5 import Backend as Dnf5Backend
@@ -33,12 +35,17 @@ class YumexPackageCache:
 
     def get_packages_by_filter(self, pkgfilter, reset=False):
         if pkgfilter not in self._packages or reset:
-            self._packages[pkgfilter] = list(
-                self.add_packages(self.backend.get_packages(pkgfilter))
-            )
+            pkgs = self.add_packages(self.backend.get_packages(pkgfilter))
+            if pkgs is not None:
+                self._packages[pkgfilter] = list(pkgs)
+            else:
+                self._packages[pkgfilter] = []
+                log(
+                    f" YumexPackageCache: ({__name__}) : no packages found for {pkgfilter}"
+                )
         return self._packages[pkgfilter]
 
-    def add_packages(self, pkgs):
+    def add_packages(self, pkgs: list[YumexPackage]):
         for pkg in pkgs:
             if pkg.nevra not in self.nerva_dict:
                 self.nerva_dict[pkg.nevra] = pkg

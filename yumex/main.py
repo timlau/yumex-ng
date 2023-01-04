@@ -19,6 +19,8 @@
 
 import sys
 import argparse
+import logging
+from traceback import format_exception
 
 from gi.repository import Gtk, Gio, Adw
 
@@ -26,6 +28,7 @@ from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log
 from yumex.constants import rootdir, app_id, version, backend
+from yumex.ui.dialogs import error_dialog
 
 
 class YumexApplication(Adw.Application):
@@ -161,8 +164,17 @@ Yum Extender is a Package management to install, update and remove packages
         prefs.set_transient_for(self.win)
         prefs.present()
 
+    def exception_hook(self, exc_type, exc_value, exc_traceback):
+        logging.critical(
+            f"Uncaught exception: {exc_value}",
+            exc_info=(exc_type, exc_value, exc_traceback),
+        )
+        msg = "".join(format_exception(exc_type, exc_value, exc_traceback, None))
+        error_dialog(self.win, title="Uncaught exception", msg=msg)
+
 
 def main():
     """The application's entry point."""
     app = YumexApplication()
+    sys.excepthook = app.exception_hook
     return app.run(sys.argv)

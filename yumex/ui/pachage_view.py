@@ -76,7 +76,7 @@ class YumexPackageView(Gtk.ColumnView):
     def get_packages(self, pkg_filter: PackageFilter):
         def set_completed(result, error=False):
             self.win.main_view.set_sensitive(True)
-            pkgs = result
+            pkgs: list = result
             self.add_packages_to_store(pkgs)
             self.win.progress.hide()
             # hide package setting sidebar
