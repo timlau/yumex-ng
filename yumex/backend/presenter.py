@@ -13,13 +13,15 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
+from yumex.constants import backend
 from yumex.backend.interface import PackageBackend
-from yumex.backend.dnf5 import Backend as Dnf5Backend
+
+if backend == "DNF5":
+    from yumex.backend.dnf5 import Backend as Dnf5Backend
 from yumex.backend.dnf import Backend as Dnf4Backend, DnfCallback
 
 from yumex.ui.progress import YumexProgress
 
-from yumex.constants import backend
 from yumex.utils.enums import PackageState
 
 
