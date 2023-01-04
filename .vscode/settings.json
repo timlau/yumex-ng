@@ -16,5 +16,8 @@
         "**/builddir"
     ],
     "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
+    "editor.formatOnSaveMode": "file",
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#553955" // Change this color!
+    },
 }
