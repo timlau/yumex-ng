@@ -1,5 +1,6 @@
 %global app_id dk.yumex.Yumex
 %global app_build release
+%global dnf_backend DNF4
 
 Name:     yumex
 Version:  4.99.2
@@ -31,6 +32,10 @@ Requires: libadwaita
 Requires: gtk4
 Requires: flatpak-libs
 
+# support for dnf5 backend
+%if "%{dnf_backend}" == "DNF5"
+Requires: python3-libdnf5
+%endif
 
 Obsoletes: yumex-dnf <= 4.5.1
 
@@ -48,7 +53,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %build
-%meson --buildtype=%{app_build}
+%meson --buildtype=%{app_build} -Ddnf_backend=%{dnf_backend}
 %meson_build
 
 %install
@@ -82,6 +87,9 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %changelog
+
+* Wed Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
+- add support for building with dnf5 backend
 
 * Wed Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
 - the 4.99.2 release

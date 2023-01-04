@@ -53,6 +53,18 @@ show-vars:
 	@echo ${BUMPED_MINOR}
 	@echo ${NEW_VER}-${NEW_REL}
 
+test-release-dnf5:
+	@git checkout -b release-test
+	# +1 Minor version and add 0.1-gitYYYYMMDD release
+	@cat ${APPNAME}.spec | sed  -e '3 s/DNF4/DNF5/' -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
+	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
+	# Make archive
+	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
+	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
+	# Build RPMS
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME}-${NEW_VER}.tar.gz
+	@$(MAKE) test-cleanup
+
 test-release:
 	@git checkout -b release-test
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
