@@ -20,6 +20,8 @@
       <li>Browse packages available for installation or update</li>
       <li>Browse packages installed on your computer</li>
       <li>Search packages by name, summary, description</li>
+      <li>Browse Installed flatpaks</li>
+      <li>Install, remove and update flatpaks</li>
     </ul>
   </description>
 
@@ -35,8 +37,16 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="4.9.0" date="2023-02-1" type="devel"><description>
-        <p>Yum Extender 4.9.0 is a total rewrite using a modern toolchain </p>
+    <release version="4.9.2" date="2023-01-04" type="devel"><description>
+        <p>Yum Extender 4.9.2 adds support for flatpaks </p>
+        <ul>
+          <li>Browse installed flatpaks</li>
+          <li>Install, remove and update flatpaks</li>
+        </ul>
+      </description>
+    </release>
+    <release version="4.9.1" date="2022-12-23" type="devel"><description>
+        <p>Yum Extender 4.9.1 is a total rewrite using a modern toolchain </p>
         <ul>
           <li>New fresh scalable UI using Gtk4 and Libadwaita</li>
           <li>Using dnf directly for readonly actions</li>
