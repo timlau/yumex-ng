@@ -157,7 +157,7 @@ class Packages:
         """
         return [
             YumexPackage.from_dnf4(pkg, state=PackageState.UPDATE)
-            for pkg in self.query.upgrades().run()
+            for pkg in self.query.upgrades().latest().run()
         ]
 
     def filter_installed(self, query: dnf.query.Query):
