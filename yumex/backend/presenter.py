@@ -29,6 +29,12 @@ from yumex.utils.enums import PackageState
 
 
 class YumexPackageCache:
+    """A cache for storing YumexPackages, so the state is preserved when getting packages
+    from the PackageBackend.
+
+    Implement the PackageCache protocol class
+    """
+
     def __init__(self, backend: PackageBackend) -> None:
         self._packages = {}
         self.backend: PackageBackend = backend
@@ -78,6 +84,17 @@ class YumexPackageCache:
 
 
 class YumexPresenter:
+    """presenter class in Model–view–presenter (MVP) architectural pattern
+
+    It works as a middle man between the UI and backend package data, so the UI can work
+    diffent package backend in a more generic way.
+
+    The used package backends, implement the PackageBackend protocol methods, so the UI has a well
+    defined interface to using the backend without knowledge of packaging API used.
+
+    Implement the Presenter protocol class
+    """
+
     def __init__(self, win) -> None:
         self.win = win
         self._backend: PackageBackend = None

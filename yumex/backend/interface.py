@@ -23,18 +23,22 @@ from yumex.utils.enums import PackageFilter, SearchField, InfoType
 
 
 class PackageCache(Protocol):
-    def get_packages_by_filter(self, pkgfilter, reset=False):
+    """Protocol class for a package cache"""
+
+    def get_packages_by_filter(
+        self, pkgfilter: PackageFilter, reset=False
+    ) -> list[YumexPackage]:
         ...
 
-    def get_packages(self, pkgs):
+    def get_packages(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
         ...
 
-    def get_package(self, pkg):
+    def get_package(self, pkg: YumexPackage) -> YumexPackage:
         ...
 
 
 class PackageBackend(Protocol):
-    """protocol class for a package backend"""
+    """Protocol class for a package backend"""
 
     def reset_backend(self) -> None:
         ...
@@ -56,6 +60,8 @@ class PackageBackend(Protocol):
 
 
 class Presenter(Protocol):
+    """Protocol class for a presenter in  a Model–view–presenter (MVP) architectural pattern"""
+
     @property
     def backend(self) -> PackageBackend:
         ...
