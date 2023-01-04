@@ -3,7 +3,7 @@ import sys
 from gi.repository import Adw
 
 
-def error_dialog(win, title, msg):
+def error_dialog(win: Adw.ApplicationWindow, title: str, msg: str):
     def response(dialog, result, *args):
         sys.exit(1)
 
