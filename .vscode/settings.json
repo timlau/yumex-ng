@@ -20,4 +20,5 @@
     "workbench.colorCustomizations": {
         "titleBar.activeBackground": "#553955" // Change this color!
     },
+    "python.analysis.typeCheckingMode": "basic",
 }

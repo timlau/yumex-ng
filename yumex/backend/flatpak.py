@@ -84,9 +84,8 @@ class FlatpakPackage(GObject.GObject):
     def type(self) -> FlatpakType:
         """the ref type as Enum (runtime/app/locale)"""
         ref_kind = self.ref.get_kind()
+        pak_type = FlatpakType.APP
         match ref_kind:
-            case Flatpak.RefKind.APP:
-                pak_type = FlatpakType.APP
             case Flatpak.RefKind.RUNTIME:
                 pak_type = FlatpakType.RUNTIME
                 if self.id.endswith(".Locale"):
@@ -184,7 +183,7 @@ class FlatpakBackend:
         try:
             transaction.add_install(to_inst, source)
             return transaction.run()
-        except GLib.GError as e:
+        except GLib.GError as e:  # type: ignore
             msg = e.message
             log(msg)
             self.win.show_message(f"{msg}", timeout=5)
@@ -197,7 +196,7 @@ class FlatpakBackend:
         try:
             transaction.add_remove(to_remove)
             return transaction.run()
-        except GLib.GError as e:
+        except GLib.GError as e:  # type: ignore
             msg = e.message
             log(msg)
             self.win.show_message(f"{msg}", timeout=5)
@@ -209,7 +208,7 @@ class FlatpakBackend:
         try:
             transaction.add_update(pkg)
             return transaction.run()
-        except GLib.GError as e:
+        except GLib.GError as e:  # type: ignore
             msg = e.message
             log(msg)
             self.win.show_message(f"{msg}", timeout=5)
