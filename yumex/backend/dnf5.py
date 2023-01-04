@@ -83,13 +83,14 @@ class Backend(Base):
     def available(self) -> PackageQuery:
         query = PackageQuery(self)
         query.filter_available()
-        query.filter_earliest_evr()
+        query.filter_latest_evr()
         return query
 
     @property
     def updates(self) -> PackageQuery:
         query = PackageQuery(self)
         query.filter_upgrades()
+        query.filter_latest_evr()
         return query
 
     def _get_yumex_packages(
