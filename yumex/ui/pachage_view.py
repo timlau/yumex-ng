@@ -100,7 +100,7 @@ class YumexPackageView(Gtk.ColumnView):
     def search(self, txt, field=SearchField.NAME):
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
-            pkgs = self.package_cache.add_packages(
+            pkgs = self.package_cache.get_packages(
                 self.backend.search(txt, field=field)
             )
             self.add_packages_to_store(pkgs)

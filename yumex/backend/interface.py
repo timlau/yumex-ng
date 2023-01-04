@@ -26,7 +26,7 @@ class PackageCache(Protocol):
     def get_packages_by_filter(self, pkgfilter, reset=False):
         ...
 
-    def add_packages(self, pkgs):
+    def get_packages(self, pkgs):
         ...
 
     def get_package(self, pkg):

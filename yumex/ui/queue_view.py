@@ -60,7 +60,7 @@ class YumexQueueView(Gtk.ListView):
         """Add package to queue"""
 
         def completed(deps, error=None):
-            for dep in self.cache.add_packages(deps):
+            for dep in self.cache.get_packages(deps):
                 if dep not in self.store:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
@@ -84,7 +84,7 @@ class YumexQueueView(Gtk.ListView):
         """Remove package from queue"""
 
         def completed(deps, error=None):
-            for dep in self.cache.add_packages(deps):
+            for dep in self.cache.get_packages(deps):
                 if dep not in store:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True

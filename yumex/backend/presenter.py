@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
+from typing import Generator
 from yumex.backend import YumexPackage
 from yumex.constants import backend
 from yumex.backend.interface import PackageBackend
@@ -33,9 +34,9 @@ class YumexPackageCache:
         self.backend: PackageBackend = backend
         self.nerva_dict = {}
 
-    def get_packages_by_filter(self, pkgfilter, reset=False):
+    def get_packages_by_filter(self, pkgfilter, reset=False) -> list[YumexPackage]:
         if pkgfilter not in self._packages or reset:
-            pkgs = self.add_packages(self.backend.get_packages(pkgfilter))
+            pkgs = self.get_packages(self.backend.get_packages(pkgfilter))
             if pkgs is not None:
                 self._packages[pkgfilter] = list(pkgs)
             else:
@@ -45,28 +46,27 @@ class YumexPackageCache:
                 )
         return self._packages[pkgfilter]
 
-    def add_packages(self, pkgs: list[YumexPackage]):
+    def get_packages(
+        self, pkgs: list[YumexPackage]
+    ) -> Generator[YumexPackage, None, None]:
         for pkg in pkgs:
-            if pkg.nevra not in self.nerva_dict:
-                self.nerva_dict[pkg.nevra] = pkg
-                yield pkg
-            else:
-                cached_pkg = self.nerva_dict[pkg.nevra]
-                if pkg.state != cached_pkg.state:
-                    self._update_state(cached_pkg, pkg)
-                # use the action from the newest pkg,
-                # to get queued deps, sorted the right way
-                cached_pkg.action = pkg.action
-                yield cached_pkg
+            yield self.get_package(pkg)
 
-    def get_package(self, pkg):
+    def get_package(self, pkg: YumexPackage) -> YumexPackage:
+        """cache a new package or return the already cached one"""
         if pkg.nevra not in self.nerva_dict:
             self.nerva_dict[pkg.nevra] = pkg
             return pkg
         else:
-            return self.nerva_dict[pkg.nevra]
+            cached_pkg = self.nerva_dict[pkg.nevra]
+            if pkg.state != cached_pkg.state:
+                self._update_state(cached_pkg, pkg)
+            # use the action from the newest pkg,
+            # to get queued deps, sorted the right way
+            cached_pkg.action = pkg.action
+            return cached_pkg
 
-    def _update_state(self, current, new):
+    def _update_state(self, current, new) -> None:
         """update the state of the cached pkg"""
         match (current.state, new.state):
             case (PackageState.AVAILABLE, PackageState.UPDATE):
