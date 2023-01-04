@@ -133,6 +133,11 @@ class Backend(Base):
                 return list(
                     self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
                 )
+            case _:
+                log(
+                    f"DNF5: (get_packages) PackageFilter: {pkg_filter} is not supported"
+                )
+                return []
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         query = PackageQuery(self)
@@ -165,7 +170,7 @@ class Backend(Base):
         return [(repo.get_id(), repo.get_name(), repo.is_enabled()) for repo in query]
 
     def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
-        return None  # TODO: implement
+        return []  # TODO: implement
 
     def test(self):
         nevra = "aajohan-comfortaa-fonts-0:3.101-5.fc37.noarch"
