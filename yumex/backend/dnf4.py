@@ -14,7 +14,7 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 from time import time
-from typing import Union
+from typing import Iterable, Union
 
 import dnf
 import dnf.yum
@@ -24,12 +24,9 @@ import dnf.subject
 import hawkey
 import itertools
 
-from gi.repository import Gio
-
 from yumex.backend import YumexPackage
 from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils import log
-
 from yumex.utils.enums import PackageAction, PackageState, SearchField
 
 
@@ -426,12 +423,12 @@ class Backend(DnfBase):
             if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
                 yield (repo.id, repo.name, repo.enabled)
 
-    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
+    def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         """build a trasaction and retrun the dependencies"""
         self.reset(goal=True, sack=False, repos=False)  # clean current transaction
         nevra_dict = {}
         deps = []
-        for pkg in store:
+        for pkg in pkgs:
             dnf_pkg = self.packages.find_package(pkg)
             if dnf_pkg:
                 nevra_dict[pkg.nevra] = pkg

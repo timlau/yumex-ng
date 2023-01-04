@@ -13,9 +13,7 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Generator
-
-from gi.repository import Gio
+from typing import Generator, Iterable
 
 import libdnf5.base as dnf
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
@@ -169,12 +167,12 @@ class Backend(dnf.Base):
         query.filter_id("*-debuginfo", QueryCmp_NOT_IGLOB)
         return [(repo.get_id(), repo.get_name(), repo.is_enabled()) for repo in query]
 
-    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
+    def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         goal = dnf.Goal(self)
         goal.set_allow_erasing(True)
         nevra_dict = {}
         deps = []
-        for pkg in store:
+        for pkg in pkgs:
             nevra = pkg.nevra
             nevra_dict[nevra] = pkg
             match pkg.state:

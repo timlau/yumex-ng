@@ -13,8 +13,7 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Protocol
-from gi.repository import Gio
+from typing import Iterable, Protocol
 
 from yumex.backend import YumexPackage
 from yumex.ui.progress import YumexProgress
@@ -55,7 +54,7 @@ class PackageBackend(Protocol):
     def get_repositories(self) -> list[str]:
         ...
 
-    def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
+    def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         ...
 
 
