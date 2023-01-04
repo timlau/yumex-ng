@@ -21,7 +21,8 @@ from yumex.utils import log
 
 if backend == "DNF5":
     from yumex.backend.dnf5 import Backend as Dnf5Backend
-from yumex.backend.dnf import Backend as Dnf4Backend, DnfCallback
+else:
+    from yumex.backend.dnf4 import Backend as Dnf4Backend, DnfCallback
 
 from yumex.ui.progress import YumexProgress
 

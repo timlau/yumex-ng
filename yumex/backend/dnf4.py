@@ -208,7 +208,8 @@ class Packages:
         """
         recent = []
         now = time()
-        recentlimit = now - (self._base.conf.recent * 86400)
+        recent: int = self._base.conf.recent
+        recentlimit = now - (recent * 86400)
         if showdups:
             avail = self.query.available()
         else:
