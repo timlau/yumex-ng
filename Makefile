@@ -18,6 +18,7 @@ all:
 
 clean:
 	@rm -rf *.tar.gz
+	@rm -rf build/
 
 archive:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
@@ -32,6 +33,7 @@ copr-release:
 	@copr-cli build yumex-ng $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 release:
+	@$(MAKE) clean
 	@git commit -a -m "bumped release to $(VERSION)"
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
