@@ -17,7 +17,7 @@ from typing import Generator
 
 from gi.repository import Gio
 
-from libdnf5.base import Base
+import libdnf5.base as dnf
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
 from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS
@@ -60,7 +60,7 @@ class UpdateInfo:
         return results
 
 
-class Backend(Base):
+class Backend(dnf.Base):
     def __init__(self, presenter: Presenter, *args) -> None:
         super().__init__(*args)
         self.presenter: Presenter = presenter
@@ -170,19 +170,38 @@ class Backend(Base):
         return [(repo.get_id(), repo.get_name(), repo.is_enabled()) for repo in query]
 
     def depsolve(self, store: Gio.ListStore) -> list[YumexPackage]:
-        return []  # TODO: implement
-
-    def test(self):
-        nevra = "aajohan-comfortaa-fonts-0:3.101-5.fc37.noarch"
-        query = PackageQuery(self)
-        query.filter_nevra(nevra)
-        for pkg in query:
-            if pkg.is_installed():
-                print(pkg.get_nevra(), pkg.get_from_repo_id())
-            else:
-                print(pkg.get_nevra(), pkg.get_repo_id())
-
-
-if __name__ == "__main__":
-    backend = Backend()
-    backend.test()
+        goal = dnf.Goal(self)
+        goal.set_allow_erasing(True)
+        nevra_dict = {}
+        deps = []
+        for pkg in store:
+            nevra = pkg.nevra
+            nevra_dict[nevra] = pkg
+            match pkg.state:
+                case PackageState.INSTALLED:
+                    goal.add_rpm_remove(nevra)
+                    log(f" DNF5: add {nevra} to transaction for removal")
+                case PackageState.UPDATE:
+                    goal.add_rpm_upgrade(nevra)
+                    log(f" DNF5: add {nevra} to transaction for upgrade")
+                case PackageState.AVAILABLE:
+                    goal.add_rpm_install(nevra)
+                    log(f" DNF5: add {nevra} to transaction for installation")
+        transaction: dnf.Transaction = goal.resolve()
+        problems = transaction.get_problems()
+        log(f" DNF5: depsolve completted : {problems}")
+        if problems == dnf.GoalProblem_NO_PROBLEM:
+            for tspkg in transaction.get_transaction_packages():
+                pkg = YumexPackage.from_dnf5(tspkg.get_package())
+                if pkg.nevra not in nevra_dict:
+                    log(f" DNF5: adding as dep : {pkg.nevra} ")
+                    pkg.is_dep = True
+                    deps.append(pkg)
+                else:
+                    log(f" DNF5: skipping already in transaction : {pkg.nevra} ")
+        else:
+            log(f" DNF5 depsolve failed with GoalProblem:  {problems}")
+            msgs = transaction.get_resolve_logs_as_strings()
+            for msg in msgs:
+                log(f"  ---> {msg}")
+        return deps
