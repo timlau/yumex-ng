@@ -44,12 +44,12 @@ class TransactionResult:
 
 
 class YumexRootBackend(Client):
-    def __init__(self, progress):
+    def __init__(self, progress) -> None:
         super(YumexRootBackend, self).__init__()
         self.progress: YumexProgress = progress
         self.dnl_frac = 0.0
 
-    def on_TransactionEvent(self, event, data):
+    def on_TransactionEvent(self, event, data) -> None:
         # Do your stuff here
         match event:
             case "start-build":
@@ -93,33 +93,33 @@ class YumexRootBackend(Client):
             case _:
                 log(f" --> on_RPMProgress : {package} : {action}")
 
-    def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp):
+    def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp) -> None:
         # TODO: Handle GPG key inport verification
         pass
 
-    def on_DownloadStart(self, num_files, num_bytes):
+    def on_DownloadStart(self, num_files, num_bytes) -> None:
         """Starting a new parallel download batch"""
         self.progress.set_title(_("Downloading Packages"))
 
-    def on_DownloadProgress(self, name, frac, total_frac, total_files):
+    def on_DownloadProgress(self, name, frac, total_frac, total_files) -> None:
         """Progress for a single instance in the batch"""
         if total_frac - self.dnl_frac > 0.01:
             self.dnl_frac = total_frac
             self.progress.set_subtitle(_(f"Downloading : {name}"))
             self.progress.set_progress(total_frac)
 
-    def on_DownloadEnd(self, name, status, msg):
+    def on_DownloadEnd(self, name, status, msg) -> None:
         """Download of af single instace ended"""
         pass
 
-    def on_RepoMetaDataProgress(self, name, frac):
+    def on_RepoMetaDataProgress(self, name, frac) -> None:
         """Repository Metadata Download progress"""
         log(f" --> on_RepoMetaDataProgress : {name} : {frac}")
 
-    def lock(self):
+    def lock(self) -> None:
         self.Lock()
 
-    def unlock(self):
+    def unlock(self) -> None:
         self.Unlock()
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
@@ -127,12 +127,13 @@ class YumexRootBackend(Client):
             if self.Lock():
                 self.ClearTransaction()
                 for pkg in pkgs:
+                    result: PackageState
                     match pkg.state:
                         case PackageState.AVAILABLE:
                             result = Result(*self.AddTransaction(pkg.id, "install"))
                         case PackageState.UPDATE:
                             result = Result(*self.AddTransaction(pkg.id, "update"))
-                        case PackageState.INSTALLED:
+                        case _:  # PackageState.INSTALLED
                             result = Result(*self.AddTransaction(pkg.id, "remove"))
                     if not result.completed:
                         log(f" --> RootBackendError : {result.data[0]}")
@@ -188,7 +189,7 @@ class YumexRootBackend(Client):
             )
 
     @staticmethod
-    def id_to_nevra(id):
+    def id_to_nevra(id) -> tuple[str, str]:
         n, e, v, r, a, repo = id.split(",")
         if e != "0":
             return f"{n}-{e}:{v}-{r}.{a}", repo
