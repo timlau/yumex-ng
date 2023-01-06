@@ -54,21 +54,24 @@ class YumexPackageInfo(Gtk.Box):
         self.description_grp.set_visible(True)
 
     def update(self, info_type: InfoType, pkg_info):
-        info = self.format(info_type, pkg_info)
-        match info_type:
-            case InfoType.UPDATE_INFO:
-                if info:
-                    self.add_update_info(info)
-                    self.update_info_grp.set_visible(True)
-                    self.description_grp.set_visible(False)
-                else:
-                    self.add_decription(_("no update information found"))
+        if pkg_info:
+            info = self.format(info_type, pkg_info)
+            match info_type:
+                case InfoType.UPDATE_INFO:
+                    if info:
+                        self.add_update_info(info)
+                        self.update_info_grp.set_visible(True)
+                        self.description_grp.set_visible(False)
+                    else:
+                        self.add_decription(_("no update information found"))
+                        self.update_info_grp.set_visible(False)
+                        self.description_grp.set_visible(True)
+                case _:
+                    self.add_decription(info)
                     self.update_info_grp.set_visible(False)
                     self.description_grp.set_visible(True)
-            case _:
-                self.add_decription(info)
-                self.update_info_grp.set_visible(False)
-                self.description_grp.set_visible(True)
+        else:
+            self.clear()
 
     def format(self, info_type: InfoType, pkg_info):
         match info_type:
