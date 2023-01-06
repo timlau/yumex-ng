@@ -43,6 +43,7 @@ PY_INSTALLDIR.install_sources(yumex_sources, subdir: 'yumex')
 # Install ui Python modules
 yumex_ui_modules = [
 'ui/__init__.py',
+'ui/dialogs.py',
 'ui/flatpak_installer.py',
 'ui/flatpak_view.py',
 'ui/pachage_view.py',
