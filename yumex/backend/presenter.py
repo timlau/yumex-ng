@@ -67,6 +67,7 @@ class YumexPackageCache:
         else:
             cached_pkg = self.nerva_dict[pkg.nevra]
             if pkg.state != cached_pkg.state:
+                log(f" update state : {cached_pkg}{cached_pkg.state} {pkg}{pkg.state}")
                 self._update_state(cached_pkg, pkg)
             # use the action from the newest pkg,
             # to get queued deps, sorted the right way
