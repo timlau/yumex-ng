@@ -220,7 +220,7 @@ class Packages:
                 recent.append(po)
         return recent
 
-    def search(self, txt: str, field=SearchField.NAME):
+    def search(self, txt: str, field=SearchField.NAME, limit: int = 1):
         q = self.query.available()
         # field like *txt* and arch != src
         match field:

@@ -94,23 +94,30 @@ class Backend(dnf.Base):
     def _get_yumex_packages(
         self, query: PackageQuery, state=PackageState.AVAILABLE
     ) -> Generator[YumexPackage, None, None]:
+        updates = self.updates
         for pkg in query:
             ypkg: YumexPackage = YumexPackage.from_dnf5(pkg)
             if pkg.is_installed():
                 ypkg.set_installed()
-            if state == PackageState.UPDATE:
+            if state == PackageState.UPDATE or updates.contains(pkg):
                 ypkg.set_update(None)
             yield ypkg
 
     def search(
-        self, key: str, field: SearchField = SearchField.NAME
+        self, key: str, field: SearchField = SearchField.NAME, limit: int = 1
     ) -> list[YumexPackage]:
         query = PackageQuery(self)
         query.filter_available()
         match field:
             case SearchField.NAME:
+                qi = PackageQuery(self)
+                qi.filter_installed()
+                qi.filter_name([key], QueryCmp_ICONTAINS)
+                qi.filter_arch("src", QueryCmp_NEQ)
                 query.filter_name([key], QueryCmp_ICONTAINS)
                 query.filter_arch("src", QueryCmp_NEQ)
+                query.filter_latest_evr(limit=limit)
+                query.update(qi)
             case SearchField.ARCH:
                 query.filter_arch([key])
             case SearchField.REPO:

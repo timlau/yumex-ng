@@ -45,7 +45,9 @@ class PackageBackend(Protocol):
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         ...
 
-    def search(self, txt: str, field: SearchField) -> list[YumexPackage]:
+    def search(
+        self, txt: str, field: SearchField, limit: int = 1
+    ) -> list[YumexPackage]:
         ...
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
