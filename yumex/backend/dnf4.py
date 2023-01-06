@@ -370,9 +370,9 @@ class DnfBase(dnf.Base):
                             )
                         )
                     case _:
-                        log(" BACKEND: unhandled transaction found: {tsi.action}")
+                        log(" DNF4: unhandled transaction found: {tsi.action}")
         if replaces:
-            log(f" BACKEND: replaces found {replaces}")
+            log(f" DNF4: replaces found {replaces}")
         return tx_list
 
 
@@ -404,7 +404,7 @@ class Backend(DnfBase):
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
         dnf_pkg = self.packages.find_package(pkg)
-        log(f" BACKEND: pkg: {dnf_pkg} attribute : {attr}")
+        log(f" DNF4: dnf_pkg: {dnf_pkg} attribute : {attr}")
         if dnf_pkg:
             match attr:
                 case InfoType.DESCRIPTION:
@@ -435,28 +435,28 @@ class Backend(DnfBase):
                 match pkg.state:
                     case PackageState.INSTALLED:
                         self.package_remove(dnf_pkg)
-                        log(f" BACKEND: add {str(dnf_pkg)} to transaction for removal")
+                        log(f" DNF4: add {str(dnf_pkg)} to transaction for removal")
                     case PackageState.UPDATE:
                         self.package_upgrade(dnf_pkg)
-                        log(f" BACKEND: add {str(dnf_pkg)} to transaction for upgrade")
+                        log(f" DNF4: add {str(dnf_pkg)} to transaction for upgrade")
                     case PackageState.AVAILABLE:
                         self.package_install(dnf_pkg)
                         log(
-                            f" BACKEND: add {str(dnf_pkg)} to transaction for installation"
+                            f" DNF4: add {str(dnf_pkg)} to transaction for installation"
                         )
             else:
-                log(f" BACKEND: dnf package for {pkg} was not found")
+                log(f" DNF4: dnf package for {pkg} was not found")
         try:
             res = self.resolve(allow_erasing=True)
-            log(f" BACKEND: depsolve completted : {res}")
+            log(f" DNF4: depsolve completted : {res}")
             for pkg in self.get_transaction():
                 if pkg.nevra not in nevra_dict:
-                    log(f" BACKEND: adding as dep : {pkg} ")
+                    log(f" DNF4: adding as dep : {pkg} ")
                     pkg.is_dep = True
                     deps.append(pkg)
                 else:
-                    log(f" BACKEND: skipping already in transaction : {pkg} ")
+                    log(f" DNF4: skipping already in transaction : {pkg} ")
 
         except dnf.exceptions.DepsolveError as e:
-            log(f" BACKEND: depsolve failed : {str(e)}")
+            log(f" DNF4: depsolve failed : {str(e)}")
         return deps
