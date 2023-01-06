@@ -232,7 +232,10 @@ class Packages:
         # field like *txt* and arch != src
         match field:
             case SearchField.NAME:
-                fdict = {f"{field}__substr": txt, "arch__neq": "src"}
+                if "*" in txt:
+                    fdict = {f"{field}__glob": txt, "arch__neq": "src"}
+                else:
+                    fdict = {f"{field}__substr": txt, "arch__neq": "src"}
             case SearchField.SUMMARY:
                 fdict = {f"{field}__substr": txt, "arch__neq": "src"}
             case SearchField.REPO:
