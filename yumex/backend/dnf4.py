@@ -236,7 +236,7 @@ class Packages:
         try:
             q = q.filter(hawkey.ICASE, **fdict)
             qi = self.query.installed().filter(hawkey.ICASE, **fdict)
-            q = q.latest()
+            q = q.latest(limit)
             q = q.union(qi)
             return self.filter_installed(query=q)
         except AssertionError:
@@ -414,8 +414,10 @@ class Backend(DnfBase):
             case _:
                 return []
 
-    def search(self, txt: str, field: str = "name") -> list[YumexPackage]:
-        return self.packages.search(txt, field=field)
+    def search(
+        self, txt: str, field: str = "name", limit: int = 1
+    ) -> list[YumexPackage]:
+        return self.packages.search(txt, field=field, limit=limit)
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
         dnf_pkg = self.packages.find_package(pkg)
