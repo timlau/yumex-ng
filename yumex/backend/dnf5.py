@@ -86,6 +86,7 @@ class Backend(dnf.Base):
     def available(self) -> PackageQuery:
         query = PackageQuery(self)
         query.filter_available()
+        query.filter_arch(["src"], QueryCmp_NEQ)
         query.filter_latest_evr()
         return query
 
@@ -93,6 +94,7 @@ class Backend(dnf.Base):
     def updates(self) -> PackageQuery:
         query = PackageQuery(self)
         query.filter_upgrades()
+        query.filter_arch(["src"], QueryCmp_NEQ)
         query.filter_latest_evr()
         return query
 
