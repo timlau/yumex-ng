@@ -13,12 +13,17 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Generator, Iterable
+from typing import Iterable
 
 import libdnf5.base as dnf
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
-from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS
+from libdnf5.common import (
+    QueryCmp_NEQ,
+    QueryCmp_NOT_IGLOB,
+    QueryCmp_ICONTAINS,
+    QueryCmp_IGLOB,
+)
 
 from yumex.backend import SearchField, YumexPackage, PackageState
 from yumex.backend.interface import Presenter
@@ -93,51 +98,60 @@ class Backend(dnf.Base):
 
     def _get_yumex_packages(
         self, query: PackageQuery, state=PackageState.AVAILABLE
-    ) -> Generator[YumexPackage, None, None]:
+    ) -> list[YumexPackage]:
         updates = self.updates
+        nevra_dict = {}
         for pkg in query:
             ypkg: YumexPackage = YumexPackage.from_dnf5(pkg)
             if pkg.is_installed():
                 ypkg.set_installed()
             if state == PackageState.UPDATE or updates.contains(pkg):
                 ypkg.set_update(None)
-            yield ypkg
+            if ypkg.nevra not in nevra_dict:
+                nevra_dict[ypkg.nevra] = ypkg
+            else:
+                log(f"Skipping duplicate : {ypkg}")
+        return nevra_dict.values()
 
     def search(
         self, key: str, field: SearchField = SearchField.NAME, limit: int = 1
     ) -> list[YumexPackage]:
-        query = PackageQuery(self)
-        query.filter_available()
+        qa = PackageQuery(self)
+        qa.filter_available()
+        qa.filter_arch(["src"], QueryCmp_NEQ)
+        qa.filter_latest_evr(limit=limit)
+        qi = PackageQuery(self)
+        qi.filter_installed()
         match field:
             case SearchField.NAME:
-                qi = PackageQuery(self)
-                qi.filter_installed()
-                qi.filter_name([key], QueryCmp_ICONTAINS)
-                qi.filter_arch("src", QueryCmp_NEQ)
-                query.filter_name([key], QueryCmp_ICONTAINS)
-                query.filter_arch("src", QueryCmp_NEQ)
-                query.filter_latest_evr(limit=limit)
-                query.update(qi)
+                if "*" in key:
+                    qi.filter_name([key], QueryCmp_IGLOB)
+                    qa.filter_name([key], QueryCmp_IGLOB)
+                else:
+                    qi.filter_name([key], QueryCmp_ICONTAINS)
+                    qa.filter_name([key], QueryCmp_ICONTAINS)
             case SearchField.ARCH:
-                query.filter_arch([key])
+                qa.filter_arch([key])
+                qi.filter_arch([key])
             case SearchField.REPO:
-                query.filter_repo_id([key])
+                qa.filter_repo_id([key])
+                qi.filter_repo_id([key])
             case SearchField.SUMMARY:
-                query.filter_summary([key], QueryCmp_ICONTAINS)
+                qi.filter_summary([key], QueryCmp_ICONTAINS)
+                qa.filter_summary([key], QueryCmp_ICONTAINS)
             case _:
                 log(f"Search field : [{field}] not supported in dnf5 backend")
-        return self._get_yumex_packages(query)
+        qa.update(qi)
+        return self._get_yumex_packages(qa)
 
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         match pkg_filter:
             case PackageFilter.AVAILABLE:
-                return list(self._get_yumex_packages(self.available))
+                return self._get_yumex_packages(self.available)
             case PackageFilter.INSTALLED:
-                return list(self._get_yumex_packages(self.installed))
+                return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
-                return list(
-                    self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
-                )
+                return self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
             case _:
                 log(
                     f"DNF5: (get_packages) PackageFilter: {pkg_filter} is not supported"
