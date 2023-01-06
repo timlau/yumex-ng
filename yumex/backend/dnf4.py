@@ -139,7 +139,7 @@ class Packages:
         for pkg in self.query.installed().run():
             key = (pkg.name, pkg.arch)
             repo_pkg = avail_na.get(key, [None])[0]
-            if repo_pkg:
+            if repo_pkg and repo_pkg.evr == pkg.evr:
                 ypkg = YumexPackage.from_dnf4(repo_pkg)
                 ypkg.set_installed()
             else:
@@ -163,8 +163,12 @@ class Packages:
             ypkg = YumexPackage.from_dnf4(pkg)
             key = (pkg.name, pkg.arch)
             inst_pkg = self._inst_na.get(key, [None])[0]
-            if inst_pkg:
+            if inst_pkg and inst_pkg.evr == pkg.evr:
                 ypkg.set_installed()
+            upd_pkg = self._update_na.get(key, [None])[0]
+            if upd_pkg and upd_pkg.evr == pkg.evr:
+                inst_pkg = self._inst_na.get(key, [None])[0]
+                ypkg.set_update(inst_pkg)
             pkgs.append(ypkg)
         return pkgs
 
@@ -230,18 +234,25 @@ class Packages:
                 fdict = {f"{field}": txt}
 
         try:
-            q = q.filter(hawkey.ICASE, **fdict).latest()
+            q = q.filter(hawkey.ICASE, **fdict)
+            qi = self.query.installed().filter(hawkey.ICASE, **fdict)
+            q = q.latest()
+            q = q.union(qi)
             return self.filter_installed(query=q)
         except AssertionError:
             return []
 
     def find_package(self, pkg: YumexPackage) -> dnf.package.Package:
         """Get the package from given package id."""
-        q = self.query
+        q = self.sack.query()
         if pkg.state == PackageState.INSTALLED:  # installed package
             f = q.installed()
             f = f.filter(
-                name=pkg.name, version=pkg.version, release=pkg.release, arch=pkg.arch
+                name=pkg.name,
+                version=pkg.version,
+                release=pkg.release,
+                arch=pkg.arch,
+                epoch=pkg.epoch,
             ).run()
             if len(f) > 0:
                 return f[0]
@@ -250,7 +261,11 @@ class Packages:
         else:
             f = q.available()
             f = f.filter(
-                name=pkg.name, version=pkg.version, release=pkg.release, arch=pkg.arch
+                name=pkg.name,
+                version=pkg.version,
+                release=pkg.release,
+                arch=pkg.arch,
+                epoch=pkg.epoch,
             ).run()
             if len(f) > 0:
                 return f[0]
@@ -415,6 +430,8 @@ class Backend(DnfBase):
                     updinfo = UpdateInfo(dnf_pkg)
                     value = updinfo.advisories_list()
                     return value
+        else:
+            log(f" DNF4: {pkg} was not found")
         return None
 
     def get_repositories(self):

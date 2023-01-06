@@ -82,7 +82,7 @@ class YumexPackage(GObject.GObject):
 
     def set_update(self, inst_pkg):
         if inst_pkg:
-            self.ref_to = YumexPackage(inst_pkg)
+            self.ref_to = YumexPackage.from_dnf4(inst_pkg)
             self.ref_to.state = PackageState.INSTALLED
         self.state = PackageState.UPDATE
 
