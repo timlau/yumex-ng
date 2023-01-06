@@ -138,7 +138,6 @@ class YumexRootBackend(Client):
                     if not result.completed:
                         log(f" --> RootBackendError : {result.data[0]}")
                 result = Result(*self.BuildTransaction())
-                print(result)
                 if result.completed:
                     return TransactionResult(True, data=self.build_result(result.data))
                 else:
