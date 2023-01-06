@@ -158,19 +158,26 @@ class Packages:
         ]
 
     def filter_installed(self, query: dnf.query.Query):
-        pkgs = []
+        nevra_dict = {}
         for pkg in query.run():
             ypkg = YumexPackage.from_dnf4(pkg)
             key = (pkg.name, pkg.arch)
-            inst_pkg = self._inst_na.get(key, [None])[0]
-            if inst_pkg and inst_pkg.evr == pkg.evr:
-                ypkg.set_installed()
             upd_pkg = self._update_na.get(key, [None])[0]
             if upd_pkg and upd_pkg.evr == pkg.evr:
                 inst_pkg = self._inst_na.get(key, [None])[0]
                 ypkg.set_update(inst_pkg)
-            pkgs.append(ypkg)
-        return pkgs
+            inst_pkg = self._inst_na.get(key, [None])[0]
+            if inst_pkg:
+                if inst_pkg.evr == pkg.evr:
+                    ypkg.set_installed()
+                # TODO: remove, when support for downgrades is implemented
+                elif pkg.evr < inst_pkg.evr:  # skip downgrades
+                    continue
+            if ypkg.nevra not in nevra_dict:
+                nevra_dict[ypkg.nevra] = ypkg
+            else:
+                log(f"Skipping duplicate : {ypkg}")
+        return nevra_dict.values()
 
     @property
     def available(self) -> list[YumexPackage]:
