@@ -26,7 +26,7 @@ else:
 
 from yumex.ui.progress import YumexProgress
 
-from yumex.utils.enums import PackageState
+from yumex.utils.enums import PackageFilter, PackageState
 
 
 class YumexPackageCache:
@@ -41,7 +41,9 @@ class YumexPackageCache:
         self.backend: PackageBackend = backend
         self.nerva_dict = {}
 
-    def get_packages_by_filter(self, pkgfilter, reset=False) -> list[YumexPackage]:
+    def get_packages_by_filter(
+        self, pkgfilter: PackageFilter, reset=False
+    ) -> list[YumexPackage]:
         if pkgfilter not in self._packages or reset:
             pkgs = self.get_packages(self.backend.get_packages(pkgfilter))
             if pkgs is not None:
