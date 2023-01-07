@@ -37,26 +37,25 @@ class YumexPackage(GObject.GObject):
         self.queue_action: bool = False
 
     @property
-    def installed(self) -> bool:
+    def is_installed(self) -> bool:
         return self.state == PackageState.INSTALLED
 
     def set_state(self, state: PackageState) -> None:
         self.state = state
 
-    def set_installed(self) -> None:
-        self.repo = f"@{self.repo}"
-        self.state = PackageState.INSTALLED
-
     def set_ref_to(self, pkg, state: PackageState) -> None:
+        """set ref. package and state"""
         self.ref_to = pkg
-        self.ref_to.state = PackageState.INSTALLED
+        self.ref_to.state = state
 
     @property
     def size_with_unit(self) -> str:
+        """size with SI units (kB, Mb, GB)"""
         return format_number(self.size)
 
     @property
     def evr(self) -> str:
+        """epoch:version-release"""
         if self.epoch:
             return f"{self.epoch}:{self.version}-{self.release}"
         else:
@@ -64,6 +63,7 @@ class YumexPackage(GObject.GObject):
 
     @property
     def nevra(self) -> str:
+        """name-(epoch:)version-release.arch"""
         return f"{self.name}-{self.evr}.{self.arch}"
 
     def __repr__(self) -> str:
@@ -73,13 +73,16 @@ class YumexPackage(GObject.GObject):
         return self.nevra
 
     def __eq__(self, other) -> bool:
+        """packages is mached by nevra"""
         return self.nevra == other.nevra
 
     def __hash__(self) -> int:
+        """hash by nevra"""
         return hash(self.nevra)
 
     @property
     def id(self) -> str:
+        """get pkg_id as used by dnfdaemon"""
         if self.repo[0] == "@":
             repo = self.repo[1:]
         else:

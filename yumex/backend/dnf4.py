@@ -142,7 +142,7 @@ class Packages:
             key = (pkg.name, pkg.arch)
             inst_pkg = self._inst_na.get(key, [None])[0]
             if inst_pkg:
-                ypkg.set_installed()
+                ypkg.set_state(PackageState.INSTALLED)
             pkgs.append(ypkg)
         return pkgs
 
@@ -158,7 +158,7 @@ class Packages:
             repo_pkg = avail_na.get(key, [None])[0]
             if repo_pkg and repo_pkg.evr == pkg.evr:
                 ypkg = create_package(repo_pkg)
-                ypkg.set_installed()
+                ypkg.set_state(PackageState.INSTALLED)
             else:
                 ypkg = create_package(pkg, state=PackageState.INSTALLED)
             pkgs.append(ypkg)
@@ -186,7 +186,7 @@ class Packages:
             inst_pkg = self._inst_na.get(key, [None])[0]
             if inst_pkg:
                 if inst_pkg.evr == pkg.evr:
-                    ypkg.set_installed()
+                    ypkg.set_state(PackageState.INSTALLED)
                 # TODO: remove, when support for downgrades is implemented
                 elif pkg.evr < inst_pkg.evr:  # skip downgrades
                     continue

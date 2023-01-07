@@ -127,7 +127,7 @@ class Backend(dnf.Base):
         for pkg in query:
             ypkg: YumexPackage = create_package(pkg)
             if pkg.is_installed():
-                ypkg.set_installed()
+                ypkg.set_state(PackageState.INSTALLED)
             if state == PackageState.UPDATE or updates.contains(pkg):
                 ypkg.set_state(PackageState.UPDATE)
             if ypkg.nevra not in nevra_dict:
