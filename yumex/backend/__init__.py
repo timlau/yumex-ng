@@ -28,7 +28,7 @@ class YumexPackage(GObject.GObject):
         self.version: str = kwargs.pop("version")
         self.repo: str = kwargs.pop("repo")
         self.description: str = kwargs.pop("description")
-        self.sizeB: int = kwargs.pop("size")
+        self.size: int = kwargs.pop("size")
         self.state: PackageState = kwargs.pop("state", PackageState.AVAILABLE)
         self.action: PackageAction = kwargs.pop("state", PackageAction.NONE)
         self.is_dep: bool = False
@@ -52,8 +52,8 @@ class YumexPackage(GObject.GObject):
         self.ref_to.state = PackageState.INSTALLED
 
     @property
-    def size(self) -> str:
-        return format_number(self.sizeB)
+    def size_with_unit(self) -> str:
+        return format_number(self.size)
 
     @property
     def evr(self) -> str:
@@ -67,7 +67,10 @@ class YumexPackage(GObject.GObject):
         return f"{self.name}-{self.evr}.{self.arch}"
 
     def __repr__(self) -> str:
-        return f"YumexPackage({self.nevra} : {self.repo})"
+        return f"YumexPackage({self.nevra}) from {self.repo}"
+
+    def __str__(self) -> str:
+        return self.nevra
 
     def __eq__(self, other) -> bool:
         return self.nevra == other.nevra
@@ -77,12 +80,17 @@ class YumexPackage(GObject.GObject):
 
     @property
     def id(self) -> str:
+        if self.repo[0] == "@":
+            repo = self.repo[1:]
+        else:
+            repo = self.repo
+
         nevra_r = (
             self.name,
             self.epoch,
             self.version,
             self.release,
             self.arch,
-            self.repo[1:],
+            repo,
         )
         return ",".join([str(elem) for elem in nevra_r])

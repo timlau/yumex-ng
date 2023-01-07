@@ -237,7 +237,7 @@ class YumexPackageView(Gtk.ColumnView):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
         pkg = item.get_item()  # get the model item, connected to current ListItem
         self.set_styles(label, pkg)
-        label.set_text(pkg.size)  # Update Gtk.Label with data from model item
+        label.set_text(pkg.size_with_unit)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_description_bind(self, widget, item):
