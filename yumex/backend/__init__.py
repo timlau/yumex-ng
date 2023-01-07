@@ -56,15 +56,6 @@ class YumexPackage(GObject.GObject):
         return format_number(self.sizeB)
 
     @property
-    def styles(self) -> list[str]:
-        match self.state:
-            case PackageState.INSTALLED:
-                return ["success"]
-            case PackageState.UPDATE:
-                return ["error"]
-        return []
-
-    @property
     def evr(self) -> str:
         if self.epoch:
             return f"{self.epoch}:{self.version}-{self.release}"

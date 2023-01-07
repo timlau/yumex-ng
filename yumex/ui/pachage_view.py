@@ -21,7 +21,13 @@ from yumex.backend import YumexPackage
 
 # from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip
-from yumex.utils.enums import InfoType, PackageFilter, SearchField, SortType
+from yumex.utils.enums import (
+    InfoType,
+    PackageFilter,
+    PackageState,
+    SearchField,
+    SortType,
+)
 from yumex.utils import log, RunAsync, timed
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
@@ -142,13 +148,17 @@ class YumexPackageView(Gtk.ColumnView):
                 store.sort(lambda a, b: a.repo > b.repo)
         return store
 
-    def set_styles(self, item, data):
-        current_styles = item.get_css_classes()
+    def set_styles(self, widget, pkg) -> None:
+        current_styles = widget.get_css_classes()
         current_styles = [
             style for style in current_styles if style not in CLEAN_STYLES
         ]
-        current_styles += data.styles
-        item.set_css_classes(current_styles)
+        match pkg.state:
+            case PackageState.INSTALLED:
+                current_styles.append("success")
+            case PackageState.UPDATE:
+                current_styles.append("error")
+        widget.set_css_classes(current_styles)
 
     def select_all(self, state: bool):
         to_add = []
@@ -197,50 +207,50 @@ class YumexPackageView(Gtk.ColumnView):
     @Gtk.Template.Callback()
     def on_name_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        self.set_styles(label, data)
-        label.set_text(data.name)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        self.set_styles(label, pkg)
+        label.set_text(pkg.name)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_version_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        self.set_styles(label, data)
-        label.set_text(data.evr)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        self.set_styles(label, pkg)
+        label.set_text(pkg.evr)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_repo_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        self.set_styles(label, data)
-        label.set_text(data.repo)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        self.set_styles(label, pkg)
+        label.set_text(pkg.repo)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_arch_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        self.set_styles(label, data)
-        label.set_text(data.arch)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        self.set_styles(label, pkg)
+        label.set_text(pkg.arch)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_size_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        self.set_styles(label, data)
-        label.set_text(data.size)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        self.set_styles(label, pkg)
+        label.set_text(pkg.size)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_description_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        self.set_styles(label, data)
-        label.set_text(data.description)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        self.set_styles(label, pkg)
+        label.set_text(pkg.description)  # Update Gtk.Label with data from model item
 
     @Gtk.Template.Callback()
     def on_queued_bind(self, widget, item):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
-        data = item.get_item()  # get the model item, connected to current ListItem
-        label.set_active(data.queued)  # Update Gtk.Label with data from model item
+        pkg = item.get_item()  # get the model item, connected to current ListItem
+        label.set_active(pkg.queued)  # Update Gtk.Label with data from model item
 
     def set_pkg_info(self, pkg):
         def completed(pkg_info, error=False):
