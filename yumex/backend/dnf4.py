@@ -30,6 +30,23 @@ from yumex.utils import log
 from yumex.utils.enums import PackageAction, PackageState, SearchField
 
 
+def create_package(
+    pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE
+) -> YumexPackage:
+    return YumexPackage(
+        name=pkg.name,
+        arch=pkg.arch,
+        epoch=pkg.epoch,
+        release=pkg.release,
+        version=pkg.version,
+        repo=pkg.reponame,
+        description=pkg.summary,
+        size=int(pkg.size),
+        state=state,
+        action=action,
+    )
+
+
 class DnfCallback:
     def __init__(self, win):
         self.win = win
@@ -121,7 +138,7 @@ class Packages:
         """
         pkgs = []
         for pkg in pkg_list:
-            ypkg = YumexPackage.from_dnf4(pkg)
+            ypkg = create_package(pkg)
             key = (pkg.name, pkg.arch)
             inst_pkg = self._inst_na.get(key, [None])[0]
             if inst_pkg:
@@ -140,10 +157,10 @@ class Packages:
             key = (pkg.name, pkg.arch)
             repo_pkg = avail_na.get(key, [None])[0]
             if repo_pkg and repo_pkg.evr == pkg.evr:
-                ypkg = YumexPackage.from_dnf4(repo_pkg)
+                ypkg = create_package(repo_pkg)
                 ypkg.set_installed()
             else:
-                ypkg = YumexPackage.from_dnf4(pkg, state=PackageState.INSTALLED)
+                ypkg = create_package(pkg, state=PackageState.INSTALLED)
             pkgs.append(ypkg)
         return pkgs
 
@@ -153,19 +170,19 @@ class Packages:
         get available updates
         """
         return [
-            YumexPackage.from_dnf4(pkg, state=PackageState.UPDATE)
+            create_package(pkg, state=PackageState.UPDATE)
             for pkg in self.query.upgrades().latest().run()
         ]
 
     def filter_installed(self, query: dnf.query.Query):
         nevra_dict = {}
         for pkg in query.run():
-            ypkg = YumexPackage.from_dnf4(pkg)
+            ypkg = create_package(pkg)
             key = (pkg.name, pkg.arch)
             upd_pkg = self._update_na.get(key, [None])[0]
             if upd_pkg and upd_pkg.evr == pkg.evr:
                 inst_pkg = self._inst_na.get(key, [None])[0]
-                ypkg.set_update(inst_pkg)
+                ypkg.set_ref_to(create_package(inst_pkg), PackageState.INSTALLED)
             inst_pkg = self._inst_na.get(key, [None])[0]
             if inst_pkg:
                 if inst_pkg.evr == pkg.evr:
@@ -356,7 +373,7 @@ class DnfBase(dnf.Base):
                 match tsi.action:
                     case dnf.transaction.PKG_DOWNGRADE:
                         tx_list.append(
-                            YumexPackage.from_dnf4(
+                            create_package(
                                 tsi.pkg,
                                 state=PackageState.INSTALLED,
                                 action=PackageAction.DOWNGRADE,
@@ -364,7 +381,7 @@ class DnfBase(dnf.Base):
                         )
                     case dnf.transaction.PKG_ERASE:
                         tx_list.append(
-                            YumexPackage.from_dnf4(
+                            create_package(
                                 tsi.pkg,
                                 state=PackageState.INSTALLED,
                                 action=PackageAction.ERASE,
@@ -372,7 +389,7 @@ class DnfBase(dnf.Base):
                         )
                     case dnf.transaction.PKG_INSTALL:
                         tx_list.append(
-                            YumexPackage.from_dnf4(
+                            create_package(
                                 tsi.pkg,
                                 state=PackageState.AVAILABLE,
                                 action=PackageAction.INSTALL,
@@ -380,7 +397,7 @@ class DnfBase(dnf.Base):
                         )
                     case dnf.transaction.PKG_REINSTALL:
                         tx_list.append(
-                            YumexPackage.from_dnf4(
+                            create_package(
                                 tsi.pkg,
                                 state=PackageState.INSTALLED,
                                 action=PackageAction.REINSTALL,
@@ -388,7 +405,7 @@ class DnfBase(dnf.Base):
                         )
                     case dnf.transaction.PKG_UPGRADE:
                         tx_list.append(
-                            YumexPackage.from_dnf4(
+                            create_package(
                                 tsi.pkg,
                                 state=PackageState.UPDATE,
                                 action=PackageAction.UPGRADE,

@@ -19,7 +19,7 @@ from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: 
 
 
 class YumexPackage(GObject.GObject):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__()
         self.name: str = kwargs.pop("name")
         self.arch: str = kwargs.pop("arch")
@@ -36,62 +36,27 @@ class YumexPackage(GObject.GObject):
         self.queued: bool = False
         self.queue_action: bool = False
 
-    @classmethod
-    def from_dnf4(cls, pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE):
-        return cls(
-            name=pkg.name,
-            arch=pkg.arch,
-            epoch=pkg.epoch,
-            release=pkg.release,
-            version=pkg.version,
-            repo=pkg.reponame,
-            description=pkg.summary,
-            size=int(pkg.size),
-            state=state,
-            action=action,
-        )
-
-    @classmethod
-    def from_dnf5(cls, pkg):
-        if pkg.is_installed():
-            state = PackageState.INSTALLED
-            repo = pkg.get_from_repo_id()
-        else:
-            state = PackageState.AVAILABLE
-            repo = pkg.get_repo_id()
-
-        return cls(
-            name=pkg.get_name(),
-            arch=pkg.get_arch(),
-            epoch=pkg.get_epoch(),
-            release=pkg.get_release(),
-            version=pkg.get_version(),
-            repo=repo,
-            description=pkg.get_summary(),
-            size=pkg.get_install_size(),
-            state=state,
-        )
-
     @property
-    def installed(self):
+    def installed(self) -> bool:
         return self.state == PackageState.INSTALLED
 
-    def set_installed(self):
+    def set_state(self, state: PackageState) -> None:
+        self.state = state
+
+    def set_installed(self) -> None:
         self.repo = f"@{self.repo}"
         self.state = PackageState.INSTALLED
 
-    def set_update(self, inst_pkg):
-        if inst_pkg:
-            self.ref_to = YumexPackage.from_dnf4(inst_pkg)
-            self.ref_to.state = PackageState.INSTALLED
-        self.state = PackageState.UPDATE
+    def set_ref_to(self, pkg, state: PackageState) -> None:
+        self.ref_to = pkg
+        self.ref_to.state = PackageState.INSTALLED
 
     @property
-    def size(self):
+    def size(self) -> str:
         return format_number(self.sizeB)
 
     @property
-    def styles(self):
+    def styles(self) -> list[str]:
         match self.state:
             case PackageState.INSTALLED:
                 return ["success"]
@@ -100,14 +65,14 @@ class YumexPackage(GObject.GObject):
         return []
 
     @property
-    def evr(self):
+    def evr(self) -> str:
         if self.epoch:
             return f"{self.epoch}:{self.version}-{self.release}"
         else:
             return f"{self.version}-{self.release}"
 
     @property
-    def nevra(self):
+    def nevra(self) -> str:
         return f"{self.name}-{self.evr}.{self.arch}"
 
     def __repr__(self) -> str:
@@ -116,8 +81,11 @@ class YumexPackage(GObject.GObject):
     def __eq__(self, other) -> bool:
         return self.nevra == other.nevra
 
+    def __hash__(self) -> int:
+        return hash(self.nevra)
+
     @property
-    def id(self):
+    def id(self) -> str:
         nevra_r = (
             self.name,
             self.epoch,

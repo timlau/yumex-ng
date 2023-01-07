@@ -31,6 +31,27 @@ from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
 from yumex.utils import log
 
 
+def create_package(pkg: Package) -> YumexPackage:
+    if pkg.is_installed():
+        state = PackageState.INSTALLED
+        repo = pkg.get_from_repo_id()
+    else:
+        state = PackageState.AVAILABLE
+        repo = pkg.get_repo_id()
+
+    return YumexPackage(
+        name=pkg.get_name(),
+        arch=pkg.get_arch(),
+        epoch=pkg.get_epoch(),
+        release=pkg.get_release(),
+        version=pkg.get_version(),
+        repo=repo,
+        description=pkg.get_summary(),
+        size=pkg.get_install_size(),
+        state=state,
+    )
+
+
 class UpdateInfo:
     """Wrapper class for dnf update advisories on a given po."""
 
@@ -104,11 +125,11 @@ class Backend(dnf.Base):
         updates = self.updates
         nevra_dict = {}
         for pkg in query:
-            ypkg: YumexPackage = YumexPackage.from_dnf5(pkg)
+            ypkg: YumexPackage = create_package(pkg)
             if pkg.is_installed():
                 ypkg.set_installed()
             if state == PackageState.UPDATE or updates.contains(pkg):
-                ypkg.set_update(None)
+                ypkg.set_state(PackageState.UPDATE)
             if ypkg.nevra not in nevra_dict:
                 nevra_dict[ypkg.nevra] = ypkg
             else:
@@ -213,7 +234,7 @@ class Backend(dnf.Base):
         log(f" DNF5: depsolve completted : {problems}")
         if problems == dnf.GoalProblem_NO_PROBLEM:
             for tspkg in transaction.get_transaction_packages():
-                pkg = YumexPackage.from_dnf5(tspkg.get_package())
+                pkg = create_package(tspkg.get_package())
                 if pkg.nevra not in nevra_dict:
                     log(f" DNF5: adding as dep : {pkg.nevra} ")
                     pkg.is_dep = True
