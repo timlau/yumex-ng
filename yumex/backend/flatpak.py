@@ -45,7 +45,7 @@ class FlatpakPackage(GObject.GObject):
     """wrapper for a installed flatpak"""
 
     def __init__(self, ref: FlatpakRef, location: FlatpakLocation, is_update=False):
-        super(FlatpakPackage, self).__init__()
+        super().__init__()
         self.ref: FlatpakRef = ref
         self.is_update = is_update
         self.location = location

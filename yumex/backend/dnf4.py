@@ -81,7 +81,7 @@ class MDProgress(dnf.callback.DownloadProgress):
     """Metadata Download callback handler."""
 
     def __init__(self, main):
-        super(MDProgress, self).__init__()
+        super().__init__()
         self.main: DnfCallback = main
         self._last_name = None
 

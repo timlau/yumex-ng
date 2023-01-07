@@ -89,7 +89,7 @@ class YumexTransactionResult(Adw.Window):
 
 class ResultElem(GObject.GObject):
     def __init__(self, title=None, result_elem=None, children=None):
-        super(ResultElem, self).__init__()
+        super().__init__()
         self.title = title
         if result_elem:
             (pkg, repo, size) = result_elem

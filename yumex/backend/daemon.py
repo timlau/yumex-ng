@@ -45,7 +45,7 @@ class TransactionResult:
 
 class YumexRootBackend(Client):
     def __init__(self, progress) -> None:
-        super(YumexRootBackend, self).__init__()
+        super().__init__()
         self.progress: YumexProgress = progress
         self.dnl_frac = 0.0
 

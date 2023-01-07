@@ -20,7 +20,7 @@ from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: 
 
 class YumexPackage(GObject.GObject):
     def __init__(self, *args, **kwargs):
-        super(YumexPackage, self).__init__()
+        super().__init__()
         self.name: str = kwargs.pop("name")
         self.arch: str = kwargs.pop("arch")
         self.epoch: str = kwargs.pop("epoch")
