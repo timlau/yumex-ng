@@ -85,7 +85,7 @@ class YumexApplication(Adw.Application):
         self.create_action("page_three", self.win.on_actions, ["<Alt>3"])
 
         # call a test function to test gui code, should not be enabled, if not testing
-        # self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])
+        self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])
 
         self.win.present()
         # click the Availble package filter, without looking the UI

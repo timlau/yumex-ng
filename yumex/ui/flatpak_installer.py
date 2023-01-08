@@ -15,7 +15,7 @@
 
 from pathlib import Path
 from gi.repository import Gtk, Adw
-from yumex.backend.flatpak import FlatpakBackend
+from yumex.backend.flatpak.backend import FlatpakBackend
 
 from yumex.constants import rootdir
 from yumex.utils import log

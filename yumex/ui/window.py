@@ -14,13 +14,13 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 import re
-from time import sleep
 
 from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
 from yumex.backend.presenter import YumexPresenter
 
 from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
+from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
@@ -181,6 +181,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.progress.hide()
         return False
 
+    def confirm_flatpak_transaction(self, refs: list) -> bool:
+        log("Window: confirm flatpak transaction")
+        dialog = YumexFlatpakResult(self)
+        dialog.populate(refs)
+        dialog.show()
+        confirm = dialog.confirm
+        del dialog
+        if confirm:
+            self.progress.show()
+            self.progress.set_title(_("Running Flatpak Transaction"))
+        return confirm
+
     def on_clear_queue(self, *args):
         """app.clear_queue action handler"""
         self.queue_view.clear_all()
@@ -208,29 +220,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-
-        def completed(result, error=None):
-            self.progress.hide()
-
-        # RunAsync(self._testing, completed)
-
-    def _testing(self):
-        self.progress.show()
-        self.progress.set_title("Testing the progress dialog")
-        self.progress.set_subtitle(
-            "this is a long text, there should split into two lines"
-            "this is a long text, there should split into two lines"
-        )
-        frac = 0.0
-        for x in range(10):
-            self.progress.set_progress(frac)
-            frac += 0.1
-            sleep(0.5)
-        self.progress.set_subtitle("this is a sort text")
-        for x in range(10):
-            self.progress.set_progress(frac)
-            frac -= 0.1
-            sleep(0.5)
+        dialog = YumexFlatpakResult(self)
+        dialog.show()
+        print(dialog.confirm)
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""

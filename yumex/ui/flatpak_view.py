@@ -17,19 +17,15 @@ import os
 
 from pathlib import Path
 from gi.repository import Gtk, Gio, Adw
+from yumex.backend.flatpak import FlatpakPackage
+from yumex.backend.flatpak.backend import FlatpakBackend
 
 from yumex.constants import rootdir
 
-from yumex.backend.flatpak import (
-    FlatpakBackend,
-    FlatpakLocation,
-    FlatpakPackage,
-    FlatpakType,
-)
-from yumex.utils import log, RunAsync  # noqa: F401
 
+from yumex.utils import log, RunAsync  # noqa: F401
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
-from yumex.utils.enums import Page
+from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_view.ui")
@@ -69,39 +65,71 @@ class YumexFlatpakView(Gtk.ListView):
         return None
 
     def update_all(self):
-        # self.backend.do_update(self.store)
-        def completed(deps, error=None):
+        def build(refs, error=None):
+            if refs:
+                confirm = self.win.confirm_flatpak_transaction(refs)
+                if confirm:
+                    RunAsync(self.backend.do_update, execute, self.store, execute=True)
+                    return
+            execute(False)
+
+        def execute(state, error=None):
             self.win.progress.hide()
             self.reset()
 
-        RunAsync(self.backend.do_update_all, completed, self.store)
+        RunAsync(self.backend.do_update_all, build, self.store, execute=False)
 
     def update(self, pkg):
         # self.backend.do_update(self.store)
-        def completed(deps, error=None):
+        def build(refs, error=None):
+            if refs:
+                confirm = self.win.confirm_flatpak_transaction(refs)
+                if confirm:
+                    RunAsync(self.backend.do_update, execute, pkg, execute=True)
+                    return
+            execute(False)
+
+        def execute(state, error=None):
             self.win.progress.hide()
             self.reset()
 
-        RunAsync(self.backend.do_update, completed, pkg)
+        RunAsync(self.backend.do_update, build, pkg, execute=False)
 
     def install(self, *args):
         """install a new flatpak"""
 
-        def completed(rc, *args):
+        def build(refs, error=None):
+            global id, source, ref, location
+            if refs:
+                confirm = self.win.confirm_flatpak_transaction(refs)
+                if confirm:
+                    RunAsync(
+                        self.backend.do_install,
+                        execute,
+                        ref,
+                        source,
+                        location,
+                        execute=True,
+                    )
+                    return
+            execute(False)
+
+        def execute(state, error=None):
             self.win.progress.hide()
-            # Translator: {id} is variable and should not be changed
-            if rc:
+            if state:
                 self.win.show_message(_(f"{id} is now installed"), timeout=5)
             self.reset()
 
         def on_close(*args):
-            global id
+            global id, source, ref, location
             id = flatpak_installer.id.get_text()
             source = flatpak_installer.source.get_selected_item().get_string()
             ref = self.backend.find_ref(source, id)
             location = flatpak_installer.location.get_selected_item().get_string()
             if flatpak_installer.confirm:
-                RunAsync(self.backend.do_install, completed, ref, source, location)
+                RunAsync(
+                    self.backend.do_install, build, ref, source, location, execute=False
+                )
 
         self.win.stack.set_visible_child_name("flatpaks")
         flatpak_installer = YumexFlatpakInstaller(self.win)
@@ -115,34 +143,25 @@ class YumexFlatpakView(Gtk.ListView):
         flatpak_installer.present()
 
     def remove(self, pkg=None):
-        # self.backend.do_update(self.store)
-        def completed(rc, error=None):
+        def build(refs, error=None):
+            if refs:
+                confirm = self.win.confirm_flatpak_transaction(refs)
+                if confirm:
+                    RunAsync(self.backend.do_remove, execute, selected, execute=True)
+                    return
+            execute(False)
+
+        def execute(state, error=None):
             self.win.progress.hide()
-            # Translator: {selected.id} is variable and should not be changed
-            if rc:
+            if state:
                 self.win.show_message(_(f"{selected.id} is now removed"), timeout=5)
             self.reset()
-
-        def response(dialog, result, *args):
-            if result == "uninstall":
-                RunAsync(self.backend.do_remove, completed, selected)
 
         if pkg:
             selected = pkg
         else:
             selected = self.selection.get_selected_item()
-        dialog = Adw.MessageDialog.new(
-            self.win,
-            _("Uninstall Flatpak"),
-            _(f"Do you want to uninstall\n\n{selected.id}"),
-        )
-        dialog.add_response("cancel", _("Cancel"))
-        dialog.add_response("uninstall", _("Uninstall"))
-        dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
-        dialog.set_default_response("cancel")
-        dialog.set_close_response("cancel")
-        dialog.connect("response", response)
-        dialog.present()
+        RunAsync(self.backend.do_remove, build, selected, execute=False)
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item):

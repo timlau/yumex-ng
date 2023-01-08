@@ -16,6 +16,12 @@
 from enum import IntEnum, StrEnum, auto
 
 
+class FlatpakAction(IntEnum):
+    UPDATE = auto()
+    INSTALL = auto()
+    UNINSTALL = auto()
+
+
 class FlatpakType(IntEnum):
     """flatpak type"""
 

@@ -45,6 +45,7 @@ yumex_ui_modules = [
 'ui/__init__.py',
 'ui/dialogs.py',
 'ui/flatpak_installer.py',
+'ui/flatpak_result.py',
 'ui/flatpak_view.py',
 'ui/pachage_view.py',
 'ui/package_info.py',
@@ -62,7 +63,9 @@ yumex_backend_modules = [
 'backend/daemon.py',
 'backend/dnf4.py',
 'backend/dnf5.py',
-'backend/flatpak.py',
+'backend/flatpak/__init__.py',
+'backend/flatpak/backend.py',
+'backend/flatpak/transaction.py',
 'backend/interface.py',
 'backend/presenter.py'
 ]
