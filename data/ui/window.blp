@@ -88,7 +88,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
             vexpand: true;
             hexpand: true;
 
-            Adw.ViewStackPage package_page {
+            Adw.ViewStackPage packages_page {
               name: "packages";
               title: _("Packages");
               icon-name: "flatpak-symbolic";
@@ -135,7 +135,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
                 };
             }
 
-            Adw.ViewStackPage {
+            Adw.ViewStackPage flatpaks_page {
               name: "flatpaks";
               title: _("Flatpaks");
               icon-name: "insert-object-symbolic";
@@ -175,7 +175,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
               };
             }
 
-            Adw.ViewStackPage {
+            Adw.ViewStackPage groups_page{
               name: "groups";
               title: _("Groups");
               visible: false;
@@ -185,7 +185,7 @@ template YumexMainWindow : Adw.ApplicationWindow {
               };
             }
 
-            Adw.ViewStackPage {
+            Adw.ViewStackPage queue_page{
               name: "queue";
               title: _("Queue");
               icon-name: "test-pass-symbolic";

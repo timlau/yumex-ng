@@ -29,6 +29,7 @@ from yumex.backend.flatpak import (
 from yumex.utils import log, RunAsync  # noqa: F401
 
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
+from yumex.utils.enums import Page
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_view.ui")
@@ -46,12 +47,16 @@ class YumexFlatpakView(Gtk.ListView):
     def reset(self):
         self.store = Gio.ListStore.new(FlatpakPackage)
         self.backend = FlatpakBackend(self.win)
+        num_updates = 0
         for elem in self.backend.get_installed(location=FlatpakLocation.BOTH):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
+                if elem.is_update:
+                    num_updates += 1
         self.store.sort(lambda a, b: a.name > b.name)
         self.selection.set_model(self.store)
         self.selection.set_selected(0)
+        self.win.set_needs_attention(Page.FLATPAKS, num_updates)
 
     def get_icon_paths(self):
         return [f"{path}/icons/" for path in os.environ["XDG_DATA_DIRS"].split(":")]

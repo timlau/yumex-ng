@@ -22,7 +22,7 @@ from yumex.backend import YumexPackage
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import RunAsync, timed
-from yumex.utils.enums import PackageState
+from yumex.utils.enums import PackageState, Page
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/queue_view.ui")
@@ -40,6 +40,7 @@ class YumexQueueView(Gtk.ListView):
     def reset(self):
         self.store = Gio.ListStore.new(YumexPackage)
         self.selection.set_model(self.store)
+        self.win.set_needs_attention(Page.QUEUE, 0)
 
     @property
     def cache(self) -> PackageCache:
@@ -69,6 +70,7 @@ class YumexQueueView(Gtk.ListView):
                 self.store.insert_sorted(dep, self.sort_by_state)
             self.package_view.refresh()
             self.win.set_sensitive(True)
+            self.win.set_needs_attention(Page.QUEUE, len(self.store))
 
         for pkg in pkgs:
             if pkg not in self.store:
@@ -94,6 +96,7 @@ class YumexQueueView(Gtk.ListView):
             self.selection.set_model(self.store)
             self.package_view.refresh()
             self.win.set_sensitive(True)
+            self.win.set_needs_attention(Page.QUEUE, len(self.store))
 
         store = Gio.ListStore.new(YumexPackage)
         for store_pkg in self.store:

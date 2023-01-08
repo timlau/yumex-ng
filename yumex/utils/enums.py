@@ -16,6 +16,13 @@
 from enum import IntEnum, StrEnum, auto
 
 
+class Page(StrEnum):
+    PACKAGES = auto()
+    FLATPAKS = auto()
+    QUEUE = auto()
+    GROUPS = auto()
+
+
 class PackageState(IntEnum):
     UPDATE = 1
     AVAILABLE = 2

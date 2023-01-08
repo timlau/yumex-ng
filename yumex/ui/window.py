@@ -13,7 +13,6 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from enum import StrEnum, auto
 import re
 from time import sleep
 
@@ -30,14 +29,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
-from yumex.utils.enums import PackageFilter, SearchField
-
-
-class Page(StrEnum):
-    PACKAGES = auto()
-    FLATPAKS = auto()
-    QUEUE = auto()
-    GROUPS = auto()
+from yumex.utils.enums import PackageFilter, SearchField, Page
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
@@ -61,6 +53,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
     package_paned = Gtk.Template.Child()
     update_info_box = Gtk.Template.Child()
     apply_button = Gtk.Template.Child()
+    packages_page = Gtk.Template.Child()
+    queue_page = Gtk.Template.Child()
+    flatpaks_page = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -390,3 +385,16 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case Page.QUEUE:
                 self.show_on_packages_page(show=False)
                 self.apply_button.set_visible(True)
+
+    def set_needs_attention(self, page: Page, num: int):
+        """set the page batch num"""
+        state = num > 0
+        match page:
+            case Page.PACKAGES:
+                self.packages_page.set_needs_attention(state)
+            case Page.FLATPAKS:
+                self.flatpaks_page.set_needs_attention(state)
+            case Page.GROUPS:
+                pass
+            case Page.QUEUE:
+                self.queue_page.set_needs_attention(state)
