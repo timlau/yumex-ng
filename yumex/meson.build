@@ -61,17 +61,24 @@ PY_INSTALLDIR.install_sources(yumex_ui_modules, subdir: 'yumex/ui')
 yumex_backend_modules = [
 'backend/__init__.py',
 'backend/daemon.py',
-'backend/dnf/__init__.py',
-'backend/dnf/dnf4.py',
-'backend/dnf/dnf5.py',
-'backend/flatpak/__init__.py',
-'backend/flatpak/backend.py',
-'backend/flatpak/transaction.py',
 'backend/interface.py',
 'backend/presenter.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
 
+yumex_backend_flatpak_modules = [
+'backend/flatpak/__init__.py',
+'backend/flatpak/backend.py',
+'backend/flatpak/transaction.py',
+]
+PY_INSTALLDIR.install_sources(yumex_backend_flatpak_modules, subdir: 'yumex/backend/flatpak')
+
+yumex_backend_dnf_modules = [
+'backend/dnf/__init__.py',
+'backend/dnf/dnf4.py',
+'backend/dnf/dnf5.py',
+]
+PY_INSTALLDIR.install_sources(yumex_backend_dnf_modules, subdir: 'yumex/backend/dnf')
 
 yumex_utils_modules = [
 'utils/__init__.py',
