@@ -15,10 +15,11 @@
 
 from dataclasses import dataclass, field
 from dnfdaemon.client import Client, DaemonError
-from yumex.backend import PackageState, YumexPackage
+from yumex.backend.dnf import YumexPackage
 
 from yumex.ui.progress import YumexProgress
 from yumex.utils import log
+from yumex.utils.enums import PackageState
 
 
 @dataclass

@@ -24,10 +24,10 @@ import dnf.subject
 import hawkey
 import itertools
 
-from yumex.backend import YumexPackage
 from yumex.ui.package_settings import InfoType, PackageFilter
 from yumex.utils import log
 from yumex.utils.enums import PackageAction, PackageState, SearchField
+from yumex.backend.dnf import YumexPackage
 
 
 def create_package(

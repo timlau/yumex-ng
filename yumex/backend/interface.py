@@ -15,7 +15,7 @@
 
 from typing import Iterable, Protocol
 
-from yumex.backend import YumexPackage
+from yumex.backend.dnf import YumexPackage
 from yumex.ui.progress import YumexProgress
 
 from yumex.utils.enums import PackageFilter, SearchField, InfoType

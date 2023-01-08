@@ -25,7 +25,7 @@ from libdnf5.common import (
     QueryCmp_IGLOB,
 )
 
-from yumex.backend import SearchField, YumexPackage, PackageState
+from yumex.backend.dnf import SearchField, YumexPackage, PackageState
 from yumex.backend.interface import Presenter
 from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
 from yumex.utils import log

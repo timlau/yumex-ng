@@ -17,7 +17,7 @@ from gi.repository import Gtk, Gio
 from yumex.backend.interface import Presenter
 
 from yumex.constants import rootdir
-from yumex.backend import YumexPackage
+from yumex.backend.dnf import YumexPackage
 
 # from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip

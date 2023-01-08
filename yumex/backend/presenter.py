@@ -14,15 +14,15 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 from typing import Generator
-from yumex.backend import YumexPackage
+from yumex.backend.dnf import YumexPackage
 from yumex.constants import backend
 from yumex.backend.interface import PackageBackend
 from yumex.utils import log
 
 if backend == "DNF5":
-    from yumex.backend.dnf5 import Backend as Dnf5Backend
+    from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
 else:
-    from yumex.backend.dnf4 import Backend as Dnf4Backend, DnfCallback
+    from yumex.backend.dnf.dnf4 import Backend as Dnf4Backend, DnfCallback
 
 from yumex.ui.progress import YumexProgress
 

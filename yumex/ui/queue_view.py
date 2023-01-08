@@ -18,7 +18,7 @@ from yumex.backend.interface import PackageCache
 
 from yumex.constants import rootdir
 
-from yumex.backend import YumexPackage
+from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import RunAsync, timed
