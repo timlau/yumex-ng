@@ -15,30 +15,11 @@
 
 """ backend for handling flatpaks"""
 
-from enum import IntEnum, StrEnum, auto
 from gi.repository import Flatpak, GObject, GLib
 
-
 from yumex.utils import log
-
 from yumex.utils.types import FlatpakRefString, FlatpakRef, MainWindow
-
-
-class FlatpakType(IntEnum):
-    """flatpak type"""
-
-    APP = 1
-    RUNTIME = 2
-    LOCALE = 3
-    DEBUG = 4
-
-
-class FlatpakLocation(StrEnum):
-    """flatpak install location"""
-
-    USER = auto()
-    SYSTEM = auto()
-    BOTH = auto()  # used only as a filter, where we want both locations
+from yumex.utils.enums import FlatpakType, FlatpakLocation
 
 
 class FlatpakPackage(GObject.GObject):

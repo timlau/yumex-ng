@@ -16,6 +16,23 @@
 from enum import IntEnum, StrEnum, auto
 
 
+class FlatpakType(IntEnum):
+    """flatpak type"""
+
+    APP = 1
+    RUNTIME = 2
+    LOCALE = 3
+    DEBUG = 4
+
+
+class FlatpakLocation(StrEnum):
+    """flatpak install location"""
+
+    USER = auto()
+    SYSTEM = auto()
+    BOTH = auto()  # used only as a filter, where we want both locations
+
+
 class Page(StrEnum):
     PACKAGES = auto()
     FLATPAKS = auto()
