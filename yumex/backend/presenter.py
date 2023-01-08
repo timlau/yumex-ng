@@ -39,7 +39,7 @@ class YumexPackageCache:
     def __init__(self, backend: PackageBackend) -> None:
         self._packages = {}
         self.backend: PackageBackend = backend
-        self.nerva_dict = {}
+        self._package_dict = {}
 
     def get_packages_by_filter(
         self, pkgfilter: PackageFilter, reset=False
@@ -63,11 +63,11 @@ class YumexPackageCache:
 
     def get_package(self, pkg: YumexPackage) -> YumexPackage:
         """cache a new package or return the already cached one"""
-        if pkg.nevra not in self.nerva_dict:
-            self.nerva_dict[pkg.nevra] = pkg
+        if pkg not in self._package_dict:
+            self._package_dict[pkg] = pkg
             return pkg
         else:
-            cached_pkg = self.nerva_dict[pkg.nevra]
+            cached_pkg = self._package_dict[pkg]
             if pkg.state != cached_pkg.state:
                 log(f" update state : {cached_pkg}{cached_pkg.state} {pkg}{pkg.state}")
                 self._update_state(cached_pkg, pkg)
