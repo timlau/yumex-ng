@@ -59,7 +59,7 @@ class PackageBackend(Protocol):
 
 
 class Presenter(Protocol):
-    """Protocol class for a presenter in  a Model–view–presenter (MVP) architectural pattern"""
+    """Protocol class for a presenter in  a Model-view-presenter (MVP) architectural pattern"""
 
     @property
     def backend(self) -> PackageBackend:

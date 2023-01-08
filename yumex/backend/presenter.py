@@ -88,7 +88,7 @@ class YumexPackageCache:
 
 
 class YumexPresenter:
-    """presenter class in Model–view–presenter (MVP) architectural pattern
+    """presenter class in Model-view-presenter (MVP) architectural pattern
 
     It works as a middle man between the UI and backend package data, so the UI can work
     diffent package backend in a more generic way.
