@@ -19,12 +19,26 @@ template YumexFlatpakResult : Adw.Window {
             Gtk.Button cancel{
                 label: _("Cancel");
                 clicked => on_cancel_clicked();
+                ShortcutController {
+                  scope: managed;
+                  Shortcut {
+                    trigger: "Escape";
+                    action: "activate";
+                  }
+                } 
             }
             [end]
             Gtk.Button confirm {
                 label: _("Confirm");
                 styles ["destructive-action"]
                 clicked => on_confirm_clicked();
+                ShortcutController {
+                  scope: managed;
+                  Shortcut {
+                    trigger: "<Ctrl>Return";
+                    action: "activate";
+                  }
+                }
             }
         }
         Gtk.Box {

@@ -16,8 +16,13 @@ ShortcutsWindow help_overlay {
         action-name: "app.preferences";
       }
       ShortcutsShortcut {
-        title: _("Apply Actions");
+        title: _("Apply Actions/Confirm");
         action-name: "app.apply_actions";
+      }
+      ShortcutsShortcut {
+        title: _("Close Dialog/Cancel");
+        shortcut-type: accelerator;
+        accelerator: "Escape";
       }
       ShortcutsShortcut {
         title: _("Select Packages");
