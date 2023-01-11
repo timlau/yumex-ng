@@ -30,6 +30,7 @@ from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log
 from yumex.constants import rootdir, app_id, version, backend, build_type
 from yumex.ui.dialogs import error_dialog
+from typing import Literal
 
 
 class YumexApplication(Adw.Application):
@@ -38,7 +39,7 @@ class YumexApplication(Adw.Application):
     __gtype_name__ = "YumexApplication"
     settings = Gio.Settings.new(app_id)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             application_id=app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
         )
@@ -46,7 +47,7 @@ class YumexApplication(Adw.Application):
         self.style_manager = Adw.StyleManager.get_default()
         self.args = None
 
-    def do_activate(self):
+    def do_activate(self) -> None:
         """Called when the application is activated.
 
         We raise the application's main window, creating it if
@@ -93,7 +94,7 @@ class YumexApplication(Adw.Application):
         # click the Availble package filter, without looking the UI
         self.win.load_packages("installed")
 
-    def do_command_line(self, args):
+    def do_command_line(self, args) -> Literal[0]:
         parser = argparse.ArgumentParser(
             prog="yumex", description="Yum Extender package managemnt application"
         )
@@ -116,7 +117,7 @@ class YumexApplication(Adw.Application):
         self.activate()
         return 0
 
-    def create_action(self, name, callback, shortcuts=None):
+    def create_action(self, name, callback, shortcuts=None) -> None:
         """Add an application action.
 
         Args:
@@ -132,7 +133,7 @@ class YumexApplication(Adw.Application):
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
-    def on_about(self, *_args):
+    def on_about(self, *_args) -> None:
         about = Adw.AboutWindow(
             transient_for=self.props.active_window,
             application_name="Yum Extender",
@@ -175,12 +176,12 @@ Yum Extender is a Package management to install, update and remove packages
 
         about.present()
 
-    def on_preferences(self, *_args):
+    def on_preferences(self, *_args) -> None:
         prefs = YumexPreferences(self.win)
         prefs.set_transient_for(self.win)
         prefs.present()
 
-    def exception_hook(self, exc_type, exc_value, exc_traceback):
+    def exception_hook(self, exc_type, exc_value, exc_traceback) -> None:
         logging.critical(
             f"Uncaught exception: {exc_value}",
             exc_info=(exc_type, exc_value, exc_traceback),
@@ -189,7 +190,7 @@ Yum Extender is a Package management to install, update and remove packages
         error_dialog(self.win, title="Uncaught exception", msg=msg)
 
 
-def main():
+def main() -> int:
     """The application's entry point."""
     app = YumexApplication()
     sys.excepthook = app.exception_hook
