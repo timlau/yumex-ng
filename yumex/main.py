@@ -93,7 +93,9 @@ class YumexApplication(Adw.Application):
         self.win.load_packages("installed")
 
     def do_command_line(self, args):
-        parser = argparse.ArgumentParser(prog="app")
+        parser = argparse.ArgumentParser(
+            prog="yumex", description="Yum Extender package managemnt application"
+        )
         parser.add_argument(
             "-d", "--debug", help="enable debug logging", action="store_true"
         )
