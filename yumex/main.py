@@ -19,6 +19,7 @@
 
 import sys
 import argparse
+import subprocess
 import logging
 from traceback import format_exception
 
@@ -93,8 +94,20 @@ class YumexApplication(Adw.Application):
 
     def do_command_line(self, args):
         parser = argparse.ArgumentParser(prog="app")
-        parser.add_argument("-d", "--debug", action="store_true")
+        parser.add_argument(
+            "-d", "--debug", help="enable debug logging", action="store_true"
+        )
+        parser.add_argument(
+            "--exit", help="stop the dnfdaemon system daemon", action="store_true"
+        )
         self.args = parser.parse_args(args.get_arguments()[1:])
+        if self.args.exit:
+            subprocess.call(
+                "/usr/bin/dbus-send --system --print-reply "
+                "--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit",
+                shell=True,
+            )
+            return 0
         setup_logging(debug=self.args.debug)
         log(f" commmand-line : {self.args}")
         self.activate()
