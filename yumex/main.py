@@ -28,7 +28,7 @@ from gi.repository import Gtk, Gio, Adw
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log
-from yumex.constants import rootdir, app_id, version, backend
+from yumex.constants import rootdir, app_id, version, backend, build_type
 from yumex.ui.dialogs import error_dialog
 
 
@@ -86,7 +86,8 @@ class YumexApplication(Adw.Application):
         self.create_action("page_three", self.win.on_actions, ["<Alt>3"])
 
         # call a test function to test gui code, should not be enabled, if not testing
-        self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])
+        if build_type == "debug" or self.args.debug:
+            self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])
 
         self.win.present()
         # click the Availble package filter, without looking the UI
