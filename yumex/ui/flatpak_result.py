@@ -20,7 +20,7 @@ class ResultElem(GObject.GObject):
                 action_str = _("Unnstalling")
             case _:
                 action_str = _("Updateing")
-        return f"{action_str} {self.ref} ({self.source})"
+        return f"{action_str} <b>{self.ref}</b> <small>({self.source})</small>"
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_result.ui")
@@ -73,4 +73,4 @@ class YumexFlatpakResult(Adw.Window):
         """bind data from the store object to the widget"""
         label = item.get_child()
         obj: ResultElem = item.get_item()
-        label.set_label(str(obj))
+        label.set_markup(str(obj))

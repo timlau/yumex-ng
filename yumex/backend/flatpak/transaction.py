@@ -20,7 +20,7 @@ from yumex.backend.flatpak import FlatpakPackage
 
 from yumex.utils import log
 from yumex.utils.types import FlatpakRefString
-from yumex.utils.enums import FlatpakLocation
+from yumex.utils.enums import FlatpakAction, FlatpakLocation
 
 
 class FlatPakFirstRun(Exception):
@@ -129,3 +129,15 @@ class FlatpakTransaction:
                 return False
         log(" FlatpakTransaction: Running Transaction Ended")
         return True
+
+    def populate(
+        self, pkgs: list[FlatpakPackage], action: FlatpakAction, source: str | None
+    ):
+        for pkg in pkgs:
+            match action:
+                case FlatpakAction.UPDATE:
+                    self.add_update(pkg)
+                case FlatpakAction.INSTALL:
+                    self.add_install(pkg, source)
+                case FlatpakAction.UNINSTALL:
+                    self.add_remove(repr(pkg))

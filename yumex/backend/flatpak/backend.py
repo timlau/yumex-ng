@@ -95,20 +95,13 @@ class FlatpakBackend:
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
         transaction = FlatpakTransaction(self, system=system, first_run=True)
-        for pkg in pkgs:
-            match action:
-                case FlatpakAction.UPDATE:
-                    transaction.add_update(pkg)
-                case FlatpakAction.INSTALL:
-                    transaction.add_install(pkg, source)
-                case FlatpakAction.UNINSTALL:
-                    transaction.add_remove(pkg)
+        transaction.populate(pkgs, action, source)
         try:
             transaction.run()
             return []
         except FlatPakFirstRun:
             result: list = transaction._current_result
-            refs = [(oper.get_ref(), action, source) for oper in result]
+            refs = [(oper.get_ref(), action, oper.get_remote()) for oper in result]
             return refs
 
     def _execute_transaction(
@@ -117,14 +110,7 @@ class FlatpakBackend:
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
         transaction = FlatpakTransaction(self, system=system, first_run=False)
-        for pkg in pkgs:
-            match action:
-                case FlatpakAction.UPDATE:
-                    transaction.add_update(pkg)
-                case FlatpakAction.INSTALL:
-                    transaction.add_install(pkg, source)
-                case FlatpakAction.UNINSTALL:
-                    transaction.add_remove(pkg)
+        transaction.populate(pkgs, action, source)
         transaction.run()
 
     def _do_transaction(
@@ -186,21 +172,37 @@ class FlatpakBackend:
                 [], pkgs, FlatpakAction.INSTALL, execute, source=source
             )
 
-    def do_remove(self, pkg: FlatpakPackage, execute: bool) -> None:
+    def do_remove(self, pkgs: list[FlatpakPackage], execute: bool) -> None:
         """uninstall a flatpak pkg"""
-        pkgs = [repr(pkg)]
-        if pkg.location == FlatpakLocation.USER:
-            return self._do_transaction(pkgs, [], FlatpakAction.UNINSTALL, execute)
-        else:
-            return self._do_transaction([], pkgs, FlatpakAction.UNINSTALL, execute)
+        user_pkgs, system_pkgs = self.filter_by_location(pkgs)
+        return self._do_transaction(
+            user_pkgs=user_pkgs,
+            system_pkgs=system_pkgs,
+            action=FlatpakAction.UNINSTALL,
+            execute=execute,
+        )
 
-    def do_update(self, pkg: FlatpakPackage, execute: bool) -> None:
+    def do_update(self, pkgs: list[FlatpakPackage], execute: bool) -> None:
         """update a flatpak pkg"""
-        pkgs = [pkg]
-        if pkg.location == FlatpakLocation.USER:
-            return self._do_transaction(pkgs, [], FlatpakAction.UNINSTALL, execute)
-        else:
-            return self._do_transaction([], pkgs, FlatpakAction.UNINSTALL, execute)
+        user_pkgs, system_pkgs = self.filter_by_location(pkgs)
+        return self._do_transaction(
+            user_pkgs=user_pkgs,
+            system_pkgs=system_pkgs,
+            action=FlatpakAction.UPDATE,
+            execute=execute,
+        )
+
+    def filter_by_location(
+        self, pkgs
+    ) -> tuple[list[FlatpakPackage], list[FlatpakPackage]]:
+        user_pkgs: list[FlatpakPackage] = []
+        system_pkgs: list[FlatpakPackage] = []
+        for pkg in pkgs:
+            if pkg.location == FlatpakLocation.USER:
+                user_pkgs.append(pkg)
+            else:
+                system_pkgs.append(pkg)
+        return user_pkgs, system_pkgs
 
     def get_installed(self, location: FlatpakLocation) -> list[FlatpakPackage]:
         """get list of installed flatpak pkgs"""

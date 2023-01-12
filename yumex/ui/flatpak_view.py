@@ -158,9 +158,9 @@ class YumexFlatpakView(Gtk.ListView):
             self.reset()
 
         if pkg:
-            selected = pkg
+            selected = [pkg]
         else:
-            selected = self.selection.get_selected_item()
+            selected = [self.selection.get_selected_item()]
         RunAsync(self.backend.do_remove, build, selected, execute=False)
 
     @Gtk.Template.Callback()
