@@ -161,25 +161,29 @@ class YumexMainWindow(Adw.ApplicationWindow):
         lbl.add_css_class("accent")
         return lbl
 
-    def run_transaction(self, confirm: bool):
-        GLib.idle_add(self._run_transaction, confirm)
-
-    def _run_transaction(self, confirm: bool):
+    def _do_transaction(self, queued):
+        """execute the transaction with the root backend."""
         self.progress.show()
-        self.progress.set_title(_("Running Transaction"))
-        result: TransactionResult = self.root_backend.run_transaction(confirm)
-        if result.completed:
-            # reset everything
-            self.package_view.reset()
-            self.package_settings.unselect_all()
-            self.search_bar.set_search_mode(False)
-            self.package_settings.set_active_filter("installed")
-            self.show_message(_("Transaction completted succesfully"))
-        else:
-            self.show_message(result.error)
-        self.root_backend = None
-        self.progress.hide()
-        return False
+        self.progress.set_title(_("Building Transaction"))
+        with YumexRootBackend(self.progress) as root_backend:
+            # build the transaction
+            result: TransactionResult = root_backend.build_transaction(queued)
+            self.progress.hide()
+            if result.completed:
+                # get confirmation
+                transaction_result = YumexTransactionResult(self)
+                transaction_result.show_result(result.data)
+                transaction_result.show()
+                if transaction_result.confirm:
+                    # run the transaction
+                    self.progress.show()
+                    self.progress.set_title(_("Running Transaction"))
+                    result: TransactionResult = root_backend.run_transaction()
+                    if result.completed:
+                        return True
+            if result.error:
+                self.show_message(result.error)
+            return False
 
     def confirm_flatpak_transaction(self, refs: list) -> bool:
         log("Window: confirm flatpak transaction")
@@ -227,24 +231,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
 
-        def on_close(widget):
-            confirm = transaction_result.confirm
-            self.run_transaction(confirm)
-            self.progress.hide()
-
-        self.root_backend = YumexRootBackend(self.progress)
         queued = self.queue_view.get_queued()
         if queued:
-            self.progress.show()
-            self.progress.set_title(_("Building Transaction"))
-            result: TransactionResult = self.root_backend.build_transaction(queued)
-            if result.completed:
-                transaction_result = YumexTransactionResult(self)
-                transaction_result.connect("close-request", on_close)
-                transaction_result.show_result(result.data)
-            else:
-                self.progress.hide()
-                self.show_message(result.error)
+            log(f"Execute the transaction on {len(queued)} packages")
+            done = self._do_transaction(queued)
+            log(f"Transaction execution ended : {done}")
+            if done:  # transaction completed without issues
+                # reset everything
+                self.package_view.reset()
+                self.package_settings.unselect_all()
+                self.search_bar.set_search_mode(False)
+                self.package_settings.set_active_filter("installed")
+                self.show_message(_("Transaction completted succesfully"))
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
@@ -308,11 +306,22 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case Page.QUEUE:
                 self.queue_view.clear_all()
 
-    def show_on_packages_page(self, show=False):
-        """show/hide widget only used on packages page"""
-        self.search_button.set_visible(show)
-        self.search_bar.set_visible(show)
-        self.sidebar_button.set_visible(show)
+    def show_on_page(self):
+        """show/hide widget dependend on the active page"""
+        if self.active_page == Page.PACKAGES:
+            self.search_button.set_visible(True)
+            self.search_bar.set_visible(True)
+            self.sidebar_button.set_visible(True)
+        else:
+            self.search_button.set_visible(False)
+            self.search_bar.set_visible(False)
+            self.sidebar_button.set_visible(False)
+        # handle other page dependend widgets
+        match self.active_page:
+            case Page.PACKAGES | Page.QUEUE:
+                self.apply_button.set_visible(True)
+            case Page.FLATPAKS:
+                self.apply_button.set_visible(False)
 
     def on_actions(self, action, *args):
         """Generic action dispatcher"""
@@ -358,28 +367,20 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "toggle_selection":
                 if self.active_page == Page.PACKAGES:
                     self.package_view.toggle_selected()
-            case _:
-                log(f"ERROR: action: {action.get_name()} not defined")
+            case other:
+                log(f"ERROR: action: {other} not defined")
+                raise ValueError(f"action: {other} not defined")
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
         log(f"stack changed : {self.active_page}")
+        self.show_on_page()
         match self.active_page:
             case Page.PACKAGES:
-                self.show_on_packages_page(show=True)
-                self.apply_button.set_visible(True)
                 self.package_view.refresh()
-            case Page.FLATPAKS:
-                self.show_on_packages_page(show=False)
-                self.apply_button.set_visible(False)
-            case Page.GROUPS:
-                self.show_on_packages_page(show=False)
-            case Page.QUEUE:
-                self.show_on_packages_page(show=False)
-                self.apply_button.set_visible(True)
 
     def set_needs_attention(self, page: Page, num: int):
-        """set the page batch num"""
+        """set the page needs_attention state"""
         state = num > 0
         match page:
             case Page.PACKAGES:

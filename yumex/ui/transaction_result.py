@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Adw, GObject, Gio
+from gi.repository import Gtk, Adw, GObject, Gio, GLib
 
 from yumex.constants import rootdir
 from yumex.utils import format_number
@@ -15,6 +15,7 @@ class YumexTransactionResult(Adw.Window):
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win = win
+        self._loop = GLib.MainLoop()
         self.confirm = False
         self.store = Gio.ListStore.new(ResultElem)
         model = Gtk.TreeListModel.new(self.store, False, True, self.add_tree_node)
@@ -23,9 +24,9 @@ class YumexTransactionResult(Adw.Window):
     def show(self):
         self.set_transient_for(self.win)
         self.present()
+        self._loop.run()
 
     def show_result(self, result_dict):
-        self.show()
         self.populate(result_dict)
 
     def populate(self, result_dict):
@@ -58,11 +59,13 @@ class YumexTransactionResult(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_confirm_clicked(self, button):
+        self._loop.quit()
         self.confirm = True
         self.close()
 
     @Gtk.Template.Callback()
     def on_cancel_clicked(self, button):
+        self._loop.quit()
         self.close()
 
     @Gtk.Template.Callback()

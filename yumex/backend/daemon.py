@@ -14,6 +14,7 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 from dataclasses import dataclass, field
+from typing import Self
 from dnfdaemon.client import Client, DaemonError
 from yumex.backend.dnf import YumexPackage
 
@@ -49,6 +50,16 @@ class YumexRootBackend(Client):
         super().__init__()
         self.progress: YumexProgress = progress
         self.dnl_frac = 0.0
+        self._locked = False
+
+    def __enter__(self) -> Self:
+        self._locked = self.lock()
+        log(f"  RootBackend :  locked : {self._locked}")
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
+        if self._locked:
+            self.unlock()
 
     def on_TransactionEvent(self, event, data) -> None:
         # Do your stuff here
@@ -117,47 +128,43 @@ class YumexRootBackend(Client):
         """Repository Metadata Download progress"""
         log(f" --> on_RepoMetaDataProgress : {name} : {frac}")
 
-    def lock(self) -> None:
-        self.Lock()
+    def lock(self) -> bool:
+        log("  RootBackend: get dnfdaemon lock")
+        return self.Lock()
 
     def unlock(self) -> None:
+        log("  RootBackend: release dnfdaemon lock")
         self.Unlock()
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         try:
-            if self.Lock():
-                self.ClearTransaction()
-                for pkg in pkgs:
-                    result: PackageState
-                    match pkg.state:
-                        case PackageState.AVAILABLE:
-                            result = Result(*self.AddTransaction(pkg.id, "install"))
-                        case PackageState.UPDATE:
-                            result = Result(*self.AddTransaction(pkg.id, "update"))
-                        case _:  # PackageState.INSTALLED
-                            result = Result(*self.AddTransaction(pkg.id, "remove"))
-                    if not result.completed:
-                        log(f" --> RootBackendError : {result.data[0]}")
-                result = Result(*self.BuildTransaction())
-                if result.completed:
-                    return TransactionResult(True, data=self.build_result(result.data))
-                else:
-                    log(" --> RootBackendError : BuildTransaction failled ")
-                    return TransactionResult(
-                        False,
-                        error=_("Couldn't build transaction\n")
-                        + "\n".join(result.data),
-                    )
+            self.ClearTransaction()
+            for pkg in pkgs:
+                result: PackageState
+                match pkg.state:
+                    case PackageState.AVAILABLE:
+                        result = Result(*self.AddTransaction(pkg.id, "install"))
+                    case PackageState.UPDATE:
+                        result = Result(*self.AddTransaction(pkg.id, "update"))
+                    case _:  # PackageState.INSTALLED
+                        result = Result(*self.AddTransaction(pkg.id, "remove"))
+                if not result.completed:
+                    log(f" --> RootBackendError : {result.data[0]}")
+            result = Result(*self.BuildTransaction())
+            if result.completed:
+                return TransactionResult(True, data=self.build_result(result.data))
             else:
-                log(" --> RootBackendError : can't get lock ")
+                log(" --> RootBackendError : BuildTransaction failled ")
                 return TransactionResult(
-                    False, error=_("Dnf is locked by another process")
+                    False,
+                    error=_("Couldn't build transaction\n") + "\n".join(result.data),
                 )
         except DaemonError as e:
-            self.Unlock()
             return TransactionResult(
                 False, error=_("Exception in Dnf Backend\n") + e.message
             )
+        except BaseException:  # Other exception should also unlock the backend daemon
+            raise
 
     def build_result(self, result: list[str, list]) -> dict:
         result_dict = {}
@@ -167,23 +174,14 @@ class YumexRootBackend(Client):
             ]
         return result_dict
 
-    def run_transaction(self, confirm) -> TransactionResult:
+    def run_transaction(self) -> TransactionResult:
         try:
-            if confirm:
-                rc, msgs = self.RunTransaction()
-                self.Unlock()
-                if rc == 0:
-                    return TransactionResult(True, data={"msgs": msgs})
-                else:
-                    return TransactionResult(False, error="\n".join(msgs))
+            rc, msgs = self.RunTransaction()
+            if rc == 0:
+                return TransactionResult(True, data={"msgs": msgs})
             else:
-                self.ClearTransaction()
-                self.Unlock()
-                return TransactionResult(
-                    False, error=_("Transaction cancelled by user")
-                )
+                return TransactionResult(False, error="\n".join(msgs))
         except DaemonError as e:
-            self.Unlock()
             return TransactionResult(
                 False, error=_("Exception in Dnf Backend : ") + str(e.message)
             )
