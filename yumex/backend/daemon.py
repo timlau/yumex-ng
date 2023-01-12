@@ -146,10 +146,18 @@ class YumexRootBackend(Client):
                         result = Result(*self.AddTransaction(pkg.id, "install"))
                     case PackageState.UPDATE:
                         result = Result(*self.AddTransaction(pkg.id, "update"))
-                    case _:  # PackageState.INSTALLED
+                    case PackageState.INSTALLED:
                         result = Result(*self.AddTransaction(pkg.id, "remove"))
+                    case other:
+                        raise ValueError(f"Unknown package state : {other}")
                 if not result.completed:
-                    log(f" --> RootBackendError : {result.data[0]}")
+                    log(
+                        " --> RootBackendError : Error in adding packages to transaction"
+                    )
+                    if result.data:
+                        for line in result.data:
+                            log(f"     --> : {line}")
+
             result = Result(*self.BuildTransaction())
             if result.completed:
                 return TransactionResult(True, data=self.build_result(result.data))
