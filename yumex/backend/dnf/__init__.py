@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-
+from __future__ import annotations
 from gi.repository import GObject
 from yumex.utils import format_number
 from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
@@ -60,7 +60,7 @@ class YumexPackage(GObject.GObject):
     def set_state(self, state: PackageState) -> None:
         self.state = state
 
-    def set_ref_to(self, pkg, state: PackageState) -> None:
+    def set_ref_to(self, pkg: YumexPackage, state: PackageState) -> None:
         """set ref. package and state"""
         self.ref_to = pkg
         self.ref_to.state = state
