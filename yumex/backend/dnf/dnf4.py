@@ -171,7 +171,7 @@ class Packages:
         """
         return [
             create_package(pkg, state=PackageState.UPDATE)
-            for pkg in self.query.upgrades().latest().run()
+            for pkg in self.query.upgrades().filter(arch__neq="src").latest().run()
         ]
 
     def filter_installed(self, query: dnf.query.Query):
@@ -202,7 +202,9 @@ class Packages:
         newest available packages
         mark the installed ones
         """
-        return self.filter_installed(query=self.query.available().latest())
+        return self.filter_installed(
+            query=self.query.available().filter(arch__neq="src").latest()
+        )
 
     @property
     def extras(self):
