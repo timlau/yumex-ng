@@ -1,16 +1,9 @@
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
-
-import sys
-
 from gi.repository import Adw
 
 
-def error_dialog(win: YumexMainWindow, title: str, msg: str):
+def error_dialog(win, title: str, msg: str):
     def response(dialog, result, *args):
-        sys.exit(1)
+        raise SystemExit
 
     dialog = Adw.MessageDialog.new(
         win,

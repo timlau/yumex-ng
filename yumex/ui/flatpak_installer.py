@@ -34,7 +34,7 @@ class YumexFlatpakInstaller(Adw.Window):
     location: Adw.ComboRow = Gtk.Template.Child()
     icon: Gtk.Image = Gtk.Template.Child()
 
-    def __init__(self, win: YumexMainWindow, **kwargs):
+    def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self.confirm = False

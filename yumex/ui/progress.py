@@ -32,7 +32,7 @@ class YumexProgress(Adw.Window):
     ok_button = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
 
-    def __init__(self, win: YumexMainWindow, **kwargs):
+    def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
 

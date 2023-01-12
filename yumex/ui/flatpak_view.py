@@ -38,7 +38,7 @@ class YumexFlatpakView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, win: YumexMainWindow, **kwargs):
+    def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self.icons_paths = self.get_icon_paths()

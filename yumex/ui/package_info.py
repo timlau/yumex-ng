@@ -46,7 +46,7 @@ class YumexPackageInfo(Gtk.Box):
     ref_grp = Gtk.Template.Child()
     references = Gtk.Template.Child()
 
-    def __init__(self, win: YumexMainWindow, **kwargs):
+    def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self._ref_rows = []

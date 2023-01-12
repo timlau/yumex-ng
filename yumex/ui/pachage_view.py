@@ -51,7 +51,7 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(self, win: YumexMainWindow, presenter: Presenter, **kwargs):
+    def __init__(self, win, presenter: Presenter, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self.presenter = presenter

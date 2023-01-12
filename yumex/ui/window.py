@@ -224,9 +224,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        dialog = YumexFlatpakResult(self)
-        dialog.show()
-        print(dialog.confirm)
+        print(1 / 0)
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
