@@ -19,6 +19,23 @@ from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: 
 
 
 class YumexPackage(GObject.GObject):
+    __slots__ = (  # define slots for better performance
+        "name",
+        "arch",
+        "epoch",
+        "version",
+        "release",
+        "repo",
+        "description",
+        "size",
+        "state",
+        "action",
+        "is_dep",
+        "queued",
+        "queue_action",
+        "ref_to",
+    )
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__()
         self.name: str = kwargs.pop("name")
