@@ -12,6 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk, Gio
 from yumex.backend.interface import PackageCache
@@ -31,9 +35,9 @@ class YumexQueueView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, window, **kwargs):
+    def __init__(self, win: YumexMainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win = window
+        self.win: YumexMainWindow = win
         self.store = Gio.ListStore.new(YumexPackage)
         self.selection.set_model(self.store)
 

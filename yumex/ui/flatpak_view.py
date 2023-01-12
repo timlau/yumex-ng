@@ -12,6 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
 
 import os
 
@@ -34,9 +38,9 @@ class YumexFlatpakView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, window, **kwargs):
+    def __init__(self, win: YumexMainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win = window
+        self.win: YumexMainWindow = win
         self.icons_paths = self.get_icon_paths()
         self.reset()
 

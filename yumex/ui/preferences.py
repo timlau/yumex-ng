@@ -12,6 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk, Adw
 
@@ -28,9 +32,9 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     repo_group = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win: YumexMainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win = win
+        self.win: YumexMainWindow = win
         self.settings = win.settings
         self.setup()
 

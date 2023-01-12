@@ -1,3 +1,8 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
+
 from gi.repository import Gtk, Adw, GObject, Gio, GLib
 
 from yumex.constants import rootdir
@@ -12,9 +17,9 @@ class YumexTransactionResult(Adw.Window):
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win: YumexMainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win = win
+        self.win: YumexMainWindow = win
         self._loop = GLib.MainLoop()
         self.confirm = False
         self.store = Gio.ListStore.new(ResultElem)

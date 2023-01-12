@@ -1,3 +1,8 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
+
 from gi.repository import Gtk, Adw, GLib, GObject, Gio
 
 from yumex.constants import rootdir
@@ -31,9 +36,9 @@ class YumexFlatpakResult(Adw.Window):
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win: YumexMainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win = win
+        self.win: YumexMainWindow = win
         self.confirm = False
         self._loop = GLib.MainLoop()
         self.store = Gio.ListStore.new(ResultElem)

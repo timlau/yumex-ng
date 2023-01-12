@@ -12,6 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk, Gio
 from yumex.backend.interface import Presenter
@@ -47,9 +51,9 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(self, window, presenter: Presenter, **kwargs):
+    def __init__(self, win: YumexMainWindow, presenter: Presenter, **kwargs):
         super().__init__(**kwargs)
-        self.win = window
+        self.win: YumexMainWindow = win
         self.presenter = presenter
         self.setup()
 
