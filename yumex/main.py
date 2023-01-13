@@ -187,8 +187,6 @@ Yum Extender is a Package management to install, update and remove packages
             exc_info=(exc_type, exc_value, exc_traceback),
         )
         msg = "".join(format_exception(exc_type, exc_value, exc_traceback, None))
-        clb = self.win.get_clipboard
-        clb.set_text(msg)
         error_dialog(self.win, title="Uncaught exception", msg=msg)
 
 

@@ -3,6 +3,12 @@ from gi.repository import Adw
 
 def error_dialog(win, title: str, msg: str):
     def response(dialog, result, *args):
+        # try:
+        #     clb = win.get_clipboard()
+        #     clb.set_text(msg)
+        # except Exception as e:
+        #     print(e)
+        # finally:
         raise SystemExit
 
     dialog = Adw.MessageDialog.new(
