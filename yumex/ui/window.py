@@ -308,11 +308,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """show/hide widget dependend on the active page"""
         if self.active_page == Page.PACKAGES:
             self.search_button.set_sensitive(True)
-            self.search_bar.set_sensitive(True)
+            self.search_bar.set_visible(True)
             self.sidebar_button.set_sensitive(True)
         else:
             self.search_button.set_sensitive(False)
-            self.search_bar.set_sensitive(False)
+            self.search_bar.set_visible(False)
             self.sidebar_button.set_sensitive(False)
         # handle other page dependend widgets
         match self.active_page:
