@@ -158,7 +158,7 @@ class YumexFlatpakView(Gtk.ListView):
         def execute(state, error=None):
             self.win.progress.hide()
             if state:
-                self.win.show_message(_(f"{selected.id} is now removed"), timeout=5)
+                self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=5)
             self.reset()
 
         if pkg:
