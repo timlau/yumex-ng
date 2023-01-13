@@ -47,7 +47,7 @@ class YumexPackage(GObject.GObject):
         self.description: str = kwargs.pop("description")
         self.size: int = kwargs.pop("size")
         self.state: PackageState = kwargs.pop("state", PackageState.AVAILABLE)
-        self.action: PackageAction = kwargs.pop("state", PackageAction.NONE)
+        self.action: PackageAction = kwargs.pop("action", PackageAction.NONE)
         self.is_dep: bool = False
         self.ref_to: YumexPackage = None
         self.queued: bool = False

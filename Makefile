@@ -92,7 +92,7 @@ user:
 	ninja -C builddir run
 
 inst-buildtools:
-	sudo dnf install @fedora-packager copr-cli
+	sudo dnf install @fedora-packager copr-cli python3-pytest python3-pytest-cov
 
 inst-deps-dnf5:
 	sudo dnf copr enable rpmsoftwaremanagement/dnf5-unstable
@@ -119,3 +119,8 @@ transifex-get:
 	git add po/*
 	git commit -m "i18n: updated translations from transifex"
 
+run-tests:
+	pytest
+
+run-test-report:
+	pytest --cov --cov-report html
