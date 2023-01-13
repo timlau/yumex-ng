@@ -95,15 +95,19 @@ class YumexFlatpakView(Gtk.ListView):
                 self.win.show_message(_(f"{id} is now installed"), timeout=5)
 
         def on_close(*args) -> None:
-            global id, source, ref, location
+            global id, remote, ref, location
             id = flatpak_installer.id.get_text()
-            source = flatpak_installer.source.get_selected_item().get_string()
-            ref = self.backend.find_ref(source, id)
-            location = flatpak_installer.location.get_selected_item().get_string()
-            if flatpak_installer.confirm:
-                self.do_transaction(
-                    self.backend.do_install, callback, ref, source, location
-                )
+            if id:
+                remote = flatpak_installer.remote.get_selected_item().get_string()
+                location = flatpak_installer.location.get_selected_item().get_string()
+                ref = self.backend.find_ref(remote, id)
+                if ref:
+                    if flatpak_installer.confirm:
+                        self.do_transaction(
+                            self.backend.do_install, callback, ref, remote, location
+                        )
+                else:
+                    self.win.show_message(f"{id} is not found om {remote}")
 
         self.win.stack.set_visible_child_name("flatpaks")
         # TODO: make and sync edition of the flatpak installer, to make code more readable
@@ -111,7 +115,7 @@ class YumexFlatpakView(Gtk.ListView):
         remotes = Gtk.StringList.new()
         for remote in self.backend.get_remotes(location=FlatpakLocation.USER):
             remotes.append(remote)
-        flatpak_installer.source.set_model(remotes)
+        flatpak_installer.remote.set_model(remotes)
         flatpak_installer.set_transient_for(self.win)
         flatpak_installer.connect("close-request", on_close)
         flatpak_installer.present()

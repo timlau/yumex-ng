@@ -30,7 +30,7 @@ class YumexFlatpakInstaller(Adw.Window):
     __gtype_name__ = "YumexFlatpakInstaller"
 
     id: Adw.EntryRow = Gtk.Template.Child()
-    source: Adw.ComboRow = Gtk.Template.Child()
+    remote: Adw.ComboRow = Gtk.Template.Child()
     location: Adw.ComboRow = Gtk.Template.Child()
     icon: Gtk.Image = Gtk.Template.Child()
 
@@ -65,16 +65,16 @@ class YumexFlatpakInstaller(Adw.Window):
                 words = text.split(" ")
                 self.id.set_text(words[3])
                 ndx = 0
-                for source in self.source.get_model():
-                    if source.get_string() == words[2]:
-                        self.source.set_selected(ndx)
+                for remote in self.remote.get_model():
+                    if remote.get_string() == words[2]:
+                        self.remote.set_selected(ndx)
                     ndx += 1
             else:
                 fp_source = self.win.settings.get_string("fp-source")
                 ndx = 0
-                for source in self.source.get_model():
-                    if source.get_string() == fp_source:
-                        self.source.set_selected(ndx)
+                for remote in self.remote.get_model():
+                    if remote.get_string() == fp_source:
+                        self.remote.set_selected(ndx)
                     ndx += 1
 
         clb = self.win.get_clipboard()
@@ -104,7 +104,7 @@ class YumexFlatpakInstaller(Adw.Window):
                 remotes = Gtk.StringList.new()
                 for remote in self.backend.get_remotes(location=location.get_string()):
                     remotes.append(remote)
-                self.source.set_model(remotes)
+                self.remote.set_model(remotes)
 
     def _set_icon(self, id: str, remote_name: str):
         icon_path = self.backend.get_icon_path(remote_name)
@@ -117,7 +117,7 @@ class YumexFlatpakInstaller(Adw.Window):
     @Gtk.Template.Callback()
     def on_apply(self, widget):
         key = widget.get_text()
-        remote_name = self.source.get_selected_item().get_string()
+        remote_name = self.remote.get_selected_item().get_string()
         id = self.backend.find(remote_name, key)
         if id:
             widget.set_text(id)

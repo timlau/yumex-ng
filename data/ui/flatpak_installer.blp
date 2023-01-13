@@ -20,12 +20,27 @@ template YumexFlatpakInstaller : Adw.Window {
           Gtk.Button cancel{
             label: _("Cancel");
             clicked => on_cancel_clicked();
+            ShortcutController {
+              scope: managed;
+              Shortcut {
+                trigger: "Escape";
+                action: "activate";
+              }
+            }
           }
           [end]
           Gtk.Button confirm {
             label: _("Confirm");
             styles ["destructive-action"]
             clicked => on_ok_clicked();
+            ShortcutController {
+              scope: managed;
+              Shortcut {
+                trigger: "<Ctrl>Return";
+                action: "activate";
+              }
+            }
+
           }
       }
 
@@ -46,9 +61,9 @@ template YumexFlatpakInstaller : Adw.Window {
           }
 
         }
-        Adw.ComboRow source {
+        Adw.ComboRow remote {
           title: _("Remote");
-          model: sources;
+          model: remotes;
         }
         Adw.ComboRow location {
           title: _("Install location");
@@ -68,7 +83,7 @@ Gtk.StringList locations {
     ]
 }
 
-Gtk.StringList sources {
+Gtk.StringList remotes {
     strings [
         "flathub",
         "fedora"
