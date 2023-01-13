@@ -307,19 +307,19 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def show_on_page(self):
         """show/hide widget dependend on the active page"""
         if self.active_page == Page.PACKAGES:
-            self.search_button.set_visible(True)
-            self.search_bar.set_visible(True)
-            self.sidebar_button.set_visible(True)
+            self.search_button.set_sensitive(True)
+            self.search_bar.set_sensitive(True)
+            self.sidebar_button.set_sensitive(True)
         else:
-            self.search_button.set_visible(False)
-            self.search_bar.set_visible(False)
-            self.sidebar_button.set_visible(False)
+            self.search_button.set_sensitive(False)
+            self.search_bar.set_sensitive(False)
+            self.sidebar_button.set_sensitive(False)
         # handle other page dependend widgets
         match self.active_page:
             case Page.PACKAGES | Page.QUEUE:
-                self.apply_button.set_visible(True)
+                self.apply_button.set_sensitive(True)
             case Page.FLATPAKS:
-                self.apply_button.set_visible(False)
+                self.apply_button.set_sensitive(False)
 
     def on_actions(self, action, *args):
         """Generic action dispatcher"""
