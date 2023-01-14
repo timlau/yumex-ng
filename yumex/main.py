@@ -80,7 +80,7 @@ class YumexApplication(Adw.Application):
         self.create_action("filter_search", None)
         self.create_action("flatpak_update", self.win.on_actions)
         self.create_action("flatpak_install", self.win.on_actions, ["<Ctrl>I"])
-        self.create_action("flatpak_remove", self.win.on_actions, ["<Ctrl>X"])
+        self.create_action("flatpak_remove", self.win.on_actions, ["Delete"])
         self.create_action("apply_actions", self.win.on_actions, ["<Ctrl>Return"])
         self.create_action("page_one", self.win.on_actions, ["<Alt>1"])
         self.create_action("page_two", self.win.on_actions, ["<Alt>2"])
