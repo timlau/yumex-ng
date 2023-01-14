@@ -96,7 +96,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         def on_close(*args) -> None:
             global id, remote, ref, location
-            id = flatpak_installer.id.get_text()
+            id = flatpak_installer.current_id.get_title()
             if id:
                 remote = flatpak_installer.remote.get_selected_item().get_string()
                 location = flatpak_installer.location.get_selected_item().get_string()

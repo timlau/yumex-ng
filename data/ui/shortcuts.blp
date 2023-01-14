@@ -89,5 +89,17 @@ ShortcutsWindow help_overlay {
         action-name: "app.flatpak_remove";
       }
     }
+    ShortcutsGroup {
+      title: _("Flatpak Installer");
+      ShortcutsShortcut {
+        title: _("Next Result");
+        shortcut-type: accelerator;
+        accelerator: "<Ctrl>G";      }
+      ShortcutsShortcut {
+        title: _("Previous Result");
+        shortcut-type: accelerator;
+        accelerator: "<Shift><Ctrl>G";
+      }
+    }
   }
 }

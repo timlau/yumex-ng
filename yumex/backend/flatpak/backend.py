@@ -31,14 +31,15 @@ class FlatpakBackend:
         self.system: Flatpak.Installation = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
 
-    def find(self, source: str, key: str) -> str | None:
+    def find(self, source: str, key: str) -> list[str]:
         """find an available id containing a key"""
         refs = self.user.list_remote_refs_sync(source)
+        found = []
         for ref in refs:
             if ref.get_kind() == Flatpak.RefKind.APP:
                 if key.lower() in ref.get_name().lower():
-                    return ref.get_name()
-        return None
+                    found.append(ref.get_name())
+        return found
 
     def find_ref(self, source: str, key: str) -> str | None:
         """find the ref string containing a key"""

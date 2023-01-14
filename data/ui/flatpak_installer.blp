@@ -26,6 +26,10 @@ template YumexFlatpakInstaller : Adw.Window {
                 trigger: "Escape";
                 action: "activate";
               }
+              Shortcut {
+                trigger: "<Ctrl>Escape";
+                action: "activate";
+              }
             }
           }
           [end]
@@ -51,15 +55,29 @@ template YumexFlatpakInstaller : Adw.Window {
         margin-end: 20;
         selection-mode: none;
         styles ["boxed-list"]
-        Adw.EntryRow id {
-          title: _("Flatpak id");
-          show-apply-button: true;
-          apply => on_apply();
+        Gtk.ListBoxRow {
+          Gtk.SearchEntry search_id {
+            search-delay: 400;
+            activate => on_search();
+            search-changed => on_search();
+            next-match => on_search_next_match();
+            previous-match => on_search_previous_match();
+            styles ["flatpak_search"]
+          }
+        }
+        Adw.ActionRow current_id {
+          tooltip-text: _("Selected Flatpak (Ctrl+G/Shift+Ctrl+G to toggle)");
           [prefix]
           Gtk.Image icon {
             styles ["icon36"]
           }
-
+          [suffix]
+          Gtk.Label found_num{
+            valign: center;
+            visible: false;
+            width-chars: 5;
+            styles ["flatpak_num"]
+          }
         }
         Adw.ComboRow remote {
           title: _("Remote");

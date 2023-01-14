@@ -125,3 +125,25 @@ spinner {
     background-color: @success_bg_color;
     color: @success_fg_color;
 }
+
+.flatpak_search {
+    margin: 5px;
+    background-color: @bg_color;
+    padding: 5x 10px;
+    outline: 0px;
+}
+
+.flatpak_search text {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.flatpak_num {
+    border-radius: 10px;
+    padding: 5px 5px;
+    font-size: 0.8em;
+    color: @success_fg_color;
+    background-color: @success_bg_color;
+}
+
+}

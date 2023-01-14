@@ -29,18 +29,23 @@ from yumex.utils import log
 class YumexFlatpakInstaller(Adw.Window):
     __gtype_name__ = "YumexFlatpakInstaller"
 
-    id: Adw.EntryRow = Gtk.Template.Child()
+    search_id: Gtk.SearchEntry = Gtk.Template.Child()
+    current_id: Adw.ActionRow = Gtk.Template.Child()
     remote: Adw.ComboRow = Gtk.Template.Child()
     location: Adw.ComboRow = Gtk.Template.Child()
     icon: Gtk.Image = Gtk.Template.Child()
+    found_num: Gtk.Label = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self.confirm = False
+        self.found_ids: list[str] = []
+        self.found_ndx: int = 0
         self.setup_location()
         self.read_clipboard()
-        self.id.grab_focus()
+        self.search_id.set_key_capture_widget(self)
+        self.search_id.grab_focus()
         self.icon.set_from_icon_name("flatpak-symbolic")
 
     def setup_location(self):
@@ -63,7 +68,7 @@ class YumexFlatpakInstaller(Adw.Window):
             text = clb.read_text_finish(res)
             if text and text.startswith("flatpak install"):
                 words = text.split(" ")
-                self.id.set_text(words[3])
+                self.search_id.set_text(words[3])
                 ndx = 0
                 for remote in self.remote.get_model():
                     if remote.get_string() == words[2]:
@@ -114,15 +119,57 @@ class YumexFlatpakInstaller(Adw.Window):
         else:
             self.icon.set_from_icon_name("flatpak-symbolic")
 
+    def _set_selected_num(self):
+        """update the current selected number"""
+        self.found_num.set_visible(True)
+        num = len(self.found_ids)
+        label = f"{self.found_ndx+1}/{num}"
+        self.found_num.set_label(label)
+
     @Gtk.Template.Callback()
-    def on_apply(self, widget):
+    def on_search(self, widget):
         key = widget.get_text()
         remote_name = self.remote.get_selected_item().get_string()
-        id = self.backend.find(remote_name, key)
-        if id:
-            widget.set_text(id)
-            self._set_icon(id, remote_name)
-
-        else:
-            widget.set_text("")
+        if key == "":
+            self.found_ids = []
+            self.found_ndx = 0
+            self.current_id.set_title("")
             self._set_icon("", remote_name)  # reset icon
+            self.found_num.set_visible(False)
+            return
+        if len(key) < 3:
+            return
+        self.found_ids = self.backend.find(remote_name, key)
+        log(f"found : {len(self.found_ids)}")
+        self.found_ndx = 0
+        if self.found_ids:
+            id = self.found_ids[self.found_ndx]
+            self._set_icon(id, remote_name)
+            self.current_id.set_title(id)
+            self._set_selected_num()
+        else:
+            self.current_id.set_title("")
+            self._set_icon("", remote_name)  # reset icon
+            self.found_num.set_visible(False)
+
+    @Gtk.Template.Callback()
+    def on_search_next_match(self, widget) -> None:
+        log("search next match")
+        if self.found_ndx < len(self.found_ids) - 1:
+            self.found_ndx += 1
+            id = self.found_ids[self.found_ndx]
+            remote_name = self.remote.get_selected_item().get_string()
+            self._set_icon(id, remote_name)
+            self.current_id.set_title(id)
+            self._set_selected_num()
+
+    @Gtk.Template.Callback()
+    def on_search_previous_match(self, widget) -> None:
+        log("search next match")
+        if self.found_ndx > 0:
+            self.found_ndx -= 1
+            id = self.found_ids[self.found_ndx]
+            remote_name = self.remote.get_selected_item().get_string()
+            self._set_icon(id, remote_name)
+            self.current_id.set_title(id)
+            self._set_selected_num()
