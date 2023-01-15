@@ -20,14 +20,13 @@
 import sys
 import argparse
 import subprocess
-import logging
 from traceback import format_exception
 
 from gi.repository import Gtk, Gio, Adw
 
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
-from yumex.utils import setup_logging, log
+from yumex.utils import setup_logging, log, logger
 from yumex.constants import rootdir, app_id, version, backend, build_type
 from yumex.ui.dialogs import error_dialog
 from typing import Literal
@@ -182,7 +181,7 @@ Yum Extender is a Package management to install, update and remove packages
         prefs.present()
 
     def exception_hook(self, exc_type, exc_value, exc_traceback) -> None:
-        logging.critical(
+        logger.critical(
             f"Uncaught exception: {exc_value}",
             exc_info=(exc_type, exc_value, exc_traceback),
         )

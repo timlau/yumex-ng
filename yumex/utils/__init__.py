@@ -24,6 +24,8 @@ from gi.repository import GLib
 
 from yumex.constants import build_type
 
+logger = logging.getLogger(name="yumex")
+
 
 def setup_logging(debug=False):
     if build_type == "debug" or debug:
@@ -41,7 +43,7 @@ def setup_logging(debug=False):
 
 
 def log(txt):
-    logger = logging.getLogger(name="yumex")
+    """debug logging"""
     logger.debug(txt)
 
 
