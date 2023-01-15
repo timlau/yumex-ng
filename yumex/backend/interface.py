@@ -13,10 +13,9 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Iterable, Protocol
+from typing import Any, Iterable, Protocol
 
 from yumex.backend.dnf import YumexPackage
-from yumex.ui.progress import YumexProgress
 
 from yumex.utils.enums import PackageFilter, SearchField, InfoType
 
@@ -70,7 +69,7 @@ class Presenter(Protocol):
         ...
 
     @property
-    def progress(self) -> YumexProgress:
+    def progress(self) -> Any:
         ...
 
     def reset_backend(self) -> None:

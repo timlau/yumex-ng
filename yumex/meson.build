@@ -62,6 +62,7 @@ yumex_backend_modules = [
 'backend/__init__.py',
 'backend/daemon.py',
 'backend/interface.py',
+'backend/cache.py',
 'backend/presenter.py'
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
