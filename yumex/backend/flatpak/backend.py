@@ -150,7 +150,7 @@ class FlatpakBackend:
         except GLib.GError as e:  # type: ignore
             msg = e.message
             log(msg)
-            self.win.show_message(f"{msg}", timeout=5)
+            self.win.show_message(f"{msg}", timeout=2)
             return False
 
     def do_update_all(self, pkgs: list[FlatpakPackage], execute) -> None:

@@ -133,7 +133,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.queue_view = YumexQueueView(self)
         self.content_queue.set_child(self.queue_view)
 
-    def show_message(self, title, timeout=5):
+    def show_message(self, title, timeout=2):
         """Create a toast with text and a given timeout"""
         toast = Adw.Toast(title=title)
         toast.set_timeout(timeout)

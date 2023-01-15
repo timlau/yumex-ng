@@ -92,7 +92,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         def callback(state, error=None) -> None:
             if state:
-                self.win.show_message(_(f"{id} is now installed"), timeout=5)
+                self.win.show_message(_(f"{id} is now installed"), timeout=2)
 
         def on_close(*args) -> None:
             global id, remote, ref, location
@@ -125,7 +125,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         def callback(state, error=None) -> None:
             if state:
-                self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=5)
+                self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
 
         if pkg:
             selected = [pkg]

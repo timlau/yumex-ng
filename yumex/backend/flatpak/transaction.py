@@ -125,7 +125,7 @@ class FlatpakTransaction:
                 raise FlatPakFirstRun
             else:
                 log(msg)
-                self.win.show_message(f"{msg}", timeout=5)
+                self.win.show_message(f"{msg}", timeout=2)
                 return False
         log(" FlatpakTransaction: Running Transaction Ended")
         return True
