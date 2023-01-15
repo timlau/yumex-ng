@@ -200,7 +200,10 @@ class Backend(dnf.Base):
                     # value = updinfo.advisories_list()
                     # return value
                     return None
-        return None
+                case other:
+                    raise KeyError(f"Unknown package info: {other}")
+        else:
+            raise ValueError(f"dnf package not found: {pkg}")
 
     def get_repositories(self) -> list[tuple[str, str, bool]]:
         query = RepoQuery(self)

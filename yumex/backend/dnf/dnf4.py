@@ -461,9 +461,11 @@ class Backend(DnfBase):
                     updinfo = UpdateInfo(dnf_pkg)
                     value = updinfo.advisories_list()
                     return value
+                case other:
+                    raise KeyError(f"Unknown package info: {other}")
         else:
             log(f" DNF4: {pkg} was not found")
-        return None
+            raise ValueError(f"dnf package not found: {pkg}")
 
     def get_repositories(self):
         repos = self.repos.all()
