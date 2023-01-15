@@ -39,6 +39,7 @@ class MockBackend:
 
 
 def test_get_package(pkg, pkg_dict):
+    """test that a package is cached"""
     cache = YumexPackageCache(None)
     assert cache._package_dict == {}
     pkg.state = PackageState.INSTALLED
@@ -50,6 +51,7 @@ def test_get_package(pkg, pkg_dict):
 
 
 def test_get_package_update_after_available(pkg, pkg_dict):
+    """test that package state is updated"""
     cache = YumexPackageCache(None)
     pkg.state = PackageState.AVAILABLE
     cache.get_package(pkg)
@@ -60,6 +62,7 @@ def test_get_package_update_after_available(pkg, pkg_dict):
 
 
 def test_get_package_update_after_installed(pkg, pkg_dict):
+    """test that package state is updated"""
     cache = YumexPackageCache(None)
     pkg.state = PackageState.INSTALLED
     cache.get_package(pkg)
@@ -70,6 +73,7 @@ def test_get_package_update_after_installed(pkg, pkg_dict):
 
 
 def test_get_package_installed_after_available(pkg, pkg_dict):
+    """test that package state is updated"""
     cache = YumexPackageCache(None)
     pkg.state = PackageState.AVAILABLE
     cache.get_package(pkg)
@@ -80,6 +84,7 @@ def test_get_package_installed_after_available(pkg, pkg_dict):
 
 
 def test_get_package_available_after_installed(pkg, pkg_dict):
+    """test that package state is not updated"""
     cache = YumexPackageCache(None)
     pkg.state = PackageState.INSTALLED
     cache.get_package(pkg)
@@ -90,6 +95,7 @@ def test_get_package_available_after_installed(pkg, pkg_dict):
 
 
 def test_get_packages(pkg, pkg_other):
+    """test the get_packages method"""
     cache = YumexPackageCache(None)
     res = cache.get_packages([pkg, pkg_other])
     assert isinstance(res, Generator)
@@ -100,6 +106,7 @@ def test_get_packages(pkg, pkg_other):
 
 
 def test_get_packages_by_filter_inst():
+    """test the get_packages_by_filter method (installed)"""
     cache = YumexPackageCache(MockBackend())
     res = cache.get_packages_by_filter(PackageFilter.INSTALLED)
     assert isinstance(res, list)
@@ -108,6 +115,7 @@ def test_get_packages_by_filter_inst():
 
 
 def test_get_packages_by_filter_avail():
+    """test the get_packages_by_filter method (available)"""
     cache = YumexPackageCache(MockBackend())
     res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
     assert isinstance(res, list)
@@ -116,6 +124,7 @@ def test_get_packages_by_filter_avail():
 
 
 def test_get_packages_by_filter_three_times():
+    """test the get_packages_by_filter dont reload from backend"""
     backend = MockBackend()
     cache = YumexPackageCache(backend)
     res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
@@ -129,7 +138,24 @@ def test_get_packages_by_filter_three_times():
     assert backend.filters[0] == PackageFilter.AVAILABLE
 
 
+def test_get_packages_by_filter_reset():
+    """test the get_packages_by_filter reset"""
+    backend = MockBackend()
+    cache = YumexPackageCache(backend)
+    res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
+    po1 = res[0]
+    res = cache.get_packages_by_filter(PackageFilter.AVAILABLE, reset=True)
+    po2 = res[0]
+    res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
+    po3 = res[0]
+    assert po1 == po2 == po3
+    # on reset the packages is reloaded from backend
+    assert len(backend.filters) == 2
+    assert backend.filters[0] == PackageFilter.AVAILABLE
+
+
 def test_get_packages_by_filter_updates():
+    """test the get_packages_by_filter method (updated)"""
     cache = YumexPackageCache(MockBackend())
     res = cache.get_packages_by_filter(PackageFilter.UPDATES)
     assert isinstance(res, list)
@@ -137,6 +163,7 @@ def test_get_packages_by_filter_updates():
 
 
 def test_get_packages_by_filter_notfound():
+    """test the get_packages_by_filter with illegal filter"""
     cache = YumexPackageCache(MockBackend())
     with pytest.raises(KeyError):
         _ = cache.get_packages_by_filter("notfound")
