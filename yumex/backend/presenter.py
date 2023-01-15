@@ -15,14 +15,12 @@
 
 from yumex.backend.cache import YumexPackageCache
 from yumex.constants import backend
-from yumex.backend.interface import PackageBackend
+from yumex.backend.interface import PackageBackend, PackageCache, Progress
 
 if backend == "DNF5":
     from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
 else:
     from yumex.backend.dnf.dnf4 import Backend as Dnf4Backend, DnfCallback
-
-from yumex.ui.progress import YumexProgress
 
 
 class YumexPresenter:
@@ -54,13 +52,13 @@ class YumexPresenter:
         return self._backend
 
     @property
-    def package_cache(self) -> YumexPackageCache:
+    def package_cache(self) -> PackageCache:
         if not self._cache:
-            self._cache: YumexPackageCache = YumexPackageCache(backend=self.backend)
+            self._cache: PackageCache = YumexPackageCache(backend=self.backend)
         return self._cache
 
     @property
-    def progress(self) -> YumexProgress:
+    def progress(self) -> Progress:
         return self.win.progress
 
     def reset_backend(self) -> None:

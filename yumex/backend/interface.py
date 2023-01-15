@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Any, Iterable, Protocol
+from typing import Iterable, Protocol
 
 from yumex.backend.dnf import YumexPackage
 
@@ -57,6 +57,23 @@ class PackageBackend(Protocol):
         ...
 
 
+class Progress(Protocol):
+    def show(self) -> None:
+        ...
+
+    def hide(self) -> None:
+        ...
+
+    def set_title(self, title: str) -> None:
+        ...
+
+    def set_subtitle(self, title: str) -> None:
+        ...
+
+    def set_progress(self, frac: float) -> None:
+        ...
+
+
 class Presenter(Protocol):
     """Protocol class for a presenter in  a Model-view-presenter (MVP) architectural pattern"""
 
@@ -69,7 +86,7 @@ class Presenter(Protocol):
         ...
 
     @property
-    def progress(self) -> Any:
+    def progress(self) -> Progress:
         ...
 
     def reset_backend(self) -> None:
