@@ -440,8 +440,8 @@ class Backend(DnfBase):
                 return self.packages.installed
             case PackageFilter.UPDATES:
                 return self.packages.updates
-            case _:
-                return []
+            case other:
+                raise KeyError(f"Unknown package filter: {other}")
 
     def search(
         self, txt: str, field: str = "name", limit: int = 1

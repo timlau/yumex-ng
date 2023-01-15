@@ -175,11 +175,8 @@ class Backend(dnf.Base):
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
                 return self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
-            case _:
-                log(
-                    f"DNF5: (get_packages) PackageFilter: {pkg_filter} is not supported"
-                )
-                return []
+            case other:
+                raise KeyError(f"Unknown package filter: {other}")
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         query = PackageQuery(self)
