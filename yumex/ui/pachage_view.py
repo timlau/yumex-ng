@@ -147,7 +147,7 @@ class YumexPackageView(Gtk.ColumnView):
             case SortType.ARCH:
                 store.sort(lambda a, b: a.arch > b.arch)
             case SortType.SIZE:
-                store.sort(lambda a, b: a.sizeB > b.sizeB)
+                store.sort(lambda a, b: a.size > b.size)
             case SortType.REPO:
                 store.sort(lambda a, b: a.repo > b.repo)
         return store
