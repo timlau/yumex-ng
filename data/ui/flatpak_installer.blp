@@ -86,7 +86,7 @@ template YumexFlatpakInstaller : Adw.Window {
         Adw.ComboRow location {
           title: _("Install location");
           model: locations;
-          notify => on_location_notify();
+          notify::selected => on_location_selected();
         }
 
       }

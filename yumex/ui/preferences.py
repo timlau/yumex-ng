@@ -27,7 +27,7 @@ from yumex.utils import log
 class YumexPreferences(Adw.PreferencesWindow):
     __gtype_name__ = "YumexPreferences"
 
-    fp_source = Gtk.Template.Child()
+    fp_remote = Gtk.Template.Child()
     fp_location = Gtk.Template.Child()
 
     repo_group = Gtk.Template.Child()
@@ -51,11 +51,11 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     def setup_flatpak(self):
         location = self.settings.get_string("fp-location")
-        source = self.settings.get_string("fp-source")
+        remote = self.settings.get_string("fp-remote")
         log(f" settings : {location=}")
-        log(f" settings : {source=}")
+        log(f" settings : {remote=}")
         self.set_location(location)
-        self.set_source(location, source)
+        self.set_remote(location, remote)
 
     def set_location(self, fp_location):
         ndx = 0
@@ -65,12 +65,12 @@ class YumexPreferences(Adw.PreferencesWindow):
                 break
             ndx += 1
 
-    def set_source(self, fp_location, fp_source):
-        self.fp_source.set_model(self.get_remotes(fp_location))
+    def set_remote(self, fp_location, fp_remote):
+        self.fp_remote.set_model(self.get_remotes(fp_location))
         ndx = 0
-        for source in self.fp_source.get_model():
-            if source.get_string() == fp_source:
-                self.fp_source.set_selected(ndx)
+        for remote in self.fp_remote.get_model():
+            if remote.get_string() == fp_remote:
+                self.fp_remote.set_selected(ndx)
                 break
             ndx += 1
 
@@ -90,22 +90,18 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.settings.set_boolean(setting, state)
 
     @Gtk.Template.Callback()
-    def on_location_notify(self, widget, data):
+    def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        match data.name:
-            case "selected":
-                location = self.fp_location.get_selected_item().get_string()
-                source = self.settings.get_string("fp-source")
-                self.settings.set_string("fp-location", location)
-                self.set_source(location, source)
+        location = self.fp_location.get_selected_item().get_string()
+        remote = self.settings.get_string("fp-remote")
+        self.settings.set_string("fp-location", location)
+        self.set_remote(location, remote)
 
     @Gtk.Template.Callback()
-    def on_source_notify(self, widget, data):
+    def on_remote_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        match data.name:
-            case "selected":
-                source = self.fp_source.get_selected_item().get_string()
-                self.settings.set_string("fp-source", source)
+        remote = self.fp_remote.get_selected_item().get_string()
+        self.settings.set_string("fp-remote", remote)
 
 
 @Gtk.Template(resource_path=f"{rootdir}/ui/repository.ui")

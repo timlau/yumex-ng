@@ -14,12 +14,12 @@ template YumexPreferences: Adw.PreferencesWindow {
       Adw.ComboRow fp_location {
         title: "Default Location";
         model: fp_locations;
-        notify => on_location_notify();
+        notify::selected => on_location_selected();
       }
-      Adw.ComboRow fp_source {
+      Adw.ComboRow fp_remote {
         title: "Default Remote";
-        model: fp_sources;
-        notify => on_source_notify();
+        model: fp_remotes;
+        notify::selected => on_remote_selected();
       }
     }
 
@@ -43,7 +43,7 @@ Gtk.StringList fp_locations {
     ]
 }
 
-Gtk.StringList fp_sources {
+Gtk.StringList fp_remotes {
     strings [
         "flathub",
         "fedora"

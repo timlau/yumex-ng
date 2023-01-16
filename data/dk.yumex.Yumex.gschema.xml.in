@@ -37,7 +37,7 @@
 		<key name="fp-location" type="s">
 			<default>"user"</default>
 		</key>
-		<key name="fp-source" type="s">
+		<key name="fp-remote" type="s">
 			<default>"flathub"</default>
 		</key>
 	</schema>

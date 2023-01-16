@@ -101,15 +101,13 @@ class YumexFlatpakInstaller(Adw.Window):
         self.close()
 
     @Gtk.Template.Callback()
-    def on_location_notify(self, widget, data):
+    def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        match data.name:
-            case "selected":
-                location = self.location.get_selected_item()
-                remotes = Gtk.StringList.new()
-                for remote in self.backend.get_remotes(location=location.get_string()):
-                    remotes.append(remote)
-                self.remote.set_model(remotes)
+        location = self.location.get_selected_item()
+        remotes = Gtk.StringList.new()
+        for remote in self.backend.get_remotes(location=location.get_string()):
+            remotes.append(remote)
+        self.remote.set_model(remotes)
 
     def _set_icon(self, id: str, remote_name: str):
         icon_path = self.backend.get_icon_path(remote_name)
