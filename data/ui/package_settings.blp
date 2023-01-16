@@ -67,7 +67,7 @@ template YumexPackageSettings : Gtk.Box {
             model: sort_attr;
             styles ["sorting-row"]
             activated => on_sorting_activated();
-            notify => on_sort_by_notify();
+            notify::selected => on_sort_by_selected();
             [prefix]
             Gtk.Image  sort_icon {
                 tooltip-text: _("Select what attribute to sort by");
@@ -77,7 +77,7 @@ template YumexPackageSettings : Gtk.Box {
        Adw.ComboRow info_type {
             model: info_types;
             styles ["sorting-row"]
-            notify => on_info_type_notify();
+            notify::selected => on_info_type_selected();
             [prefix]
             Gtk.Image  show_icon {
                 tooltip-text: _("Select what package information to show");

@@ -86,22 +86,18 @@ class YumexPackageSettings(Gtk.Box):
         self.previuos_pkg_filter = pkg_filter
 
     @Gtk.Template.Callback()
-    def on_info_type_notify(self, widget, data):
+    def on_info_type_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        match data.name:
-            case "selected":
-                log(f"package info changed {self.info_type.get_selected()}")
-                self.win.package_view.on_selection_changed(
-                    self.win.package_view.get_model(), 0, 0
-                )
-                self.win.sidebar.set_reveal_flap(False)
+        log(f"package info changed {self.info_type.get_selected()}")
+        self.win.package_view.on_selection_changed(
+            self.win.package_view.get_model(), 0, 0
+        )
+        self.win.sidebar.set_reveal_flap(False)
 
     @Gtk.Template.Callback()
-    def on_sort_by_notify(self, widget, data):
+    def on_sort_by_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        match data.name:
-            case "selected":
-                log(f"sort_by changed {self.sort_by.get_selected()}")
-                self.win.package_view.sort()
-                self.win.package_view.refresh()
-                self.win.sidebar.set_reveal_flap(False)
+        log(f"sort_by changed {self.sort_by.get_selected()}")
+        self.win.package_view.sort()
+        self.win.package_view.refresh()
+        self.win.sidebar.set_reveal_flap(False)
