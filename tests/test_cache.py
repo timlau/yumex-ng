@@ -47,7 +47,7 @@ def test_get_package(pkg, pkg_dict):
     assert pkg in cache._package_dict
     pkg2 = YumexPackage(**pkg_dict)
     po2 = cache.get_package(pkg2)
-    assert po1 == po2
+    assert id(po1) == id(po2)
 
 
 def test_get_package_update_after_available(pkg, pkg_dict):
@@ -133,7 +133,7 @@ def test_get_packages_by_filter_three_times():
     po2 = res[0]
     res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
     po3 = res[0]
-    assert po1 == po2 == po3
+    assert id(po1) == id(po2) == id(po3)
     assert len(backend.filters) == 1
     assert backend.filters[0] == PackageFilter.AVAILABLE
 
@@ -148,7 +148,7 @@ def test_get_packages_by_filter_reset():
     po2 = res[0]
     res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
     po3 = res[0]
-    assert po1 == po2 == po3
+    assert id(po1) == id(po2) == id(po3)
     # on reset the packages is reloaded from backend
     assert len(backend.filters) == 2
     assert backend.filters[0] == PackageFilter.AVAILABLE
