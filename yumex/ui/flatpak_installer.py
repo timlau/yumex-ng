@@ -50,11 +50,9 @@ class YumexFlatpakInstaller(Adw.Window):
 
     def setup_location(self):
         fp_location = self.win.settings.get_string("fp-location")
-        ndx = 0
-        for location in self.location.get_model():
+        for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
-            ndx += 1
 
     def read_clipboard(self):
         """If the the clipboard contains
@@ -69,18 +67,14 @@ class YumexFlatpakInstaller(Adw.Window):
             if text and text.startswith("flatpak install"):
                 words = text.split(" ")
                 self.search_id.set_text(words[3])
-                ndx = 0
-                for remote in self.remote.get_model():
+                for ndx, remote in enumerate(self.remote.get_model()):
                     if remote.get_string() == words[2]:
                         self.remote.set_selected(ndx)
-                    ndx += 1
             else:
                 fp_source = self.win.settings.get_string("fp-source")
-                ndx = 0
-                for remote in self.remote.get_model():
+                for ndx, remote in enumerate(self.remote.get_model()):
                     if remote.get_string() == fp_source:
                         self.remote.set_selected(ndx)
-                    ndx += 1
 
         clb = self.win.get_clipboard()
         clb.read_text_async(None, callback)

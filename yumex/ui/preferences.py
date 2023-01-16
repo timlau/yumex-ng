@@ -58,21 +58,17 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.set_remote(location, remote)
 
     def set_location(self, fp_location):
-        ndx = 0
-        for location in self.fp_location.get_model():
+        for ndx, location in enumerate(self.fp_location.get_model()):
             if location.get_string() == fp_location:
                 self.fp_location.set_selected(ndx)
                 break
-            ndx += 1
 
     def set_remote(self, fp_location, fp_remote):
         self.fp_remote.set_model(self.get_remotes(fp_location))
-        ndx = 0
-        for remote in self.fp_remote.get_model():
+        for ndx, remote in enumerate(self.fp_remote.get_model()):
             if remote.get_string() == fp_remote:
                 self.fp_remote.set_selected(ndx)
                 break
-            ndx += 1
 
     def get_remotes(self, location):
         if location == "system":
