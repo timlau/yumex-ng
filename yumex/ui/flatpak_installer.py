@@ -36,9 +36,10 @@ class YumexFlatpakInstaller(Adw.Window):
     icon: Gtk.Image = Gtk.Template.Child()
     found_num: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win, backend, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
+        self.backend: FlatpakBackend = backend
         self.confirm = False
         self.found_ids: list[str] = []
         self.found_ndx: int = 0
@@ -81,10 +82,6 @@ class YumexFlatpakInstaller(Adw.Window):
             clb.read_text_async(None, callback)
         except GLib.GError:  # type:ignore
             log("cant read from clipboard")
-
-    @property
-    def backend(self) -> FlatpakBackend:
-        return self.win.flatpak_view.backend
 
     @Gtk.Template.Callback()
     def on_ok_clicked(self, *args):

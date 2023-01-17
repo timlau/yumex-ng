@@ -111,7 +111,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         self.win.stack.set_visible_child_name("flatpaks")
         # TODO: make and sync edition of the flatpak installer, to make code more readable
-        flatpak_installer = YumexFlatpakInstaller(self.win)
+        flatpak_installer = YumexFlatpakInstaller(self.win, self.backend)
         remotes = Gtk.StringList.new()
         for remote in self.backend.get_remotes(location=FlatpakLocation.USER):
             remotes.append(remote)
