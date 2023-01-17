@@ -52,7 +52,7 @@ class FlatpakPackage(GObject.GObject):
         version = self.ref.get_appdata_version()
         if not version:
             version = ""
-        return
+        return version
 
     @property
     def summary(self) -> str:
