@@ -7,42 +7,10 @@ gi.require_version("Adw", "1")
 import pytest
 from gi.repository import Flatpak
 from yumex.utils.enums import FlatpakLocation, FlatpakType
-from .mock import Mock
+from .mock import MockFlatpakRef
 from yumex.backend.flatpak import FlatpakPackage
 
 pytestmark = pytest.mark.guitest
-
-
-class MockFlatpakRef(Mock):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.id = "dk.yumex.Yumex"
-        self.name = "Yum Extender"
-        self.version = "4.99"
-        self.summary = "This is a package manager"
-        self.ref_string = "app/dk.yumex.Yumex/x86_64/stable"
-        self.kind = Flatpak.RefKind.APP
-
-    def get_name(self) -> str:
-        return self.id
-
-    def get_appdata_name(self) -> str:
-        return self.name
-
-    def get_appdata_version(self) -> str:
-        return self.version
-
-    def get_appdata_summary(self) -> str:
-        return self.summary
-
-    def format_ref(self):
-        return self.ref_string
-
-    def get_origin(self):
-        return "flathub"
-
-    def get_kind(self):
-        return self.kind
 
 
 @pytest.fixture

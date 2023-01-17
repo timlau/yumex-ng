@@ -1,5 +1,6 @@
 import gi
 
+
 gi.require_version("Flatpak", "1.0")
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -8,8 +9,9 @@ from dataclasses import dataclass
 import pytest
 import os
 from yumex.constants import PKGDATADIR
-from yumex.utils.enums import FlatpakLocation
-from .mock import Mock
+from yumex.utils.enums import FlatpakLocation, Page
+from yumex.backend.flatpak import FlatpakPackage
+from .mock import Mock, MockFlatpakRef
 
 pytestmark = pytest.mark.guitest
 
@@ -22,7 +24,11 @@ class MockWindow(Mock):
 class MockFlatpackBackend(Mock):
     def get_installed(self, *args, **kwargs):
         self.set_mock_call("get_installed", args, kwargs)
-        return []
+        return [
+            FlatpakPackage(
+                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
+            )
+        ]
 
 
 @dataclass
@@ -65,6 +71,13 @@ def package():
 def test_backend_mock(flatpak_view):
     """Test that the backend is mocked."""
     assert isinstance(flatpak_view.backend, MockFlatpackBackend)
+
+
+def test_backend_set_needs_attention(flatpak_view):
+    """Test that the win.set_needs_attention is called with one update"""
+    calls = flatpak_view.win.get_mock_call("set_needs_attention")
+    assert len(calls) == 1
+    assert calls[0] == ((Page.FLATPAKS, 1), {})
 
 
 def test_backend_get_installed_called(flatpak_view):
