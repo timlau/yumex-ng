@@ -112,7 +112,8 @@ class YumexApplication(Adw.Application):
             )
             return 0
         setup_logging(debug=self.args.debug)
-        log(f" commmand-line : {self.args}")
+        log(f"version : {version}")
+        log(f"commmand-line : {self.args}")
         self.activate()
         return 0
 
