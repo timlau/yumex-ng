@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
 from pathlib import Path
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, GLib
 from yumex.backend.flatpak.backend import FlatpakBackend
 
 from yumex.constants import ROOTDIR
@@ -71,13 +71,16 @@ class YumexFlatpakInstaller(Adw.Window):
                     if remote.get_string() == words[2]:
                         self.remote.set_selected(ndx)
             else:
-                fp_source = self.win.settings.get_string("fp-source")
+                fp_remote = self.win.settings.get_string("fp-remote")
                 for ndx, remote in enumerate(self.remote.get_model()):
-                    if remote.get_string() == fp_source:
+                    if remote.get_string() == fp_remote:
                         self.remote.set_selected(ndx)
 
         clb = self.win.get_clipboard()
-        clb.read_text_async(None, callback)
+        try:
+            clb.read_text_async(None, callback)
+        except GLib.GError:  # type:ignore
+            log("cant read from clipboard")
 
     @property
     def backend(self) -> FlatpakBackend:
