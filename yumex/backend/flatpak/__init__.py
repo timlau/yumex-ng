@@ -38,7 +38,12 @@ class FlatpakPackage(GObject.GObject):
     @property
     def name(self) -> str:
         """return the application name (not id) : ex. Contrast"""
-        return self.ref.get_appdata_name()
+        name = self.ref.get_appdata_name()
+        if not name:
+            id = self.ref.get_name()
+            name = id.split(".")[-1]
+            self.log(f"flatpak {id} don't have an appname, using {name}")
+        return name
 
     @property
     def version(self) -> str:
