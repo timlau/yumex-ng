@@ -57,6 +57,14 @@ def test_storage_clear(storage, pkg, pkg_other):
     assert len(storage) == 0
 
 
+def test_storage_insert_sorted(storage, pkg, pkg_other):
+    """test sort by name"""
+    storage.add_package(pkg_other)
+    storage.insert_sorted(pkg, lambda a, b: a.name > b.name)
+    assert storage.get_storage()[0] == pkg
+    assert storage.get_storage()[1] == pkg_other
+
+
 def test_storage_sort_name(storage, pkg, pkg_other):
     """test sort by name"""
     storage.add_packages([pkg_other, pkg])  # otherpkg, mypkg

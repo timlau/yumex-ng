@@ -37,6 +37,12 @@ class PackageStorage:
         else:
             raise ValueError(f"Can't add {package} to package storage")
 
+    def insert_sorted(self, package: YumexPackage, sort_fn: callable) -> None:
+        if isinstance(package, YumexPackage):
+            self._store.insert_sorted(package, sort_fn)
+        else:
+            raise ValueError(f"Can't add {package} to package storage")
+
     def sort_by(self, attr: SortType) -> Gio.ListStore:
         match attr:
             case SortType.NAME:
