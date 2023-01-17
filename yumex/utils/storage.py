@@ -17,6 +17,9 @@ class PackageStorage:
     def __len__(self):
         return len(self._store)
 
+    def __contains__(self, item):
+        return item in self._store
+
     def get_storage(self) -> Gio.ListStore:
         return self._store
 

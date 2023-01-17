@@ -27,6 +27,12 @@ def test_storage_add_pkgs(storage, pkg, pkg_other):
     assert storage.get_storage()[1] == pkg_other
 
 
+def test_storage_contains(storage, pkg, pkg_other):
+    storage.add_packages([pkg])
+    assert pkg in storage
+    assert pkg_other not in storage
+
+
 def test_storage_iterate(storage, pkg, pkg_other):
     storage.add_packages([pkg, pkg_other])
     assert len(storage) == 2
