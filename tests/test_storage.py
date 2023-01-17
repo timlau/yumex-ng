@@ -80,6 +80,13 @@ def test_storage_sort_name(storage: PackageStorage, pkg, pkg_other):
     assert storage.get_storage()[1] == pkg_other
 
 
+def test_storage_sort_name_single(storage: PackageStorage, pkg):
+    """test sort by name, with single element"""
+    storage.add_package(pkg)  # otherpkg, mypkg
+    storage.sort_by(SortType.NAME)  # mypkg, otherpkg
+    assert storage.get_storage()[0] == pkg
+
+
 def test_storage_sort_repo(storage: PackageStorage, pkg, pkg_other):
     """test sort by repo"""
     storage.add_packages([pkg, pkg_other])  # repo2, repo1
