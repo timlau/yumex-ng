@@ -48,12 +48,18 @@ class FlatpakPackage(GObject.GObject):
     @property
     def version(self) -> str:
         """return the flatpak version"""
-        return self.ref.get_appdata_version()
+        version = self.ref.get_appdata_version()
+        if not version:
+            version = ""
+        return
 
     @property
     def summary(self) -> str:
         """return the flatpak summary"""
-        return self.ref.get_appdata_summary()
+        summary = self.ref.get_appdata_summary()
+        if not summary:
+            summary = ""
+        return summary
 
     @property
     def origin(self) -> str:
