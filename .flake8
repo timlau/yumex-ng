@@ -2,3 +2,4 @@
 max-line-length = 99
 extend-ignore = E203
 builtins = _
+ignore = E402

@@ -1,34 +1,25 @@
+import gi
+
+gi.require_version("Flatpak", "1.0")
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
+
 from dataclasses import dataclass
 import pytest
 import os
-import gi
-from gi.repository import Gio
 from yumex.constants import PKGDATADIR
 from yumex.utils.enums import FlatpakLocation
+from .mock import Mock
 
 pytestmark = pytest.mark.guitest
 
 
-class MockWindow:
-    def __init__(self):
-        self._calls = []
-
+class MockWindow(Mock):
     def set_needs_attention(self, *args, **kwargs):
-        self._calls.append((__name__, args, kwargs))
+        self.set_mock_call("set_needs_attention", args, kwargs)
 
 
-class MockFlatpackBackend:
-    def __init__(self, *args, **kwargs):
-        self._calls = {}
-
-    def get_mock_call(self, method) -> list:
-        return self._calls.get(method, [])
-
-    def set_mock_call(self, method, args, kwargs):
-        call_list = self._calls.get(method, [])
-        call_list.append((args, kwargs))
-        self._calls[method] = call_list
-
+class MockFlatpackBackend(Mock):
     def get_installed(self, *args, **kwargs):
         self.set_mock_call("get_installed", args, kwargs)
         return []
@@ -56,9 +47,8 @@ def window():
 @pytest.fixture
 def flatpak_view(window):
     """setup ressources and create a YumexFlatpakView object"""
-    gi.require_version("Flatpak", "1.0")
-    gi.require_version("Gtk", "4.0")
-    gi.require_version("Adw", "1")
+    from gi.repository import Gio
+
     resource = Gio.Resource.load(os.path.join(PKGDATADIR, "yumex.gresource"))
     Gio.Resource._register(resource)
     from yumex.ui.flatpak_view import YumexFlatpakView
@@ -78,7 +68,7 @@ def test_backend_mock(flatpak_view):
 
 
 def test_backend_get_installed_called(flatpak_view):
-    """Test that the backend, get_installed is called"""
+    """Test that backend,get_installed is called"""
     assert isinstance(flatpak_view.backend, MockFlatpackBackend)
     calls = flatpak_view.backend.get_mock_call("get_installed")
     assert len(calls) == 1
