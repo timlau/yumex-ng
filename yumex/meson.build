@@ -84,7 +84,8 @@ PY_INSTALLDIR.install_sources(yumex_backend_dnf_modules, subdir: 'yumex/backend/
 yumex_utils_modules = [
 'utils/__init__.py',
 'utils/types.py',
-'utils/enums.py'
+'utils/enums.py',
+'utils/storage.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
