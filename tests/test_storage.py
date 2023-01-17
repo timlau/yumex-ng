@@ -110,3 +110,11 @@ def test_storage_add_illegal(storage, pkg, pkg_other):
         storage.add_packages([pkg, pkg_other, "illegal"])
     with pytest.raises(ValueError):
         storage.add_packages([pkg, pkg_other, None])
+
+
+def test_storage_find_by_nevra(storage, pkg, pkg_other, pkg_upd):
+    storage.add_packages([pkg, pkg_other])  # x86_64, noarch
+    po = storage.find_by_nevra(pkg.nevra)  # pkg is in storage
+    assert po == pkg
+    po = storage.find_by_nevra(pkg_upd.nevra)  # pkg is not in storage
+    assert po is None

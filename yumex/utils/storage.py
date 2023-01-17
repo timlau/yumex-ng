@@ -56,3 +56,9 @@ class PackageStorage:
             case other:
                 raise ValueError(f"Unknown sort type: {other}")
         return self._store
+
+    def find_by_nevra(self, nevra: str) -> YumexPackage | None:
+        for pkg in self._store:
+            if pkg.nevra == nevra:
+                return pkg
+        return None
