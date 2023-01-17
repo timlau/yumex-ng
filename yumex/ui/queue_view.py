@@ -14,10 +14,12 @@
 # Copyright (C) 2023  Tim Lauridsen
 from typing import TYPE_CHECKING
 
+from yumex.utils.storage import PackageStorage
+
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk
 from yumex.backend.interface import PackageCache
 
 from yumex.constants import rootdir
@@ -38,12 +40,11 @@ class YumexQueueView(Gtk.ListView):
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
-        self.store = Gio.ListStore.new(YumexPackage)
-        self.selection.set_model(self.store)
+        self.storage = PackageStorage()
+        self.selection.set_model(self.storage.get_storage())
 
     def reset(self):
-        self.store = Gio.ListStore.new(YumexPackage)
-        self.selection.set_model(self.store)
+        self.selection.set_model(self.storage.clear())
         self.win.set_needs_attention(Page.QUEUE, 0)
 
     @property
@@ -55,7 +56,7 @@ class YumexQueueView(Gtk.ListView):
         return self.win.package_view
 
     def contains(self, pkg):
-        return pkg in self.store
+        return pkg in self.storage
 
     def add_package(self, pkg):
         self.add_packages([pkg])
@@ -66,21 +67,21 @@ class YumexQueueView(Gtk.ListView):
 
         def completed(deps, error=None):
             for dep in self.cache.get_packages(deps):
-                if dep not in self.store:  # new dep not in queue
+                if dep not in self.storage:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
                     dep.ref_to = pkg
                     dep.queue_action = True
-                self.store.insert_sorted(dep, self.sort_by_state)
+                self.storage.insert_sorted(dep, self.sort_by_state)
             self.package_view.refresh()
             self.win.set_sensitive(True)
-            self.win.set_needs_attention(Page.QUEUE, len(self.store))
+            self.win.set_needs_attention(Page.QUEUE, len(self.storage))
 
         for pkg in pkgs:
-            if pkg not in self.store:
-                self.store.insert_sorted(pkg, self.sort_by_state)
+            if pkg not in self.storage:
+                self.storage.insert_sorted(pkg, self.sort_by_state)
         self.win.set_sensitive(False)
-        RunAsync(self.win.package_view.backend.depsolve, completed, self.store)
+        RunAsync(self.win.package_view.backend.depsolve, completed, self.storage)
 
     def remove_package(self, pkg):
         self.remove_packages([pkg])
@@ -91,47 +92,46 @@ class YumexQueueView(Gtk.ListView):
 
         def completed(deps, error=None):
             for dep in self.cache.get_packages(deps):
-                if dep not in store:  # new dep not in queue
+                if dep not in self.storage:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
                     dep.queue_action = True
-                    store.insert_sorted(dep, self.sort_by_state)
-            self.store = store
-            self.selection.set_model(self.store)
+                    self.storage.insert_sorted(dep, self.sort_by_state)
+            self.selection.set_model(self.storage.get_storage())
             self.package_view.refresh()
             self.win.set_sensitive(True)
-            self.win.set_needs_attention(Page.QUEUE, len(self.store))
+            self.win.set_needs_attention(Page.QUEUE, len(self.storage))
 
-        store = Gio.ListStore.new(YumexPackage)
-        for store_pkg in self.store:
+        to_keep = []
+        for store_pkg in self.storage:
             # check if this package should be kept in the queue
             if store_pkg not in pkgs and not store_pkg.is_dep:
-                store.insert_sorted(store_pkg, self.sort_by_state)
+                to_keep.append(store_pkg)
             else:  # reset properties for pkg to not keep in queue
                 store_pkg.queued = False
                 store_pkg.is_dep = False
                 store_pkg.queue_action = True
-        if len(store):  # check if there something in the queue
+        store = self.storage.clear()
+        if len(to_keep):  # check if there something in the queue
+            for pkg in to_keep:
+                self.storage.insert_sorted(pkg, self.sort_by_state)
             self.win.set_sensitive(False)
             RunAsync(self.win.package_view.backend.depsolve, completed, store)
         else:
             completed([])
 
     def clear_all(self):
-        self.remove_packages(self.store)
+        self.remove_packages(list(self.storage))
 
     def get_queued(self) -> list[YumexPackage]:
-        return [pkg for pkg in self.store if not pkg.is_dep]
+        return [pkg for pkg in self.storage if not pkg.is_dep]
 
     @staticmethod
     def sort_by_state(a, b):
         return (a.state + a.action) > (b.state + b.action)
 
     def find_by_nevra(self, nevra):
-        for pkg in self.store:
-            if pkg.nevra == nevra:
-                return pkg
-        return None
+        return self.storage.find_by_nevra(nevra)
 
     @Gtk.Template.Callback()
     def on_queue_setup(self, widget, item):
