@@ -14,10 +14,12 @@
 # Copyright (C) 2023  Tim Lauridsen
 from typing import TYPE_CHECKING
 
+from yumex.utils.storage import PackageStorage
+
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk
 from yumex.backend.interface import Presenter
 
 from yumex.constants import rootdir
@@ -55,10 +57,11 @@ class YumexPackageView(Gtk.ColumnView):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self.presenter = presenter
+        self.storage = PackageStorage(YumexPackage)
         self.setup()
 
     def setup(self):
-        self.store = Gio.ListStore.new(YumexPackage)
+        self.store = self.storage.clear()
         self.selection.set_model(self.store)
         self.last_position = -1
         self.column_num = 0
@@ -119,38 +122,25 @@ class YumexPackageView(Gtk.ColumnView):
     def add_packages_to_store(self, pkgs):
         log("Adding packages to store")
         # create a new store and add packages (big speed improvement)
-        store = Gio.ListStore.new(YumexPackage)
+        self.storage.clear()
         # for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
+
         for pkg in pkgs:
             qpkg = self.queue_view.find_by_nevra(pkg.nevra)
             if qpkg:
-                store.append(qpkg)
+                self.storage.add_package(qpkg)
             else:
-                store.append(pkg)
+                self.storage.add_package(pkg)
         sort_attr = self.win.package_settings.get_sort_attr()
         log(f" --> sorting by : {sort_attr}")
-        store = self.sort_by(store, sort_attr)
-        self.store = store
+        self.store = self.storage.sort_by(sort_attr)
         self.selection.set_model(self.store)
         log(f" --> number of packages : {len(list(pkgs))}")
 
     def sort(self):
         sort_attr = SortType(self.win.package_settings.get_sort_attr())
         log(f" --> sorting by : {sort_attr}")
-        self.store = self.sort_by(self.store, sort_attr)
-
-    @staticmethod
-    def sort_by(store: Gio.ListStore, attr: SortType) -> Gio.ListStore:
-        match attr:
-            case SortType.NAME:
-                store.sort(lambda a, b: a.name.lower() > b.name.lower())
-            case SortType.ARCH:
-                store.sort(lambda a, b: a.arch > b.arch)
-            case SortType.SIZE:
-                store.sort(lambda a, b: a.size > b.size)
-            case SortType.REPO:
-                store.sort(lambda a, b: a.repo > b.repo)
-        return store
+        self.store = self.storage.sort_by(sort_attr)
 
     def set_styles(self, widget, pkg) -> None:
         current_styles = widget.get_css_classes()
