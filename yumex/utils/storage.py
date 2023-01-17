@@ -1,37 +1,20 @@
-from typing import Protocol
-
-
 from gi.repository import Gio
+from yumex.backend.dnf import YumexPackage
 
-from yumex.backend.interface import Presenter
 from yumex.utils.enums import SortType
 
 
-class Storage(Protocol):
-    def get_storage(self) -> Gio.ListStore:
-        ...
-
-    def clear(self) -> None:
-        ...
-
-    def add_packages(self, packages: list) -> None:
-        ...
-
-    def sort_by(self, attr: SortType) -> None:
-        ...
-
-
 class PackageStorage:
-    def __init__(self, cls, presenter: Presenter):
+    def __init__(self, cls):
         self._cls = cls
-        self.presenter = presenter
-        self._store = Gio.ListStore.new(self._cls)
+        self._store = None
+        self.clear()
 
     def __iter__(self):
         return iter(self._store)
 
-    def __next__(self):
-        return next(self._store)
+    def __len__(self):
+        return len(self._store)
 
     def get_storage(self) -> Gio.ListStore:
         return self._store
@@ -40,9 +23,15 @@ class PackageStorage:
         self._store = Gio.ListStore.new(self._cls)
         return self._store
 
-    def add_packages(self, packages: list) -> None:
+    def add_packages(self, packages: list[YumexPackage]) -> None:
         for package in packages:
+            self.add_package(package)
+
+    def add_package(self, package: YumexPackage) -> None:
+        if isinstance(package, self._cls):
             self._store.append(package)
+        else:
+            raise ValueError(f"Can't add {package} to package storage")
 
     def sort_by(self, attr: SortType) -> Gio.ListStore:
         match attr:

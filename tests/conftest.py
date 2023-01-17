@@ -11,9 +11,9 @@ def pkg_dict():
         "arch": "x86_64",
         "release": "1.0",
         "epoch": "",
-        "repo": "repo",
+        "repo": "repo2",
         "description": "desc",
-        "size": 1024,
+        "size": 2048,
     }
 
 
@@ -22,10 +22,10 @@ def pkg_other_dict():
     return {
         "name": "otherpkg",
         "version": "1",
-        "arch": "x86_64",
+        "arch": "noarch",
         "release": "1.0",
         "epoch": "",
-        "repo": "repo",
+        "repo": "repo1",
         "description": "desc",
         "size": 1024,
     }
@@ -39,7 +39,7 @@ def pkg_dict_upd():
         "arch": "x86_64",
         "release": "2.0",
         "epoch": "",
-        "repo": "repo",
+        "repo": "repo1",
         "description": "desc",
         "size": 1024,
     }

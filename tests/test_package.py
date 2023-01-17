@@ -8,9 +8,9 @@ def test_yp_init(pkg):
     assert pkg.arch == "x86_64"
     assert pkg.release == "1.0"
     assert pkg.epoch == ""
-    assert pkg.repo == "repo"
+    assert pkg.repo == "repo2"
     assert pkg.description == "desc"
-    assert pkg.size == 1024
+    assert pkg.size == 2048
     assert pkg.state == PackageState.AVAILABLE
     assert pkg.action == PackageAction.NONE
 
@@ -51,7 +51,7 @@ def test_yp_str(pkg):
 
 
 def test_yp_repr(pkg):
-    assert repr(pkg) == "YumexPackage(mypkg-1-1.0.x86_64) from repo"
+    assert repr(pkg) == "YumexPackage(mypkg-1-1.0.x86_64) from repo2"
 
 
 def test_yp_eq(pkg_dict):
@@ -68,14 +68,14 @@ def test_yp_hash(pkg_dict):
 
 def test_yp_id(pkg):
 
-    assert pkg.id == "mypkg,,1,1.0,x86_64,repo"
+    assert pkg.id == "mypkg,,1,1.0,x86_64,repo2"
     pkg.epoch = "3"
     pkg.repo = "@system"
     assert pkg.id == "mypkg,3,1,1.0,x86_64,system"
 
 
 def test_yp_size_unit(pkg):
-    assert pkg.size_with_unit == "1.0 K"
+    assert pkg.size_with_unit == "2.0 K"
     pkg.size = 1024 * 1024
     assert pkg.size_with_unit == "1.0 M"
     pkg.size = 1024 * 1024 * 1024
