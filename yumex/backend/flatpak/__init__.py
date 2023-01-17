@@ -16,6 +16,7 @@
 """ backend for handling flatpaks"""
 
 from gi.repository import Flatpak, GObject
+from yumex.utils import log
 
 from yumex.utils.types import FlatpakRefString, FlatpakRef
 from yumex.utils.enums import FlatpakType, FlatpakLocation
@@ -42,7 +43,7 @@ class FlatpakPackage(GObject.GObject):
         if not name:
             id = self.ref.get_name()
             name = id.split(".")[-1]
-            self.log(f"flatpak {id} don't have an appname, using {name}")
+            log(f"flatpak {id} don't have an appname, using {name}")
         return name
 
     @property
