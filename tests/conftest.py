@@ -3,6 +3,16 @@ import pytest
 from yumex.backend.dnf import YumexPackage
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--guitest",
+        action="store_true",
+        dest="guitest",
+        default=False,
+        help="enable gui tests",
+    )
+
+
 @pytest.fixture
 def pkg_dict():
     return {
