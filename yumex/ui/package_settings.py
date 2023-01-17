@@ -19,12 +19,12 @@ if TYPE_CHECKING:
 
 from gi.repository import Gtk
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 from yumex.utils import log
 from yumex.utils.enums import PackageFilter, SortType, InfoType
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/package_settings.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_settings.ui")
 class YumexPackageSettings(Gtk.Box):
     __gtype_name__ = "YumexPackageSettings"
 

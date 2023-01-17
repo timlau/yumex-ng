@@ -21,11 +21,11 @@ from pathlib import Path
 from gi.repository import Gtk, Adw
 from yumex.backend.flatpak.backend import FlatpakBackend
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 from yumex.utils import log
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_installer.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_installer.ui")
 class YumexFlatpakInstaller(Adw.Window):
     __gtype_name__ = "YumexFlatpakInstaller"
 

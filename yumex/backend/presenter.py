@@ -14,10 +14,10 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 from yumex.backend.cache import YumexPackageCache
-from yumex.constants import backend
+from yumex.constants import BACKEND
 from yumex.backend.interface import PackageBackend, PackageCache, Progress
 
-if backend == "DNF5":
+if BACKEND == "DNF5":
     from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
 else:
     from yumex.backend.dnf.dnf4 import Backend as Dnf4Backend, DnfCallback
@@ -43,7 +43,7 @@ class YumexPresenter:
     @property
     def backend(self) -> PackageBackend:
         if not self._backend:
-            if backend == "DNF5":
+            if BACKEND == "DNF5":
                 self._backend: PackageBackend = Dnf5Backend(self)
             else:
                 callback = DnfCallback(self.win)

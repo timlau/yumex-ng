@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 from gi.repository import Gtk, Adw
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 import hawkey
 
 from yumex.utils.enums import InfoType
@@ -32,7 +32,7 @@ ADVISORY_TYPES = {
 }
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/package_info.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_info.ui")
 class YumexPackageInfo(Gtk.Box):
     __gtype_name__ = "YumexPackageInfo"
 

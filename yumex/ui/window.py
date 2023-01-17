@@ -19,7 +19,7 @@ from gi.repository import Gtk, Adw, Gio, GLib
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
 from yumex.backend.presenter import YumexPresenter
 
-from yumex.constants import rootdir, app_id, PACKAGE_COLUMNS
+from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
@@ -32,7 +32,7 @@ from yumex.utils import log
 from yumex.utils.enums import PackageFilter, SearchField, Page
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/window.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/window.ui")
 class YumexMainWindow(Adw.ApplicationWindow):
     __gtype_name__ = "YumexMainWindow"
 
@@ -60,7 +60,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
-        self.settings = Gio.Settings(app_id)
+        self.settings = Gio.Settings(APP_ID)
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
         self.root_backend = None

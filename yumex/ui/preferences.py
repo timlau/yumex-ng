@@ -19,11 +19,11 @@ if TYPE_CHECKING:
 
 from gi.repository import Gtk, Adw
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 from yumex.utils import log
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/preferences.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/preferences.ui")
 class YumexPreferences(Adw.PreferencesWindow):
     __gtype_name__ = "YumexPreferences"
 
@@ -100,7 +100,7 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.settings.set_string("fp-remote", remote)
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/repository.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/repository.ui")
 class YumexRepository(Adw.ActionRow):
     __gtype_name__ = "YumexRepository"
 

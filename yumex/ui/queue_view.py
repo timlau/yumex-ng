@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 from gi.repository import Gtk
 from yumex.backend.interface import PackageCache
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
@@ -31,7 +31,7 @@ from yumex.utils import RunAsync, timed
 from yumex.utils.enums import PackageState, Page
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/queue_view.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_view.ui")
 class YumexQueueView(Gtk.ListView):
     __gtype_name__ = "YumexQueueView"
 
@@ -165,7 +165,7 @@ class YumexQueueView(Gtk.ListView):
                 row.icon.add_css_class("accent")
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/queue_row.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_row.ui")
 class YumexQueueRow(Gtk.Box):
     __gtype_name__ = "YumexQueueRow"
 

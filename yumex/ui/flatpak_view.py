@@ -24,7 +24,7 @@ from gi.repository import Gtk, Gio, Adw
 from yumex.backend.flatpak import FlatpakPackage
 from yumex.backend.flatpak.backend import FlatpakBackend
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 
 
 from yumex.utils import log, RunAsync  # noqa: F401
@@ -32,7 +32,7 @@ from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_view.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_view.ui")
 class YumexFlatpakView(Gtk.ListView):
     __gtype_name__ = "YumexFlatpakView"
 
@@ -192,7 +192,7 @@ class YumexFlatpakView(Gtk.ListView):
         row.set_subtitle(pkg.summary)
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_row.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_row.ui")
 class YumexFlatpakRow(Adw.ActionRow):
     """Row widget to show a flatpak"""
 

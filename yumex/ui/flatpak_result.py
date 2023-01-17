@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 from gi.repository import Gtk, Adw, GLib, GObject, Gio
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 from yumex.utils import log
 from yumex.utils.enums import FlatpakAction
 
@@ -28,7 +28,7 @@ class ResultElem(GObject.GObject):
         return f"{action_str} <b>{self.ref}</b> <small>({self.source})</small>"
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/flatpak_result.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_result.ui")
 class YumexFlatpakResult(Adw.Window):
     __gtype_name__ = "YumexFlatpakResult"
 

@@ -5,11 +5,11 @@ if TYPE_CHECKING:
 
 from gi.repository import Gtk, Adw, GObject, Gio, GLib
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 from yumex.utils import format_number
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/transaction_result.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/transaction_result.ui")
 class YumexTransactionResult(Adw.Window):
     __gtype_name__ = "YumexTransactionResult"
 

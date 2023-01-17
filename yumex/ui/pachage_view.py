@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 from gi.repository import Gtk
 from yumex.backend.interface import Presenter
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 from yumex.backend.dnf import YumexPackage
 
 # from yumex.backend.dnf import Backend, DnfCallback
@@ -39,7 +39,7 @@ from yumex.utils import log, RunAsync, timed
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/package_view.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_view.ui")
 class YumexPackageView(Gtk.ColumnView):
     __gtype_name__ = "YumexPackageView"
 

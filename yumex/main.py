@@ -27,7 +27,7 @@ from gi.repository import Gtk, Gio, Adw
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
 from yumex.utils import setup_logging, log, logger
-from yumex.constants import rootdir, app_id, version, backend, build_type
+from yumex.constants import ROOTDIR, APP_ID, VERSION, BACKEND, BUILD_TYPE
 from yumex.ui.dialogs import error_dialog
 from typing import Literal
 
@@ -36,13 +36,13 @@ class YumexApplication(Adw.Application):
     """The main application singleton class."""
 
     __gtype_name__ = "YumexApplication"
-    settings = Gio.Settings.new(app_id)
+    settings = Gio.Settings.new(APP_ID)
 
     def __init__(self) -> None:
         super().__init__(
-            application_id=app_id, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
+            application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
         )
-        self.set_resource_base_path(rootdir)
+        self.set_resource_base_path(ROOTDIR)
         self.style_manager = Adw.StyleManager.get_default()
         self.args = None
 
@@ -86,7 +86,7 @@ class YumexApplication(Adw.Application):
         self.create_action("page_three", self.win.on_actions, ["<Alt>3"])
 
         # call a test function to test gui code, should not be enabled, if not testing
-        if build_type == "debug" or self.args.debug:
+        if BUILD_TYPE == "debug" or self.args.debug:
             self.create_action("testing", self.win.on_testing, ["<Shift><Ctrl>T"])
 
         self.win.present()
@@ -112,7 +112,9 @@ class YumexApplication(Adw.Application):
             )
             return 0
         setup_logging(debug=self.args.debug)
-        log(f"version : {version}")
+        global is_local
+        log(f"Version:  {VERSION} ({BACKEND})")
+        log(f"executable : {args.get_arguments()[0]}")
         log(f"commmand-line : {self.args}")
         self.activate()
         return 0
@@ -137,7 +139,7 @@ class YumexApplication(Adw.Application):
         about = Adw.AboutWindow(
             transient_for=self.props.active_window,
             application_name="Yum Extender",
-            application_icon=app_id,
+            application_icon=APP_ID,
             developer_name="Tim Lauridsen",
             website="https://yumex.dk",
             support_url="",
@@ -149,8 +151,8 @@ class YumexApplication(Adw.Application):
             translator_credits="",
             copyright="© 2023 Tim Lauridsen",
             license_type=Gtk.License.GPL_3_0,
-            version=f"{version} ({backend})",
-            release_notes_version=version,
+            version=f"{VERSION} ({BACKEND})",
+            release_notes_version=VERSION,
             release_notes=_(
                 """
 <ul>

@@ -22,13 +22,13 @@ import time
 from gi.repository import GLib
 
 
-from yumex.constants import build_type
+from yumex.constants import BUILD_TYPE
 
 logger = logging.getLogger(name="yumex")
 
 
 def setup_logging(debug=False):
-    if build_type == "debug" or debug:
+    if BUILD_TYPE == "debug" or debug:
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",

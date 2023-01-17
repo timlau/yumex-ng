@@ -16,15 +16,15 @@
 #
 #
 
-rootdir = "/dk/yumex/Yumex"
-app_id = "@APP_ID@"
-pkgdatadir = "@PKGDATA_DIR@"
-localedir = "@LOCALE_DIR@"
 
-version = "@VERSION@"
-build_type = "@BUILD_TYPE@"
-backend = "@BACKEND@"
+ROOTDIR = "/dk/yumex/Yumex"
+APP_ID = "@APP_ID@"
+PKGDATADIR = "@PKGDATA_DIR@"
+LOCALEDIR = "@LOCALE_DIR@"
 
+VERSION = "@VERSION@"
+BUILD_TYPE = "@BUILD_TYPE@"
+BACKEND = "@BACKEND@"
 
 # package column names, for save/load values from setting
 PACKAGE_COLUMNS = ["name", "version", "repo", "arch", "size", "description"]

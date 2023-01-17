@@ -19,10 +19,10 @@ if TYPE_CHECKING:
 
 from gi.repository import Gtk, Adw
 
-from yumex.constants import rootdir
+from yumex.constants import ROOTDIR
 
 
-@Gtk.Template(resource_path=f"{rootdir}/ui/progress.ui")
+@Gtk.Template(resource_path=f"{ROOTDIR}/ui/progress.ui")
 class YumexProgress(Adw.Window):
     __gtype_name__ = "YumexProgress"
 
