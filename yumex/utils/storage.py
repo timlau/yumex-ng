@@ -5,9 +5,10 @@ from yumex.utils.enums import SortType
 
 
 class PackageStorage:
-    def __init__(self, cls):
-        self._cls = cls
-        self._store = None
+    """A wrapper for a Gio.ListStore with YumexPackage objects"""
+
+    def __init__(self):
+        self._store: Gio.ListStore = None
         self.clear()
 
     def __iter__(self):
@@ -20,7 +21,7 @@ class PackageStorage:
         return self._store
 
     def clear(self) -> Gio.ListStore:
-        self._store = Gio.ListStore.new(self._cls)
+        self._store = Gio.ListStore.new(YumexPackage)
         return self._store
 
     def add_packages(self, packages: list[YumexPackage]) -> None:
@@ -28,7 +29,7 @@ class PackageStorage:
             self.add_package(package)
 
     def add_package(self, package: YumexPackage) -> None:
-        if isinstance(package, self._cls):
+        if isinstance(package, YumexPackage):
             self._store.append(package)
         else:
             raise ValueError(f"Can't add {package} to package storage")

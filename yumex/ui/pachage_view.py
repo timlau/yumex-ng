@@ -57,7 +57,7 @@ class YumexPackageView(Gtk.ColumnView):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
         self.presenter = presenter
-        self.storage = PackageStorage(YumexPackage)
+        self.storage = PackageStorage()
         self.setup()
 
     def setup(self):

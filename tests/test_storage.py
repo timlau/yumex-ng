@@ -1,44 +1,26 @@
 import pytest
 
 from gi.repository import Gio
-from yumex.backend.dnf import YumexPackage
 from yumex.utils.enums import SortType
 from yumex.utils.storage import PackageStorage
 
 
-class MockPresenter:
-    def __init__(self) -> None:
-        pass
-
-    @property
-    def backend(self) -> None:
-        return None
-
-    @property
-    def package_cache(self) -> None:
-        return None
-
-    @property
-    def progress(self) -> None:
-        return None
-
-    def reset_backend(self) -> None:
-        pass
-
-    def reset_cache(self) -> None:
-        pass
-
-
 @pytest.fixture
 def storage() -> PackageStorage:
-    return PackageStorage(YumexPackage)
+    return PackageStorage()
 
 
 def test_storage_setup(storage):
     assert isinstance(storage.get_storage(), Gio.ListStore)
 
 
-def test_storage_add(storage, pkg, pkg_other):
+def test_storage_add_pkg(storage, pkg):
+    storage.add_package(pkg)
+    assert len(storage) == 1
+    assert storage.get_storage()[0] == pkg
+
+
+def test_storage_add_pkgs(storage, pkg, pkg_other):
     storage.add_packages([pkg, pkg_other])
     assert len(storage) == 2
     assert storage.get_storage()[0] == pkg
