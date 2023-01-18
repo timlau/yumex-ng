@@ -20,10 +20,30 @@ class MockWindow(Mock):
     def set_needs_attention(self, *args, **kwargs):
         self.set_mock_call("set_needs_attention", args, kwargs)
 
+    def confirm_flatpak_transaction(self, *args, **kwargs):
+        self.set_mock_call("confirm_flatpak_transaction", args, kwargs)
+        return True
+
+    @property
+    def progress(self):
+        self.set_mock_call("progress", (), {})
+        return self
+
+    def hide(self):
+        self.set_mock_call("progress.hide", (), {})
+
 
 class MockFlatpackBackend(Mock):
     def get_installed(self, *args, **kwargs):
         self.set_mock_call("get_installed", args, kwargs)
+        return [
+            FlatpakPackage(
+                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
+            )
+        ]
+
+    def install(self, *args, **kwargs):
+        self.set_mock_call("install", args, kwargs)
         return [
             FlatpakPackage(
                 MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
@@ -86,6 +106,21 @@ def test_backend_get_installed_called(flatpak_view):
     calls = flatpak_view.backend.get_mock_call("get_installed")
     assert len(calls) == 1
     assert calls[0] == ((), {"location": FlatpakLocation.BOTH})
+
+
+def test_view_do_transaction(flatpak_view):
+    """Test that backend,install is called"""
+
+    def callback(*args, **kwargs):
+        calls = flatpak_view.backend.get_mock_call("install")
+        assert len(calls) == 2
+        assert calls[0] == ((), {"execute": False})
+
+    flatpak_view.do_transaction(flatpak_view.backend.install, callback)
+    calls = flatpak_view.backend.get_mock_call("install")
+    assert len(calls) == 1
+    assert calls[0] == ((), {"execute": False})
+    # assert calls[0] == ((), {"location": FlatpakLocation.BOTH})
 
 
 def test_get_icon_paths(flatpak_view):

@@ -27,7 +27,7 @@ from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.constants import ROOTDIR
 
 
-from yumex.utils import log, RunAsync  # noqa: F401
+from yumex.utils import RunAsyncWait, log, RunAsync  # noqa: F401
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
@@ -153,7 +153,7 @@ class YumexFlatpakView(Gtk.ListView):
                 confirm = self.win.confirm_flatpak_transaction(refs)
                 if confirm:
                     # Second run
-                    RunAsync(method, second_run_callback, *args, execute=True)
+                    RunAsyncWait(method, second_run_callback, *args, execute=True)
                     return
             second_run_callback(False)
 
@@ -168,7 +168,7 @@ class YumexFlatpakView(Gtk.ListView):
                 callback(state)
 
         # First run
-        RunAsync(method, first_run_callback, *args, execute=False)
+        RunAsyncWait(method, first_run_callback, *args, execute=False)
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item) -> None:
