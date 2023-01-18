@@ -143,3 +143,8 @@ def test_search_illegal_field(backend):
     """test search by illegal search field"""
     with pytest.raises(ValueError):
         _ = backend.search("ffff", field="illegal")
+
+
+# TODO: Add tests for def reset_backend(self) -> None:
+# TODO: Add tests for def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
+# TODO: Add tests for def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
