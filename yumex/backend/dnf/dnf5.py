@@ -25,9 +25,10 @@ from libdnf5.common import (
     QueryCmp_IGLOB,
 )
 
-from yumex.backend.dnf import SearchField, YumexPackage, PackageState
+from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
-from yumex.ui.package_settings import InfoType, PackageFilter  # noqa :F401
+from yumex.utils.enums import SearchField, PackageState, InfoType, PackageFilter
+
 from yumex.utils import log
 
 
@@ -134,7 +135,7 @@ class Backend(dnf.Base):
                 nevra_dict[ypkg.nevra] = ypkg
             else:
                 log(f"Skipping duplicate : {ypkg}")
-        return nevra_dict.values()
+        return list(nevra_dict.values())
 
     def search(
         self, key: str, field: SearchField = SearchField.NAME, limit: int = 1
@@ -162,8 +163,10 @@ class Backend(dnf.Base):
             case SearchField.SUMMARY:
                 qi.filter_summary([key], QueryCmp_ICONTAINS)
                 qa.filter_summary([key], QueryCmp_ICONTAINS)
-            case _:
-                log(f"Search field : [{field}] not supported in dnf5 backend")
+            case other:
+                msg = f"Search field : [{other}] not supported in dnf5 backend"
+                log(msg)
+                raise ValueError(msg)
         qa.update(qi)
         return self._get_yumex_packages(qa)
 
@@ -176,7 +179,7 @@ class Backend(dnf.Base):
             case PackageFilter.UPDATES:
                 return self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
             case other:
-                raise KeyError(f"Unknown package filter: {other}")
+                raise ValueError(f"Unknown package filter: {other}")
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         query = PackageQuery(self)
@@ -201,7 +204,7 @@ class Backend(dnf.Base):
                     # return value
                     return None
                 case other:
-                    raise KeyError(f"Unknown package info: {other}")
+                    raise ValueError(f"Unknown package info: {other}")
         else:
             raise ValueError(f"dnf package not found: {pkg}")
 

@@ -1,48 +1,34 @@
 """
-These tests use real dnf data from the current machine so they might take some time
+These tests use real dnf5 data from the current machine so they might take some time
 to run. so they are disabled by default.
 Some if the test might fail becuase their requiements is not found in the repository
 Se comments on the individual tests
 
 use:
 
-pytest -m "dnf4test"
+pytest -m "dnf5test"
 
 to excute them.
 
 """
 import pytest
-from tests.mock import Mock
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.dnf.dnf4 import Backend as Dnf4Backend
+from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
 from yumex.utils.enums import PackageFilter, PackageState, SearchField
 
-pytestmark = pytest.mark.dnf4test
-
-
-class MockCallback(Mock):
-    def __init__(self):
-        self.repo = None
-
-    def set_title(self, txt):
-        # self.win.progress.set_title(txt)
-        pass
-
-    def set_subtitle(self, txt):
-        # self.win.progress.set_subtitle(txt)
-        pass
+pytestmark = pytest.mark.dnf5test
 
 
 @pytest.fixture
 def backend():
-    backend = Dnf4Backend(MockCallback())
+    backend = Dnf5Backend(presenter=None)
     yield backend
     del backend
 
 
 def test_setup(backend):
     """Test we can create and dnf backend instance"""
-    assert isinstance(backend, Dnf4Backend)
+    assert isinstance(backend, Dnf5Backend)
 
 
 def test_get_repositorie(backend):
