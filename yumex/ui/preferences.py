@@ -71,10 +71,7 @@ class YumexPreferences(Adw.PreferencesWindow):
                 break
 
     def get_remotes(self, location):
-        if location == "system":
-            system = True
-        else:
-            system = False
+        system = location == "system"
         remotes = self.win.flatpak_view.backend.get_remotes(location=system)
         model = Gtk.StringList.new()
         for remote in remotes:

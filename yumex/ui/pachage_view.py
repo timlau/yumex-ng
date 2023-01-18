@@ -126,8 +126,7 @@ class YumexPackageView(Gtk.ColumnView):
         # for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
 
         for pkg in pkgs:
-            qpkg = self.queue_view.find_by_nevra(pkg.nevra)
-            if qpkg:
+            if qpkg := self.queue_view.find_by_nevra(pkg.nevra):
                 self.storage.add_package(qpkg)
             else:
                 self.storage.add_package(pkg)
@@ -160,19 +159,20 @@ class YumexPackageView(Gtk.ColumnView):
         for pkg in self.store:
             if state:
                 if not pkg.queued:
-                    pkg.queue_action = True
-                    pkg.queued = True
-                    to_add.append(pkg)
-            else:
-                if pkg.queued:
-                    pkg.queue_action = True
-                    pkg.queued = False
-                    to_delete.append(pkg)
+                    self._extracted_from_select_all_7(pkg, True, to_add)
+            elif pkg.queued:
+                self._extracted_from_select_all_7(pkg, False, to_delete)
         if to_add:
             self.queue_view.add_packages(to_add)
         if to_delete:
             self.queue_view.remove_packages(to_add)
         self.refresh()
+
+    # TODO Rename this here and in `select_all`
+    def _extracted_from_select_all_7(self, pkg, arg1, arg2):
+        pkg.queue_action = True
+        pkg.queued = arg1
+        arg2.append(pkg)
 
     def refresh(self):
         self.selection.selection_changed(0, len(self.store))

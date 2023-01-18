@@ -87,10 +87,7 @@ class YumexPackageInfo(Gtk.Box):
                 return "\n".join(pkg_info)
             case InfoType.UPDATE_INFO:
                 # a list of update_info dicts
-                if pkg_info:
-                    return pkg_info[0]
-                else:
-                    return None
+                return pkg_info[0] if pkg_info else None
 
     def add_decription(self, txt):
         if not txt:
@@ -98,28 +95,29 @@ class YumexPackageInfo(Gtk.Box):
         self.info.set_title(txt)
 
     def add_update_info(self, pkg_info):
-        if pkg_info:
-            release = pkg_info["id"]
-            self.release.set_label(release)
-            upd_type = ADVISORY_TYPES[pkg_info["type"]]
-            self.type.set_label(upd_type)
-            issued = pkg_info["updated"]
-            self.issued.set_label(issued)
-            description = pkg_info["description"]
-            self.desc.set_title(description)
-            refs = pkg_info["references"]
-            # remove the previous added rows
-            for row in self._ref_rows:
-                self.ref_grp.remove(row)
-            self._ref_rows = []
-            if refs:
-                for ref in refs:
-                    num, bug_id, bug_desc, bug_link = ref
-                    txt = f'<a href="{bug_link}">{bug_id}</a> - {bug_desc}'
-                    row = Adw.ActionRow()
-                    row.set_title(txt)
-                    self.ref_grp.add(row)
-                    self._ref_rows.append(row)
-                self.references.set_visible(True)
-            else:
-                self.references.set_visible(False)
+        if not pkg_info:
+            return
+        release = pkg_info["id"]
+        self.release.set_label(release)
+        upd_type = ADVISORY_TYPES[pkg_info["type"]]
+        self.type.set_label(upd_type)
+        issued = pkg_info["updated"]
+        self.issued.set_label(issued)
+        description = pkg_info["description"]
+        self.desc.set_title(description)
+        refs = pkg_info["references"]
+        # remove the previous added rows
+        for row in self._ref_rows:
+            self.ref_grp.remove(row)
+        self._ref_rows = []
+        if refs:
+            for ref in refs:
+                num, bug_id, bug_desc, bug_link = ref
+                txt = f'<a href="{bug_link}">{bug_id}</a> - {bug_desc}'
+                row = Adw.ActionRow()
+                row.set_title(txt)
+                self.ref_grp.add(row)
+                self._ref_rows.append(row)
+            self.references.set_visible(True)
+        else:
+            self.references.set_visible(False)

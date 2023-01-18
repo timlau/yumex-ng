@@ -57,7 +57,7 @@ class RunAsync(threading.Thread):
 
         self.task_func = task_func
 
-        self.callback = callback if callback else lambda r, e: None
+        self.callback = callback or (lambda r, e: None)
         # self.daemon = kwargs.pop("daemon", True)
         self.daemon = False
         self.start()
@@ -95,7 +95,7 @@ class RunAsyncWait(threading.Thread):
 
         self.task_func = task_func
 
-        self.callback = callback if callback else lambda r, e: None
+        self.callback = callback or (lambda r, e: None)
         # self.daemon = kwargs.pop("daemon", True)
         self.daemon = False
         self.start()
@@ -139,11 +139,7 @@ def format_number(number, SI=0, space=" "):
         "Y",
     ]  # yotta
 
-    if SI:
-        step = 1000.0
-    else:
-        step = 1024.0
-
+    step = 1000.0 if SI else 1024.0
     thresh = 999
     depth = 0
     max_depth = len(symbols) - 1
@@ -152,7 +148,7 @@ def format_number(number, SI=0, space=" "):
     # of our list.  In that event, the formatting will be screwed up,
     # but it'll still show the right number.
     while number > thresh and depth < max_depth:
-        depth = depth + 1
+        depth += 1
         number = number / step
 
     if isinstance(number, int):

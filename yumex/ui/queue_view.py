@@ -183,7 +183,6 @@ class YumexQueueRow(Gtk.Box):
         """row delete button cliecked"""
         # row -> box -> box -> button
         row = button.get_parent()
-        pkg = row.pkg
-        if pkg:
+        if pkg := row.pkg:
             row.view.remove_package(pkg)
             pkg.queued = False

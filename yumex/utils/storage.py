@@ -58,7 +58,4 @@ class PackageStorage:
         return self._store
 
     def find_by_nevra(self, nevra: str) -> YumexPackage | None:
-        for pkg in self._store:
-            if pkg.nevra == nevra:
-                return pkg
-        return None
+        return next((pkg for pkg in self._store if pkg.nevra == nevra), None)

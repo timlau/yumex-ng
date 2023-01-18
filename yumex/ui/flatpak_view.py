@@ -66,8 +66,7 @@ class YumexFlatpakView(Gtk.ListView):
     def find_icon(self, pkg: FlatpakPackage) -> str | None:
         """find icon file for an installed flatpak"""
         for path in self.icons_paths:
-            files = list(Path(f"{path}").rglob(f"{pkg.id}.*"))
-            if files:
+            if files := list(Path(f"{path}").rglob(f"{pkg.id}.*")):
                 return files[0].as_posix()
         return None
 
@@ -92,22 +91,22 @@ class YumexFlatpakView(Gtk.ListView):
 
         def callback(state, error=None) -> None:
             if state:
-                self.win.show_message(_(f"{id} is now installed"), timeout=2)
+                self.win.show_message(_(f"{fp_id} is now installed"), timeout=2)
 
         def on_close(*args) -> None:
-            global id, remote, ref, location
-            id = flatpak_installer.current_id.get_title()
-            if id:
+            global fp_id, remote, ref, location
+            fp_id = flatpak_installer.current_id.get_title()
+            if fp_id:
                 remote = flatpak_installer.remote.get_selected_item().get_string()
                 location = flatpak_installer.location.get_selected_item().get_string()
-                ref = self.backend.find_ref(remote, id)
+                ref = self.backend.find_ref(remote, fp_id)
                 if ref:
                     if flatpak_installer.confirm:
                         self.do_transaction(
                             self.backend.do_install, callback, ref, remote, location
                         )
                 else:
-                    self.win.show_message(f"{id} is not found om {remote}")
+                    self.win.show_message(f"{fp_id} is not found om {remote}")
 
         self.win.stack.set_visible_child_name("flatpaks")
         # TODO: make and sync edition of the flatpak installer, to make code more readable
@@ -127,10 +126,7 @@ class YumexFlatpakView(Gtk.ListView):
             if state:
                 self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
 
-        if pkg:
-            selected = [pkg]
-        else:
-            selected = [self.selection.get_selected_item()]
+        selected = [pkg] if pkg else [self.selection.get_selected_item()]
         self.do_transaction(self.backend.do_remove, callback, selected)
 
     def do_transaction(self, method: Callable, callback: Callable, *args) -> None:
@@ -182,8 +178,7 @@ class YumexFlatpakView(Gtk.ListView):
         row = item.get_child()
         pkg: FlatpakPackage = item.get_item()
         row.pkg = pkg
-        icon_file = self.find_icon(pkg)
-        if icon_file:
+        if icon_file := self.find_icon(pkg):
             row.icon.set_from_file(icon_file)
         row.user.set_label(pkg.location)
         row.origin.set_label(pkg.origin)

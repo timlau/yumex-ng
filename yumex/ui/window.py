@@ -229,8 +229,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
 
-        queued = self.queue_view.get_queued()
-        if queued:
+        if queued := self.queue_view.get_queued():
             log(f"Execute the transaction on {len(queued)} packages")
             done = self._do_transaction(queued)
             log(f"Transaction execution ended : {done}")
@@ -307,19 +306,20 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def show_on_page(self):
         """show/hide widget dependend on the active page"""
         if self.active_page == Page.PACKAGES:
-            self.search_button.set_sensitive(True)
-            self.search_bar.set_visible(True)
-            self.sidebar_button.set_sensitive(True)
+            self._set_vidgets_visibility(True)
         else:
-            self.search_button.set_sensitive(False)
-            self.search_bar.set_visible(False)
-            self.sidebar_button.set_sensitive(False)
+            self._set_vidgets_visibility(False)
         # handle other page dependend widgets
         match self.active_page:
             case Page.PACKAGES | Page.QUEUE:
                 self.apply_button.set_sensitive(True)
             case Page.FLATPAKS:
                 self.apply_button.set_sensitive(False)
+
+    def _set_vidgets_visibility(self, visible):
+        self.search_button.set_sensitive(visible)
+        self.search_bar.set_visible(visible)
+        self.sidebar_button.set_sensitive(visible)
 
     def on_actions(self, action, *args):
         """Generic action dispatcher"""
