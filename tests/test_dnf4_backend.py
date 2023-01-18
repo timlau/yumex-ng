@@ -20,7 +20,7 @@ from yumex.utils.enums import PackageFilter, PackageState, SearchField
 # pytest from command line with skip the tests
 # but they can be run insite vscode testing
 
-# pytestmark = pytest.mark.skip("dont run dnf5 tests by default")
+pytestmark = pytest.mark.skip("dont run dnf5 tests by default")
 
 
 class MockCallback(Mock):
