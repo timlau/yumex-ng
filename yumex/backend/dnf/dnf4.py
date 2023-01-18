@@ -199,7 +199,7 @@ class Packages:
                 nevra_dict[ypkg.nevra] = ypkg
             else:
                 log(f"Skipping duplicate : {ypkg}")
-        return nevra_dict.values()
+        return list(nevra_dict.values())
 
     @property
     def available(self) -> list[YumexPackage]:
@@ -266,7 +266,8 @@ class Packages:
                 fdict = {"reponame": txt}
             case SearchField.ARCH:
                 fdict = {f"{field}": txt}
-
+            case other:
+                raise ValueError(f"{other} is not a legal search field")
         try:
             q = q.filter(hawkey.ICASE, **fdict)
             qi = self.query.installed().filter(hawkey.ICASE, **fdict)
@@ -446,7 +447,7 @@ class Backend(DnfBase):
             case PackageFilter.UPDATES:
                 return self.packages.updates
             case other:
-                raise KeyError(f"Unknown package filter: {other}")
+                raise ValueError(f"{other} is not an legal package filter")
 
     def search(
         self, txt: str, field: str = "name", limit: int = 1
@@ -467,7 +468,7 @@ class Backend(DnfBase):
                     value = updinfo.advisories_list()
                     return value
                 case other:
-                    raise KeyError(f"Unknown package info: {other}")
+                    raise ValueError(f"{other} is not an legal package info attribute")
         else:
             log(f" DNF4: {pkg} was not found")
             raise ValueError(f"dnf package not found: {pkg}")
