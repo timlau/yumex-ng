@@ -17,7 +17,10 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf.dnf4 import Backend as Dnf4Backend
 from yumex.utils.enums import PackageFilter, PackageState, SearchField
 
-pytestmark = pytest.mark.dnf4test
+# pytest from command line with skip the tests
+# but they can be run insite vscode testing
+
+pytestmark = pytest.mark.skip("dont run dnf5 tests by default")
 
 
 class MockCallback(Mock):
