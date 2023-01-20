@@ -64,7 +64,12 @@ class YumexFlatpakInstaller(Adw.Window):
         """
 
         def callback(obj, res, *args):
-            text = clb.read_text_finish(res)
+            try:
+                text = clb.read_text_finish(res)
+            except GLib.GError:  # type:ignore
+                log("cant read from clipboard")
+                return
+
             if text and text.startswith("flatpak install"):
                 words = text.split(" ")
                 self.search_id.set_text(words[3])
