@@ -30,14 +30,19 @@ class FlatpakBackend:
         self.user: Flatpak.Installation = Flatpak.Installation.new_user()
         self.system: Flatpak.Installation = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
+        self._installed = [ref.get_name() for ref in self.user.list_installed_refs()]
+        self._installed.extend(
+            [ref.get_name() for ref in self.system.list_installed_refs()]
+        )
 
     def find(self, source: str, key: str) -> list[str]:
         """find an available id containing a key"""
         refs = self.user.list_remote_refs_sync(source)
+        key = key.lower()
         found = []
         for ref in refs:
             if ref.get_kind() == Flatpak.RefKind.APP:
-                if key.lower() in ref.get_name().lower():
+                if key in ref.get_name().lower() and not self.is_installed(ref):
                     found.append(ref.get_name())
         return found
 
@@ -73,6 +78,10 @@ class FlatpakBackend:
     def get_arch(self) -> str:
         """get the default arch"""
         return Flatpak.get_default_arch()
+
+    def is_installed(self, ref: FlatpakRef) -> bool:
+        """check if a ref is installed"""
+        return ref.get_name() in self._installed
 
     def _get_updates(self) -> list[str]:
         """get a list of flatpak ids with available updates"""
