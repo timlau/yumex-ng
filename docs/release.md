@@ -3,7 +3,7 @@
 - update the code
   - bump the version number in .\build.meson
   - bump the version number in .\yumex.spec
-  - add changelog entry in .\yum.spec
+  - add changelog entry in .\yumex.spec
   - add new release in data/dk.yumex.Yumex.metainfo.xml.in.in
 - build the release
   - run `make release`
@@ -14,11 +14,11 @@
       - make source archive
       - build the src.rpm
       - create a Fedora Copr build of the src.rpm
-  - make a new github release
-    - https://github.com/timlau/yumex-ng/releases/new
-    - select the release tag
-    - add title and description
-    - add the source archive from ./build/SOURCES
-    - add the src.rpm from ./build/SRPMS
-    - set the pre-release checkmark
-    - publish the release
+- make a new github release
+  - https://github.com/timlau/yumex-ng/releases/new
+  - select the release tag
+  - add title and description
+  - add the source archive from ./build/SOURCES
+  - add the src.rpm from ./build/SRPMS
+  - set the pre-release checkmark
+  - publish the release
