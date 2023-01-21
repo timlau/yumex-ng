@@ -3,7 +3,7 @@
 %global dnf_backend DNF4
 
 Name:     yumex
-Version:  4.99.2
+Version:  4.99.3
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -87,6 +87,9 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %changelog
+
+* Sat Jan 21 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.3-1
+- the 4.99.3 release
 
 * Wed Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
 - add support for building with dnf5 backend

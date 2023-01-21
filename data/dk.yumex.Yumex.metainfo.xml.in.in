@@ -37,6 +37,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="4.9.3" date="2023-01-21" type="devel"><description>
+        <p>Yum Extender 4.9.3 improve the flatpak installer </p>
+        <ul>
+          <li>flatpak install with search and select available results</li>
+          <li>lot of code fixes and optimization</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.9.2" date="2023-01-04" type="devel"><description>
         <p>Yum Extender 4.9.2 adds support for flatpaks </p>
         <ul>
