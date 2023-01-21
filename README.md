@@ -45,7 +45,17 @@ It is pretty early in development, but the basics are working
 ## package view settings
 ![package settings](data/gfx/yumex-ng-package-setting.png) 
 
+## package search
+![package search](data/gfx/yumex-ng-search.png) 
+
 ## Queue Page
 ![queue](data/gfx/yumex-ng-queue.png) 
+
+## flatpaks page
+![flatpak](data/gfx/yumex-ng-flatpaks.png) 
+
+## flatpak installer
+![flatpak-installer](data/gfx/yumex-ng-flatpaks-install.png) 
+
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
