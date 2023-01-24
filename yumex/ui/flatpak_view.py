@@ -20,14 +20,14 @@ if TYPE_CHECKING:
 import os
 
 from pathlib import Path
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gio, Adw, GLib
 from yumex.backend.flatpak import FlatpakPackage
 from yumex.backend.flatpak.backend import FlatpakBackend
 
 from yumex.constants import ROOTDIR
 
 
-from yumex.utils import RunAsync  # noqa: F401
+from yumex.utils import RunAsync, log  # noqa: F401
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
@@ -73,40 +73,15 @@ class YumexFlatpakView(Gtk.ListView):
     def update_all(self) -> None:
         """update all flatpaks with pending updates"""
 
-        def callback(state, error=None) -> None:
-            pass
-
-        self.do_transaction(self.backend.do_update_all, callback, list(self.store))
+        self.do_transaction(self.backend.do_update_all, list(self.store))
 
     def update(self, pkg) -> None:
         """update a flatpak"""
 
-        def callback(state, error=None) -> None:
-            pass
-
-        self.do_transaction(self.backend.do_update, callback, pkg)
+        self.do_transaction(self.backend.do_update, pkg)
 
     def install(self, *args) -> None:
         """install a new flatpak"""
-
-        def callback(state, error=None) -> None:
-            if state:
-                self.win.show_message(_(f"{fp_id} is now installed"), timeout=2)
-
-        def on_close(*args) -> None:
-            global fp_id, remote, ref, location
-            fp_id = flatpak_installer.current_id.get_title()
-            if fp_id:
-                remote = flatpak_installer.remote.get_selected_item().get_string()
-                location = flatpak_installer.location.get_selected_item().get_string()
-                ref = self.backend.find_ref(remote, fp_id)
-                if ref:
-                    if flatpak_installer.confirm:
-                        self.do_transaction(
-                            self.backend.do_install, callback, ref, remote, location
-                        )
-                else:
-                    self.win.show_message(f"{fp_id} is not found om {remote}")
 
         self.win.stack.set_visible_child_name("flatpaks")
         # TODO: make and sync edition of the flatpak installer, to make code more readable
@@ -115,21 +90,28 @@ class YumexFlatpakView(Gtk.ListView):
         for remote in self.backend.get_remotes(location=FlatpakLocation.USER):
             remotes.append(remote)
         flatpak_installer.remote.set_model(remotes)
-        flatpak_installer.set_transient_for(self.win)
-        flatpak_installer.connect("close-request", on_close)
-        flatpak_installer.present()
+        flatpak_installer.show()
+        fp_id = flatpak_installer.current_id.get_title()
+        if fp_id:
+            remote = flatpak_installer.remote.get_selected_item().get_string()
+            location = flatpak_installer.location.get_selected_item().get_string()
+            ref = self.backend.find_ref(remote, fp_id)
+            if ref:
+                if flatpak_installer.confirm:
+                    self.do_transaction(self.backend.do_install, ref, remote, location)
+                    self.win.show_message(_(f"{fp_id} is now installed"), timeout=2)
+
+            else:
+                self.win.show_message(f"{fp_id} is not found om {remote}")
 
     def remove(self, pkg=None) -> None:
         """remove an flatpak"""
 
-        def callback(state, error=None) -> None:
-            if state:
-                self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
-
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
-        self.do_transaction(self.backend.do_remove, callback, selected)
+        self.do_transaction(self.backend.do_remove, selected)
+        self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
 
-    def do_transaction(self, method: Callable, callback: Callable, *args) -> None:
+    def do_transaction(self, method: Callable, *args) -> None:
         """Excute the transaction in two runs
 
         The first get the refs in the transaction and show a confirmation dialog
@@ -139,6 +121,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         The provided callback will be called, with the state of second run
         """
+        _loop = GLib.MainLoop()
 
         def first_run_callback(refs, error=None) -> None:
             """callback for first run is completed.
@@ -158,13 +141,15 @@ class YumexFlatpakView(Gtk.ListView):
 
             Transaction is completted
             """
+            _loop.quit()
             self.win.progress.hide()
             self.reset()
-            if callback:
-                callback(state)
 
         # First run
+        log(">>Start")
         RunAsync(method, first_run_callback, *args, execute=False)
+        _loop.run()
+        log(">>End")
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item) -> None:

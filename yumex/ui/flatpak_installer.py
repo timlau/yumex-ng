@@ -45,11 +45,17 @@ class YumexFlatpakInstaller(Adw.Window):
         self.confirm = False
         self.found_ids: list[str] = []
         self.found_ndx: int = 0
+        self._loop = GLib.MainLoop()
         self.setup_location()
         self.read_clipboard()
         self.search_id.set_key_capture_widget(self)
         self.search_id.grab_focus()
         self.icon.set_from_icon_name("flatpak-symbolic")
+
+    def show(self):
+        self.set_transient_for(self.win)
+        self.present()
+        self._loop.run()
 
     def setup_location(self):
         fp_location = FlatpakLocation(self.win.settings.get_string("fp-location"))
@@ -92,12 +98,14 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_ok_clicked(self, *args):
+        self._loop.quit()
         log("flafpak_installer Ok clicked")
         self.confirm = True
         self.close()
 
     @Gtk.Template.Callback()
     def on_cancel_clicked(self, *args):
+        self._loop.quit()
         log("flafpak_installer cancel clicked")
         self.close()
 
