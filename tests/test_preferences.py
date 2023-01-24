@@ -15,36 +15,10 @@ from .mock import Mock
 pytestmark = pytest.mark.guitest
 
 
-class MockSettings(Mock):
-    def get_string(self, setting):
-        match setting:
-            case "fp-location":
-                return FlatpakLocation.USER
-            case "fp-remote":
-                return "flathub"
-
-    def set_string(self, setting, value):
-        self.set_mock_call("set_string", setting, value)
-
-
-class MockPackageBackend(Mock):
-    def get_repositories(self) -> list[tuple[str, str, bool]]:
-        return [("fedora", "fedora packages", True)]
-
-
 class MockFlatpackBackend(Mock):
     def __init__(self, remotes):
         super().__init__()
         self._remotes = remotes
-
-    def get_remotes(self, location: FlatpakLocation) -> list:
-        return self._remotes
-
-
-class MockPackageView(Mock):
-    @property
-    def backend(self):
-        return MockPackageBackend()
 
 
 class MockFlatpakView(Mock):
@@ -62,17 +36,24 @@ class MockWindow(Mock):
         Mock.__init__(self)
         self._remotes = remotes
 
-    @property
-    def package_view(self):
-        return MockPackageView()
+    # PackageBackend Mock methods
+    def get_repositories(self) -> list[tuple[str, str, bool]]:
+        return [("fedora", "fedora packages", True)]
 
-    @property
-    def flatpak_view(self):
-        return MockFlatpakView(self._remotes)
+    # setting Mock methods
+    def get_string(self, setting):
+        match setting:
+            case "fp-location":
+                return FlatpakLocation.USER
+            case "fp-remote":
+                return "flathub"
 
-    @property
-    def settings(self):
-        return MockSettings()
+    def set_string(self, setting, value):
+        self.set_mock_call("set_string", setting, value)
+
+    # flatpak backend mock methods
+    def get_remotes(self, location: FlatpakLocation) -> list:
+        return self._remotes
 
 
 @pytest.fixture
@@ -105,6 +86,14 @@ def test_setup(pref):
     """Check that the default flatpak location and remote are set correctly"""
     assert pref.fp_remote.get_selected_item().get_string() == "flathub"
     assert pref.fp_location.get_selected_item().get_string() == FlatpakLocation.USER
+    assert pref.win.get_number_of_calls() == 6
+    calls = pref.win.get_calls()
+    assert calls[0] == "settings"
+    assert calls[1] == "flatpak_view"
+    assert calls[2] == "backend"
+    assert calls[3] == "set_string(fp-remote,user)"
+    assert calls[4] == "package_view"
+    assert calls[5] == "backend"
 
 
 def test_get_remotes(pref):

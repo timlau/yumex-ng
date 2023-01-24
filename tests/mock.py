@@ -9,15 +9,32 @@ from gi.repository import Flatpak
 
 class Mock:
     def __init__(self, *args, **kwargs):
-        self._calls = {}
+        self._calls = []
+
+    def __getattr__(self, attr):
+        """all unknown attributes, just return self"""
+        self.set_mock_call(f"{attr}")
+        return self
+
+    def get_calls(self):
+        return self._calls
+
+    def get_number_of_calls(self):
+        return len(self._calls)
 
     def get_mock_call(self, method) -> list:
-        return self._calls.get(method, None)
+        return [call for call in self._calls if call.startswith(method)]
 
-    def set_mock_call(self, method, args, kwargs):
-        call_list = self._calls.get(method, [])
-        call_list.append((args, kwargs))
-        self._calls[method] = call_list
+    def set_mock_call(self, method, *args, **kwargs):
+        param_str = ""
+        if args:
+            param_str += ",".join([str(elem) for elem in args])
+        if kwargs:
+            param_str += ",".join([f"{key}={value}" for key, value in kwargs.items()])
+        if param_str:
+            self._calls.append(f"{method}({param_str})")
+        else:
+            self._calls.append(f"{method}")
 
 
 class MockFlatpakRef(Mock):

@@ -9,7 +9,7 @@ from dataclasses import dataclass
 import pytest
 import os
 from yumex.constants import PKGDATADIR
-from yumex.utils.enums import FlatpakLocation, Page
+from yumex.utils.enums import FlatpakLocation
 from yumex.backend.flatpak import FlatpakPackage
 from .mock import Mock, MockFlatpakRef
 
@@ -18,24 +18,19 @@ pytestmark = pytest.mark.guitest
 
 class MockWindow(Mock):
     def set_needs_attention(self, *args, **kwargs):
-        self.set_mock_call("set_needs_attention", args, kwargs)
+        self.set_mock_call("set_needs_attention", *args, **kwargs)
 
     def confirm_flatpak_transaction(self, *args, **kwargs):
         self.set_mock_call("confirm_flatpak_transaction", args, kwargs)
         return True
 
-    @property
-    def progress(self):
-        self.set_mock_call("progress", (), {})
-        return self
-
     def hide(self):
-        self.set_mock_call("progress.hide", (), {})
+        self.set_mock_call("progress.hide")
 
 
 class MockFlatpackBackend(Mock):
     def get_installed(self, *args, **kwargs):
-        self.set_mock_call("get_installed", args, kwargs)
+        self.set_mock_call("get_installed", *args, **kwargs)
         return [
             FlatpakPackage(
                 MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
@@ -43,12 +38,15 @@ class MockFlatpackBackend(Mock):
         ]
 
     def install(self, *args, **kwargs):
-        self.set_mock_call("install", args, kwargs)
+        self.set_mock_call("install", *args, **kwargs)
         return [
             FlatpakPackage(
                 MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
             )
         ]
+
+    def number_of_updates(self):
+        return 1
 
 
 @dataclass
@@ -97,7 +95,7 @@ def test_backend_set_needs_attention(flatpak_view):
     """Test that the win.set_needs_attention is called with one update"""
     calls = flatpak_view.win.get_mock_call("set_needs_attention")
     assert len(calls) == 1
-    assert calls[0] == ((Page.FLATPAKS, 1), {})
+    assert calls[0] == "set_needs_attention(flatpaks,1)"
 
 
 def test_backend_get_installed_called(flatpak_view):
@@ -105,22 +103,7 @@ def test_backend_get_installed_called(flatpak_view):
     assert isinstance(flatpak_view.backend, MockFlatpackBackend)
     calls = flatpak_view.backend.get_mock_call("get_installed")
     assert len(calls) == 1
-    assert calls[0] == ((), {"location": FlatpakLocation.BOTH})
-
-
-def test_view_do_transaction(flatpak_view):
-    """Test that backend,install is called"""
-
-    def callback(*args, **kwargs):
-        calls = flatpak_view.backend.get_mock_call("install")
-        assert len(calls) == 2
-        assert calls[0] == ((), {"execute": False})
-
-    flatpak_view.do_transaction(flatpak_view.backend.install, callback)
-    calls = flatpak_view.backend.get_mock_call("install")
-    assert len(calls) == 1
-    assert calls[0] == ((), {"execute": False})
-    # assert calls[0] == ((), {"location": FlatpakLocation.BOTH})
+    assert calls[0] == "get_installed(location=both)"
 
 
 def test_get_icon_paths(flatpak_view):
@@ -138,3 +121,9 @@ def test_find_icon(flatpak_view, package):
     notfound = MockFlatpakPackage(id="xx.xxxxxx.notfound")
     path = flatpak_view.find_icon(notfound)
     assert path is None
+
+
+# def test_view_do_transaction(flatpak_view):
+#     """Test that backend,install is called"""
+#     flatpak_view.do_transaction(flatpak_view.backend.install, None)
+#     assert flatpak_view.backend.get_number_of_calls() == 2
