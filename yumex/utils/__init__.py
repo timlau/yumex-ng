@@ -13,11 +13,13 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
+from dataclasses import dataclass
 import sys
 import logging
 import traceback
 import threading
 import time
+from typing import Any, Callable
 
 from gi.repository import GLib
 
@@ -83,6 +85,43 @@ class RunAsync(threading.Thread):
         self.source_id = GLib.idle_add(self.callback, result, error)
         log(f"<< Completed async job : {self.task_func.__name__}.")
         return self.source_id
+
+
+@dataclass
+class JobResult:
+    result: Any
+    error: Any
+
+
+class RunJob(threading.Thread):
+    """Run a task in a thread and wait for it to complete using a GLib.Mainloop
+    So the GUI don't get stalled with the task is running
+    """
+
+    def __init__(self, task_func: Callable, *args, **kwargs):
+        self.result = None
+        self._loop = GLib.MainLoop()
+        if threading.current_thread() is not threading.main_thread():
+            raise AssertionError
+        super().__init__(target=self.target, args=args, kwargs=kwargs)
+        self.task_func = task_func
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
+        log(f"<< Completed job : {self.task_func.__name__}.")
+
+    def start(self):
+        log(f">> Running job : {self.task_func.__name__}.")
+        super().start()
+        self._loop.run()
+        return self.result
+
+    def target(self, *args, **kwargs):
+        result = self.task_func(*args, **kwargs)
+        self.result = result
+        self._loop.quit()
 
 
 def format_number(number, SI=0, space=" "):

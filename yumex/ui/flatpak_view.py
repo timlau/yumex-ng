@@ -20,14 +20,14 @@ if TYPE_CHECKING:
 import os
 
 from pathlib import Path
-from gi.repository import Gtk, Gio, Adw, GLib
+from gi.repository import Gtk, Gio, Adw
 from yumex.backend.flatpak import FlatpakPackage
 from yumex.backend.flatpak.backend import FlatpakBackend
 
 from yumex.constants import ROOTDIR
 
 
-from yumex.utils import RunAsync, log  # noqa: F401
+from yumex.utils import RunAsync, RunJob, log  # noqa: F401
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
@@ -121,35 +121,18 @@ class YumexFlatpakView(Gtk.ListView):
 
         The provided callback will be called, with the state of second run
         """
-        _loop = GLib.MainLoop()
-
-        def first_run_callback(refs, error=None) -> None:
-            """callback for first run is completed.
-
-            Getting flatpaks in the transaction
-            """
-            if refs:
-                confirm = self.win.confirm_flatpak_transaction(refs)
-                if confirm:
-                    # Second run
-                    RunAsync(method, second_run_callback, *args, execute=True)
-                    return
-            second_run_callback(False)
-
-        def second_run_callback(state, error=None) -> None:
-            """callback for second run is completed.
-
-            Transaction is completted
-            """
-            _loop.quit()
-            self.win.progress.hide()
-            self.reset()
-
-        # First run
-        log(">>Start")
-        RunAsync(method, first_run_callback, *args, execute=False)
-        _loop.run()
-        log(">>End")
+        log(">> Start do_transaction")
+        with RunJob(method, *args, execute=False) as job:
+            refs = job.start()
+        if refs:
+            confirm = self.win.confirm_flatpak_transaction(refs)
+            if confirm:
+                # Second run
+                with RunJob(method, *args, execute=True) as job:
+                    job.start()
+        self.win.progress.hide()
+        self.reset()
+        log("<< End do_transaction")
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item) -> None:
