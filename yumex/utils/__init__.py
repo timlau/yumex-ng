@@ -85,46 +85,6 @@ class RunAsync(threading.Thread):
         return self.source_id
 
 
-class RunAsyncWait(threading.Thread):
-    def __init__(self, task_func, callback, *args, **kwargs):
-        self.source_id = None
-        if threading.current_thread() is not threading.main_thread():
-            raise AssertionError
-
-        super().__init__(target=self.target, args=args, kwargs=kwargs)
-
-        self.task_func = task_func
-
-        self.callback = callback or (lambda r, e: None)
-        # self.daemon = kwargs.pop("daemon", True)
-        self.daemon = False
-        self.start()
-        self.join()
-        log("RunAsyncWait Done")
-
-    def target(self, *args, **kwargs):
-        result = None
-        error = None
-        log(f">> Running async wait job : {self.task_func.__name__}.")
-
-        try:
-            result = self.task_func(*args, **kwargs)
-        except Exception as exception:
-            log(
-                "Error while running async job: "
-                f"{self.task_func}\nException: {exception}"
-            )
-
-            error = exception
-            _ex_type, _ex_value, trace = sys.exc_info()
-            traceback.print_tb(trace)
-            # traceback_info = "\n".join(traceback.format_tb(trace))
-            # log([str(exception), traceback_info])
-        self.source_id = GLib.idle_add(self.callback, result, error)
-        log(f"<< Completed async wait job : {self.task_func.__name__}.")
-        return self.source_id
-
-
 def format_number(number, SI=0, space=" "):
     """Turn numbers into human-readable metric-like numbers"""
     symbols = [

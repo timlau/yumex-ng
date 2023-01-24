@@ -171,10 +171,27 @@ class FlatpakBackend:
             self.win.show_message(f"{msg}", timeout=2)
             return False
 
+    def _get_all_updates(self):
+        user_updates = [
+            self._get_package(ref, FlatpakAction.UPDATE)
+            for ref in self.user.list_installed_refs_for_update()
+        ]
+        system_updates = [
+            self._get_package(ref, FlatpakAction.UPDATE)
+            for ref in self.system.list_installed_refs_for_update()
+        ]
+        return user_updates, system_updates
+
+    def number_of_updates(self) -> int:
+        """get the number of available updates."""
+        return len(self.updates)
+
     def do_update_all(self, pkgs: list[FlatpakPackage], execute) -> None:
         """update all flatpaks with available updates"""
-        user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
-        system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
+        # user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
+        # system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
+
+        user_updates, system_updates = self._get_all_updates()
         return self._do_transaction(
             user_updates, system_updates, FlatpakAction.UPDATE, execute
         )

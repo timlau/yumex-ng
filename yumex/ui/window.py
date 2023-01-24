@@ -56,6 +56,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     packages_page = Gtk.Template.Child()
     queue_page = Gtk.Template.Child()
     flatpaks_page = Gtk.Template.Child()
+    flatpak_update_all: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -376,6 +377,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         match self.active_page:
             case Page.PACKAGES:
                 self.package_view.refresh()
+            case Page.FLATPAKS:
+                self.flatpak_view.refresh_need_attention()
 
     def set_needs_attention(self, page: Page, num: int):
         """set the page needs_attention state"""
@@ -384,7 +387,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case Page.PACKAGES:
                 self.packages_page.set_needs_attention(state)
             case Page.FLATPAKS:
+                log(f"set_need_attetion (flatpak): state: {state} ")
                 self.flatpaks_page.set_needs_attention(state)
+                if state:
+                    self.flatpak_update_all.add_css_class("success")
+                else:
+                    self.flatpak_update_all.remove_css_class("success")
+                self.flatpak_update_all.set_sensitive(state)
+
             case Page.GROUPS:
                 pass
             case Page.QUEUE:

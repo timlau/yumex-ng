@@ -27,7 +27,7 @@ from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.constants import ROOTDIR
 
 
-from yumex.utils import RunAsyncWait, log, RunAsync  # noqa: F401
+from yumex.utils import RunAsync  # noqa: F401
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
@@ -48,16 +48,16 @@ class YumexFlatpakView(Gtk.ListView):
         """Create a new store and populate with flatpak fron the backend"""
         self.store = Gio.ListStore.new(FlatpakPackage)
         self.backend = FlatpakBackend(self.win)
-        num_updates = 0
         for elem in self.backend.get_installed(location=FlatpakLocation.BOTH):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
-                if elem.is_update:
-                    num_updates += 1
         self.store.sort(lambda a, b: a.name > b.name)
         self.selection.set_model(self.store)
         self.selection.set_selected(0)
-        self.win.set_needs_attention(Page.FLATPAKS, num_updates)
+        self.refresh_need_attention()
+
+    def refresh_need_attention(self):
+        self.win.set_needs_attention(Page.FLATPAKS, self.backend.number_of_updates())
 
     def get_icon_paths(self) -> list[str]:
         """list of possible icon location for installed flatpaks"""
@@ -76,7 +76,7 @@ class YumexFlatpakView(Gtk.ListView):
         def callback(state, error=None) -> None:
             pass
 
-        self.do_transaction(self.backend.do_update_all, callback, self.store)
+        self.do_transaction(self.backend.do_update_all, callback, list(self.store))
 
     def update(self, pkg) -> None:
         """update a flatpak"""
@@ -149,7 +149,7 @@ class YumexFlatpakView(Gtk.ListView):
                 confirm = self.win.confirm_flatpak_transaction(refs)
                 if confirm:
                     # Second run
-                    RunAsyncWait(method, second_run_callback, *args, execute=True)
+                    RunAsync(method, second_run_callback, *args, execute=True)
                     return
             second_run_callback(False)
 
@@ -164,7 +164,7 @@ class YumexFlatpakView(Gtk.ListView):
                 callback(state)
 
         # First run
-        RunAsyncWait(method, first_run_callback, *args, execute=False)
+        RunAsync(method, first_run_callback, *args, execute=False)
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item) -> None:
