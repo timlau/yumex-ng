@@ -14,6 +14,8 @@
 # Copyright (C) 2023  Tim Lauridsen
 from typing import TYPE_CHECKING
 
+from yumex.utils.enums import FlatpakLocation
+
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
@@ -50,7 +52,7 @@ class YumexFlatpakInstaller(Adw.Window):
         self.icon.set_from_icon_name("flatpak-symbolic")
 
     def setup_location(self):
-        fp_location = self.win.settings.get_string("fp-location")
+        fp_location = FlatpakLocation(self.win.settings.get_string("fp-location"))
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
@@ -102,7 +104,7 @@ class YumexFlatpakInstaller(Adw.Window):
     @Gtk.Template.Callback()
     def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        location = self.location.get_selected_item()
+        location = FlatpakLocation(self.location.get_selected_item())
         remotes = Gtk.StringList.new()
         for remote in self.backend.get_remotes(location=location.get_string()):
             remotes.append(remote)
