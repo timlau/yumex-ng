@@ -13,9 +13,12 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
+from typing import Iterable
 from yumex.backend.cache import YumexPackageCache
+from yumex.backend.dnf import YumexPackage
 from yumex.constants import BACKEND
 from yumex.backend.interface import PackageBackend, PackageCache, Progress
+from yumex.utils.enums import InfoType, PackageFilter, SearchField
 
 if BACKEND == "DNF5":
     from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
@@ -32,7 +35,7 @@ class YumexPresenter:
     The used package backends, implement the PackageBackend protocol methods, so the UI has a well
     defined interface to using the backend without knowledge of packaging API used.
 
-    Implement the Presenter protocol class
+    Implements Presenter,PackageBackend,PackageCache protocols
     """
 
     def __init__(self, win) -> None:
@@ -41,7 +44,7 @@ class YumexPresenter:
         self._cache: YumexPackageCache = None
 
     @property
-    def backend(self) -> PackageBackend:
+    def package_backend(self) -> PackageBackend:
         if not self._backend:
             if BACKEND == "DNF5":
                 self._backend: PackageBackend = Dnf5Backend(self)
@@ -54,7 +57,7 @@ class YumexPresenter:
     @property
     def package_cache(self) -> PackageCache:
         if not self._cache:
-            self._cache: PackageCache = YumexPackageCache(backend=self.backend)
+            self._cache: PackageCache = YumexPackageCache(backend=self.package_backend)
         return self._cache
 
     @property
@@ -68,3 +71,28 @@ class YumexPresenter:
     def reset_cache(self) -> None:
         del self._cache
         self._cache = None
+
+    # PackageBackend implementation
+    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]:
+        return self.package_backend.search(txt, field, limit)
+
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
+        return self.package_backend.get_package_info(pkg, attr)
+
+    def get_repositories(self) -> list[str]:
+        return self.package_backend.get_repositories()
+
+    def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
+        return self.package_backend.depsolve(pkgs)
+
+    # PackageCache protocol implementation
+    def get_packages_by_filter(
+        self, pkgfilter: PackageFilter, reset=False
+    ) -> list[YumexPackage]:
+        return self.package_cache.get_packages_by_filter(pkgfilter, reset)
+
+    def get_packages(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
+        return self.package_cache.get_packages(pkgs)
+
+    def get_package(self, pkg: YumexPackage) -> YumexPackage:
+        return self.package_cache.get_package(pkg)

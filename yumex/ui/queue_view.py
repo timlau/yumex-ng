@@ -20,7 +20,6 @@ if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk
-from yumex.backend.interface import PackageCache
 
 from yumex.constants import ROOTDIR
 
@@ -37,19 +36,16 @@ class YumexQueueView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win, presenter, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
+        self.presenter = presenter
         self.storage = PackageStorage()
         self.selection.set_model(self.storage.get_storage())
 
     def reset(self):
         self.selection.set_model(self.storage.clear())
         self.win.set_needs_attention(Page.QUEUE, 0)
-
-    @property
-    def cache(self) -> PackageCache:
-        return self.win.package_view.package_cache
 
     @property
     def package_view(self) -> YumexPackageView:
@@ -66,7 +62,7 @@ class YumexQueueView(Gtk.ListView):
         """Add package to queue"""
 
         def completed(deps, error=None):
-            for dep in self.cache.get_packages(deps):
+            for dep in self.presenter.get_packages(deps):
                 if dep not in self.storage:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
@@ -81,7 +77,7 @@ class YumexQueueView(Gtk.ListView):
             if pkg not in self.storage:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
         self.win.set_sensitive(False)
-        RunAsync(self.win.package_view.backend.depsolve, completed, self.storage)
+        RunAsync(self.presenter.depsolve, completed, self.storage)
 
     def remove_package(self, pkg):
         self.remove_packages([pkg])
@@ -91,7 +87,7 @@ class YumexQueueView(Gtk.ListView):
         """Remove package from queue"""
 
         def completed(deps, error=None):
-            for dep in self.cache.get_packages(deps):
+            for dep in self.presenter.get_packages(deps):
                 if dep not in self.storage:  # new dep not in queue
                     dep.queued = True
                     dep.is_dep = True
@@ -116,7 +112,7 @@ class YumexQueueView(Gtk.ListView):
             for pkg in to_keep:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
             self.win.set_sensitive(False)
-            RunAsync(self.win.package_view.backend.depsolve, completed, store)
+            RunAsync(self.presenter.depsolve, completed, store)
         else:
             completed([])
 

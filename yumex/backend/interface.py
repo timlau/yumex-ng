@@ -38,9 +38,6 @@ class PackageCache(Protocol):
 class PackageBackend(Protocol):
     """Protocol class for a package backend"""
 
-    def reset_backend(self) -> None:
-        ...
-
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         ...
 
@@ -76,14 +73,6 @@ class Progress(Protocol):
 
 class Presenter(Protocol):
     """Protocol class for a presenter in  a Model-view-presenter (MVP) architectural pattern"""
-
-    @property
-    def backend(self) -> PackageBackend:
-        ...
-
-    @property
-    def package_cache(self) -> PackageCache:
-        ...
 
     @property
     def progress(self) -> Progress:

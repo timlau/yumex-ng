@@ -67,14 +67,6 @@ class YumexPackageView(Gtk.ColumnView):
         self.column_num = 0
         self._last_selected_pkg: YumexPackage = None
 
-    @property
-    def backend(self):
-        return self.presenter.backend
-
-    @property
-    def package_cache(self):
-        return self.presenter.package_cache
-
     def reset(self):
         log("Reset Package View")
         self.queue_view.reset()
@@ -107,14 +99,14 @@ class YumexPackageView(Gtk.ColumnView):
 
         self.win.progress.show()
         self.win.main_view.set_sensitive(False)
-        RunAsync(self.package_cache.get_packages_by_filter, set_completed, pkg_filter)
+        RunAsync(self.presenter.get_packages_by_filter, set_completed, pkg_filter)
 
     # @timed
     def search(self, txt, field=SearchField.NAME):
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
-            pkgs = self.package_cache.get_packages(
-                self.backend.search(txt, field=field, limit=1)
+            pkgs = self.presenter.get_packages(
+                self.presenter.search(txt, field=field, limit=1)
             )
             self.add_packages_to_store(pkgs)
 
@@ -255,7 +247,7 @@ class YumexPackageView(Gtk.ColumnView):
         self._last_selected_pkg = pkg
         info_type = InfoType(self.win.package_settings.get_info_type())
         RunAsync(
-            self.backend.get_package_info,
+            self.presenter.get_package_info,
             completed,
             pkg,
             info_type,
