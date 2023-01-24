@@ -104,13 +104,20 @@ class YumexFlatpakInstaller(Adw.Window):
     @Gtk.Template.Callback()
     def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        location = FlatpakLocation(self.location.get_selected_item())
-        remotes = Gtk.StringList.new()
-        for remote in self.backend.get_remotes(location=location.get_string()):
-            remotes.append(remote)
-        self.remote.set_model(remotes)
+        location = FlatpakLocation(self.location.get_selected_item().get_string())
+        remotes = self.backend.get_remotes(location=location)
+        if remotes:
+            model = Gtk.StringList.new()
+            for remote in remotes:
+                model.append(remote)
+            self.remote.set_model(model)
+        else:
+            self._clear()
 
     def _set_icon(self, id: str, remote_name: str):
+        if not remote_name:
+            self.icon.set_from_icon_name("flatpak-symbolic")
+            return
         icon_path = self.backend.get_icon_path(remote_name)
         icon_file = Path(f"{icon_path}/{id}.png")
         if icon_file.exists():
@@ -125,20 +132,23 @@ class YumexFlatpakInstaller(Adw.Window):
         label = f"{self.found_ndx+1}/{num}"
         self.found_num.set_label(label)
 
+    def _clear(self) -> None:
+        self.found_ids = []
+        self.found_ndx = 0
+        self.current_id.set_title("")
+        self._set_icon("", None)  # reset icon
+        self.found_num.set_visible(False)
+
     @Gtk.Template.Callback()
     def on_search(self, widget):
         key = widget.get_text()
-        remote_name = self.remote.get_selected_item().get_string()
-        if key == "":
-            self.found_ids = []
-            self.found_ndx = 0
-            self.current_id.set_title("")
-            self._set_icon("", remote_name)  # reset icon
-            self.found_num.set_visible(False)
+        selected = self.remote.get_selected_item()
+        if key == "" or not selected or len(key) < 3:
+            self._clear()
             return
-        if len(key) < 3:
-            return
-        self.found_ids = self.backend.find(remote_name, key)
+        remote_name = selected.get_string()
+        location = FlatpakLocation(self.location.get_selected_item().get_string())
+        self.found_ids = self.backend.find(remote_name, key, location=location)
         log(f"found : {len(self.found_ids)}")
         self.found_ndx = 0
         if self.found_ids:
@@ -147,9 +157,7 @@ class YumexFlatpakInstaller(Adw.Window):
             self.current_id.set_title(fp_id)
             self._set_selected_num()
         else:
-            self.current_id.set_title("")
-            self._set_icon("", remote_name)  # reset icon
-            self.found_num.set_visible(False)
+            self._clear()
 
     @Gtk.Template.Callback()
     def on_search_next_match(self, widget) -> None:

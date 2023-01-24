@@ -35,9 +35,12 @@ class FlatpakBackend:
             [ref.get_name() for ref in self.system.list_installed_refs()]
         )
 
-    def find(self, source: str, key: str) -> list[str]:
+    def find(self, source: str, key: str, location: FlatpakLocation) -> list[str]:
         """find an available id containing a key"""
-        refs = self.user.list_remote_refs_sync(source)
+        if location == FlatpakLocation.SYSTEM:
+            refs = self.system.list_remote_refs_sync(source)
+        else:
+            refs = self.user.list_remote_refs_sync(source)
         key = key.lower()
         found = []
         for ref in refs:
