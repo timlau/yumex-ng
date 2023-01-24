@@ -111,6 +111,8 @@ class RunJob(threading.Thread):
 
     def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
         log(f"<< Completed job : {self.task_func.__name__}.")
+        if self._loop.is_running():
+            self._loop.quit()
 
     def start(self):
         log(f">> Running job : {self.task_func.__name__}.")
