@@ -14,6 +14,8 @@
 # Copyright (C) 2023  Tim Lauridsen
 from typing import TYPE_CHECKING
 
+from yumex.utils.enums import FlatpakLocation
+
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
@@ -27,8 +29,8 @@ from yumex.utils import log
 class YumexPreferences(Adw.PreferencesWindow):
     __gtype_name__ = "YumexPreferences"
 
-    fp_remote = Gtk.Template.Child()
-    fp_location = Gtk.Template.Child()
+    fp_remote: Adw.ComboRow = Gtk.Template.Child()
+    fp_location: Adw.ComboRow = Gtk.Template.Child()
 
     repo_group = Gtk.Template.Child()
 
@@ -50,30 +52,37 @@ class YumexPreferences(Adw.PreferencesWindow):
             self.repo_group.add(repo_widget)
 
     def setup_flatpak(self):
-        location = self.settings.get_string("fp-location")
+        location = FlatpakLocation(self.settings.get_string("fp-location"))
         remote = self.settings.get_string("fp-remote")
         log(f" settings : {location=}")
         log(f" settings : {remote=}")
         self.set_location(location)
         self.set_remote(location, remote)
 
-    def set_location(self, fp_location):
+    def set_location(self, current_location):
         for ndx, location in enumerate(self.fp_location.get_model()):
-            if location.get_string() == fp_location:
+            if location.get_string() == current_location:
                 self.fp_location.set_selected(ndx)
                 break
 
-    def set_remote(self, fp_location, fp_remote):
-        self.fp_remote.set_model(self.get_remotes(fp_location))
-        for ndx, remote in enumerate(self.fp_remote.get_model()):
-            if remote.get_string() == fp_remote:
-                self.fp_remote.set_selected(ndx)
-                break
+    def set_remote(self, current_location, current_remote):
+        remotes = self.get_remotes(current_location)
+        self.fp_remote.set_model(remotes)
+        if remotes:
+            self.fp_remote.set_sensitive(True)
+            for ndx, remote in enumerate(self.fp_remote.get_model()):
+                if remote.get_string() == current_remote:
+                    self.fp_remote.set_selected(ndx)
+                    break
+        else:
+            self.fp_remote.set_sensitive(False)
 
-    def get_remotes(self, location):
-        system = location == "system"
-        remotes = self.win.flatpak_view.backend.get_remotes(location=system)
+    def get_remotes(self, location: FlatpakLocation) -> list:
+        remotes = self.win.flatpak_view.backend.get_remotes(location=location)
         model = Gtk.StringList.new()
+        if not remotes:
+            log(f"pref: No remotes found location {location}")
+            return model
         for remote in remotes:
             model.append(remote)
         return model
@@ -85,7 +94,7 @@ class YumexPreferences(Adw.PreferencesWindow):
     @Gtk.Template.Callback()
     def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        location = self.fp_location.get_selected_item().get_string()
+        location = FlatpakLocation(self.fp_location.get_selected_item().get_string())
         remote = self.settings.get_string("fp-remote")
         self.settings.set_string("fp-location", location)
         self.set_remote(location, remote)
@@ -93,8 +102,10 @@ class YumexPreferences(Adw.PreferencesWindow):
     @Gtk.Template.Callback()
     def on_remote_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        remote = self.fp_remote.get_selected_item().get_string()
-        self.settings.set_string("fp-remote", remote)
+        selected = self.fp_location.get_selected_item()
+        if selected:
+            remote = selected.get_string()
+            self.settings.set_string("fp-remote", remote)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/repository.ui")

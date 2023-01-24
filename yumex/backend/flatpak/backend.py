@@ -71,9 +71,15 @@ class FlatpakBackend:
     def get_remotes(self, location: FlatpakLocation) -> list[str]:
         """get a list of active flatpak remote names"""
         if location is FlatpakLocation.SYSTEM:
-            return sorted([remote.get_name() for remote in self.system.list_remotes()])
+            remotes = sorted(
+                [remote.get_name() for remote in self.system.list_remotes()]
+            )
+            log(f"FLATPAK : system remotes: {remotes}")
+            return remotes
         else:
-            return sorted([remote.get_name() for remote in self.user.list_remotes()])
+            remotes = sorted([remote.get_name() for remote in self.user.list_remotes()])
+            log(f"FLATPAK : user remotes: {remotes}")
+            return remotes
 
     def get_arch(self) -> str:
         """get the default arch"""

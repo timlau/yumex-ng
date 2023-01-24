@@ -97,7 +97,8 @@ def pref_no():
     Gio.Resource._register(resource)
     from yumex.ui.preferences import YumexPreferences
 
-    return YumexPreferences(win=MockWindow([]))
+    remotes = []
+    return YumexPreferences(win=MockWindow(remotes=remotes))
 
 
 def test_setup(pref):
