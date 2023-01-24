@@ -17,7 +17,11 @@
 
 from gi.repository import Flatpak, GLib
 from yumex.backend.flatpak import FlatpakPackage
-from yumex.backend.flatpak.transaction import FlatPakFirstRun, FlatpakTransaction
+from yumex.backend.flatpak.transaction import (
+    FlatPakFirstRun,
+    FlatPakNoOperations,
+    FlatpakTransaction,
+)
 
 from yumex.utils import log
 from yumex.utils.types import FlatpakRef, MainWindow
@@ -122,6 +126,9 @@ class FlatpakBackend:
             result: list = transaction._current_result
             refs = [(oper.get_ref(), action, oper.get_remote()) for oper in result]
             return refs
+        except FlatPakNoOperations:
+            log("FLATPAK : no operations")
+            return []
 
     def _execute_transaction(
         self, pkgs: list[FlatpakPackage], system: bool, action, **kwargs
@@ -186,7 +193,7 @@ class FlatpakBackend:
         """get the number of available updates."""
         return len(self.updates)
 
-    def do_update_all(self, pkgs: list[FlatpakPackage], execute) -> None:
+    def do_update_all(self, execute) -> None:
         """update all flatpaks with available updates"""
         # user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
         # system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]

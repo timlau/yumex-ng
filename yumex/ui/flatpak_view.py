@@ -73,7 +73,7 @@ class YumexFlatpakView(Gtk.ListView):
     def update_all(self) -> None:
         """update all flatpaks with pending updates"""
 
-        self.do_transaction(self.backend.do_update_all, list(self.store))
+        self.do_transaction(self.backend.do_update_all)
 
     def update(self, pkg) -> None:
         """update a flatpak"""

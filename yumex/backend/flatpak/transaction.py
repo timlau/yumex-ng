@@ -28,6 +28,11 @@ class FlatPakFirstRun(Exception):
         super().__init__(*args)
 
 
+class FlatPakNoOperations(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
 class FlatpakTransaction:
     def __init__(self, backend, system: FlatpakLocation, first_run: bool = False):
         self.win = backend.win
@@ -65,6 +70,8 @@ class FlatpakTransaction:
         """signal handler for FlatPak.Transaction::ready"""
         log(" FlatpakTransaction: ready")
         self.num_actions = len(transaction.get_operations())
+        if not self.num_actions:
+            raise FlatPakNoOperations("FlatpakTransaction: no operations")
         self.current_action = 0
         self.elem_progress = 1.0 / self.num_actions
         if self.first_run:
