@@ -16,25 +16,21 @@
 from gi.repository import Gtk, Adw
 
 from yumex.constants import ROOTDIR
-from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/progress.ui")
 class YumexProgress(Adw.Window):
     __gtype_name__ = "YumexProgress"
 
-    title = Gtk.Template.Child()
-    subtitle = Gtk.Template.Child()
-    progress = Gtk.Template.Child()
-    ok_button = Gtk.Template.Child()
-    spinner = Gtk.Template.Child()
+    title: Gtk.Label = Gtk.Template.Child()
+    subtitle: Gtk.Label = Gtk.Template.Child()
+    progress: Gtk.ProgressBar = Gtk.Template.Child()
+    spinner: Gtk.Spinner = Gtk.Template.Child()
 
-    def __init__(self, win: MainWindow, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.win: MainWindow = win
 
     def show(self):
-        self.set_transient_for(self.win)
         self.spinner.set_visible(True)
         self.present()
 
@@ -52,16 +48,7 @@ class YumexProgress(Adw.Window):
     def set_subtitle(self, title: str):
         self.subtitle.set_label(title)
 
-    def show_button(self):
-        self.spinner.set_visible(False)
-        self.ok_button.set_visible(True)
-
     def set_progress(self, frac: float):
         if frac >= 0.0 and frac <= 1.0:
             self.progress.set_visible(True)
             self.progress.set_fraction(frac)
-
-    @Gtk.Template.Callback()
-    def on_ok_clicked(self, *args):
-        self.ok_button.set_visible(False)
-        self.hide()

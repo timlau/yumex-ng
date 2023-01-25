@@ -95,7 +95,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_gui(self):
         """Setup the gui"""
-        self.progress = YumexProgress(self)
+        self.progress = YumexProgress()
+        self.progress.set_transient_for(self)
         self.setup_package_page()
         self.setup_groups_page()
         self.setup_queue()

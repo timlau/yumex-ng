@@ -50,13 +50,6 @@ template YumexProgress : Adw.Window {
                 valign: start;
                 spinning: true;
             }
-            Gtk.Button ok_button {
-                label: "Ok";
-                visible: false;
-                valign: end;
-                styles ["accent"]
-                clicked => on_ok_clicked();
-            }
         }
       }
 
