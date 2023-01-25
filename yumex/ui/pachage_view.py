@@ -12,20 +12,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING
 
-from yumex.utils.storage import PackageStorage
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk
-from yumex.backend.interface import Presenter
 
+from yumex.backend.interface import Presenter
+from yumex.utils.storage import PackageStorage
+from yumex.utils.types import MainWindow
 from yumex.constants import ROOTDIR
 from yumex.backend.dnf import YumexPackage
-
-# from yumex.backend.dnf import Backend, DnfCallback
 from yumex.ui import get_package_selection_tooltip
 from yumex.utils.enums import (
     InfoType,
@@ -53,9 +48,9 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(self, win, presenter: Presenter, **kwargs):
+    def __init__(self, win: MainWindow, presenter: Presenter, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
         self.presenter = presenter
         self.storage = PackageStorage()
         self.setup()

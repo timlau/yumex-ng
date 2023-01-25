@@ -12,22 +12,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING
-
-from yumex.utils.storage import PackageStorage
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk
 
 from yumex.constants import ROOTDIR
-
+from yumex.utils.storage import PackageStorage
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import RunAsync, timed
 from yumex.utils.enums import PackageState, Page
+from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_view.ui")
@@ -36,9 +31,9 @@ class YumexQueueView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, win, presenter, **kwargs):
+    def __init__(self, win: MainWindow, presenter, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
         self.presenter = presenter
         self.storage = PackageStorage()
         self.selection.set_model(self.storage.get_storage())

@@ -12,16 +12,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
+import hawkey
 
 from gi.repository import Gtk, Adw
 
 from yumex.constants import ROOTDIR
-import hawkey
-
+from yumex.utils.types import MainWindow
 from yumex.utils.enums import InfoType
 
 ADVISORY_TYPES = {
@@ -46,9 +43,9 @@ class YumexPackageInfo(Gtk.Box):
     ref_grp = Gtk.Template.Child()
     references = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win: MainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
         self._ref_rows = []
 
     def clear(self):

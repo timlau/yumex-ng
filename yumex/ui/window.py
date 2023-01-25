@@ -16,9 +16,9 @@
 import re
 
 from gi.repository import Gtk, Adw, Gio, GLib
+
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
 from yumex.backend.presenter import YumexPresenter
-
 from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView

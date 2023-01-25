@@ -14,10 +14,15 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 """Custom types used for type hinting for more clarity"""
+from typing import Type, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
+
 from gi.repository import Flatpak
 
 # we can not use the YumexMainWindow direct, because of circular imports
 
-MainWindow = "YumexMainWindow"
+MainWindow = Type["YumexMainWindow"]
 FlatpakRefString = str  # ex. app/org.gnome.design.Contrast/x86_64/stable
 FlatpakRef = Flatpak.Ref

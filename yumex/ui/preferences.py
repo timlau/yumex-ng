@@ -12,17 +12,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING
-
-from yumex.utils.enums import FlatpakLocation
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk, Adw
 
 from yumex.constants import ROOTDIR
 from yumex.utils import log
+from yumex.utils.types import MainWindow
+from yumex.utils.enums import FlatpakLocation
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/preferences.ui")
@@ -34,9 +30,9 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     repo_group = Gtk.Template.Child()
 
-    def __init__(self, win, presenter, **kwargs):
+    def __init__(self, win: MainWindow, presenter, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
         self.presenter = presenter
         self.settings = win.settings
         self.setup()

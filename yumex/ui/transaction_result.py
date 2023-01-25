@@ -1,12 +1,23 @@
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright (C) 2023  Tim Lauridsen
 
 from gi.repository import Gtk, Adw, GObject, Gio, GLib
 
 from yumex.constants import ROOTDIR
 from yumex.utils import format_number
+from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/transaction_result.ui")
@@ -17,9 +28,9 @@ class YumexTransactionResult(Adw.Window):
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win: MainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
         self._loop = GLib.MainLoop()
         self.confirm = False
         self.store = Gio.ListStore.new(ResultElem)

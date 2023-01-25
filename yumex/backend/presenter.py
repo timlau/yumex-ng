@@ -12,12 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterable
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
+from typing import Iterable
 
 from yumex.utils.types import MainWindow
 from yumex.backend.cache import YumexPackageCache
@@ -117,7 +115,7 @@ class YumexPresenter:
 
     # Main Window helpers
 
-    def get_main_window(self) -> "YumexMainWindow":
+    def get_main_window(self) -> MainWindow:
         return self.win
 
     def show_message(self, title, timeout=2):

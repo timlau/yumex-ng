@@ -1,7 +1,9 @@
 from gi.repository import Adw
 
+from yumex.utils.types import MainWindow
 
-def error_dialog(win, title: str, msg: str):
+
+def error_dialog(win: MainWindow, title: str, msg: str):
     def response(dialog, result, *args):
         # try:
         #     clb = win.get_clipboard()

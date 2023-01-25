@@ -12,17 +12,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING
 
-from yumex.utils.enums import FlatpakLocation
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
 
 from pathlib import Path
 from gi.repository import Gtk, Adw, GLib
-from yumex.backend.flatpak.backend import FlatpakBackend
 
+from yumex.backend.flatpak.backend import FlatpakBackend
+from yumex.utils.enums import FlatpakLocation
+from yumex.utils.types import MainWindow
 from yumex.constants import ROOTDIR
 from yumex.utils import log
 
@@ -38,9 +35,9 @@ class YumexFlatpakInstaller(Adw.Window):
     icon: Gtk.Image = Gtk.Template.Child()
     found_num: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, win, backend, **kwargs):
+    def __init__(self, win: MainWindow, backend, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
         self.backend: FlatpakBackend = backend
         self.confirm = False
         self.found_ids: list[str] = []

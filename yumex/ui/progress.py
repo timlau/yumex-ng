@@ -12,14 +12,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
 
 from gi.repository import Gtk, Adw
 
 from yumex.constants import ROOTDIR
+from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/progress.ui")
@@ -32,9 +29,9 @@ class YumexProgress(Adw.Window):
     ok_button = Gtk.Template.Child()
     spinner = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win: MainWindow, **kwargs):
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
+        self.win: MainWindow = win
 
     def show(self):
         self.set_transient_for(self.win)

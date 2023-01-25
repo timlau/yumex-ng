@@ -12,23 +12,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
-from typing import TYPE_CHECKING, Callable
 
-from yumex.backend.presenter import YumexPresenter
-
-if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow  # noqa: F401
 
 import os
 
+from typing import Callable
 from pathlib import Path
+
 from gi.repository import Gtk, Gio, Adw
+
+from yumex.backend.presenter import YumexPresenter
 from yumex.backend.flatpak import FlatpakPackage
-
 from yumex.constants import ROOTDIR
-
-
-from yumex.utils import RunAsync, RunJob, log  # noqa: F401
+from yumex.utils import RunJob, log
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
