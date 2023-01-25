@@ -190,7 +190,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def confirm_flatpak_transaction(self, refs: list) -> bool:
         log("Window: confirm flatpak transaction")
-        dialog = YumexFlatpakResult(self)
+        dialog = YumexFlatpakResult()
+        dialog.set_transient_for(self)
         dialog.populate(refs)
         dialog.show()
         confirm = dialog.confirm
