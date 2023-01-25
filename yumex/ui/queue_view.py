@@ -52,23 +52,10 @@ class YumexQueueView(Gtk.ListView):
     @timed
     def add_packages(self, pkgs):
         """Add package to queue"""
-
-        def completed(deps, error=None):
-            for dep in self.presenter.get_packages(deps):
-                if dep not in self.storage:  # new dep not in queue
-                    dep.queued = True
-                    dep.is_dep = True
-                    dep.ref_to = pkg
-                    dep.queue_action = True
-                self.storage.insert_sorted(dep, self.sort_by_state)
-            # send refresh signal, to refresh the package view
-            self.emit("refresh")
-            self.refresh_attention()
-
         for pkg in pkgs:
             if pkg not in self.storage:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
-        RunAsync(self.presenter.depsolve, completed, self.storage)
+        RunAsync(self.presenter.depsolve, self.add_deps_to_queue, self.storage)
 
     def remove_package(self, pkg):
         self.remove_packages([pkg])
@@ -76,19 +63,6 @@ class YumexQueueView(Gtk.ListView):
     @timed
     def remove_packages(self, pkgs):
         """Remove package from queue"""
-
-        def completed(deps, error=None):
-            for dep in self.presenter.get_packages(deps):
-                if dep not in self.storage:  # new dep not in queue
-                    dep.queued = True
-                    dep.is_dep = True
-                    dep.queue_action = True
-                    self.storage.insert_sorted(dep, self.sort_by_state)
-            self.selection.set_model(self.storage.get_storage())
-            # send refresh signal, to refresh the package view
-            self.emit("refresh")
-            self.refresh_attention()
-
         to_keep = []
         for store_pkg in self.storage:
             # check if this package should be kept in the queue
@@ -102,9 +76,21 @@ class YumexQueueView(Gtk.ListView):
         if len(to_keep):  # check if there something in the queue
             for pkg in to_keep:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
-            RunAsync(self.presenter.depsolve, completed, store)
+            RunAsync(self.presenter.depsolve, self.add_deps_to_queue, store)
         else:
-            completed([])
+            self.add_deps_to_queue([])
+
+    def add_deps_to_queue(self, deps, error=None):
+        for dep in self.presenter.get_packages(deps):
+            if dep not in self.storage:  # new dep not in queue
+                dep.queued = True
+                dep.is_dep = True
+                dep.queue_action = True
+            self.storage.insert_sorted(dep, self.sort_by_state)
+        self.selection.set_model(self.storage.get_storage())
+        # send refresh signal, to refresh the package view
+        self.emit("refresh")
+        self.refresh_attention()
 
     def clear_all(self):
         self.remove_packages(list(self.storage))
