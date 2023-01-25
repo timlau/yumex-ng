@@ -34,16 +34,17 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     repo_group = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs):
+    def __init__(self, win, presenter, **kwargs):
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
+        self.presenter = presenter
         self.settings = win.settings
         self.setup()
 
     def setup(self):
         self.setup_flatpak()
         # get repositories and add them
-        repos = self.win.package_view.backend.get_repositories()
+        repos = self.presenter.get_repositories()
         for id, name, enabled in repos:
             repo_widget = YumexRepository()
             repo_widget.set_title(id)
