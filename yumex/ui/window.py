@@ -132,8 +132,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_queue(self):
         """Setup the groups page"""
-        self.queue_view = YumexQueueView(self.package_view, self.presenter)
+        self.queue_view = YumexQueueView(self.presenter)
+        self.queue_view.connect("refresh", self.on_queue_refresh)
         self.content_queue.set_child(self.queue_view)
+
+    def on_queue_refresh(self, *args):
+        """handle the refresh signal from queue view"""
+        self.package_view.refresh()
 
     def show_message(self, title, timeout=2):
         """Create a toast with text and a given timeout"""

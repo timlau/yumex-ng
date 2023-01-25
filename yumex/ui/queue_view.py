@@ -13,13 +13,12 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 from yumex.constants import ROOTDIR
 from yumex.utils.storage import PackageStorage
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
-from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import RunAsync, timed
 from yumex.utils.enums import PackageState, Page
 
@@ -27,12 +26,12 @@ from yumex.utils.enums import PackageState, Page
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_view.ui")
 class YumexQueueView(Gtk.ListView):
     __gtype_name__ = "YumexQueueView"
+    __gsignals__ = {"refresh": (GObject.SignalFlags.RUN_FIRST, None, ())}
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, pkg_view: YumexPackageView, presenter, **kwargs):
+    def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
-        self.package_view = pkg_view
         self.presenter = presenter
         self.storage = PackageStorage()
         self.selection.set_model(self.storage.get_storage())
@@ -59,7 +58,8 @@ class YumexQueueView(Gtk.ListView):
                     dep.ref_to = pkg
                     dep.queue_action = True
                 self.storage.insert_sorted(dep, self.sort_by_state)
-            self.package_view.refresh()
+            # send refresh signal, to refresh the package view
+            self.emit("refresh")
             self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
 
         for pkg in pkgs:
@@ -82,7 +82,8 @@ class YumexQueueView(Gtk.ListView):
                     dep.queue_action = True
                     self.storage.insert_sorted(dep, self.sort_by_state)
             self.selection.set_model(self.storage.get_storage())
-            self.package_view.refresh()
+            # send refresh signal, to refresh the package view
+            self.emit("refresh")
             self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
 
         to_keep = []
