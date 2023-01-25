@@ -16,6 +16,7 @@
 from typing import Iterable
 from yumex.backend.cache import YumexPackageCache
 from yumex.backend.dnf import YumexPackage
+from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.constants import BACKEND
 from yumex.backend.interface import PackageBackend, PackageCache, Progress
 from yumex.utils.enums import InfoType, PackageFilter, SearchField
@@ -42,6 +43,7 @@ class YumexPresenter:
         self.win = win
         self._backend: PackageBackend = None
         self._cache: YumexPackageCache = None
+        self._fp_backend: FlatpakBackend = None
 
     @property
     def package_backend(self) -> PackageBackend:
@@ -61,12 +63,22 @@ class YumexPresenter:
         return self._cache
 
     @property
+    def flatpak_backend(self):
+        if not self._fp_backend:
+            self._fp_backend = FlatpakBackend(self.win)
+        return self._fp_backend
+
+    @property
     def progress(self) -> Progress:
         return self.win.progress
 
     def reset_backend(self) -> None:
         del self._backend
         self._backend = None
+
+    def reset_flatpak_backend(self) -> None:
+        del self._fp_backend
+        self._fp_backend = None
 
     def reset_cache(self) -> None:
         del self._cache

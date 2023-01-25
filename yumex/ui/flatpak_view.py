@@ -14,6 +14,8 @@
 # Copyright (C) 2023  Tim Lauridsen
 from typing import TYPE_CHECKING, Callable
 
+from yumex.backend.presenter import YumexPresenter
+
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
@@ -22,7 +24,6 @@ import os
 from pathlib import Path
 from gi.repository import Gtk, Gio, Adw
 from yumex.backend.flatpak import FlatpakPackage
-from yumex.backend.flatpak.backend import FlatpakBackend
 
 from yumex.constants import ROOTDIR
 
@@ -38,16 +39,17 @@ class YumexFlatpakView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, win, **kwargs) -> None:
+    def __init__(self, win, presenter: YumexPresenter, **kwargs) -> None:
         super().__init__(**kwargs)
         self.win: YumexMainWindow = win
+        self.presenter: YumexPresenter = presenter
         self.icons_paths = self.get_icon_paths()
         self.reset()
 
     def reset(self) -> None:
         """Create a new store and populate with flatpak fron the backend"""
         self.store = Gio.ListStore.new(FlatpakPackage)
-        self.backend = FlatpakBackend(self.win)
+        self.presenter.reset_flatpak_backend()
         for elem in self.backend.get_installed(location=FlatpakLocation.BOTH):
             if elem.type == FlatpakType.APP:  # show only apps
                 self.store.append(elem)
@@ -55,6 +57,10 @@ class YumexFlatpakView(Gtk.ListView):
         self.selection.set_model(self.store)
         self.selection.set_selected(0)
         self.refresh_need_attention()
+
+    @property
+    def backend(self):
+        return self.presenter.flatpak_backend
 
     def refresh_need_attention(self):
         self.win.set_needs_attention(Page.FLATPAKS, self.backend.number_of_updates())

@@ -102,7 +102,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_flatpaks()
 
     def setup_flatpaks(self):
-        self.flatpak_view = YumexFlatpakView(self)
+        self.flatpak_view = YumexFlatpakView(self, self.presenter)
         self.content_flatpaks.set_child(self.flatpak_view)
 
     def setup_package_page(self):
