@@ -10,7 +10,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk
 import pytest
 from yumex.utils.enums import FlatpakLocation
-from .mock import Mock
+from .mock import Mock, MockPresenter
 
 pytestmark = pytest.mark.guitest
 
@@ -65,8 +65,9 @@ def pref():
     Gio.Resource._register(resource)
     from yumex.ui.preferences import YumexPreferences
 
+    presenter = MockPresenter()
     remotes = ["flathub", "gnome-nightly"]
-    return YumexPreferences(win=MockWindow(remotes=remotes))
+    return YumexPreferences(win=MockWindow(remotes=remotes), presenter=presenter)
 
 
 @pytest.fixture
@@ -78,22 +79,21 @@ def pref_no():
     Gio.Resource._register(resource)
     from yumex.ui.preferences import YumexPreferences
 
+    presenter = MockPresenter()
     remotes = []
-    return YumexPreferences(win=MockWindow(remotes=remotes))
+    return YumexPreferences(win=MockWindow(remotes=remotes), presenter=presenter)
 
 
 def test_setup(pref):
     """Check that the default flatpak location and remote are set correctly"""
     assert pref.fp_remote.get_selected_item().get_string() == "flathub"
     assert pref.fp_location.get_selected_item().get_string() == FlatpakLocation.USER
-    assert pref.win.get_number_of_calls() == 6
+    assert pref.win.get_number_of_calls() == 4
     calls = pref.win.get_calls()
     assert calls[0] == "settings"
     assert calls[1] == "flatpak_view"
     assert calls[2] == "backend"
     assert calls[3] == "set_string(fp-remote,user)"
-    assert calls[4] == "package_view"
-    assert calls[5] == "backend"
 
 
 def test_get_remotes(pref):

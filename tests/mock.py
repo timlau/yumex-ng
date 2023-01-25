@@ -1,5 +1,8 @@
 import gi
 
+from yumex.backend.flatpak import FlatpakPackage
+from yumex.utils.enums import FlatpakLocation, Page
+
 gi.require_version("Flatpak", "1.0")
 # gi.require_version("Gtk", "4.0")
 # gi.require_version("Adw", "1")
@@ -67,3 +70,56 @@ class MockFlatpakRef(Mock):
 
     def get_kind(self):
         return self.kind
+
+
+class MockPresenter(Mock):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._fp_backend = MockFlatpackBackend()
+
+    def hide(self):
+        self.set_mock_call("progress.hide")
+
+    def reset_flatpak_backend(self):
+        self.set_mock_call("reset_flatpak_backend")
+
+    @property
+    def flatpak_backend(self):
+        return self._fp_backend
+
+    def show_message(self, title, timeout=2) -> None:
+        self.set_mock_call("show_message", title, timeout)
+
+    def set_needs_attention(self, page: Page, num: int) -> None:
+        self.set_mock_call("set_needs_attention", page, num)
+
+    def confirm_flatpak_transaction(self, refs: list) -> bool:
+        self.set_mock_call("confirm_flatpak_transaction", refs)
+        return True
+
+    def select_page(self, page: Page) -> None:
+        self.set_mock_call("select_page", page)
+
+    def get_repositories(self) -> list[tuple[str, str, bool]]:
+        return [("fedora", "fedora packages", True)]
+
+
+class MockFlatpackBackend(Mock):
+    def get_installed(self, *args, **kwargs):
+        self.set_mock_call("get_installed", *args, **kwargs)
+        return [
+            FlatpakPackage(
+                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
+            )
+        ]
+
+    def install(self, *args, **kwargs):
+        self.set_mock_call("install", *args, **kwargs)
+        return [
+            FlatpakPackage(
+                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
+            )
+        ]
+
+    def number_of_updates(self):
+        return 1

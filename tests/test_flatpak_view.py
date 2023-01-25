@@ -9,44 +9,9 @@ from dataclasses import dataclass
 import pytest
 import os
 from yumex.constants import PKGDATADIR
-from yumex.utils.enums import FlatpakLocation
-from yumex.backend.flatpak import FlatpakPackage
-from .mock import Mock, MockFlatpakRef
+from .mock import MockFlatpackBackend, MockPresenter
 
 pytestmark = pytest.mark.guitest
-
-
-class MockWindow(Mock):
-    def set_needs_attention(self, *args, **kwargs):
-        self.set_mock_call("set_needs_attention", *args, **kwargs)
-
-    def confirm_flatpak_transaction(self, *args, **kwargs):
-        self.set_mock_call("confirm_flatpak_transaction", args, kwargs)
-        return True
-
-    def hide(self):
-        self.set_mock_call("progress.hide")
-
-
-class MockFlatpackBackend(Mock):
-    def get_installed(self, *args, **kwargs):
-        self.set_mock_call("get_installed", *args, **kwargs)
-        return [
-            FlatpakPackage(
-                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
-            )
-        ]
-
-    def install(self, *args, **kwargs):
-        self.set_mock_call("install", *args, **kwargs)
-        return [
-            FlatpakPackage(
-                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
-            )
-        ]
-
-    def number_of_updates(self):
-        return 1
 
 
 @dataclass
@@ -54,22 +19,14 @@ class MockFlatpakPackage:
     id: str = "org.gnome.design.Contrast"
 
 
-@pytest.fixture(autouse=True)
-def mock_backend(monkeypatch):
-    """use a mock backend"""
-    monkeypatch.setattr(
-        "yumex.backend.flatpak.backend.FlatpakBackend", MockFlatpackBackend
-    )
-
-
 @pytest.fixture
-def window():
+def presenter():
     """use a mock window"""
-    return MockWindow()
+    return MockPresenter()
 
 
 @pytest.fixture
-def flatpak_view(window):
+def flatpak_view(presenter):
     """setup ressources and create a YumexFlatpakView object"""
     from gi.repository import Gio
 
@@ -77,7 +34,7 @@ def flatpak_view(window):
     Gio.Resource._register(resource)
     from yumex.ui.flatpak_view import YumexFlatpakView
 
-    fpw: YumexFlatpakView = YumexFlatpakView(window)
+    fpw: YumexFlatpakView = YumexFlatpakView(presenter=presenter)
     return fpw
 
 
@@ -93,7 +50,7 @@ def test_backend_mock(flatpak_view):
 
 def test_backend_set_needs_attention(flatpak_view):
     """Test that the win.set_needs_attention is called with one update"""
-    calls = flatpak_view.win.get_mock_call("set_needs_attention")
+    calls = flatpak_view.presenter.get_mock_call("set_needs_attention")
     assert len(calls) == 1
     assert calls[0] == "set_needs_attention(flatpaks,1)"
 
