@@ -179,7 +179,7 @@ Yum Extender is a Package management to install, update and remove packages
         about.present()
 
     def on_preferences(self, *_args) -> None:
-        prefs = YumexPreferences(self.win, self.win.presenter)
+        prefs = YumexPreferences(self.win.settings, self.win.presenter)
         prefs.set_transient_for(self.win)
         prefs.present()
 

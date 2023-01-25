@@ -10,35 +10,14 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk
 import pytest
 from yumex.utils.enums import FlatpakLocation
-from .mock import Mock, MockPresenter
+from .mock import Mock, MockFlatpackBackend, MockPresenter
 
 pytestmark = pytest.mark.guitest
 
 
-class MockFlatpackBackend(Mock):
-    def __init__(self, remotes):
-        super().__init__()
-        self._remotes = remotes
-
-
-class MockFlatpakView(Mock):
-    def __init__(self, remotes):
+class MockSettings(Mock):
+    def __init__(self):
         Mock.__init__(self)
-        self._remotes = remotes
-
-    @property
-    def backend(self):
-        return MockFlatpackBackend(self._remotes)
-
-
-class MockWindow(Mock):
-    def __init__(self, remotes):
-        Mock.__init__(self)
-        self._remotes = remotes
-
-    # PackageBackend Mock methods
-    def get_repositories(self) -> list[tuple[str, str, bool]]:
-        return [("fedora", "fedora packages", True)]
 
     # setting Mock methods
     def get_string(self, setting):
@@ -51,10 +30,6 @@ class MockWindow(Mock):
     def set_string(self, setting, value):
         self.set_mock_call("set_string", setting, value)
 
-    # flatpak backend mock methods
-    def get_remotes(self, location: FlatpakLocation) -> list:
-        return self._remotes
-
 
 @pytest.fixture
 def pref():
@@ -66,8 +41,7 @@ def pref():
     from yumex.ui.preferences import YumexPreferences
 
     presenter = MockPresenter()
-    remotes = ["flathub", "gnome-nightly"]
-    return YumexPreferences(win=MockWindow(remotes=remotes), presenter=presenter)
+    return YumexPreferences(settings=MockSettings(), presenter=presenter)
 
 
 @pytest.fixture
@@ -79,21 +53,19 @@ def pref_no():
     Gio.Resource._register(resource)
     from yumex.ui.preferences import YumexPreferences
 
-    presenter = MockPresenter()
-    remotes = []
-    return YumexPreferences(win=MockWindow(remotes=remotes), presenter=presenter)
+    fp_backend = MockFlatpackBackend(remotes=[])
+    assert fp_backend._remotes == []
+    presenter = MockPresenter(fp_backend=fp_backend)
+    return YumexPreferences(settings=MockSettings(), presenter=presenter)
 
 
 def test_setup(pref):
     """Check that the default flatpak location and remote are set correctly"""
     assert pref.fp_remote.get_selected_item().get_string() == "flathub"
     assert pref.fp_location.get_selected_item().get_string() == FlatpakLocation.USER
-    assert pref.win.get_number_of_calls() == 4
-    calls = pref.win.get_calls()
-    assert calls[0] == "settings"
-    assert calls[1] == "flatpak_view"
-    assert calls[2] == "backend"
-    assert calls[3] == "set_string(fp-remote,user)"
+    assert pref.settings.get_number_of_calls() == 1
+    calls = pref.settings.get_calls()
+    assert calls[0] == "set_string(fp-remote,user)"
 
 
 def test_get_remotes(pref):
@@ -132,7 +104,7 @@ def test_on_location_selected_no_remotes(pref_no):
 def test_on_remote_selected_no_remotes(pref_no):
     """test on_remote_selected when there are no remotes"""
     assert not (
-        pref_no.win.flatpak_view.backend.get_remotes(location=FlatpakLocation.USER)
+        pref_no.presenter.flatpak_backend.get_remotes(location=FlatpakLocation.USER)
     )
     assert pref_no.fp_remote.get_selected_item() is None
     pref_no.on_remote_selected(widget=None, data=None)

@@ -73,9 +73,11 @@ class MockFlatpakRef(Mock):
 
 
 class MockPresenter(Mock):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, fp_backend=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._fp_backend = MockFlatpackBackend()
+        if fp_backend is None:
+            fp_backend = MockFlatpackBackend()
+        self._fp_backend = fp_backend
 
     def hide(self):
         self.set_mock_call("progress.hide")
@@ -105,6 +107,12 @@ class MockPresenter(Mock):
 
 
 class MockFlatpackBackend(Mock):
+    def __init__(self, remotes=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if remotes is None:
+            remotes = ["flathub", "gnome-nightly"]
+        self._remotes = remotes
+
     def get_installed(self, *args, **kwargs):
         self.set_mock_call("get_installed", *args, **kwargs)
         return [
@@ -123,3 +131,6 @@ class MockFlatpackBackend(Mock):
 
     def number_of_updates(self):
         return 1
+
+    def get_remotes(self, location: FlatpakLocation) -> list:
+        return self._remotes

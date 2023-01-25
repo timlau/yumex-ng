@@ -13,11 +13,10 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, Gio
 
 from yumex.constants import ROOTDIR
 from yumex.utils import log
-from yumex.utils.types import MainWindow
 from yumex.utils.enums import FlatpakLocation
 
 
@@ -30,11 +29,10 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     repo_group = Gtk.Template.Child()
 
-    def __init__(self, win: MainWindow, presenter, **kwargs):
+    def __init__(self, settings: Gio.Settings, presenter, **kwargs):
         super().__init__(**kwargs)
-        self.win: MainWindow = win
         self.presenter = presenter
-        self.settings = win.settings
+        self.settings = settings
         self.setup()
 
     def setup(self):
@@ -75,7 +73,7 @@ class YumexPreferences(Adw.PreferencesWindow):
             self.fp_remote.set_sensitive(False)
 
     def get_remotes(self, location: FlatpakLocation) -> list:
-        remotes = self.win.flatpak_view.backend.get_remotes(location=location)
+        remotes = self.presenter.flatpak_backend.get_remotes(location=location)
         model = Gtk.StringList.new()
         if not remotes:
             log(f"pref: No remotes found location {location}")
