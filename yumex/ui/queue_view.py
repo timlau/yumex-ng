@@ -38,7 +38,10 @@ class YumexQueueView(Gtk.ListView):
 
     def reset(self):
         self.selection.set_model(self.storage.clear())
-        self.presenter.set_needs_attention(Page.QUEUE, 0)
+        self.refresh_attention()
+
+    def refresh_attention(self):
+        self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
 
     def contains(self, pkg):
         return pkg in self.storage
@@ -60,7 +63,7 @@ class YumexQueueView(Gtk.ListView):
                 self.storage.insert_sorted(dep, self.sort_by_state)
             # send refresh signal, to refresh the package view
             self.emit("refresh")
-            self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
+            self.refresh_attention()
 
         for pkg in pkgs:
             if pkg not in self.storage:
@@ -84,7 +87,7 @@ class YumexQueueView(Gtk.ListView):
             self.selection.set_model(self.storage.get_storage())
             # send refresh signal, to refresh the package view
             self.emit("refresh")
-            self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
+            self.refresh_attention()
 
         to_keep = []
         for store_pkg in self.storage:
