@@ -136,19 +136,8 @@ class YumexQueueView(Gtk.ListView):
         row.dep.set_visible(pkg.is_dep)
         # set pkg label tooltip bases on pkg state
         tip = get_package_selection_tooltip(pkg)
-        row.text.set_tooltip_text(tip)
-        row.icon.set_tooltip_text(tip)
-        row.dep.set_tooltip_text(tip)
-        match pkg.state:
-            case PackageState.INSTALLED:
-                row.icon.set_from_icon_name("edit-delete-symbolic")
-                row.icon.add_css_class("error")
-            case PackageState.AVAILABLE:
-                row.icon.set_from_icon_name("emblem-default-symbolic")
-                row.icon.add_css_class("success")
-            case PackageState.UPDATE:
-                row.icon.set_from_icon_name("emblem-synchronizing-symbolic")
-                row.icon.add_css_class("accent")
+        row.set_tooltip(tip)
+        row.set_icon()
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_row.ui")
@@ -163,6 +152,23 @@ class YumexQueueRow(Gtk.Box):
         super().__init__(**kwargs)
         self.view: YumexQueueView = view
         self.pkg: YumexPackage = None
+
+    def set_tooltip(self, tip: str):
+        self.text.set_tooltip_text(tip)
+        self.icon.set_tooltip_text(tip)
+        self.dep.set_tooltip_text(tip)
+
+    def set_icon(self):
+        match self.pkg.state:
+            case PackageState.INSTALLED:
+                self.icon.set_from_icon_name("edit-delete-symbolic")
+                self.icon.add_css_class("error")
+            case PackageState.AVAILABLE:
+                self.icon.set_from_icon_name("emblem-default-symbolic")
+                self.icon.add_css_class("success")
+            case PackageState.UPDATE:
+                self.icon.set_from_icon_name("emblem-synchronizing-symbolic")
+                self.icon.add_css_class("accent")
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, button):
