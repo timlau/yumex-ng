@@ -120,9 +120,7 @@ class YumexQueueView(Gtk.ListView):
         row.text.set_label(pkg.nevra)
         row.pkg = pkg
         row.dep.set_visible(pkg.is_dep)
-        # set pkg label tooltip bases on pkg state
-        tip = get_package_selection_tooltip(pkg)
-        row.set_tooltip(tip)
+        row.set_tooltip()
         row.set_icon()
 
 
@@ -139,7 +137,8 @@ class YumexQueueRow(Gtk.Box):
         self.view: YumexQueueView = view
         self.pkg: YumexPackage = None
 
-    def set_tooltip(self, tip: str):
+    def set_tooltip(self):
+        tip = get_package_selection_tooltip(self.pkg)
         self.text.set_tooltip_text(tip)
         self.icon.set_tooltip_text(tip)
         self.dep.set_tooltip_text(tip)
