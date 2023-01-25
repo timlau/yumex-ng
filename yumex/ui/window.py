@@ -132,7 +132,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_queue(self):
         """Setup the groups page"""
-        self.queue_view = YumexQueueView(self, self.presenter)
+        self.queue_view = YumexQueueView(self.package_view, self.presenter)
         self.content_queue.set_child(self.queue_view)
 
     def show_message(self, title, timeout=2):

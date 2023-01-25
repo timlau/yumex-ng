@@ -22,7 +22,6 @@ from yumex.ui import get_package_selection_tooltip
 from yumex.ui.pachage_view import YumexPackageView
 from yumex.utils import RunAsync, timed
 from yumex.utils.enums import PackageState, Page
-from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_view.ui")
@@ -31,20 +30,16 @@ class YumexQueueView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, win: MainWindow, presenter, **kwargs):
+    def __init__(self, pkg_view: YumexPackageView, presenter, **kwargs):
         super().__init__(**kwargs)
-        self.win: MainWindow = win
+        self.package_view = pkg_view
         self.presenter = presenter
         self.storage = PackageStorage()
         self.selection.set_model(self.storage.get_storage())
 
     def reset(self):
         self.selection.set_model(self.storage.clear())
-        self.win.set_needs_attention(Page.QUEUE, 0)
-
-    @property
-    def package_view(self) -> YumexPackageView:
-        return self.win.package_view
+        self.presenter.set_needs_attention(Page.QUEUE, 0)
 
     def contains(self, pkg):
         return pkg in self.storage
@@ -65,13 +60,11 @@ class YumexQueueView(Gtk.ListView):
                     dep.queue_action = True
                 self.storage.insert_sorted(dep, self.sort_by_state)
             self.package_view.refresh()
-            self.win.set_sensitive(True)
-            self.win.set_needs_attention(Page.QUEUE, len(self.storage))
+            self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
 
         for pkg in pkgs:
             if pkg not in self.storage:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
-        self.win.set_sensitive(False)
         RunAsync(self.presenter.depsolve, completed, self.storage)
 
     def remove_package(self, pkg):
@@ -90,8 +83,7 @@ class YumexQueueView(Gtk.ListView):
                     self.storage.insert_sorted(dep, self.sort_by_state)
             self.selection.set_model(self.storage.get_storage())
             self.package_view.refresh()
-            self.win.set_sensitive(True)
-            self.win.set_needs_attention(Page.QUEUE, len(self.storage))
+            self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
 
         to_keep = []
         for store_pkg in self.storage:
@@ -106,7 +98,6 @@ class YumexQueueView(Gtk.ListView):
         if len(to_keep):  # check if there something in the queue
             for pkg in to_keep:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
-            self.win.set_sensitive(False)
             RunAsync(self.presenter.depsolve, completed, store)
         else:
             completed([])
