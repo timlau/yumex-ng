@@ -14,10 +14,10 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 """Custom types used for type hinting for more clarity"""
-from gi.repository import Adw, Flatpak
+from gi.repository import Flatpak
 
 # we can not use the YumexMainWindow direct, because of circular imports
 
-MainWindow = Adw.ApplicationWindow
+MainWindow = "YumexMainWindow"
 FlatpakRefString = str  # ex. app/org.gnome.design.Contrast/x86_64/stable
 FlatpakRef = Flatpak.Ref

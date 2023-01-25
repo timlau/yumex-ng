@@ -12,14 +12,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+from __future__ import annotations
 
-from typing import Iterable
+from typing import TYPE_CHECKING, Iterable
+
+if TYPE_CHECKING:
+    from yumex.ui.window import YumexMainWindow
+
+from yumex.utils.types import MainWindow
 from yumex.backend.cache import YumexPackageCache
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.constants import BACKEND
 from yumex.backend.interface import PackageBackend, PackageCache, Progress
-from yumex.utils.enums import InfoType, PackageFilter, SearchField
+from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField
 
 if BACKEND == "DNF5":
     from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
@@ -39,8 +45,8 @@ class YumexPresenter:
     Implements Presenter,PackageBackend,PackageCache protocols
     """
 
-    def __init__(self, win) -> None:
-        self.win = win
+    def __init__(self, win: MainWindow) -> None:
+        self.win: MainWindow = win
         self._backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
@@ -108,3 +114,21 @@ class YumexPresenter:
 
     def get_package(self, pkg: YumexPackage) -> YumexPackage:
         return self.package_cache.get_package(pkg)
+
+    # Main Window helpers
+
+    def get_main_window(self) -> "YumexMainWindow":
+        return self.win
+
+    def show_message(self, title, timeout=2):
+        self.win.show_message(title, timeout)
+
+    def set_needs_attention(self, page: Page, num: int):
+        """set the page needs_attention state"""
+        self.win.set_needs_attention(page, num)
+
+    def confirm_flatpak_transaction(self, refs: list) -> bool:
+        return self.win.confirm_flatpak_transaction(refs)
+
+    def select_page(self, page: Page):
+        self.win.select_page(page)

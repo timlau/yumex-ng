@@ -102,7 +102,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.setup_flatpaks()
 
     def setup_flatpaks(self):
-        self.flatpak_view = YumexFlatpakView(self, self.presenter)
+        self.flatpak_view = YumexFlatpakView(self.presenter)
         self.content_flatpaks.set_child(self.flatpak_view)
 
     def setup_package_page(self):
@@ -399,3 +399,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 pass
             case Page.QUEUE:
                 self.queue_page.set_needs_attention(state)
+
+    def select_page(self, page: Page):
+        self.stack.set_visible_child_name(page)

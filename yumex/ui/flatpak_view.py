@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Callable
 from yumex.backend.presenter import YumexPresenter
 
 if TYPE_CHECKING:
-    from yumex.ui.window import YumexMainWindow
+    from yumex.ui.window import YumexMainWindow  # noqa: F401
 
 import os
 
@@ -39,9 +39,8 @@ class YumexFlatpakView(Gtk.ListView):
 
     selection = Gtk.Template.Child()
 
-    def __init__(self, win, presenter: YumexPresenter, **kwargs) -> None:
+    def __init__(self, presenter: YumexPresenter, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.win: YumexMainWindow = win
         self.presenter: YumexPresenter = presenter
         self.icons_paths = self.get_icon_paths()
         self.reset()
@@ -63,7 +62,9 @@ class YumexFlatpakView(Gtk.ListView):
         return self.presenter.flatpak_backend
 
     def refresh_need_attention(self):
-        self.win.set_needs_attention(Page.FLATPAKS, self.backend.number_of_updates())
+        self.presenter.set_needs_attention(
+            Page.FLATPAKS, self.backend.number_of_updates()
+        )
 
     def get_icon_paths(self) -> list[str]:
         """list of possible icon location for installed flatpaks"""
@@ -89,9 +90,11 @@ class YumexFlatpakView(Gtk.ListView):
     def install(self, *args) -> None:
         """install a new flatpak"""
 
-        self.win.stack.set_visible_child_name("flatpaks")
+        self.presenter.select_page(Page.FLATPAKS)
         # TODO: make and sync edition of the flatpak installer, to make code more readable
-        flatpak_installer = YumexFlatpakInstaller(self.win, self.backend)
+        flatpak_installer = YumexFlatpakInstaller(
+            self.presenter.get_main_window(), self.backend
+        )
         remotes = Gtk.StringList.new()
         for remote in self.backend.get_remotes(location=FlatpakLocation.USER):
             remotes.append(remote)
@@ -105,17 +108,19 @@ class YumexFlatpakView(Gtk.ListView):
             if ref:
                 if flatpak_installer.confirm:
                     self.do_transaction(self.backend.do_install, ref, remote, location)
-                    self.win.show_message(_(f"{fp_id} is now installed"), timeout=2)
+                    self.presenter.show_message(
+                        _(f"{fp_id} is now installed"), timeout=2
+                    )
 
             else:
-                self.win.show_message(f"{fp_id} is not found om {remote}")
+                self.presenter.show_message(f"{fp_id} is not found om {remote}")
 
     def remove(self, pkg=None) -> None:
         """remove an flatpak"""
 
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
         self.do_transaction(self.backend.do_remove, selected)
-        self.win.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
+        self.presenter.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
 
     def do_transaction(self, method: Callable, *args) -> None:
         """Excute the transaction in two runs
@@ -131,12 +136,12 @@ class YumexFlatpakView(Gtk.ListView):
         with RunJob(method, *args, execute=False) as job:
             refs = job.start()
         if refs:
-            confirm = self.win.confirm_flatpak_transaction(refs)
+            confirm = self.presenter.confirm_flatpak_transaction(refs)
             if confirm:
                 # Second run
                 with RunJob(method, *args, execute=True) as job:
                     job.start()
-        self.win.progress.hide()
+        self.presenter.progress.hide()
         self.reset()
         log("<< End do_transaction")
 

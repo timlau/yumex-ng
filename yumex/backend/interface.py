@@ -15,9 +15,9 @@
 
 from typing import Iterable, Protocol
 
+from yumex.utils.types import MainWindow
 from yumex.backend.dnf import YumexPackage
-
-from yumex.utils.enums import PackageFilter, SearchField, InfoType
+from yumex.utils.enums import PackageFilter, Page, SearchField, InfoType
 
 
 class PackageCache(Protocol):
@@ -82,4 +82,19 @@ class Presenter(Protocol):
         ...
 
     def reset_cache(self) -> None:
+        ...
+
+    def get_main_window(self) -> MainWindow:
+        ...
+
+    def show_message(self, title, timeout=2) -> None:
+        ...
+
+    def set_needs_attention(self, page: Page, num: int) -> None:
+        ...
+
+    def confirm_flatpak_transaction(self, refs: list) -> bool:
+        ...
+
+    def select_page(self, page: Page) -> None:
         ...
