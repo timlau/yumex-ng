@@ -121,7 +121,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
         self.package_settings = YumexPackageSettings(self)
         self.sidebar.set_flap(self.package_settings)
-        self.package_info = YumexPackageInfo(self)
+        self.package_info = YumexPackageInfo()
         self.update_info_box.append(self.package_info)
 
     def setup_groups_page(self):
