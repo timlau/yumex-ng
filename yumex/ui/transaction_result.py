@@ -17,7 +17,6 @@ from gi.repository import Gtk, Adw, GObject, Gio, GLib
 
 from yumex.constants import ROOTDIR
 from yumex.utils import format_number
-from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/transaction_result.ui")
@@ -28,9 +27,8 @@ class YumexTransactionResult(Adw.Window):
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
 
-    def __init__(self, win: MainWindow, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.win: MainWindow = win
         self._loop = GLib.MainLoop()
         self.confirm = False
         self.store = Gio.ListStore.new(ResultElem)
@@ -38,7 +36,6 @@ class YumexTransactionResult(Adw.Window):
         self.selection.set_model(model)
 
     def show(self):
-        self.set_transient_for(self.win)
         self.present()
         self._loop.run()
 

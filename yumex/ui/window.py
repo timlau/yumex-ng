@@ -173,7 +173,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.progress.hide()
             if result.completed:
                 # get confirmation
-                transaction_result = YumexTransactionResult(self)
+                transaction_result = YumexTransactionResult()
+                transaction_result.set_transient_for(self)
                 transaction_result.show_result(result.data)
                 transaction_result.show()
                 if transaction_result.confirm:
