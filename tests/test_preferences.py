@@ -10,25 +10,9 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk
 import pytest
 from yumex.utils.enums import FlatpakLocation
-from .mock import Mock, MockFlatpackBackend, MockPresenter
+from .mock import MockFlatpackBackend, MockPresenter, MockSettings
 
 pytestmark = pytest.mark.guitest
-
-
-class MockSettings(Mock):
-    def __init__(self, *args, **kwargs):
-        Mock.__init__(self)
-
-    # setting Mock methods
-    def get_string(self, setting):
-        match setting:
-            case "fp-location":
-                return FlatpakLocation.USER
-            case "fp-remote":
-                return "flathub"
-
-    def set_string(self, setting, value):
-        self.set_mock_call("set_string", setting, value)
 
 
 @pytest.fixture

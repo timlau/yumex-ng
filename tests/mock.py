@@ -134,3 +134,19 @@ class MockFlatpackBackend(Mock):
 
     def get_remotes(self, location: FlatpakLocation) -> list:
         return self._remotes
+
+
+class MockSettings(Mock):
+    def __init__(self, *args, **kwargs):
+        Mock.__init__(self)
+
+    # setting Mock methods
+    def get_string(self, setting):
+        match setting:
+            case "fp-location":
+                return FlatpakLocation.USER
+            case "fp-remote":
+                return "flathub"
+
+    def set_string(self, setting, value):
+        self.set_mock_call("set_string", setting, value)
