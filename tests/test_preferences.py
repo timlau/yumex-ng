@@ -16,7 +16,7 @@ pytestmark = pytest.mark.guitest
 
 
 class MockSettings(Mock):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         Mock.__init__(self)
 
     # setting Mock methods
@@ -32,7 +32,7 @@ class MockSettings(Mock):
 
 
 @pytest.fixture
-def pref():
+def pref(monkeypatch):
     """setup ressources and create a YumexFlatpakView object"""
     from gi.repository import Gio
 
@@ -40,12 +40,13 @@ def pref():
     Gio.Resource._register(resource)
     from yumex.ui.preferences import YumexPreferences
 
+    monkeypatch.setattr(Gio, "Settings", MockSettings)
     presenter = MockPresenter()
-    return YumexPreferences(settings=MockSettings(), presenter=presenter)
+    return YumexPreferences(presenter=presenter)
 
 
 @pytest.fixture
-def pref_no():
+def pref_no(monkeypatch):
     """setup ressources and create a YumexFlatpakView object"""
     from gi.repository import Gio
 
@@ -53,10 +54,11 @@ def pref_no():
     Gio.Resource._register(resource)
     from yumex.ui.preferences import YumexPreferences
 
+    monkeypatch.setattr(Gio, "Settings", MockSettings)
     fp_backend = MockFlatpackBackend(remotes=[])
     assert fp_backend._remotes == []
     presenter = MockPresenter(fp_backend=fp_backend)
-    return YumexPreferences(settings=MockSettings(), presenter=presenter)
+    return YumexPreferences(presenter=presenter)
 
 
 def test_setup(pref):

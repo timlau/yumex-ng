@@ -15,12 +15,12 @@
 
 
 from pathlib import Path
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw, GLib, Gio
 
 from yumex.backend.flatpak.backend import FlatpakBackend
+from yumex.backend.presenter import YumexPresenter
 from yumex.utils.enums import FlatpakLocation
-from yumex.utils.types import MainWindow
-from yumex.constants import ROOTDIR
+from yumex.constants import APP_ID, ROOTDIR
 from yumex.utils import log
 
 
@@ -35,10 +35,11 @@ class YumexFlatpakInstaller(Adw.Window):
     icon: Gtk.Image = Gtk.Template.Child()
     found_num: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, win: MainWindow, backend, **kwargs):
-        super().__init__(**kwargs)
-        self.win: MainWindow = win
-        self.backend: FlatpakBackend = backend
+    def __init__(self, presenter: YumexPresenter):
+        super().__init__()
+        self.presenter = presenter
+        self.backend: FlatpakBackend = presenter.flatpak_backend
+        self.settings = Gio.Settings(APP_ID)
         self.confirm = False
         self.found_ids: list[str] = []
         self.found_ndx: int = 0
@@ -50,12 +51,11 @@ class YumexFlatpakInstaller(Adw.Window):
         self.icon.set_from_icon_name("flatpak-symbolic")
 
     def show(self):
-        self.set_transient_for(self.win)
         self.present()
         self._loop.run()
 
     def setup_location(self):
-        fp_location = FlatpakLocation(self.win.settings.get_string("fp-location"))
+        fp_location = FlatpakLocation(self.settings.get_string("fp-location"))
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
@@ -82,12 +82,12 @@ class YumexFlatpakInstaller(Adw.Window):
                     if remote.get_string() == words[2]:
                         self.remote.set_selected(ndx)
             else:
-                fp_remote = self.win.settings.get_string("fp-remote")
+                fp_remote = self.settings.get_string("fp-remote")
                 for ndx, remote in enumerate(self.remote.get_model()):
                     if remote.get_string() == fp_remote:
                         self.remote.set_selected(ndx)
 
-        clb = self.win.get_clipboard()
+        clb = self.get_clipboard()
         try:
             clb.read_text_async(None, callback)
         except GLib.GError:  # type:ignore

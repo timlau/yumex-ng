@@ -15,7 +15,7 @@
 
 from gi.repository import Gtk, Adw, Gio
 
-from yumex.constants import ROOTDIR
+from yumex.constants import APP_ID, ROOTDIR
 from yumex.utils import log
 from yumex.utils.enums import FlatpakLocation
 
@@ -29,10 +29,10 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     repo_group = Gtk.Template.Child()
 
-    def __init__(self, settings: Gio.Settings, presenter, **kwargs):
+    def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
         self.presenter = presenter
-        self.settings = settings
+        self.settings = Gio.Settings(APP_ID)
         self.setup()
 
     def setup(self):
