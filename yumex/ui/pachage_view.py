@@ -17,6 +17,7 @@
 from gi.repository import Gtk
 
 from yumex.backend.interface import Presenter
+from yumex.ui.dialogs import error_dialog
 from yumex.utils.storage import PackageStorage
 from yumex.utils.types import MainWindow
 from yumex.constants import ROOTDIR
@@ -74,11 +75,13 @@ class YumexPackageView(Gtk.ColumnView):
         return self.win.queue_view
 
     def get_packages(self, pkg_filter: PackageFilter):
-        def set_completed(result, error=False):
+        def set_completed(pkgs: list, error=False):
             self.win.main_view.set_sensitive(True)
-            pkgs: list = result
-            self.add_packages_to_store(pkgs)
             self.win.progress.hide()
+            if not error:
+                self.add_packages_to_store(pkgs)
+            else:
+                error_dialog(self.win, "Error in loading packages", str(error))
             # hide package setting sidebar
             self.win.sidebar.set_reveal_flap(False)
             # refresh the package description for the selected package in the view
