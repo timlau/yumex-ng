@@ -47,32 +47,20 @@ class YumexPackageInfo(Gtk.Box):
         self._ref_rows = []
 
     def clear(self):
-        """clear the package info"""
-        self.add_decription("")
-        self.update_info_grp.set_visible(False)
-        self.description_grp.set_visible(True)
+        self.write_text(None)
 
     def update(self, info_type: InfoType, pkg_info):
-        if pkg_info:
-            info = self.format(info_type, pkg_info)
-            match info_type:
-                case InfoType.UPDATE_INFO:
-                    if info:
-                        self.add_update_info(info)
-                        self.update_info_grp.set_visible(True)
-                        self.description_grp.set_visible(False)
-                    else:
-                        self.add_decription(_("no update information found"))
-                        self.update_info_grp.set_visible(False)
-                        self.description_grp.set_visible(True)
-                case _:
-                    self.add_decription(info)
-                    self.update_info_grp.set_visible(False)
-                    self.description_grp.set_visible(True)
+        info = self.format(info_type, pkg_info)
+        if info_type is not InfoType.UPDATE_INFO:
+            self.write_text(info)
+        if info:
+            self.write_update(info)
         else:
-            self.clear()
+            self.write_text(_("no update information found"))
 
-    def format(self, info_type: InfoType, pkg_info):
+    def format(self, info_type: InfoType, pkg_info) -> str | dict | None:
+        if not pkg_info:
+            return None
         match info_type:
             case InfoType.DESCRIPTION:
                 # a string
@@ -82,16 +70,21 @@ class YumexPackageInfo(Gtk.Box):
                 return "\n".join(pkg_info)
             case InfoType.UPDATE_INFO:
                 # a list of update_info dicts
-                return pkg_info[0] if pkg_info else None
+                return pkg_info[0]
 
-    def add_decription(self, txt):
-        if not txt:
+    def write_update(self, info):
+        self.add_update_info(info)
+        self.update_info_grp.set_visible(True)
+        self.description_grp.set_visible(False)
+
+    def write_text(self, txt):
+        if txt is None:
             txt = ""
         self.info.set_title(txt)
+        self.update_info_grp.set_visible(False)
+        self.description_grp.set_visible(True)
 
     def add_update_info(self, pkg_info):
-        if not pkg_info:
-            return
         release = pkg_info["id"]
         self.release.set_label(release)
         upd_type = ADVISORY_TYPES[pkg_info["type"]]
@@ -105,14 +98,13 @@ class YumexPackageInfo(Gtk.Box):
         for row in self._ref_rows:
             self.ref_grp.remove(row)
         self._ref_rows = []
-        if refs:
-            for ref in refs:
-                num, bug_id, bug_desc, bug_link = ref
-                txt = f'<a href="{bug_link}">{bug_id}</a> - {bug_desc}'
-                row = Adw.ActionRow()
-                row.set_title(txt)
-                self.ref_grp.add(row)
-                self._ref_rows.append(row)
-            self.references.set_visible(True)
-        else:
-            self.references.set_visible(False)
+        if not refs:
+            return self.references.set_visible(False)
+        for ref in refs:
+            num, bug_id, bug_desc, bug_link = ref
+            txt = f'<a href="{bug_link}">{bug_id}</a> - {bug_desc}'
+            row = Adw.ActionRow()
+            row.set_title(txt)
+            self.ref_grp.add(row)
+            self._ref_rows.append(row)
+        self.references.set_visible(True)
