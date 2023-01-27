@@ -13,3 +13,4 @@ yumex/constants.py
 *.tar.gz
 
 
+docs/test.md
