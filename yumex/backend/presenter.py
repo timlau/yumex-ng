@@ -53,7 +53,7 @@ class YumexPresenter:
     def __init__(
         self, win: MainWindow, factory_cls: type[BackendFactory] = DnfBackendFactory
     ) -> None:
-        self.win: MainWindow = win
+        self._win: MainWindow = win
         self._backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
@@ -76,12 +76,12 @@ class YumexPresenter:
     @property
     def flatpak_backend(self):
         if not self._fp_backend:
-            self._fp_backend = FlatpakBackend(self.win)
+            self._fp_backend = FlatpakBackend(self._win)
         return self._fp_backend
 
     @property
     def progress(self) -> Progress:
-        return self.win.progress
+        return self._win.progress
 
     def reset_backend(self) -> None:
         del self._backend
@@ -123,17 +123,17 @@ class YumexPresenter:
     # Main Window helpers
 
     def get_main_window(self) -> MainWindow:
-        return self.win
+        return self._win
 
     def show_message(self, title, timeout=2):
-        self.win.show_message(title, timeout)
+        self._win.show_message(title, timeout)
 
     def set_needs_attention(self, page: Page, num: int):
         """set the page needs_attention state"""
-        self.win.set_needs_attention(page, num)
+        self._win.set_needs_attention(page, num)
 
     def confirm_flatpak_transaction(self, refs: list) -> bool:
-        return self.win.confirm_flatpak_transaction(refs)
+        return self._win.confirm_flatpak_transaction(refs)
 
     def select_page(self, page: Page):
-        self.win.select_page(page)
+        self._win.select_page(page)
