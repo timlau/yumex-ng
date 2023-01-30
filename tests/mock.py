@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock
 import gi
+from yumex.backend.dnf import YumexPackage
 
 from yumex.backend.flatpak import FlatpakPackage
 from yumex.utils.enums import FlatpakLocation
@@ -78,4 +79,21 @@ def mock_settings():
 
     mock = MagicMock()
     mock.get_string.side_effect = get_string
+    return mock
+
+
+def mock_package_backend():
+    pkg_para = {
+        "name": "some_package",
+        "version": "1",
+        "arch": "x86_64",
+        "release": "1.0",
+        "epoch": "",
+        "repo": "repo",
+        "description": "desc",
+        "size": 1024,
+    }
+
+    mock = MagicMock()
+    mock.get_packages.return_value = [YumexPackage(**pkg_para)]
     return mock
