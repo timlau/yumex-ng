@@ -87,3 +87,27 @@ def test_confirm_flatpak_transaction(presenter: YumexPresenter):
     win = presenter.get_main_window()
     presenter.confirm_flatpak_transaction([1, 2, 3])
     win.confirm_flatpak_transaction.assert_called_with([1, 2, 3])
+
+
+def test_search(presenter: YumexPresenter):
+    backend = presenter.package_backend
+    presenter.search("test", None, 1)
+    backend.search.assert_called_with("test", None, 1)
+
+
+def test_get_package_info(presenter: YumexPresenter):
+    backend = presenter.package_backend
+    presenter.get_package_info(None, 1)
+    backend.get_package_info.assert_called_with(None, 1)
+
+
+def test_get_repositories(presenter: YumexPresenter):
+    backend = presenter.package_backend
+    presenter.get_repositories()
+    backend.get_repositories.assert_called_once()
+
+
+def test_depsolve(presenter: YumexPresenter):
+    backend = presenter.package_backend
+    presenter.depsolve([None, None, None])
+    backend.depsolve.assert_called_with([None, None, None])
