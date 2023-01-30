@@ -19,7 +19,6 @@ template YumexPreferences: Adw.PreferencesWindow {
       Adw.ComboRow fp_remote {
         title: "Default Remote";
         model: fp_remotes;
-        notify::selected => on_remote_selected();
       }
     }
 

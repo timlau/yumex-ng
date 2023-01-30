@@ -33,6 +33,7 @@ class YumexPreferences(Adw.PreferencesWindow):
         super().__init__(**kwargs)
         self.presenter = presenter
         self.settings = Gio.Settings(APP_ID)
+        self.connect("unrealize", self.save_settings)
         self.setup_repo()
         self.setup_flatpak()
 
@@ -71,7 +72,15 @@ class YumexPreferences(Adw.PreferencesWindow):
                 self.fp_location.set_selected(ndx)
                 break
 
-    def update_remote(self, current_location):
+    def save_settings(self, *args):
+        location = self.get_current_location()
+        self.settings.set_string("fp-location", location.value)
+        remote = self.get_current_remote()
+        if remote:
+            self.settings.set_string("fp-remote", remote)
+        return location, remote
+
+    def update_remote(self, current_location) -> str | None:
         remotes = self.get_remotes(current_location)
         self.fp_remote.set_model(remotes)
         current_remote = self.settings.get_string("fp-remote")
@@ -101,28 +110,11 @@ class YumexPreferences(Adw.PreferencesWindow):
             model.append(remote)
         return model
 
-    def on_setting_changed(self, widget, state, setting):
-        log(f"setting {setting} is changed to {state}")
-        self.settings.set_boolean(setting, state)
-
     @Gtk.Template.Callback()
     def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
         location = FlatpakLocation(self.fp_location.get_selected_item().get_string())
-        self.settings.set_string("fp-location", location.value)
-        log(f" updating setting: fp-location to {location}")
         self.update_remote(location)
-
-    @Gtk.Template.Callback()
-    def on_remote_selected(self, widget, data):
-        """handler for fp_remote selection changed"""
-        selected = self.fp_remote.get_selected_item()
-        if selected:
-            remote = selected.get_string()
-            self.settings.set_string("fp-remote", remote)
-            log(f" updating setting: fp: remote to {remote}")
-        else:
-            log("no remote selected")
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/repository.ui")

@@ -81,6 +81,25 @@ def test_get_current_remote(pref):
     assert pref.get_current_remote() == "flathub"
 
 
+def test_save_settings(pref):
+    """test save setting"""
+    location, remote = pref.save_settings()
+    assert location == "user"
+    assert remote == "flathub"
+    assert pref.settings.set_string.call_count == 2
+    pref.settings.set_string.assert_any_call("fp-location", "user")
+    pref.settings.set_string.assert_any_call("fp-remote", "flathub")
+
+
+def test_save_settings_no_remotes(pref_no):
+    """test save settins with no remotes, fp-remote will not be written"""
+    location, remote = pref_no.save_settings()
+    assert location == "user"
+    assert remote is None
+    assert pref_no.settings.set_string.call_count == 1
+    pref_no.settings.set_string.called_with("fp-location", "user")
+
+
 def test_setup(pref):
     """Check that the default flatpak location and remote are set correctly"""
     # assert pref.fp_remote.get_selected_item() is not None
@@ -131,14 +150,10 @@ def test_on_location_selected_no_remotes(pref_no):
     location = pref_no.fp_location.get_selected_item().get_string()
     assert location == FlatpakLocation.USER
 
-
-def test_on_remote_selected_no_remotes(pref_no):
     """test on_remote_selected when there are no remotes"""
     remotes = pref_no.presenter.flatpak_backend.get_remotes(
         location=FlatpakLocation.USER
     )
-    print(remotes)
     assert remotes == []
     assert pref_no.fp_remote.get_selected_item() is None
-    pref_no.on_remote_selected(widget=None, data=None)
     assert pref_no.fp_remote.get_sensitive() is False
