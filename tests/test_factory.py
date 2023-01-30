@@ -15,8 +15,7 @@ def test_DNF4(mocker):
 
 
 def test_DNF5(mocker):
-    dnf_mock = mocker.patch("yumex.backend.dnf.dnf5.dnf")
-    dnf_mock.Base.return_value = Mock()
+    mocker.patch("yumex.backend.dnf.dnf5.dnf")
     presenter = Mock()
     factory = DnfBackendFactory(PackageBackendType.DNF5, presenter=presenter)
     backend = factory.get_backend()
