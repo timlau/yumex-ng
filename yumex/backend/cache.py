@@ -20,6 +20,8 @@ class YumexPackageCache:
     def get_packages_by_filter(
         self, pkgfilter: PackageFilter, reset=False
     ) -> list[YumexPackage]:
+        if not isinstance(pkgfilter, PackageFilter):
+            raise KeyError(f"{pkgfilter} is not a valid PackageFilter")
         if pkgfilter not in self._packages or reset:
             pkgs = self.get_packages(self.backend.get_packages(pkgfilter))
             self._packages[pkgfilter] = list(pkgs)
