@@ -111,3 +111,23 @@ def test_depsolve(presenter: YumexPresenter):
     backend = presenter.package_backend
     presenter.depsolve([None, None, None])
     backend.depsolve.assert_called_with([None, None, None])
+
+
+def test_get_packages(presenter: YumexPresenter, mocker):
+    mock = mocker.patch("yumex.backend.presenter.YumexPackageCache.get_packages")
+    presenter = presenter.get_packages([1, 2, 3])
+    mock.assert_called_with([1, 2, 3])
+
+
+def test_get_package(presenter: YumexPresenter, mocker):
+    mock = mocker.patch("yumex.backend.presenter.YumexPackageCache.get_package")
+    presenter = presenter.get_package(None)
+    mock.assert_called_with(None)
+
+
+def test_get_packages_by_filter(presenter: YumexPresenter, mocker):
+    mock = mocker.patch(
+        "yumex.backend.presenter.YumexPackageCache.get_packages_by_filter"
+    )
+    presenter = presenter.get_packages_by_filter(None, reset=True)
+    mock.assert_called_with(None, True)
