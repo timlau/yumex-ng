@@ -16,19 +16,26 @@
 from __future__ import annotations
 
 from typing import Iterable
+from yumex.backend.dnf.factory import DnfBackendFactory
 
 from yumex.utils.types import MainWindow
 from yumex.backend.cache import YumexPackageCache
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.constants import BACKEND
-from yumex.backend.interface import PackageBackend, PackageCache, Progress
-from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField
-
-if BACKEND == "DNF5":
-    from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
-else:
-    from yumex.backend.dnf.dnf4 import Backend as Dnf4Backend, DnfCallback
+from yumex.backend.interface import (
+    BackendFactory,
+    PackageBackend,
+    PackageCache,
+    Progress,
+)
+from yumex.utils.enums import (
+    InfoType,
+    PackageBackendType,
+    PackageFilter,
+    Page,
+    SearchField,
+)
 
 
 class YumexPresenter:
@@ -43,21 +50,21 @@ class YumexPresenter:
     Implements Presenter,PackageBackend,PackageCache protocols
     """
 
-    def __init__(self, win: MainWindow) -> None:
+    def __init__(
+        self, win: MainWindow, factory_cls: type[BackendFactory] = DnfBackendFactory
+    ) -> None:
         self.win: MainWindow = win
         self._backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
+        self.dnf_backend_factory: BackendFactory = factory_cls(
+            PackageBackendType(BACKEND.lower()), presenter=self
+        )
 
     @property
     def package_backend(self) -> PackageBackend:
         if not self._backend:
-            if BACKEND == "DNF5":
-                self._backend: PackageBackend = Dnf5Backend(self)
-            else:
-                callback = DnfCallback(self.win)
-                self._backend: PackageBackend = Dnf4Backend(callback=callback)
-
+            self._backend: PackageBackend = self.dnf_backend_factory.get_backend()
         return self._backend
 
     @property

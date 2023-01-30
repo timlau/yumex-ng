@@ -54,6 +54,11 @@ class PackageBackend(Protocol):
         ...
 
 
+class BackendFactory(Protocol):
+    def get_factory(self) -> PackageBackend:
+        ...
+
+
 class Progress(Protocol):
     def show(self) -> None:
         ...

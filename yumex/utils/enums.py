@@ -16,6 +16,11 @@
 from enum import IntEnum, StrEnum, auto
 
 
+class PackageBackendType(StrEnum):
+    DNF4 = auto()
+    DNF5 = auto()
+
+
 class FlatpakAction(IntEnum):
     UPDATE = auto()
     INSTALL = auto()
