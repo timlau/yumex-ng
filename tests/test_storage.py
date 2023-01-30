@@ -34,16 +34,10 @@ def test_storage_contains(storage: PackageStorage, pkg, pkg_other):
 
 
 def test_storage_iterate(storage: PackageStorage, pkg, pkg_other):
+    """check if we can interate over the storage"""
     storage.add_packages([pkg, pkg_other])
-    assert len(storage) == 2
-    for ndx, po in enumerate(storage):
-        match ndx:
-            case 0:
-                assert po == pkg
-            case 1:
-                assert po == pkg_other
-            case _:
-                raise IndexError("There should not be more than 2 packages in store")
+    pkgs = list(storage)
+    assert pkgs == [pkg, pkg_other]
 
 
 def test_storage_clear(storage: PackageStorage, pkg, pkg_other):

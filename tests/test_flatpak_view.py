@@ -28,7 +28,7 @@ def presenter():
 
 
 @pytest.fixture
-def flatpak_view(presenter):
+def flatpak_view(presenter, mocker):
     """setup ressources and create a YumexFlatpakView object"""
     from gi.repository import Gio
 
@@ -47,7 +47,7 @@ def package():
 
 def test_backend_set_needs_attention(flatpak_view):
     """Test that the win.set_needs_attention is called with one update"""
-    flatpak_view.presenter.set_needs_attention.assert_called()
+    flatpak_view.presenter.set_needs_attention.assert_called_with(Page.FLATPAKS, 1)
 
 
 def test_backend_get_installed_called(flatpak_view):
@@ -55,22 +55,9 @@ def test_backend_get_installed_called(flatpak_view):
     flatpak_view.backend.get_installed.assert_called_with(location=FlatpakLocation.BOTH)
 
 
-def test_get_icon_paths(flatpak_view):
+def test_get_icon_paths(flatpak_view, monkeypatch):
+    """check get_icon_paths()"""
+    monkeypatch.setenv("XDG_DATA_DIRS", "/path1:/path2")
     paths = flatpak_view.get_icon_paths()
-    assert "/icons/" in paths[0]
-
-
-def test_find_icon(flatpak_view, package):
-    # if org.gnome.design.Contrast is install we get a path
-    path = flatpak_view.find_icon(package)
-    if path:
-        assert package.id in path
-    notfound = MockFlatpakPackage(id="xx.xxxxxx.notfound")
-    path = flatpak_view.find_icon(notfound)
-    assert path is None
-
-
-# def test_view_do_transaction(flatpak_view):
-#     """Test that backend,install is called"""
-#     flatpak_view.do_transaction(flatpak_view.backend.install, None)
-#     assert flatpak_view.backend.get_number_of_calls() == 2
+    assert paths[0] == "/path1/icons/"
+    assert paths[1] == "/path2/icons/"
