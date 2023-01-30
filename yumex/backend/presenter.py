@@ -50,16 +50,17 @@ class YumexPresenter:
     Implements Presenter,PackageBackend,PackageCache protocols
     """
 
-    def __init__(
-        self, win: MainWindow, factory_cls: type[BackendFactory] = DnfBackendFactory
-    ) -> None:
+    def __init__(self, win: MainWindow, factory: BackendFactory = None) -> None:
         self._win: MainWindow = win
         self._backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
-        self.dnf_backend_factory: BackendFactory = factory_cls(
-            PackageBackendType(BACKEND.lower()), presenter=self
-        )
+        if factory is None:
+            self.dnf_backend_factory: BackendFactory = DnfBackendFactory(
+                PackageBackendType(BACKEND.lower()), presenter=self
+            )
+        else:
+            self.dnf_backend_factory = factory
 
     @property
     def package_backend(self) -> PackageBackend:
