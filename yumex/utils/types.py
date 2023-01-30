@@ -19,6 +19,9 @@ from typing import Type, TYPE_CHECKING
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
 
+import gi
+
+gi.require_version("Flatpak", "1.0")
 from gi.repository import Flatpak
 
 # we can not use the YumexMainWindow direct, because of circular imports

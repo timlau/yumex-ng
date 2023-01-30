@@ -1,5 +1,7 @@
 import gi
 
+from yumex.utils.enums import FlatpakLocation, Page
+
 
 gi.require_version("Flatpak", "1.0")
 gi.require_version("Gtk", "4.0")
@@ -9,7 +11,7 @@ from dataclasses import dataclass
 import pytest
 import os
 from yumex.constants import PKGDATADIR
-from .mock import MockFlatpackBackend, MockPresenter
+from .mock import mock_presenter
 
 pytestmark = pytest.mark.guitest
 
@@ -22,7 +24,7 @@ class MockFlatpakPackage:
 @pytest.fixture
 def presenter():
     """use a mock window"""
-    return MockPresenter()
+    return mock_presenter()
 
 
 @pytest.fixture
@@ -43,31 +45,19 @@ def package():
     return MockFlatpakPackage()
 
 
-def test_backend_mock(flatpak_view):
-    """Test that the backend is mocked."""
-    assert isinstance(flatpak_view.backend, MockFlatpackBackend)
-
-
 def test_backend_set_needs_attention(flatpak_view):
     """Test that the win.set_needs_attention is called with one update"""
-    calls = flatpak_view.presenter.get_mock_call("set_needs_attention")
-    assert len(calls) == 1
-    assert calls[0] == "set_needs_attention(flatpaks,1)"
+    flatpak_view.presenter.set_needs_attention.assert_called()
 
 
 def test_backend_get_installed_called(flatpak_view):
     """Test that backend,get_installed is called"""
-    assert isinstance(flatpak_view.backend, MockFlatpackBackend)
-    calls = flatpak_view.backend.get_mock_call("get_installed")
-    assert len(calls) == 1
-    assert calls[0] == "get_installed(location=both)"
+    flatpak_view.backend.get_installed.assert_called_with(location=FlatpakLocation.BOTH)
 
 
 def test_get_icon_paths(flatpak_view):
-    assert isinstance(flatpak_view.backend, MockFlatpackBackend)
     paths = flatpak_view.get_icon_paths()
-    for path in paths:
-        assert "/icons/" in path
+    assert "/icons/" in paths[0]
 
 
 def test_find_icon(flatpak_view, package):

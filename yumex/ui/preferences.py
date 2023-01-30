@@ -33,10 +33,10 @@ class YumexPreferences(Adw.PreferencesWindow):
         super().__init__(**kwargs)
         self.presenter = presenter
         self.settings = Gio.Settings(APP_ID)
-        self.setup()
-
-    def setup(self):
+        self.setup_repo()
         self.setup_flatpak()
+
+    def setup_repo(self):
         # get repositories and add them
         repos = self.presenter.get_repositories()
         for id, name, enabled in repos:
@@ -47,30 +47,49 @@ class YumexPreferences(Adw.PreferencesWindow):
             self.repo_group.add(repo_widget)
 
     def setup_flatpak(self):
-        location = FlatpakLocation(self.settings.get_string("fp-location"))
+        location = FlatpakLocation(self.settings.get_string("fp-location").lower())
         remote = self.settings.get_string("fp-remote")
         log(f" settings : {location=}")
         log(f" settings : {remote=}")
-        self.set_location(location)
-        self.set_remote(location, remote)
+        self.set_selected_location(location)
+        self.update_remote(location)
 
-    def set_location(self, current_location):
+    def get_current_location(self) -> FlatpakLocation:
+        return FlatpakLocation(self.fp_location.get_selected_item().get_string())
+
+    def get_current_remote(self) -> FlatpakLocation:
+        selected = self.fp_remote.get_selected_item()
+        if selected:
+            remote = selected.get_string()
+        else:
+            remote = None
+        return remote
+
+    def set_selected_location(self, current_location):
         for ndx, location in enumerate(self.fp_location.get_model()):
             if location.get_string() == current_location:
                 self.fp_location.set_selected(ndx)
                 break
 
-    def set_remote(self, current_location, current_remote):
+    def update_remote(self, current_location):
         remotes = self.get_remotes(current_location)
         self.fp_remote.set_model(remotes)
-        if remotes:
-            self.fp_remote.set_sensitive(True)
-            for ndx, remote in enumerate(self.fp_remote.get_model()):
-                if remote.get_string() == current_remote:
-                    self.fp_remote.set_selected(ndx)
-                    break
-        else:
+        current_remote = self.settings.get_string("fp-remote")
+        selected = None
+        if not len(remotes):  # not remotes for current location
             self.fp_remote.set_sensitive(False)
+            return selected
+
+        self.fp_remote.set_sensitive(True)
+        for ndx, remote in enumerate(self.fp_remote.get_model()):
+            if remote.get_string() == current_remote:
+                self.fp_remote.set_selected(ndx)
+                selected = current_remote
+                break
+        if not selected:  # if current_remote not found, select first remote
+            self.fp_remote.set_selected(0)
+            selected = self.fp_remote.get_selected_item().get_string()
+        return selected
 
     def get_remotes(self, location: FlatpakLocation) -> list:
         remotes = self.presenter.flatpak_backend.get_remotes(location=location)
@@ -90,17 +109,20 @@ class YumexPreferences(Adw.PreferencesWindow):
     def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
         location = FlatpakLocation(self.fp_location.get_selected_item().get_string())
-        remote = self.settings.get_string("fp-remote")
-        self.settings.set_string("fp-location", location)
-        self.set_remote(location, remote)
+        self.settings.set_string("fp-location", location.value)
+        log(f" updating setting: fp-location to {location}")
+        self.update_remote(location)
 
     @Gtk.Template.Callback()
     def on_remote_selected(self, widget, data):
-        """capture the Notify for the selected property is changed"""
-        selected = self.fp_location.get_selected_item()
+        """handler for fp_remote selection changed"""
+        selected = self.fp_remote.get_selected_item()
         if selected:
             remote = selected.get_string()
             self.settings.set_string("fp-remote", remote)
+            log(f" updating setting: fp: remote to {remote}")
+        else:
+            log("no remote selected")
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/repository.ui")

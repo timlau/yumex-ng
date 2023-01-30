@@ -1,7 +1,8 @@
+from unittest.mock import MagicMock
 import gi
 
 from yumex.backend.flatpak import FlatpakPackage
-from yumex.utils.enums import FlatpakLocation, Page
+from yumex.utils.enums import FlatpakLocation
 
 gi.require_version("Flatpak", "1.0")
 # gi.require_version("Gtk", "4.0")
@@ -40,113 +41,41 @@ class Mock:
             self._calls.append(f"{method}")
 
 
-class MockFlatpakRef(Mock):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.id = "dk.yumex.Yumex"
-        self.name = "Yum Extender"
-        self.version = "4.99"
-        self.summary = "This is a package manager"
-        self.ref_string = "app/dk.yumex.Yumex/x86_64/stable"
-        self.kind = Flatpak.RefKind.APP
-
-    def get_name(self) -> str:
-        return self.id
-
-    def get_appdata_name(self) -> str:
-        return self.name
-
-    def get_appdata_version(self) -> str:
-        return self.version
-
-    def get_appdata_summary(self) -> str:
-        return self.summary
-
-    def format_ref(self):
-        return self.ref_string
-
-    def get_origin(self):
-        return "flathub"
-
-    def get_kind(self):
-        return self.kind
+def flatpak_ref():
+    mock = MagicMock()
+    mock.get_name.return_value = "dk.yumex.Yumex"
+    mock.get_appdata_name.return_value = "Yum Extender"
+    mock.get_appdata_version.return_value = "4.99"
+    mock.get_appdata_summary.return_value = "This is a package manager"
+    mock.format_ref.return_value = "app/dk.yumex.Yumex/x86_64/stable"
+    mock.get_origin.return_value = "flathub"
+    mock.get_kind.return_value = Flatpak.RefKind.APP
+    return mock
 
 
-class MockPresenter(Mock):
-    def __init__(self, fp_backend=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if fp_backend is None:
-            fp_backend = MockFlatpackBackend()
-        self._fp_backend = fp_backend
-
-    def hide(self):
-        self.set_mock_call("progress.hide")
-
-    def reset_flatpak_backend(self):
-        self.set_mock_call("reset_flatpak_backend")
-
-    @property
-    def flatpak_backend(self):
-        return self._fp_backend
-
-    def show_message(self, title, timeout=2) -> None:
-        self.set_mock_call("show_message", title, timeout)
-
-    def set_needs_attention(self, page: Page, num: int) -> None:
-        self.set_mock_call("set_needs_attention", page, num)
-
-    def confirm_flatpak_transaction(self, refs: list) -> bool:
-        self.set_mock_call("confirm_flatpak_transaction", refs)
-        return True
-
-    def select_page(self, page: Page) -> None:
-        self.set_mock_call("select_page", page)
-
-    def get_repositories(self) -> list[tuple[str, str, bool]]:
-        return [("fedora", "fedora packages", True)]
+def mock_presenter(remotes: list = None):
+    mock = MagicMock()
+    mock.flatpak_backend.get_remotes.return_value = remotes
+    mock.flatpak_backend.number_of_updates.return_value = 1
+    mock.confirm_flatpak_transaction.return_value = True
+    mock.get_repositories.return_value = [("fedora", "fedora packages", True)]
+    fp_pkg = FlatpakPackage(
+        flatpak_ref(), location=FlatpakLocation.USER, is_update=True
+    )
+    mock.get_installed.return_value = [fp_pkg]
+    mock.install.return_value = [fp_pkg]
+    mock.number_of_updates.return_value = 1
+    return mock
 
 
-class MockFlatpackBackend(Mock):
-    def __init__(self, remotes=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if remotes is None:
-            remotes = ["flathub", "gnome-nightly"]
-        self._remotes = remotes
-
-    def get_installed(self, *args, **kwargs):
-        self.set_mock_call("get_installed", *args, **kwargs)
-        return [
-            FlatpakPackage(
-                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
-            )
-        ]
-
-    def install(self, *args, **kwargs):
-        self.set_mock_call("install", *args, **kwargs)
-        return [
-            FlatpakPackage(
-                MockFlatpakRef(), location=FlatpakLocation.USER, is_update=True
-            )
-        ]
-
-    def number_of_updates(self):
-        return 1
-
-    def get_remotes(self, location: FlatpakLocation) -> list:
-        return self._remotes
-
-
-class MockSettings(Mock):
-    def __init__(self, *args, **kwargs):
-        Mock.__init__(self)
-
-    # setting Mock methods
-    def get_string(self, setting):
+def mock_settings():
+    def get_string(setting):
         match setting:
             case "fp-location":
-                return FlatpakLocation.USER
+                return "user"
             case "fp-remote":
                 return "flathub"
 
-    def set_string(self, setting, value):
-        self.set_mock_call("set_string", setting, value)
+    mock = MagicMock()
+    mock.get_string.side_effect = get_string
+    return mock
