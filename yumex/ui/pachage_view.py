@@ -18,6 +18,7 @@ from gi.repository import Gtk
 
 from yumex.backend.interface import Presenter
 from yumex.ui.dialogs import error_dialog
+from yumex.ui.queue_view import YumexQueueView
 from yumex.utils.storage import PackageStorage
 from yumex.utils.types import MainWindow
 from yumex.constants import ROOTDIR
@@ -49,14 +50,18 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(self, win: MainWindow, presenter: Presenter, **kwargs):
+    def __init__(
+        self, win: MainWindow, presenter: Presenter, qview: YumexQueueView, **kwargs
+    ):
         super().__init__(**kwargs)
         self.win: MainWindow = win
         self.presenter = presenter
         self.storage = PackageStorage()
+        self.queue_view = qview
         self.setup()
 
     def setup(self):
+        """Setup the properties, there will be set again on a reset"""
         self.store = self.storage.clear()
         self.selection.set_model(self.store)
         self.last_position = -1
@@ -64,20 +69,23 @@ class YumexPackageView(Gtk.ColumnView):
         self._last_selected_pkg: YumexPackage = None
 
     def reset(self):
+        """Reset the view"""
         log("Reset Package View")
         self.queue_view.reset()
         self.setup()
         self.presenter.reset_backend()
         self.presenter.reset_cache()
 
-    @property
-    def queue_view(self):
-        return self.win.queue_view
+    def refresh(self):
+        """refresh the view"""
+        self.selection.selection_changed(0, len(self.store))
 
     def get_packages(self, pkg_filter: PackageFilter):
+        """fetch the packages and add them to the store"""
+
         def set_completed(pkgs: list, error=False):
             self.win.main_view.set_sensitive(True)
-            self.win.progress.hide()
+            self.presenter.progress.hide()
             if not error:
                 self.add_packages_to_store(pkgs)
             else:
@@ -92,15 +100,16 @@ class YumexPackageView(Gtk.ColumnView):
 
         log(f"Loading packages : {pkg_filter}")
 
-        self.win.progress.set_title(_("Loading Packages"))
-        self.win.progress.set_subtitle(_("This make take a little while"))
+        self.presenter.progress.set_title(_("Loading Packages"))
+        self.presenter.progress.set_subtitle(_("This make take a little while"))
 
-        self.win.progress.show()
+        self.presenter.progress.show()
         self.win.main_view.set_sensitive(False)
         RunAsync(self.presenter.get_packages_by_filter, set_completed, pkg_filter)
 
     # @timed
     def search(self, txt, field=SearchField.NAME):
+        """search for packages and add them to store"""
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
             pkgs = self.presenter.get_packages(
@@ -110,6 +119,7 @@ class YumexPackageView(Gtk.ColumnView):
 
     @timed
     def add_packages_to_store(self, pkgs):
+        """adding packages to store"""
         log("Adding packages to store")
         # create a new store and add packages (big speed improvement)
         self.storage.clear()
@@ -127,11 +137,13 @@ class YumexPackageView(Gtk.ColumnView):
         log(f" --> number of packages : {len(list(pkgs))}")
 
     def sort(self):
+        """Sort the packages in the store"""
         sort_attr = SortType(self.win.package_settings.get_sort_attr())
         log(f" --> sorting by : {sort_attr}")
         self.store = self.storage.sort_by(sort_attr)
 
     def set_styles(self, widget, pkg) -> None:
+        """Set widget style based on pkg state"""
         current_styles = widget.get_css_classes()
         current_styles = [
             style for style in current_styles if style not in CLEAN_STYLES
@@ -158,19 +170,63 @@ class YumexPackageView(Gtk.ColumnView):
             self.queue_view.remove_packages(to_add)
         self.refresh()
 
-    def _set_queued(self, pkg, arg1, arg2):
+    def _set_queued(self, pkg, is_queued: bool, to_list: list):
         pkg.queue_action = True
-        pkg.queued = arg1
-        arg2.append(pkg)
-
-    def refresh(self):
-        self.selection.selection_changed(0, len(self.store))
+        pkg.queued = is_queued
+        to_list.append(pkg)
 
     def toggle_selected(self):
         if len(self.store) > 0:
             pkg: YumexPackage = self.selection.get_selected_item()
             pkg.queued = not pkg.queued
             self.refresh()
+
+    def set_pkg_info(self, pkg):
+        def completed(pkg_info, error=False):
+            self.win.package_info.update(info_type, pkg_info)
+
+        if self._last_selected_pkg and pkg == self._last_selected_pkg:
+            return
+        self._last_selected_pkg = pkg
+        info_type = InfoType(self.win.package_settings.get_info_type())
+        RunAsync(
+            self.presenter.get_package_info,
+            completed,
+            pkg,
+            info_type,
+        )
+
+    # --------------------- callbacks --------------------------------
+
+    def on_queued_toggled(self, widget, item):
+        """update the dataobject with the current check state"""
+        pkg: YumexPackage = item.get_item()
+        checkbox = item.get_child()
+        tip = get_package_selection_tooltip(pkg)
+        checkbox.set_tooltip_text(tip)
+        # if a pkg is select as a dep, the the user can't deselect
+        if pkg.is_dep:
+            checkbox.set_sensitive(False)
+        else:
+            checkbox.set_sensitive(True)
+        if pkg.queue_action:  # package is being processed by queue (add/remove)
+            pkg.queue_action = False
+        else:  # the user has clicked on the widget
+            pkg.queued = widget.get_active()
+            if pkg.queued:
+                self.queue_view.add_package(pkg)
+            else:
+                self.queue_view.remove_package(pkg)
+
+    @Gtk.Template.Callback()
+    def on_selection_changed(self, widget, position, n_items):
+        if len(self.store) > 0:
+            pkg: YumexPackage = self.selection.get_selected_item()
+            self.set_pkg_info(pkg)
+        else:
+            self.win.package_info.clear()
+
+    # --------------------- Factory setup methods --------------------------------
 
     @Gtk.Template.Callback()
     def on_package_column_checkmark_setup(self, widget, item):
@@ -186,6 +242,8 @@ class YumexPackageView(Gtk.ColumnView):
         label.set_hexpand(True)
         label.set_margin_start(10)
         item.set_child(label)
+
+    # --------------------- Factory bind methods --------------------------------
 
     @Gtk.Template.Callback()
     def on_name_bind(self, widget, item):
@@ -234,46 +292,3 @@ class YumexPackageView(Gtk.ColumnView):
         label = item.get_child()  # Get the Gtk.Label stored in the ListItem
         pkg = item.get_item()  # get the model item, connected to current ListItem
         label.set_active(pkg.queued)  # Update Gtk.Label with data from model item
-
-    def set_pkg_info(self, pkg):
-        def completed(pkg_info, error=False):
-            self.win.package_info.update(info_type, pkg_info)
-
-        if self._last_selected_pkg and pkg == self._last_selected_pkg:
-            return
-        self._last_selected_pkg = pkg
-        info_type = InfoType(self.win.package_settings.get_info_type())
-        RunAsync(
-            self.presenter.get_package_info,
-            completed,
-            pkg,
-            info_type,
-        )
-
-    @Gtk.Template.Callback()
-    def on_selection_changed(self, widget, position, n_items):
-        if len(self.store) > 0:
-            pkg: YumexPackage = self.selection.get_selected_item()
-            self.set_pkg_info(pkg)
-        else:
-            self.win.package_info.clear()
-
-    def on_queued_toggled(self, widget, item):
-        """update the dataobject with the current check state"""
-        pkg: YumexPackage = item.get_item()
-        checkbox = item.get_child()
-        tip = get_package_selection_tooltip(pkg)
-        checkbox.set_tooltip_text(tip)
-        # if a pkg is select as a dep, the the user can't deselect
-        if pkg.is_dep:
-            checkbox.set_sensitive(False)
-        else:
-            checkbox.set_sensitive(True)
-        if pkg.queue_action:  # package is being processed by queue (add/remove)
-            pkg.queue_action = False
-        else:  # the user has clicked on the widget
-            pkg.queued = widget.get_active()
-            if pkg.queued:
-                self.queue_view.add_package(pkg)
-            else:
-                self.queue_view.remove_package(pkg)

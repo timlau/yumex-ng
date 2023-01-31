@@ -97,19 +97,31 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Setup the gui"""
         self.progress = YumexProgress()
         self.progress.set_transient_for(self)
-        self.setup_package_page()
-        self.setup_groups_page()
-        self.setup_queue()
+        self.setup_packages_and_queue()
         self.setup_flatpaks()
 
     def setup_flatpaks(self):
         self.flatpak_view = YumexFlatpakView(self.presenter)
         self.content_flatpaks.set_child(self.flatpak_view)
 
-    def setup_package_page(self):
-        """Setup the packages page"""
-        self.package_view = YumexPackageView(self, self.presenter)
+    def setup_packages_and_queue(self):
+        """Setup the packages & queue pages"""
+        # Setup queue page
+        self.queue_view = YumexQueueView(self.presenter)
+        self.queue_view.connect("refresh", self.on_queue_refresh)
+        self.content_queue.set_child(self.queue_view)
+        # setup packages page
+        self.package_view = YumexPackageView(self, self.presenter, self.queue_view)
         self.content_packages.set_child(self.package_view)
+        self.set_saved_setting()
+        # setup package settings
+        self.package_settings = YumexPackageSettings(self)
+        self.sidebar.set_flap(self.package_settings)
+        # setup package info
+        self.package_info = YumexPackageInfo()
+        self.update_info_box.append(self.package_info)
+
+    def set_saved_setting(self):
         # set columns width from settings and calc clamp width
         clamp_width = 100
         for setting in PACKAGE_COLUMNS:
@@ -119,25 +131,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width)
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
-        self.package_settings = YumexPackageSettings(self)
-        self.sidebar.set_flap(self.package_settings)
-        self.package_info = YumexPackageInfo()
-        self.update_info_box.append(self.package_info)
-
-    def setup_groups_page(self):
-        """Setup the groups page"""
-        self.content_groups.append(
-            self.create_label_center("Groups is not implemented yet")
-        )
-
-    def setup_queue(self):
-        """Setup the groups page"""
-        self.queue_view = YumexQueueView(self.presenter)
-        self.queue_view.connect("refresh", self.on_queue_refresh)
-        self.content_queue.set_child(self.queue_view)
 
     def on_queue_refresh(self, *args):
-        """handle the refresh signal from queue view"""
+        """handle the refressh signal from queue view"""
         self.package_view.refresh()
 
     def show_message(self, title, timeout=2):
