@@ -2,7 +2,11 @@ from yumex.backend.dnf import YumexPackage
 from yumex.utils.enums import PackageAction, PackageState
 
 
-def test_yp_init(pkg):
+# fixtures is defined in conftest.py
+
+
+def test_yp_init(pkg: YumexPackage):
+    """should return the expected properties"""
     assert pkg.name == "mypkg"
     assert pkg.version == "1"
     assert pkg.arch == "x86_64"
@@ -16,6 +20,7 @@ def test_yp_init(pkg):
 
 
 def test_yp_state_action(pkg_dict):
+    """should return the expected properties, when called with state and action kwargs"""
     pkg = YumexPackage(
         **pkg_dict, state=PackageState.INSTALLED, action=PackageAction.INSTALL
     )
@@ -26,6 +31,7 @@ def test_yp_state_action(pkg_dict):
 
 
 def test_yp_installed(pkg_dict):
+    """Should return the package installation state"""
     pkg = YumexPackage(
         **pkg_dict, state=PackageState.INSTALLED, action=PackageAction.INSTALL
     )
@@ -35,18 +41,21 @@ def test_yp_installed(pkg_dict):
 
 
 def test_yp_evr(pkg):
+    """should return a evr string based on epoch, version and release"""
     assert pkg.evr == "1-1.0"
     pkg.epoch = "3"
     assert pkg.evr == "3:1-1.0"
 
 
 def test_yp_nevra(pkg):
+    """should return a nevra string based package properties"""
     assert pkg.nevra == "mypkg-1-1.0.x86_64"
     pkg.epoch = "3"
     assert pkg.nevra == "mypkg-3:1-1.0.x86_64"
 
 
 def test_yp_str(pkg):
+    """Should return a string representation of the package (nevra)"""
     assert str(pkg) == "mypkg-1-1.0.x86_64"
 
 

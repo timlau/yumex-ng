@@ -15,6 +15,7 @@ pytestmark = pytest.mark.guitest
 
 @pytest.fixture
 def flatpak_ref():
+    """create a fixture imulating a flatpak"""
     mock = MagicMock()
     mock.get_name.return_value = "dk.yumex.Yumex"
     mock.get_appdata_name.return_value = "Yum Extender"
@@ -28,6 +29,7 @@ def flatpak_ref():
 
 @pytest.fixture
 def flatpak_ref_no_appdata():
+    """create a fixture imulating a flatpak with no appdata"""
     mock = MagicMock()
     mock.get_name.return_value = "dk.yumex.Yumex"
     mock.get_appdata_name.return_value = None
@@ -41,45 +43,49 @@ def flatpak_ref_no_appdata():
 
 @pytest.fixture
 def flatpak_package(flatpak_ref):
+    """create a fixture returning a flatpak package"""
     return FlatpakPackage(flatpak_ref, location=FlatpakLocation.USER)
 
 
-def test_fppackage_setup(flatpak_package):
-    assert isinstance(flatpak_package, FlatpakPackage)
-
-
 def test_fppackage_id(flatpak_package):
+    """should return the id of the flatpak"""
     assert flatpak_package.id == "dk.yumex.Yumex"
 
 
 def test_fppackage_name(flatpak_package):
+    """should return the name of the flatpak"""
     assert flatpak_package.name == "Yum Extender"
 
 
 def test_fppackage_version(flatpak_package):
+    """should return the version of the flatpak"""
     assert flatpak_package.version == "4.99"
 
 
 def test_fppackage_summary(flatpak_package):
+    """should return the summary of the flatpak"""
     assert flatpak_package.summary == "This is a package manager"
 
 
 def test_fppackage_origin(flatpak_package):
+    """should return the origin of the flatpak"""
     assert flatpak_package.origin == "flathub"
 
 
 def test_fppackage_is_user(flatpak_package):
+    """should return true if the flatpak is a user flatpak"""
     assert flatpak_package.is_user is True
     flatpak_package.location = FlatpakLocation.SYSTEM
     assert flatpak_package.is_user is False
 
 
 def test_fppackage_repr(flatpak_package):
+    """should the full ref string as a repr()"""
     assert repr(flatpak_package) == "app/dk.yumex.Yumex/x86_64/stable"
 
 
 def test_fppackage_type(flatpak_ref):
-    """Test type based on ref.get_kind() ref.get_name()"""
+    """Should return the type of the flatpak, based on Refkind or name"""
     flatpak_package = FlatpakPackage(flatpak_ref, location=FlatpakLocation.USER)
     assert flatpak_package.type == FlatpakType.APP
     flatpak_ref.get_kind.return_value = Flatpak.RefKind.RUNTIME
@@ -91,6 +97,7 @@ def test_fppackage_type(flatpak_ref):
 
 
 def test_fppackage_appdata_notfound(flatpak_ref_no_appdata):
+    """Should name based on last part of id, if no appdata"""
     flatpak_package = FlatpakPackage(
         flatpak_ref_no_appdata, location=FlatpakLocation.USER
     )

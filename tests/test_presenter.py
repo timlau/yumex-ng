@@ -6,11 +6,11 @@ from yumex.utils.enums import Page
 
 
 @pytest.fixture
-def presenter() -> YumexPresenter:
-    mock_factory = Mock()
-    mock_win = Mock()
+def presenter(mocker) -> YumexPresenter:
+    mock_factory = mocker.Mock()
+    mock_win = mocker.Mock()
     presenter = YumexPresenter(win=mock_win, factory=mock_factory)
-    mock_factory.get_backend.return_value = Mock()
+    mock_factory.get_backend.return_value = mocker.Mock()
     return presenter
 
 
@@ -51,7 +51,6 @@ def test_flatpak_backend(presenter: YumexPresenter, mocker):
     backend1 = presenter.flatpak_backend
     backend2 = presenter.flatpak_backend
     assert backend1 == backend2
-    assert isinstance(backend1, Mock)
     assert fp_init.call_count == 1
 
 

@@ -6,6 +6,7 @@ from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
 
 
 def test_DNF4(mocker):
+    """should return Dnf4Backend"""
     # do not do a real dnf setup, so we mock the DnfBase class
     mocker.patch("yumex.backend.dnf.dnf4.DnfBase")
     presenter = Mock()
@@ -15,6 +16,7 @@ def test_DNF4(mocker):
 
 
 def test_DNF5(mocker):
+    """should return Dnf5Backend"""
     mocker.patch("yumex.backend.dnf.dnf5.dnf")
     presenter = Mock()
     factory = DnfBackendFactory(PackageBackendType.DNF5, presenter=presenter)

@@ -10,7 +10,7 @@ from yumex.utils.enums import PackageFilter, PackageState
 
 
 def test_get_package(pkg, pkg_dict):
-    """test that a package is cached"""
+    """should return the same package object, when adding another with same properties"""
     cache = YumexPackageCache(None)
     pkg.state = PackageState.INSTALLED
     po1 = cache.get_package(pkg)
@@ -32,7 +32,7 @@ def test_get_package(pkg, pkg_dict):
 def test_get_package_state_updates(
     first_state, second_state, expected_state, pkg, pkg_dict
 ):
-    """test that package state is updated"""
+    """Should update state, in some given combinations"""
     cache = YumexPackageCache(None)
     pkg.state = first_state
     cache.get_package(pkg)
@@ -44,7 +44,7 @@ def test_get_package_state_updates(
 
 
 def test_get_packages(pkg, pkg_other):
-    """test the get_packages method"""
+    """Should return an interator to the cached packages"""
     cache = YumexPackageCache(None)
     res = cache.get_packages([pkg, pkg_other])
     assert isinstance(res, Generator)
@@ -53,7 +53,7 @@ def test_get_packages(pkg, pkg_other):
 
 
 def test_get_packages_by_filter():
-    """test the get_packages_by_filter method (installed)"""
+    """should get packages by filter, from the backend"""
     backend = mock_package_backend()
     cache = YumexPackageCache(backend)
     res = cache.get_packages_by_filter(PackageFilter.INSTALLED)
@@ -62,7 +62,7 @@ def test_get_packages_by_filter():
 
 
 def test_get_packages_by_filter_illegal_filter():
-    """test the get_packages_by_filter with illegal filter"""
+    """should raise an exception if filter is illegal"""
     backend = mock_package_backend()
     cache = YumexPackageCache(backend)
     with pytest.raises(KeyError):
@@ -70,7 +70,7 @@ def test_get_packages_by_filter_illegal_filter():
 
 
 def test_get_packages_by_filter_two_times():
-    """test the get_packages_by_filter dont reload from backend"""
+    """should only call the backend the first time and return the cached ones, second time"""
     backend = mock_package_backend()
     cache = YumexPackageCache(backend)
     res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)
@@ -82,7 +82,7 @@ def test_get_packages_by_filter_two_times():
 
 
 def test_get_packages_by_filter_reset():
-    """test the get_packages_by_filter reset"""
+    """Should call the backend again after a reset"""
     backend = mock_package_backend()
     cache = YumexPackageCache(backend)
     res = cache.get_packages_by_filter(PackageFilter.AVAILABLE)

@@ -31,3 +31,6 @@ def test_setup(progress):
     assert isinstance(progress.subtitle, Gtk.Label)
     assert isinstance(progress.progress, Gtk.ProgressBar)
     assert isinstance(progress.spinner, Gtk.Spinner)
+
+
+#   FIXME: add some more tests or remove it
