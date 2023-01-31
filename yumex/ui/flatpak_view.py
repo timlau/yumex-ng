@@ -87,7 +87,6 @@ class YumexFlatpakView(Gtk.ListView):
         """install a new flatpak"""
 
         self.presenter.select_page(Page.FLATPAKS)
-        # TODO: make and sync edition of the flatpak installer, to make code more readable
         flatpak_installer = YumexFlatpakInstaller(self.presenter)
         flatpak_installer.set_transient_for(self.presenter.get_main_window())
         remotes = Gtk.StringList.new()

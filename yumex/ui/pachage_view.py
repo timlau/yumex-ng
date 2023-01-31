@@ -149,17 +149,16 @@ class YumexPackageView(Gtk.ColumnView):
         for pkg in self.store:
             if state:
                 if not pkg.queued:
-                    self._extracted_from_select_all_7(pkg, True, to_add)
+                    self._set_queued(pkg, True, to_add)
             elif pkg.queued:
-                self._extracted_from_select_all_7(pkg, False, to_delete)
+                self._set_queued(pkg, False, to_delete)
         if to_add:
             self.queue_view.add_packages(to_add)
         if to_delete:
             self.queue_view.remove_packages(to_add)
         self.refresh()
 
-    # TODO Rename this here and in `select_all`
-    def _extracted_from_select_all_7(self, pkg, arg1, arg2):
+    def _set_queued(self, pkg, arg1, arg2):
         pkg.queue_action = True
         pkg.queued = arg1
         arg2.append(pkg)
