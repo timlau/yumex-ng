@@ -9,9 +9,9 @@ gi.require_version("Adw", "1")
 
 from dataclasses import dataclass
 import pytest
-import os
-from yumex.constants import PKGDATADIR
-from .mock import mock_presenter
+from .mock import mock_presenter, TemplateUIFromFile
+
+from gi.repository import Gtk
 
 pytestmark = pytest.mark.guitest
 
@@ -28,12 +28,10 @@ def presenter():
 
 
 @pytest.fixture
-def flatpak_view(presenter, mocker):
+def flatpak_view(presenter, monkeypatch):
     """setup ressources and create a YumexFlatpakView object"""
-    from gi.repository import Gio
-
-    resource = Gio.Resource.load(os.path.join(PKGDATADIR, "yumex.gresource"))
-    Gio.Resource._register(resource)
+    # used the Special Gtk.Template wrapper
+    monkeypatch.setattr(Gtk, "Template", TemplateUIFromFile)
     from yumex.ui.flatpak_view import YumexFlatpakView
 
     fpw: YumexFlatpakView = YumexFlatpakView(presenter=presenter)

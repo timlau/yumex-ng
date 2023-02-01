@@ -7,8 +7,6 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk
 from .mock import TemplateUIFromFile
 
-pytestmark = pytest.mark.guitest
-
 
 @pytest.fixture
 def progress(mocker, monkeypatch):

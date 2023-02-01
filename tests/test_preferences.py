@@ -1,27 +1,21 @@
 import gi
-import os
-
-from yumex.constants import PKGDATADIR
+import pytest
 
 gi.require_version("Flatpak", "1.0")
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk
-import pytest
 from yumex.utils.enums import FlatpakLocation
-from .mock import mock_presenter, mock_settings
+from .mock import mock_presenter, mock_settings, TemplateUIFromFile
 
 pytestmark = pytest.mark.guitest
 
 
 @pytest.fixture
-def pref(mocker):
-    """setup ressources and create a YumexFlatpakView object"""
-    from gi.repository import Gio
-
-    resource = Gio.Resource.load(os.path.join(PKGDATADIR, "yumex.gresource"))
-    Gio.Resource._register(resource)
+def pref(mocker, monkeypatch):
+    """create a YumexPreferences object"""
+    monkeypatch.setattr(Gtk, "Template", TemplateUIFromFile)
     from yumex.ui.preferences import YumexPreferences
 
     mock = mocker.patch("yumex.ui.preferences.Gio")
@@ -36,12 +30,9 @@ def pref(mocker):
 
 
 @pytest.fixture
-def pref_no(mocker):
-    """setup ressources and create a YumexFlatpakView object"""
-    from gi.repository import Gio
-
-    resource = Gio.Resource.load(os.path.join(PKGDATADIR, "yumex.gresource"))
-    Gio.Resource._register(resource)
+def pref_no(mocker, monkeypatch):
+    """create a YumexPreferences object"""
+    monkeypatch.setattr(Gtk, "Template", TemplateUIFromFile)
     from yumex.ui.preferences import YumexPreferences
 
     mock = mocker.patch("yumex.ui.preferences.Gio")
@@ -124,7 +115,7 @@ def test_get_remotes(pref):
 
 
 def test_get_remotes_none(pref_no):
-    """ Should return an empty list if no remotes"""
+    """Should return an empty list if no remotes"""
     remotes = pref_no.get_remotes(FlatpakLocation.USER)
     assert isinstance(remotes, Gtk.StringList)
     assert len(remotes) == 0

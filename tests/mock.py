@@ -1,15 +1,26 @@
 from unittest.mock import MagicMock
 import gi
-from yumex.backend.dnf import YumexPackage
 
+gi.require_version("Flatpak", "1.0")
+gi.require_version("Gtk", "4.0")
+# gi.require_version("Adw", "1")
+
+from pathlib import Path
+
+from yumex.backend.dnf import YumexPackage
 from yumex.backend.flatpak import FlatpakPackage
 from yumex.utils.enums import FlatpakLocation
 
-gi.require_version("Flatpak", "1.0")
-# gi.require_version("Gtk", "4.0")
-# gi.require_version("Adw", "1")
+from gi.repository import Flatpak, Gtk
 
-from gi.repository import Flatpak
+
+class TemplateUIFromFile(Gtk.Template):
+    def __init__(self, resource_path=None):
+        # convert resource path to to file path
+        # use ui file from local build when testing
+        basename = Path(resource_path).name
+        ui_dir = Path("./builddir/data/ui/") / basename
+        super().__init__(filename=ui_dir.resolve().as_posix())
 
 
 class Mock:
