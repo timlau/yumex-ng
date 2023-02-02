@@ -27,6 +27,7 @@ def mock_presenter():
     mock = MagicMock()
     mock.get_packages_by_filter.return_value = [test_package()]
     mock.search.return_value = [test_package()]
+    # dont use cache, just return the same packages
     mock.get_packages.side_effect = lambda x: x
     return mock
 
@@ -34,6 +35,7 @@ def mock_presenter():
 def mock_win():
     """mock the main window"""
     mock = MagicMock()
+    # mock the package_setting method call by YumexPackageView
     mock.package_settings.get_sort_attr.return_value = SortType.NAME
     mock.package_settings.get_info_type.return_value = InfoType.DESCRIPTION
     return mock
@@ -42,18 +44,19 @@ def mock_win():
 def mock_queueview():
     """mock the queueview"""
     mock = MagicMock()
-    mock.find_by_nevra.side_effect = lambda x: None
+    mock.find_by_nevra.return_value = None
     return mock
 
 
 def run_sync(func, callback, *args, **kwargs):
+    """replacement for RunAsync, that dont work well with testing"""
     res = func(*args, **kwargs)
     return callback(res)
 
 
 @pytest.fixture
 def view(monkeypatch, mocker):
-    """create a progress object"""
+    """create a YumexPackageView object"""
     # used the Special Gtk.Template wrapper
     monkeypatch.setattr(Gtk, "Template", TemplateUIFromFile)
     monkeypatch.setattr(yumex.utils, "RunAsync", run_sync)
@@ -88,7 +91,7 @@ def test_get_packages(view):
 
 
 def test_get_packages_empty(view):
-    """should get one package and add it to the view storage"""
+    """should not get anything"""
     view.presenter.get_packages_by_filter.return_value = []
     view.get_packages(PackageFilter.INSTALLED)
     assert len(view.storage) == 0
@@ -101,7 +104,7 @@ def test_search(view):
 
 
 def test_search_empty(view):
-    """should get one package and add it to the view storage"""
+    """should not find anything"""
     view.presenter.search.return_value = []
     view.search("text", SearchField.NAME)
     assert len(view.storage) == 0
