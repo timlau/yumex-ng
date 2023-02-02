@@ -14,6 +14,20 @@ from yumex.utils.enums import FlatpakLocation
 from gi.repository import Flatpak, Gtk
 
 
+def test_package():
+    pkg_dict = {
+        "name": "mypkg",
+        "version": "1",
+        "arch": "x86_64",
+        "release": "1.0",
+        "epoch": "",
+        "repo": "repo2",
+        "description": "desc",
+        "size": 2048,
+    }
+    return YumexPackage(**pkg_dict)
+
+
 class TemplateUIFromFile(Gtk.Template):
     def __init__(self, resource_path=None):
         # convert resource path to to file path
@@ -80,7 +94,7 @@ def mock_presenter(remotes: list = None):
     return mock
 
 
-def mock_settings():
+def mock_settings_flatpak():
     def get_string(setting):
         match setting:
             case "fp-location":

@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import MagicMock, Mock
 import pytest
 import gi
 
@@ -7,7 +7,12 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk
-from .mock import TemplateUIFromFile, mock_presenter
+from .mock import TemplateUIFromFile
+
+
+def mock_presenter(remotes: list = None):
+    mock = MagicMock()
+    return mock
 
 
 @pytest.fixture

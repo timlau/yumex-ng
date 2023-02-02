@@ -7,7 +7,7 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk
 from yumex.utils.enums import FlatpakLocation
-from .mock import mock_presenter, mock_settings, TemplateUIFromFile
+from .mock import mock_presenter, mock_settings_flatpak, TemplateUIFromFile
 
 pytestmark = pytest.mark.guitest
 
@@ -19,7 +19,7 @@ def pref(mocker, monkeypatch):
     from yumex.ui.preferences import YumexPreferences
 
     mock = mocker.patch("yumex.ui.preferences.Gio")
-    mock.Settings.return_value = mock_settings()
+    mock.Settings.return_value = mock_settings_flatpak()
     presenter = mock_presenter(
         [
             "flathub",
@@ -36,7 +36,7 @@ def pref_no(mocker, monkeypatch):
     from yumex.ui.preferences import YumexPreferences
 
     mock = mocker.patch("yumex.ui.preferences.Gio")
-    mock.Settings.return_value = mock_settings()
+    mock.Settings.return_value = mock_settings_flatpak()
     presenter = mock_presenter([])
     return YumexPreferences(presenter=presenter)
 
