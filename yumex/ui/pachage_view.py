@@ -167,8 +167,9 @@ class YumexPackageView(Gtk.ColumnView):
         if to_add:
             self.queue_view.add_packages(to_add)
         if to_delete:
-            self.queue_view.remove_packages(to_add)
+            self.queue_view.remove_packages(to_delete)
         self.refresh()
+        return to_add, to_delete
 
     def _set_queued(self, pkg, is_queued: bool, to_list: list):
         pkg.queue_action = True

@@ -3,7 +3,12 @@ import sys
 import pytest
 import gi
 
-from yumex.utils.enums import PackageFilter, SearchField, SortType, InfoType
+from yumex.utils.enums import (
+    PackageFilter,
+    SearchField,
+    SortType,
+    InfoType,
+)
 
 
 gi.require_version("Gtk", "4.0")
@@ -108,3 +113,24 @@ def test_search_empty(view):
     view.presenter.search.return_value = []
     view.search("text", SearchField.NAME)
     assert len(view.storage) == 0
+
+
+def test_search_2chars(view):
+    """should not do a search with less than 3 characters"""
+    view.search("12", SearchField.NAME)
+    assert len(view.storage) == 0
+
+
+def test_select_all(view):
+    view.get_packages(PackageFilter.AVAILABLE)
+    # all packages are selected and added to queue
+    assert len(view.storage) == 1
+    to_add, to_delete = view.select_all(state=True)
+    assert len(to_add) == 1
+    assert len(to_delete) == 0
+    view.queue_view.add_packages.assert_called_with(to_add)
+    # all packages are de-selected and removed from queue
+    to_add, to_delete = view.select_all(state=False)
+    assert len(to_add) == 0
+    assert len(to_delete) == 1
+    view.queue_view.remove_packages.assert_called_with(to_delete)

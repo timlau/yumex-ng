@@ -9,7 +9,7 @@ from pathlib import Path
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.flatpak import FlatpakPackage
-from yumex.utils.enums import FlatpakLocation
+from yumex.utils.enums import FlatpakLocation, PackageState
 
 from gi.repository import Flatpak, Gtk
 
@@ -24,6 +24,7 @@ def test_package():
         "repo": "repo2",
         "description": "desc",
         "size": 2048,
+        "state": PackageState.INSTALLED,
     }
     return YumexPackage(**pkg_dict)
 
