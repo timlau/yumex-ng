@@ -78,14 +78,15 @@ yumex_backend_dnf_modules = [
 'backend/dnf/__init__.py',
 'backend/dnf/dnf4.py',
 'backend/dnf/dnf5.py',
+'backend/dnf/factory.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_dnf_modules, subdir: 'yumex/backend/dnf')
 
 yumex_utils_modules = [
 'utils/__init__.py',
-'utils/types.py',
 'utils/enums.py',
 'utils/storage.py',
+'utils/types.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
