@@ -49,9 +49,12 @@ class YumexRootBackend(Client):
     def __init__(self, presenter) -> None:
         super().__init__()
         self.presenter = presenter
-        self.progress: YumexProgress = presenter.progress
         self.dnl_frac = 0.0
         self._locked = False
+
+    @property
+    def progress(self) -> YumexProgress:
+        return self.presenter.progress
 
     def __enter__(self) -> Self:
         self._locked = self.lock()
