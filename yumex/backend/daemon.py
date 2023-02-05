@@ -46,9 +46,10 @@ class TransactionResult:
 
 
 class YumexRootBackend(Client):
-    def __init__(self, progress) -> None:
+    def __init__(self, presenter) -> None:
         super().__init__()
-        self.progress: YumexProgress = progress
+        self.presenter = presenter
+        self.progress: YumexProgress = presenter.progress
         self.dnl_frac = 0.0
         self._locked = False
 
@@ -127,6 +128,8 @@ class YumexRootBackend(Client):
     def on_RepoMetaDataProgress(self, name, frac) -> None:
         """Repository Metadata Download progress"""
         log(f" --> on_RepoMetaDataProgress : {name} : {frac}")
+        self.progress.set_title(_("Downloading Repository Metadata"))
+        self.progress.set_subtitle(name)
 
     def lock(self) -> bool:
         log("  RootBackend: get dnfdaemon lock")
