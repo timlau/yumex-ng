@@ -55,6 +55,7 @@ class YumexPackageView(Gtk.ColumnView):
     ):
         super().__init__(**kwargs)
         self.win: MainWindow = win
+        self.info_type: InfoType = InfoType.DESCRIPTION
         self.presenter = presenter
         self.storage = PackageStorage()
         self.queue_view = qview
@@ -181,19 +182,21 @@ class YumexPackageView(Gtk.ColumnView):
             pkg.queued = not pkg.queued
             self.refresh()
 
+    def set_info_type(self, info_type: InfoType):
+        self.info_type = info_type
+
     def set_pkg_info(self, pkg):
         def completed(pkg_info, error=False):
-            self.win.package_info.update(info_type, pkg_info)
+            self.win.package_info.update(self.info_type, pkg_info)
 
         if self._last_selected_pkg and pkg == self._last_selected_pkg:
             return
         self._last_selected_pkg = pkg
-        info_type = InfoType(self.win.package_settings.get_info_type())
         RunAsync(
             self.presenter.get_package_info,
             completed,
             pkg,
-            info_type,
+            self.info_type,
         )
 
     # --------------------- callbacks --------------------------------

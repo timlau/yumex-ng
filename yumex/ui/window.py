@@ -399,6 +399,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_info_type_changed(self, widget, info_type: str):
         info_type = InfoType(info_type)
         log(f"SIGNAL: info-type-changed : {info_type}")
+        self.package_view.set_info_type(info_type)
         self.package_view.on_selection_changed(self.package_view.get_model(), 0, 0)
         self.sidebar.set_reveal_flap(False)
 
