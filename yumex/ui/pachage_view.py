@@ -202,7 +202,7 @@ class YumexPackageView(Gtk.ColumnView):
     def on_selection_changed(self, widget, position, n_items):
         if len(self.store) > 0:
             pkg: YumexPackage = self.selection.get_selected_item()
-            log(f"SIGNAL: selection_changed: {pkg}")
+            log(f"SIGNAL: emit selection_changed: {pkg}")
             self.emit("selection-changed", pkg)
         else:
             self.emit("selection-changed", None)
