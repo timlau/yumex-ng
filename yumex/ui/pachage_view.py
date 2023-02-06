@@ -136,9 +136,8 @@ class YumexPackageView(Gtk.ColumnView):
         self.selection.set_model(self.store)
         log(f" --> number of packages : {len(list(pkgs))}")
 
-    def sort(self):
+    def sort(self, sort_attr: SortType):
         """Sort the packages in the store"""
-        sort_attr = SortType(self.win.package_settings.get_sort_attr())
         log(f" --> sorting by : {sort_attr}")
         self.store = self.storage.sort_by(sort_attr)
 

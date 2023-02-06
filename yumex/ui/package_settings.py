@@ -13,12 +13,11 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 from yumex.constants import ROOTDIR
 from yumex.utils import log
 from yumex.utils.enums import PackageFilter, SortType, InfoType
-from yumex.utils.types import MainWindow
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_settings.ui")
@@ -35,10 +34,8 @@ class YumexPackageSettings(Gtk.Box):
     sort_icon = Gtk.Template.Child()
     installed_row = Gtk.Template.Child()
 
-    def __init__(self, win: MainWindow, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.win: MainWindow = win
-        self.setting = win.settings
         self.current_pkg_filter: PackageFilter = None
         self.previuos_pkg_filter: PackageFilter = None
         self.show_icon.set_from_icon_name("diagnostics-symbolic")
@@ -75,26 +72,35 @@ class YumexPackageSettings(Gtk.Box):
         log(f"Sorting activated: {widget}")
 
     def on_package_filter_activated(self, button):
-        entry = self.win.search_bar.get_child()
-        entry.set_text("")
+        # entry = self.win.search_bar.get_child()
+        # entry.set_text("")
         pkg_filter: PackageFilter = PackageFilter(button.get_name())
-        self.win.package_view.get_packages(pkg_filter)
+        # self.win.package_view.get_packages(pkg_filter)
         self.current_pkg_filter = pkg_filter
         self.previuos_pkg_filter = pkg_filter
+        self.emit("package-filter-changed", pkg_filter)
+        log("SIGNAL: package-filter-changed emitted")
 
     @Gtk.Template.Callback()
     def on_info_type_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
         log(f"package info changed {self.info_type.get_selected()}")
-        self.win.package_view.on_selection_changed(
-            self.win.package_view.get_model(), 0, 0
-        )
-        self.win.sidebar.set_reveal_flap(False)
+        self.emit("info-type-changed", self.get_info_type())
 
     @Gtk.Template.Callback()
     def on_sort_by_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
         log(f"sort_by changed {self.sort_by.get_selected()}")
-        self.win.package_view.sort()
-        self.win.package_view.refresh()
-        self.win.sidebar.set_reveal_flap(False)
+        self.emit("sort-attr-changed", self.get_sort_attr())
+
+    @GObject.Signal(arg_types=(str,))
+    def package_filter_changed(self, pkg_filter: PackageFilter):
+        pass
+
+    @GObject.Signal(arg_types=(str,))
+    def sort_attr_changed(self, sort_attr: SortType):
+        pass
+
+    @GObject.Signal(arg_types=(str,))
+    def info_type_changed(self, info_type: InfoType):
+        pass

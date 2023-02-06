@@ -29,7 +29,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import log
-from yumex.utils.enums import PackageFilter, SearchField, Page
+from yumex.utils.enums import InfoType, PackageFilter, SearchField, Page, SortType
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/window.ui")
@@ -115,7 +115,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.content_packages.set_child(self.package_view)
         self.set_saved_setting()
         # setup package settings
-        self.package_settings = YumexPackageSettings(self)
+        self.package_settings = YumexPackageSettings()
+        self.package_settings.connect(
+            "package-filter-changed", self.on_package_filter_changed
+        )
+        self.package_settings.connect("info-type-changed", self.on_info_type_changed)
+        self.package_settings.connect("sort-attr-changed", self.on_sort_attr_changed)
         self.sidebar.set_flap(self.package_settings)
         # setup package info
         self.package_info = YumexPackageInfo()
@@ -383,6 +388,26 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.package_view.refresh()
             case Page.FLATPAKS:
                 self.flatpak_view.refresh_need_attention()
+
+    def on_package_filter_changed(self, widget, pkg_filter):
+        log(f"SIGNAL: package filter changed : {pkg_filter}")
+        entry = self.search_bar.get_child()
+        entry.set_text("")
+        pkg_filter = PackageFilter(pkg_filter)
+        self.package_view.get_packages(pkg_filter)
+
+    def on_info_type_changed(self, widget, info_type: str):
+        info_type = InfoType(info_type)
+        log(f"SIGNAL: info-type-changed : {info_type}")
+        self.package_view.on_selection_changed(self.package_view.get_model(), 0, 0)
+        self.sidebar.set_reveal_flap(False)
+
+    def on_sort_attr_changed(self, widget, sort_attr: str):
+        sort_attr = SortType(sort_attr)
+        log(f"SIGNAL: sort-attr-changed : {sort_attr}")
+        self.package_view.sort(sort_attr)
+        self.package_view.refresh()
+        self.sidebar.set_reveal_flap(False)
 
     def set_needs_attention(self, page: Page, num: int):
         """set the page needs_attention state"""
