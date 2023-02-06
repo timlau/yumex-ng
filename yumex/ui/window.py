@@ -115,7 +115,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.queue_view.connect("refresh", self.on_queue_refresh)
         self.content_queue.set_child(self.queue_view)
         # setup packages page
-        self.package_view = YumexPackageView(self, self.presenter, self.queue_view)
+        self.package_view = YumexPackageView(self.presenter, self.queue_view)
         self.package_view.connect(
             "selection-changed", self.on_package_selection_changed
         )

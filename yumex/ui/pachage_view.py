@@ -20,7 +20,6 @@ from yumex.backend.interface import Presenter
 from yumex.ui.dialogs import error_dialog
 from yumex.ui.queue_view import YumexQueueView
 from yumex.utils.storage import PackageStorage
-from yumex.utils.types import MainWindow
 from yumex.constants import ROOTDIR
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
@@ -49,14 +48,12 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection = Gtk.Template.Child("selection")
 
-    def __init__(
-        self, win: MainWindow, presenter: Presenter, qview: YumexQueueView, **kwargs
-    ):
+    def __init__(self, presenter: Presenter, qview: YumexQueueView, **kwargs):
         super().__init__(**kwargs)
-        self.win: MainWindow = win
         self.presenter = presenter
         self.storage = PackageStorage()
         self.queue_view = qview
+        self.sort_attr = SortType.NAME
         self.setup()
 
     def setup(self):
@@ -87,7 +84,7 @@ class YumexPackageView(Gtk.ColumnView):
             if not error:
                 self.add_packages_to_store(pkgs)
             else:
-                error_dialog(self.win, "Error in loading packages", str(error))
+                error_dialog(self.get_root(), "Error in loading packages", str(error))
             # refresh the package description for the selected package in the view
             self.on_selection_changed(self.selection, 0, 0)
 
@@ -123,15 +120,15 @@ class YumexPackageView(Gtk.ColumnView):
                 self.storage.add_package(qpkg)
             else:
                 self.storage.add_package(pkg)
-        sort_attr = self.win.package_settings.get_sort_attr()
-        log(f" --> sorting by : {sort_attr}")
-        self.store = self.storage.sort_by(sort_attr)
+        log(f" --> sorting by : {self.sort_attr}")
+        self.store = self.storage.sort_by(self.sort_attr)
         self.selection.set_model(self.store)
         log(f" --> number of packages : {len(list(pkgs))}")
 
     def sort(self, sort_attr: SortType):
         """Sort the packages in the store"""
         log(f" --> sorting by : {sort_attr}")
+        self.sort_attr = sort_attr
         self.store = self.storage.sort_by(sort_attr)
 
     def set_styles(self, widget, pkg) -> None:
