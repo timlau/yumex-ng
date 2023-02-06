@@ -14,7 +14,7 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 from yumex.backend.interface import Presenter
 from yumex.ui.dialogs import error_dialog
@@ -25,7 +25,6 @@ from yumex.constants import ROOTDIR
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
 from yumex.utils.enums import (
-    InfoType,
     PackageFilter,
     PackageState,
     SearchField,
@@ -55,7 +54,6 @@ class YumexPackageView(Gtk.ColumnView):
     ):
         super().__init__(**kwargs)
         self.win: MainWindow = win
-        self.info_type: InfoType = InfoType.DESCRIPTION
         self.presenter = presenter
         self.storage = PackageStorage()
         self.queue_view = qview
@@ -67,7 +65,6 @@ class YumexPackageView(Gtk.ColumnView):
         self.selection.set_model(self.store)
         self.last_position = -1
         self.column_num = 0
-        self._last_selected_pkg: YumexPackage = None
 
     def reset(self):
         """Reset the view"""
@@ -182,22 +179,10 @@ class YumexPackageView(Gtk.ColumnView):
             pkg.queued = not pkg.queued
             self.refresh()
 
-    def set_info_type(self, info_type: InfoType):
-        self.info_type = info_type
-
-    def set_pkg_info(self, pkg):
-        def completed(pkg_info, error=False):
-            self.win.package_info.update(self.info_type, pkg_info)
-
-        if self._last_selected_pkg and pkg == self._last_selected_pkg:
-            return
-        self._last_selected_pkg = pkg
-        RunAsync(
-            self.presenter.get_package_info,
-            completed,
-            pkg,
-            self.info_type,
-        )
+    # --------------------- signals --------------------------------
+    @GObject.Signal(arg_types=(object,))
+    def selection_changed(self, pkg: YumexPackage):
+        pass
 
     # --------------------- callbacks --------------------------------
 
@@ -225,9 +210,10 @@ class YumexPackageView(Gtk.ColumnView):
     def on_selection_changed(self, widget, position, n_items):
         if len(self.store) > 0:
             pkg: YumexPackage = self.selection.get_selected_item()
-            self.set_pkg_info(pkg)
+            log(f"SIGNAL: selection_changed: {pkg}")
+            self.emit("selection-changed", pkg)
         else:
-            self.win.package_info.clear()
+            self.emit("selection-changed", None)
 
     # --------------------- Factory setup methods --------------------------------
 

@@ -18,6 +18,7 @@ import re
 from gi.repository import Gtk, Adw, Gio, GLib
 
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
+from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
 from yumex.ui.flatpak_result import YumexFlatpakResult
@@ -28,7 +29,7 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import log
+from yumex.utils import RunAsync, log
 from yumex.utils.enums import InfoType, PackageFilter, SearchField, Page, SortType
 
 
@@ -65,6 +66,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
         self.root_backend = None
+        self._last_selected_pkg: YumexPackage = None
+        self.info_type: InfoType = InfoType.DESCRIPTION
+
         # save settings on windows close
         self.connect("unrealize", self.save_window_props)
         # connect to changes on Adw.ViewStack
@@ -112,6 +116,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.content_queue.set_child(self.queue_view)
         # setup packages page
         self.package_view = YumexPackageView(self, self.presenter, self.queue_view)
+        self.package_view.connect(
+            "selection-changed", self.on_package_selection_changed
+        )
         self.content_packages.set_child(self.package_view)
         self.set_saved_setting()
         # setup package settings
@@ -207,6 +214,22 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.progress.set_title(_("Running Flatpak Transaction"))
         return confirm
 
+    def set_pkg_info(self, pkg):
+        def completed(pkg_info, error=False):
+            self.package_info.update(self.info_type, pkg_info)
+
+        if pkg is None:
+            return self.package_info.clear()
+        if self._last_selected_pkg and pkg == self._last_selected_pkg:
+            return
+        self._last_selected_pkg = pkg
+        RunAsync(
+            self.presenter.get_package_info,
+            completed,
+            pkg,
+            self.info_type,
+        )
+
     def on_clear_queue(self, *args):
         """app.clear_queue action handler"""
         self.queue_view.clear_all()
@@ -231,6 +254,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         button = self.package_settings.filter_available
         button.set_active(True)
         self.package_settings.on_package_filter_activated(button)
+
+    def on_package_selection_changed(self, widget, pkg: YumexPackage):
+        log(f"Window: package selection changed : {pkg}")
+        self.set_pkg_info(pkg)
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
@@ -399,7 +426,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_info_type_changed(self, widget, info_type: str):
         info_type = InfoType(info_type)
         log(f"SIGNAL: info-type-changed : {info_type}")
-        self.package_view.set_info_type(info_type)
+        self.info_type = info_type
         self.package_view.on_selection_changed(self.package_view.get_model(), 0, 0)
         self.sidebar.set_reveal_flap(False)
 
