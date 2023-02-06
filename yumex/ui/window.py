@@ -262,6 +262,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.package_view.reset()
                 self.search_bar.set_search_mode(False)
                 self.show_message(_("Transaction completted succesfully"), timeout=3)
+                self.package_settings.unselect_all()
                 self.load_packages(PackageFilter.INSTALLED)
 
     @Gtk.Template.Callback()

@@ -54,6 +54,7 @@ class YumexPackageSettings(Gtk.Box):
                 self.filter_available.activate()
 
     def unselect_all(self):
+        self.previuos_pkg_filter = None
         self.filter_available.set_active(False)
         self.filter_installed.set_active(False)
         self.filter_updates.set_active(False)
@@ -72,14 +73,12 @@ class YumexPackageSettings(Gtk.Box):
         log(f"Sorting activated: {widget}")
 
     def on_package_filter_activated(self, button):
-        # entry = self.win.search_bar.get_child()
-        # entry.set_text("")
         pkg_filter: PackageFilter = PackageFilter(button.get_name())
-        # self.win.package_view.get_packages(pkg_filter)
         self.current_pkg_filter = pkg_filter
-        self.previuos_pkg_filter = pkg_filter
-        self.emit("package-filter-changed", pkg_filter)
-        log("SIGNAL: package-filter-changed emitted")
+        if self.current_pkg_filter != self.previuos_pkg_filter:
+            self.previuos_pkg_filter = pkg_filter
+            log(f"SIGNAL: emit package-filter-changed: {pkg_filter}")
+            self.emit("package-filter-changed", pkg_filter)
 
     @Gtk.Template.Callback()
     def on_info_type_selected(self, widget, data):
