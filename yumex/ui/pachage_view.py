@@ -82,19 +82,14 @@ class YumexPackageView(Gtk.ColumnView):
         """fetch the packages and add them to the store"""
 
         def set_completed(pkgs: list, error=False):
-            self.win.main_view.set_sensitive(True)
+            self.presenter.set_window_sesitivity(True)
             self.presenter.progress.hide()
             if not error:
                 self.add_packages_to_store(pkgs)
             else:
                 error_dialog(self.win, "Error in loading packages", str(error))
-            # hide package setting sidebar
-            self.win.sidebar.set_reveal_flap(False)
             # refresh the package description for the selected package in the view
             self.on_selection_changed(self.selection, 0, 0)
-            # restore focus to search entry
-            if self.win.search_bar.get_search_mode():
-                self.win.search_entry.grab_focus()
 
         log(f"Loading packages : {pkg_filter}")
 
@@ -102,7 +97,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.presenter.progress.set_subtitle(_("This make take a little while"))
 
         self.presenter.progress.show()
-        self.win.main_view.set_sensitive(False)
+        self.presenter.set_window_sesitivity(False)
         RunAsync(self.presenter.get_packages_by_filter, set_completed, pkg_filter)
 
     # @timed

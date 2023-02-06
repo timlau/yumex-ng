@@ -138,3 +138,6 @@ class YumexPresenter:
 
     def select_page(self, page: Page):
         self._win.select_page(page)
+
+    def set_window_sesitivity(self, sensitive: bool):
+        self._win.set_sesitivity(sensitive)

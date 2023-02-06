@@ -15,7 +15,7 @@
 
 import re
 
-from gi.repository import Gtk, Adw, Gio, GLib
+from gi.repository import Gtk, Adw, Gio
 
 from yumex.backend.daemon import TransactionResult, YumexRootBackend
 from yumex.backend.dnf import YumexPackage
@@ -156,25 +156,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         return toast
 
     def load_packages(self, pkg_filter: PackageFilter):
-        """Trigger the activation of a given pkg filter"""
-        GLib.idle_add(self._load_packages, pkg_filter)
-
-    def _load_packages(self, pkg_filter: PackageFilter):
-        """Helper for Trigger the activation of a given pkg filter
-        Using GLib.idle_add
-        """
+        """Helper for Trigger the activation of a given pkg filter"""
         self.package_settings.set_active_filter(pkg_filter)
-        return False
 
-    def create_label_center(self, label):
-
-        lbl = Gtk.Label()
-        lbl.props.hexpand = True
-        lbl.props.vexpand = True
-        lbl.props.label = label
-        lbl.add_css_class("page_label")
-        lbl.add_css_class("accent")
-        return lbl
+    def set_sesitivity(self, sensitive: bool):
+        """Set the sesitivity of the package view"""
+        self.main_view.set_sensitive(sensitive)
 
     def _do_transaction(self, queued):
         """execute the transaction with the root backend."""
@@ -261,7 +248,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        print(1 / 0)
+        pass
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
@@ -273,10 +260,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if done:  # transaction completed without issues
                 # reset everything
                 self.package_view.reset()
-                self.package_settings.unselect_all()
                 self.search_bar.set_search_mode(False)
-                self.package_settings.set_active_filter("installed")
-                self.show_message(_("Transaction completted succesfully"))
+                self.show_message(_("Transaction completted succesfully"), timeout=3)
+                self.load_packages(PackageFilter.INSTALLED)
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
@@ -421,6 +407,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         entry = self.search_bar.get_child()
         entry.set_text("")
         pkg_filter = PackageFilter(pkg_filter)
+        self.sidebar.set_reveal_flap(False)
+        self.search_bar.set_search_mode(False)
+        self.search_entry.set_text("")
         self.package_view.get_packages(pkg_filter)
 
     def on_info_type_changed(self, widget, info_type: str):

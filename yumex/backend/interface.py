@@ -103,3 +103,6 @@ class Presenter(Protocol):
 
     def select_page(self, page: Page) -> None:
         ...
+
+    def set_window_sesitivity(self, sensitive: bool):
+        ...
