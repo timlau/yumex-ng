@@ -166,22 +166,26 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_search_next_match(self, widget) -> None:
-        log("search next match")
         if self.found_ndx < len(self.found_ids) - 1:
             self.found_ndx += 1
-            fp_id = self.found_ids[self.found_ndx]
-            remote_name = self.remote.get_selected_item().get_string()
-            self._set_icon(fp_id, remote_name)
-            self.current_id.set_title(fp_id)
-            self._set_selected_num()
+        else:
+            self.found_ndx = 0
+        log(f"search next match : {self.found_ndx}")
+        fp_id = self.found_ids[self.found_ndx]
+        remote_name = self.remote.get_selected_item().get_string()
+        self._set_icon(fp_id, remote_name)
+        self.current_id.set_title(fp_id)
+        self._set_selected_num()
 
     @Gtk.Template.Callback()
     def on_search_previous_match(self, widget) -> None:
-        log("search next match")
         if self.found_ndx > 0:
             self.found_ndx -= 1
-            fp_id = self.found_ids[self.found_ndx]
-            remote_name = self.remote.get_selected_item().get_string()
-            self._set_icon(fp_id, remote_name)
-            self.current_id.set_title(fp_id)
-            self._set_selected_num()
+        else:
+            self.found_ndx = len(self.found_ids) - 1
+        log(f"search previous match : {self.found_ndx}")
+        fp_id = self.found_ids[self.found_ndx]
+        remote_name = self.remote.get_selected_item().get_string()
+        self._set_icon(fp_id, remote_name)
+        self.current_id.set_title(fp_id)
+        self._set_selected_num()
