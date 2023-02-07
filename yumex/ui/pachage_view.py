@@ -80,10 +80,11 @@ class YumexPackageView(Gtk.ColumnView):
 
         def set_completed(pkgs: list, error=False):
             self.presenter.set_window_sesitivity(True)
-            self.presenter.progress.hide()
             if not error:
                 self.add_packages_to_store(pkgs)
+                self.presenter.progress.hide()
             else:
+                self.presenter.progress.hide()
                 error_dialog(self.get_root(), "Error in loading packages", str(error))
             # refresh the package description for the selected package in the view
             self.on_selection_changed(self.selection, 0, 0)
