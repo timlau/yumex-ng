@@ -66,7 +66,6 @@ template YumexPackageSettings : Gtk.Box {
         Adw.ComboRow sort_by {
             model: sort_attr;
             styles ["sorting-row"]
-            activated => on_sorting_activated();
             notify::selected => on_sort_by_selected();
             [prefix]
             Gtk.Image  sort_icon {

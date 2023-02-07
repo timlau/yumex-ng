@@ -68,10 +68,6 @@ class YumexPackageSettings(Gtk.Box):
         selected = self.sort_by.get_selected()
         return list(SortType)[selected]
 
-    @Gtk.Template.Callback()
-    def on_sorting_activated(self, widget):
-        log(f"Sorting activated: {widget}")
-
     def on_package_filter_activated(self, button):
         pkg_filter: PackageFilter = PackageFilter(button.get_name())
         self.current_pkg_filter = pkg_filter
@@ -83,14 +79,17 @@ class YumexPackageSettings(Gtk.Box):
     @Gtk.Template.Callback()
     def on_info_type_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        log(f"package info changed {self.info_type.get_selected()}")
-        self.emit("info-type-changed", self.get_info_type())
+        info_type = self.get_info_type()
+        log(f"SIGNAL: emit info-type-changed: {info_type}")
+        self.emit("info-type-changed", info_type)
 
     @Gtk.Template.Callback()
     def on_sort_by_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
         log(f"sort_by changed {self.sort_by.get_selected()}")
-        self.emit("sort-attr-changed", self.get_sort_attr())
+        sort_attr = self.get_sort_attr()
+        log(f"SIGNAL: emit sort-arre-changed: {sort_attr}")
+        self.emit("sort-attr-changed", sort_attr)
 
     @GObject.Signal(arg_types=(str,))
     def package_filter_changed(self, pkg_filter: PackageFilter):
