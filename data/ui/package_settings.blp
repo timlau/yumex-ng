@@ -69,6 +69,7 @@ template YumexPackageSettings : Gtk.Box {
             notify::selected => on_sort_by_selected();
             [prefix]
             Gtk.Image  sort_icon {
+                icon-name: "view-sort-descending-rtl-symbolic";
                 tooltip-text: _("Select what attribute to sort by");
 
             }
@@ -79,6 +80,7 @@ template YumexPackageSettings : Gtk.Box {
             notify::selected => on_info_type_selected();
             [prefix]
             Gtk.Image  show_icon {
+                icon-name: "diagnostics-symbolic";
                 tooltip-text: _("Select what package information to show");
 
             }
