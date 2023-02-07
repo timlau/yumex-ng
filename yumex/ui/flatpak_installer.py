@@ -55,18 +55,15 @@ class YumexFlatpakInstaller(Adw.Window):
         self._loop.run()
 
     def setup_location(self):
+        """set the location bases on the settings"""
         fp_location = FlatpakLocation(self.settings.get_string("fp-location"))
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
 
     def read_clipboard(self):
-        """If the the clipboard contains
-
-        flatpak install flathub <some id>
-
-        then use these values
-        """
+        """If the the clipboard contains : flatpak install flathub <some id>
+        then use these values"""
 
         def callback(obj, res, *args):
             try:
@@ -95,6 +92,7 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_ok_clicked(self, *args):
+        """Ok button clicked"""
         self._loop.quit()
         log("flafpak_installer Ok clicked")
         self.confirm = True
@@ -102,13 +100,14 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_cancel_clicked(self, *args):
+        """Cancel buttton clicked"""
         self._loop.quit()
         log("flafpak_installer cancel clicked")
         self.close()
 
     @Gtk.Template.Callback()
     def on_location_selected(self, widget, data):
-        """capture the Notify for the selected property is changed"""
+        """hander for location is changed"""
         location = FlatpakLocation(self.location.get_selected_item().get_string())
         remotes = self.backend.get_remotes(location=location)
         if remotes:
@@ -120,6 +119,7 @@ class YumexFlatpakInstaller(Adw.Window):
             self._clear()
 
     def _set_icon(self, id: str, remote_name: str):
+        """set the flatpak icon in the ui of current found flatpak"""
         if not remote_name:
             self.icon.set_from_icon_name("flatpak-symbolic")
             return
@@ -138,6 +138,7 @@ class YumexFlatpakInstaller(Adw.Window):
         self.found_num.set_label(label)
 
     def _clear(self) -> None:
+        """clear all search related, used when nothing is found"""
         self.found_ids = []
         self.found_ndx = 0
         self.current_id.set_title("")
@@ -146,6 +147,7 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_search(self, widget):
+        """typeahead search handler"""
         key = widget.get_text()
         selected = self.remote.get_selected_item()
         if key == "" or not selected or len(key) < 3:
@@ -166,6 +168,7 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_search_next_match(self, widget) -> None:
+        """show the next search result in ui"""
         if self.found_ndx < len(self.found_ids) - 1:
             self.found_ndx += 1
         else:
@@ -179,6 +182,7 @@ class YumexFlatpakInstaller(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_search_previous_match(self, widget) -> None:
+        """show the previous search result in ui"""
         if self.found_ndx > 0:
             self.found_ndx -= 1
         else:
