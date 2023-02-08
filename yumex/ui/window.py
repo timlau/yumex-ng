@@ -134,14 +134,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.update_info_box.append(self.package_info)
 
     def set_saved_setting(self):
-        # set columns width from settings and calc clamp width
-        clamp_width = 100
+        # set columns width from settings
         for setting in PACKAGE_COLUMNS:
             width = self.settings.get_int(f"col-{setting}-width")
             getattr(self.package_view, f"{setting}s").set_fixed_width(width)
-            clamp_width += width
+        # set the package page clamp width
+        clamp_width = self.settings.get_int("window-width")
         self.clamp_packages.set_maximum_size(clamp_width)
-        self.clamp_packages.set_tightening_threshold(clamp_width)
+        self.clamp_packages.set_tightening_threshold(clamp_width - 100)
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
 
     def on_queue_refresh(self, *args):
