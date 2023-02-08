@@ -62,6 +62,14 @@ class YumexApplication(Adw.Application):
                 fullscreened=self.settings.get_boolean("window-fullscreen"),
                 maximized=self.settings.get_boolean("window-maximized"),
             )
+            window_height = self.settings.get_int("window-height")
+            window_width = self.settings.get_int("window-width")
+            fullscreened = self.settings.get_boolean("window-fullscreen")
+            maximized = self.settings.get_boolean("window-maximized")
+            log(f"window-height: {window_height}")
+            log(f"window-width: {window_width}")
+            log(f"fullscreened: {fullscreened}")
+            log(f"maximized: {maximized}")
 
         # create app actions
         self.create_action("about", self.on_about)
