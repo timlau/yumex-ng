@@ -175,7 +175,7 @@ class YumexRootBackend(Client):
                 )
         except DaemonError as e:
             return TransactionResult(
-                False, error=_("Exception in Dnf Backend\n") + e.message
+                False, error=_("Exception in Dnf Backend\n") + str(e)
             )
         except BaseException:  # Other exception should also unlock the backend daemon
             raise
@@ -197,7 +197,7 @@ class YumexRootBackend(Client):
                 return TransactionResult(False, error="\n".join(msgs))
         except DaemonError as e:
             return TransactionResult(
-                False, error=_("Exception in Dnf Backend : ") + str(e.message)
+                False, error=_("Exception in Dnf Backend : ") + str(e)
             )
 
     @staticmethod
