@@ -19,7 +19,7 @@ from yumex.constants import ROOTDIR
 from yumex.utils.storage import PackageStorage
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
-from yumex.utils import RunAsync, timed
+from yumex.utils import RunAsync, log
 from yumex.utils.enums import PackageState, Page
 
 
@@ -49,20 +49,23 @@ class YumexQueueView(Gtk.ListView):
     def add_package(self, pkg):
         self.add_packages([pkg])
 
-    @timed
     def add_packages(self, pkgs):
         """Add package to queue"""
+        log(f"QueueView.add_packages: {len(pkgs)}")
         for pkg in pkgs:
             if pkg not in self.storage:
+                pkg.queue_action = True
+                pkg.is_dep = False
+                pkg.queued = True
                 self.storage.insert_sorted(pkg, self.sort_by_state)
         RunAsync(self.presenter.depsolve, self.add_deps_to_queue, self.storage)
 
     def remove_package(self, pkg):
         self.remove_packages([pkg])
 
-    @timed
     def remove_packages(self, pkgs):
         """Remove package from queue"""
+        log(f"QueueView.remove_packages: {len(pkgs)}")
         to_keep = []
         for store_pkg in self.storage:
             # check if this package should be kept in the queue
@@ -81,11 +84,15 @@ class YumexQueueView(Gtk.ListView):
             self.add_deps_to_queue([])
 
     def add_deps_to_queue(self, deps, error=None):
+        if deps is None:
+            log("QueueView.add_deps_to_queue: deps = None")
+            return
+        log(f"QueueView.add_deps_to_queue: deps found : {len(deps)}")
         for dep in self.presenter.get_packages(deps):
             if dep not in self.storage:  # new dep not in queue
-                dep.queued = True
                 dep.is_dep = True
                 dep.queue_action = True
+                dep.queued = True
             self.storage.insert_sorted(dep, self.sort_by_state)
         self.selection.set_model(self.storage.get_storage())
         # send refresh signal, to refresh the package view

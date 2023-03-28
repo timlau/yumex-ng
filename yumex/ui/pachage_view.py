@@ -54,6 +54,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.storage = PackageStorage()
         self.queue_view = qview
         self.sort_attr = SortType.NAME
+        self.batch_selection = False
         self.setup()
 
     def setup(self):
@@ -61,6 +62,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.store = self.storage.clear()
         self.selection.set_model(self.store)
         self.last_position = -1
+        self.last_selected = None
         self.column_num = 0
 
     def reset(self):
@@ -146,6 +148,7 @@ class YumexPackageView(Gtk.ColumnView):
         widget.set_css_classes(current_styles)
 
     def select_all(self, state: bool):
+        self.batch_selection = True
         to_add = []
         to_delete = []
         for pkg in self.store:
@@ -159,6 +162,7 @@ class YumexPackageView(Gtk.ColumnView):
         if to_delete:
             self.queue_view.remove_packages(to_delete)
         self.refresh()
+        self.batch_selection = False
         return to_add, to_delete
 
     def _set_queued(self, pkg, is_queued: bool, to_list: list):
@@ -193,20 +197,30 @@ class YumexPackageView(Gtk.ColumnView):
         if pkg.queue_action:  # package is being processed by queue (add/remove)
             pkg.queue_action = False
         else:  # the user has clicked on the widget
+            # log(
+            #     f"PackageView.on_queued_toggled : {pkg} dep: {pkg.is_dep} qa: {pkg.queue_action} bs: {self.batch_selection}"  # noqa
+            # )
             pkg.queued = widget.get_active()
-            if pkg.queued:
-                self.queue_view.add_package(pkg)
-            else:
-                self.queue_view.remove_package(pkg)
+            if not self.batch_selection:
+                if pkg.queued:
+                    self.queue_view.add_package(pkg)
+                else:
+                    self.queue_view.remove_package(pkg)
 
     @Gtk.Template.Callback()
     def on_selection_changed(self, widget, position, n_items):
+        # dont send selection changed on batch changes, like select all
+        if self.batch_selection:
+            return
         if len(self.store) > 0:
             pkg: YumexPackage = self.selection.get_selected_item()
-            log(f"SIGNAL: emit selection_changed: {pkg}")
-            self.emit("selection-changed", pkg)
+            if self.last_selected is None or pkg != self.last_selected:
+                log(f"SIGNAL: emit selection_changed: {pkg}")
+                self.emit("selection-changed", pkg)
+                self.last_selected = pkg
         else:
             self.emit("selection-changed", None)
+            self.last_selected = None
 
     # --------------------- Factory setup methods --------------------------------
 
