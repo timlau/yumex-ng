@@ -418,8 +418,10 @@ class DnfBase(dnf.Base):
                                 action=PackageAction.UPGRADE,
                             )
                         )
+                    case dnf.transaction.PKG_UPGRADED, dnf.transaction.PKG_OBSOLETED, dnf.transaction.PKG_DOWNGRADED:  # noqa
+                        pass
                     case _:
-                        log(" DNF4: unhandled transaction found: {tsi.action}")
+                        log(f" DNF4: unhandled transaction found: {tsi.action} ")
         if replaces:
             log(f" DNF4: replaces found {replaces}")
         return tx_list
@@ -509,8 +511,8 @@ class Backend(DnfBase):
                     log(f" DNF4: adding as dep : {pkg} ")
                     pkg.is_dep = True
                     deps.append(pkg)
-                else:
-                    log(f" DNF4: skipping already in transaction : {pkg} ")
+                # else:
+                #     log(f" DNF4: skipping already in transaction : {pkg} ")
 
         except dnf.exceptions.DepsolveError as e:
             log(f" DNF4: depsolve failed : {str(e)}")
