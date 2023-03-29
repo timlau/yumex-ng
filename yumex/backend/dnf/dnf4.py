@@ -461,7 +461,7 @@ class Backend(DnfBase):
         if dnf_pkg:
             match attr:
                 case InfoType.DESCRIPTION:
-                    return pkg.description
+                    return dnf_pkg.description
                 case InfoType.FILES:
                     return dnf_pkg.files
                 case InfoType.UPDATE_INFO:
