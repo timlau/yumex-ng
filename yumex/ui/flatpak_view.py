@@ -99,6 +99,9 @@ class YumexFlatpakView(Gtk.ListView):
             remote = flatpak_installer.remote.get_selected_item().get_string()
             location = flatpak_installer.location.get_selected_item().get_string()
             ref = self.backend.find_ref(remote, fp_id)
+            log(
+                f"FlatPakView.install : remote: {remote} location: {location} ref: {ref}"
+            )
             if ref:
                 if flatpak_installer.confirm:
                     self.do_transaction(self.backend.do_install, ref, remote, location)

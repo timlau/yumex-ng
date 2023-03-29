@@ -113,11 +113,11 @@ class FlatpakBackend:
         return FlatpakPackage(ref, location=location, is_update=is_update)
 
     def _build_transaction(
-        self, pkgs: list[FlatpakPackage], system: bool, action, **kwargs
+        self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs
     ) -> list[tuple[str, FlatpakAction, str]]:
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
-        transaction = FlatpakTransaction(self, system=system, first_run=True)
+        transaction = FlatpakTransaction(self, location=location, first_run=True)
         transaction.populate(pkgs, action, source)
         try:
             transaction.run()
@@ -131,11 +131,11 @@ class FlatpakBackend:
             return []
 
     def _execute_transaction(
-        self, pkgs: list[FlatpakPackage], system: bool, action, **kwargs
+        self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs
     ):
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
-        transaction = FlatpakTransaction(self, system=system, first_run=False)
+        transaction = FlatpakTransaction(self, location=location, first_run=False)
         transaction.populate(pkgs, action, source)
         transaction.run()
 
@@ -152,23 +152,35 @@ class FlatpakBackend:
             if not execute:  # build the trasaction and return refs
                 if user_pkgs:
                     refs = self._build_transaction(
-                        user_pkgs, system=False, action=action, **kwargs
+                        user_pkgs,
+                        location=FlatpakLocation.USER,
+                        action=action,
+                        **kwargs,
                     )
                     refs_total.extend(refs)
                 if system_pkgs:
                     refs = self._build_transaction(
-                        system_pkgs, system=True, action=action, **kwargs
+                        system_pkgs,
+                        location=FlatpakLocation.SYSTEM,
+                        action=action,
+                        **kwargs,
                     )
                     refs_total.extend(refs)
                 return refs_total
             else:  # execute the transaction
                 if user_pkgs:
                     self._execute_transaction(
-                        user_pkgs, system=False, action=action, **kwargs
+                        user_pkgs,
+                        location=FlatpakLocation.USER,
+                        action=action,
+                        **kwargs,
                     )
                 if system_pkgs:
                     self._execute_transaction(
-                        system_pkgs, system=True, action=action, **kwargs
+                        system_pkgs,
+                        location=FlatpakLocation.SYSTEM,
+                        action=action,
+                        **kwargs,
                     )
                 return True
 

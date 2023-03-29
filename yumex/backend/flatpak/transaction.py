@@ -34,12 +34,12 @@ class FlatPakNoOperations(Exception):
 
 
 class FlatpakTransaction:
-    def __init__(self, backend, system: FlatpakLocation, first_run: bool = False):
+    def __init__(self, backend, location: FlatpakLocation, first_run: bool = False):
         self.win = backend.win
         self.backend = backend
         self.first_run = first_run
         self._current_result = None
-        if system is FlatpakLocation.SYSTEM:
+        if location is FlatpakLocation.SYSTEM:
             log(" FlatpakTransaction: setup system transaction")
             self.transaction = Flatpak.Transaction.new_for_installation(
                 self.backend.system
