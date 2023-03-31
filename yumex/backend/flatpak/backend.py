@@ -124,7 +124,9 @@ class FlatpakBackend:
             return []
         except FlatPakFirstRun:
             result: list = transaction._current_result
-            refs = [(oper.get_ref(), action, oper.get_remote()) for oper in result]
+            refs = [
+                (oper.get_ref(), action, oper.get_remote(), location) for oper in result
+            ]
             return refs
         except FlatPakNoOperations:
             log("FLATPAK : no operations")

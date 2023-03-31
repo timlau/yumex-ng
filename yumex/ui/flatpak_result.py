@@ -17,15 +17,18 @@ from gi.repository import Gtk, Adw, GLib, GObject, Gio
 
 from yumex.constants import ROOTDIR
 from yumex.utils import log
-from yumex.utils.enums import FlatpakAction
+from yumex.utils.enums import FlatpakAction, FlatpakLocation
 
 
 class ResultElem(GObject.GObject):
-    def __init__(self, ref: str, action: FlatpakAction, source: str) -> None:
+    def __init__(
+        self, ref: str, action: FlatpakAction, source: str, location: FlatpakLocation
+    ) -> None:
         super().__init__()
         self.ref: str = ref
         self.action: FlatpakAction = action
         self.source: str = source
+        self.location: FlatpakLocation = location
 
     def __str__(self) -> str:
         match self.action:
@@ -35,7 +38,7 @@ class ResultElem(GObject.GObject):
                 action_str = _("Unnstalling")
             case _:
                 action_str = _("Updateing")
-        return f"{action_str} <b>{self.ref}</b> <small>({self.source})</small>"
+        return f"{action_str} : <i>{self.location.upper()}</i>  - <b>{self.ref}</b> <small>({self.source})</small> "  # noqa
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_result.ui")
@@ -58,10 +61,11 @@ class YumexFlatpakResult(Adw.Window):
         self._loop.run()
 
     def populate(self, results: list[str, FlatpakAction, str]):
-        for (ref, action, source) in results:
-            elem = ResultElem(ref, action, source)
+        for (ref, action, source, location) in results:
+            elem = ResultElem(ref, action, source, location)
             log(f" --> Adding element {elem}")
             self.store.append(elem)
+        self.store.sort(lambda a, b: a.location + a.ref > b.location + b.ref)
 
     @Gtk.Template.Callback()
     def on_confirm_clicked(self, button):
