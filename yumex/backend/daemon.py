@@ -43,6 +43,8 @@ class TransactionResult:
     completed: bool
     data: dict = field(default_factory=dict)
     error: str = ""
+    key_install: bool = False
+    key_values: tuple = None
 
 
 class YumexRootBackend(Client):
@@ -51,6 +53,7 @@ class YumexRootBackend(Client):
         self.presenter = presenter
         self.dnl_frac = 0.0
         self._locked = False
+        self.gpg_confirm = None
 
     @property
     def progress(self) -> YumexProgress:
@@ -64,6 +67,7 @@ class YumexRootBackend(Client):
     def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
         if self._locked:
             self.unlock()
+        self.Exit()
 
     def on_TransactionEvent(self, event, data) -> None:
         # Do your stuff here
@@ -111,7 +115,9 @@ class YumexRootBackend(Client):
 
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp) -> None:
         # TODO: Handle GPG key inport verification
-        pass
+        values = (pkg_id, userid, hexkeyid, keyurl, timestamp)
+        self.gpg_confirm = values
+        log(f"received signal : GPGImport {repr(values)}")
 
     def on_DownloadStart(self, num_files, num_bytes) -> None:
         """Starting a new parallel download batch"""
@@ -174,6 +180,7 @@ class YumexRootBackend(Client):
                     error=_("Couldn't build transaction\n") + "\n".join(result.data),
                 )
         except DaemonError as e:
+            log(" --> RootBackendError : " + str(e))
             return TransactionResult(
                 False, error=_("Exception in Dnf Backend\n") + str(e)
             )
@@ -193,12 +200,26 @@ class YumexRootBackend(Client):
             rc, msgs = self.RunTransaction()
             if rc == 0:
                 return TransactionResult(True, data={"msgs": msgs})
+            elif rc == 1:  # gpg keys need to be confirmed
+                return TransactionResult(
+                    False, key_install=True, key_values=self.gpg_confirm
+                )
             else:
                 return TransactionResult(False, error="\n".join(msgs))
         except DaemonError as e:
             return TransactionResult(
                 False, error=_("Exception in Dnf Backend : ") + str(e)
             )
+
+    def do_gpg_import(self):
+        (
+            pkg_id,
+            userid,
+            hexkeyid,
+            keyurl,
+            timestamp,
+        ) = self.gpg_confirm
+        self.ConfirmGPGImport(hexkeyid, True)
 
     @staticmethod
     def id_to_nevra(id) -> tuple[str, str]:

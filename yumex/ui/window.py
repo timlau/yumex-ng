@@ -21,6 +21,7 @@ from yumex.backend.daemon import TransactionResult, YumexRootBackend
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
+from yumex.ui.dialogs import GPGDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.pachage_view import YumexPackageView
@@ -153,6 +154,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         toast = Adw.Toast(title=title)
         toast.set_timeout(timeout)
         self.toast_overlay.add_toast(toast)
+        log(f"show_message : {title}")
         return toast
 
     def load_packages(self, pkg_filter: PackageFilter):
@@ -179,11 +181,29 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 transaction_result.show()
                 if transaction_result.confirm:
                     # run the transaction
-                    self.progress.show()
-                    self.progress.set_title(_("Running Transaction"))
-                    result: TransactionResult = root_backend.run_transaction()
-                    if result.completed:
-                        return True
+                    while True:
+                        self.progress.show()
+                        self.progress.set_title(_("Running Transaction"))
+                        result: TransactionResult = root_backend.run_transaction()
+                        if result.completed:
+                            return True
+                        if result.key_install and result.key_values:
+                            self.progress.hide()
+                            dialog = GPGDialog(self, result.key_values)
+                            dialog.set_transient_for(self)
+                            dialog.show()
+                            log(f"Install key: {dialog.install_key}")
+                            if dialog.install_key:
+                                log("Re-run transaction and import GPG keys")
+                                # tell the backend to import this gpg key in next run
+                                root_backend.do_gpg_import()
+                                # rebuild the transaction again, before re-run
+                                root_backend.build_transaction(queued)
+                                continue
+                            else:
+                                return True
+                        else:
+                            break
             if result.error:
                 self.show_message(result.error)
             return False
@@ -248,6 +268,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
+        values = (
+            "rpmfusion-nonfree-release,0,38,1,noarch,rpmfusion-nonfree",
+            "RPM Fusion nonfree repository for Fedora (2020) <rpmfusion-buildsys@lists.rpmfusion.org>",
+            "94843C65",
+            "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-38",
+            1571667044,
+        )
+        dialog = GPGDialog(self, values)
+        dialog.set_transient_for(self)
+        dialog.show()
+        if dialog.install_key:
+            log("Re-run transaction and import GPG keys")
         pass
 
     def on_apply_actions_clicked(self, *_args):
