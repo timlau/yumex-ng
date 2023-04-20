@@ -1,7 +1,7 @@
 # Create a new release check list
 
 - update the code
-  - bump the version number in .\build.meson
+  - bump the version number in .\meson.build
   - bump the version number in .\yumex.spec
   - add changelog entry in .\yumex.spec
   - add new release in data/dk.yumex.Yumex.metainfo.xml.in.in

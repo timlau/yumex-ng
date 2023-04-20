@@ -37,6 +37,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="4.9.4" date="2023-04-20" type="devel"><description>
+        <p>Yum Extender 4.9.4 add many fixes and small improvments </p>
+        <ul>
+          <li>Support for importing gpg keys from repositories</li>
+          <li>fix installing and updating flatpaks at system location</li>
+          <li>lot of code fixes and optimization</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.9.3" date="2023-01-21" type="devel"><description>
         <p>Yum Extender 4.9.3 improve the flatpak installer </p>
         <ul>
