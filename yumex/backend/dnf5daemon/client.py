@@ -27,18 +27,6 @@ def gv_list(var: list[str]) -> GLib.Variant:
     return GLib.Variant("as", var)
 
 
-def gv_str(var: str) -> GLib.Variant:
-    return GLib.Variant("s", var)
-
-
-def gv_bool(var: bool) -> GLib.Variant:
-    return GLib.Variant("b", var)
-
-
-def gv_int(var: int) -> GLib.Variant:
-    return GLib.Variant("i", var)
-
-
 # async call handler class
 class AsyncDbusCaller:
     def __init__(self) -> None:
@@ -89,63 +77,3 @@ class Dnf5DbusClient:
         dbus method name
         """
         return partial(self.async_dbus.call, getattr(self.session, method))
-
-    def package_list(self, *args, **kwargs) -> list[list[str]]:
-        """call the org.rpm.dnf.v0.rpm.Repo list method
-
-        *args is package patterns to match
-        **kwargs can contain other options like package_attrs, repo or scope
-
-        """
-        options = {}
-        options["patterns"] = gv_list(args)
-        options["package_attrs"] = gv_list(kwargs.pop("package_attrs", ["nevra"]))
-        options["with_src"] = gv_bool(False)
-        options["latest-limit"] = gv_int(1)
-        if "repo" in kwargs:
-            options["repo"] = gv_list(kwargs.pop("repo"))
-        if "scope" in kwargs:
-            options["scope"] = gv_str(kwargs.pop("scope"))
-        # get and async partial function
-        get_list = self._async_method("list")
-        result = get_list(options)
-        # [{
-        #   "id": GLib.Variant(),
-        #   "nevra": GLib.Variant("s", nevra),
-        #   "repo": GLib.Variant("s", repo),
-        #   },
-        #   {....},
-        # ]
-        return [
-            [value.get_string() for value in list(elem.values())[1:]] for elem in result
-        ]
-
-
-# dnf5daemon-server is needed to work
-if __name__ == "__main__":
-    with Dnf5DbusClient() as client:
-        # print(client.session.Introspect())
-        key = "0xFFFF"
-        print(f"Searching for {key}")
-        pkgs = client.package_list(
-            key,
-            package_attrs=["nevra", "repo_id"],
-            repo=["fedora", "updates"],
-        )
-        print(f"Found : {len(pkgs)}")
-        for nevra, repo in pkgs:
-            print(f"FOUND: {nevra:40} repo: {repo}")
-            print("removeing")
-            to_remove = gv_list([nevra])
-            client.session.remove(to_remove, {})
-        if len(pkgs) > 0:
-            try:
-                print("depsolve")
-                res = client.session.resolve({})
-                print(res)
-                print("do transaction")
-                res = client.session.do_transaction({})
-                print(res)
-            except DBusError as e:
-                print(10 * "=" + "> Error calling dnf5daemon :")
-                print(e)
