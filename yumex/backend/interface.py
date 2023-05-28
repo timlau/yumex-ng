@@ -13,7 +13,8 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-from typing import Iterable, Protocol
+from typing import Iterable, Protocol, Self
+from yumex.backend.daemon import TransactionResult
 
 from yumex.utils.types import MainWindow
 from yumex.backend.dnf import YumexPackage
@@ -51,6 +52,22 @@ class PackageBackend(Protocol):
         ...
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
+        ...
+
+
+class PackageRootBackend(Protocol):
+    """Protocol class for a package root backend"""
+
+    def __enter__(self) -> Self:
+        ...
+
+    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
+        ...
+
+    def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
+        ...
+
+    def run_transaction(self) -> TransactionResult:
         ...
 
 

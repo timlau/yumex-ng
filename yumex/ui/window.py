@@ -169,7 +169,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
-        # with YumexRootBackend(self.presenter) as root_backend:
         with self.presenter.package_root_backend as root_backend:
             # build the transaction
             result: TransactionResult = root_backend.build_transaction(queued)

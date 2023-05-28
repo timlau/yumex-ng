@@ -1,4 +1,4 @@
-from yumex.backend.interface import Presenter, PackageBackend
+from yumex.backend.interface import PackageRootBackend, Presenter, PackageBackend
 from yumex.utils.enums import PackageBackendType
 
 
@@ -33,12 +33,12 @@ class DnfBackendFactory:
 
         return Dnf5Backend(self.presenter)
 
-    def get_dnf4_root_backend(self):
+    def get_dnf4_root_backend(self) -> PackageRootBackend:
         from yumex.backend.daemon import YumexRootBackend
 
         return YumexRootBackend(self.presenter)
 
-    def get_dnf5_root_backend(self):
+    def get_dnf5_root_backend(self) -> PackageRootBackend:
         from yumex.backend.dnf5daemon import YumexRootBackend
 
         return YumexRootBackend(self.presenter)
