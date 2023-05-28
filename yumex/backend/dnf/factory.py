@@ -14,6 +14,13 @@ class DnfBackendFactory:
             case PackageBackendType.DNF5:
                 return self.get_dnf5_backend()
 
+    def get_root_backend(self) -> PackageBackend:
+        match self.type:
+            case PackageBackendType.DNF4:
+                return self.get_dnf4_root_backend()
+            case PackageBackendType.DNF5:
+                return self.get_dnf5_root_backend()
+
     def get_dnf4_backend(self) -> PackageBackend:
         from yumex.backend.dnf.dnf4 import DnfCallback, Backend as Dnf4Backend
 
@@ -25,3 +32,13 @@ class DnfBackendFactory:
         from yumex.backend.dnf.dnf5 import Backend as Dnf5Backend
 
         return Dnf5Backend(self.presenter)
+
+    def get_dnf4_root_backend(self):
+        from yumex.backend.daemon import YumexRootBackend
+
+        return YumexRootBackend(self.presenter)
+
+    def get_dnf5_root_backend(self):
+        from yumex.backend.dnf5daemon import YumexRootBackend
+
+        return YumexRootBackend(self.presenter)

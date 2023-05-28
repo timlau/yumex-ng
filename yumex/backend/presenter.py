@@ -53,6 +53,7 @@ class YumexPresenter:
     def __init__(self, win: MainWindow, factory: BackendFactory = None) -> None:
         self._win: MainWindow = win
         self._backend: PackageBackend = None
+        self._root_backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
         if factory is None:
@@ -67,6 +68,14 @@ class YumexPresenter:
         if not self._backend:
             self._backend: PackageBackend = self.dnf_backend_factory.get_backend()
         return self._backend
+
+    @property
+    def package_root_backend(self) -> PackageBackend:
+        if not self._root_backend:
+            self._root_backend: PackageBackend = (
+                self.dnf_backend_factory.get_root_backend()
+            )
+        return self._root_backend
 
     @property
     def package_cache(self) -> PackageCache:
