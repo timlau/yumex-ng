@@ -68,11 +68,14 @@ class YumexRootBackend:
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
         with Dnf5DbusClient() as client:
+            self.progress.show()
+            self.progress.set_title(_("Building Transaction"))
             log("DNF5_ROOT : building transaction")
             content, rc = self._build_translations(pkgs, client)
             log(f"DNF5_ROOT : build transaction: rc =  {rc}")
             errors = client.session.get_transaction_problems_string()
             log(f"DNF5_ROOT : build transaction: error =  {errors}")
+            self.progress.hide()
             if rc == 0 or rc == 1:
                 return TransactionResult(True, data=self.build_result(content))
             elif rc == 2:
@@ -80,8 +83,12 @@ class YumexRootBackend:
 
     def run_transaction(self) -> TransactionResult:
         with Dnf5DbusClient() as client:
+            self.progress.show()
+            self.progress.set_title(_("Building Transaction"))
             log("DNF5_ROOT : building transaction")
-            content, rc = self._build_translations(self.last_transaction, client)
+            self._build_translations(self.last_transaction, client)
+            self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
             client.session.do_transaction({})
+            self.progress.hide()
             return TransactionResult(True, data=None)
