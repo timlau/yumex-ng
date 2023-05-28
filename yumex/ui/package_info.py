@@ -15,7 +15,7 @@
 
 import hawkey
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw  # type: ignore
 
 from yumex.constants import ROOTDIR
 from yumex.utils.enums import InfoType
