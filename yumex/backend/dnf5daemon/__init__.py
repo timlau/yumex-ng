@@ -47,10 +47,13 @@ class YumexRootBackend:
         for pkg in pkgs:
             match pkg.state:
                 case PackageState.AVAILABLE:
+                    log(f"DNF5_ROOT : adding {pkg.nevra} for install")
                     to_install.append(pkg.nevra)
                 case PackageState.UPDATE:
+                    log(f"DNF5_ROOT : adding {pkg.nevra} for update")
                     to_update.append(pkg.nevra)
                 case PackageState.INSTALLED:
+                    log(f"DNF5_ROOT : adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
         if to_remove:
             client.session.remove(gv_list(to_remove), {})
@@ -65,12 +68,20 @@ class YumexRootBackend:
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
         with Dnf5DbusClient() as client:
+            log("DNF5_ROOT : building transaction")
             content, rc = self._build_translations(pkgs, client)
-            log(f"  dnf5root : build transaction: rc =  {rc}")
-            return TransactionResult(rc == 0, data=self.build_result(content))
+            log(f"DNF5_ROOT : build transaction: rc =  {rc}")
+            errors = client.session.get_transaction_problems_string()
+            log(f"DNF5_ROOT : build transaction: error =  {errors}")
+            if rc == 0 or rc == 1:
+                return TransactionResult(True, data=self.build_result(content))
+            elif rc == 2:
+                return TransactionResult(False, error=errors)
 
     def run_transaction(self) -> TransactionResult:
         with Dnf5DbusClient() as client:
+            log("DNF5_ROOT : building transaction")
             content, rc = self._build_translations(self.last_transaction, client)
+            log("DNF5_ROOT : running transaction")
             client.session.do_transaction({})
             return TransactionResult(True, data=None)
