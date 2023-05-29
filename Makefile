@@ -96,7 +96,7 @@ test-copr:
 
 test-copr-dnf5:
 	@$(MAKE) test-release-dnf5
-	copr-cli build yumex-ng -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-rawhide-i386 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 # Make a local build and run it
 localbuild:
