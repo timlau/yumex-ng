@@ -5,7 +5,7 @@ from typing import Self, Any
 from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
 from dasbus.loop import EventLoop
-from dasbus.error import DBusError
+from dasbus.error import DBusError  # noqa
 from gi.repository import GLib  # type: ignore
 
 
@@ -77,3 +77,11 @@ class Dnf5DbusClient:
         dbus method name
         """
         return partial(self.async_dbus.call, getattr(self.session, method))
+
+    def resolve(self, *args):
+        resolve = self._async_method("resolve")
+        return resolve(*args)
+
+    def do_transaction(self, *args):
+        do_transaction = self._async_method("do_transaction")
+        return do_transaction(*args)
