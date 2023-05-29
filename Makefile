@@ -32,7 +32,7 @@ archive:
 # build local rpms and start a copr build
 copr-release:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ts ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
-	@copr-cli build yumex-ng $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
+	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # create a release
 # commit, tag, push, build local rpm and start a copr build
