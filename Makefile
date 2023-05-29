@@ -110,8 +110,7 @@ inst-build-tools:
 
 # install packages needed for running with the dnf5 backend
 inst-deps-dnf5:
-	sudo dnf copr enable rpmsoftwaremanagement/dnf5-unstable
-	sudo dnf install dnf5 dnf5-plugins python3-libdnf5
+	sudo dnf python3-libdnf5 dnf5daemon-server
 
 # install packages needed running and building
 inst-deps:

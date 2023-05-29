@@ -25,16 +25,21 @@ BuildRequires: pkgconfig(libadwaita-1)
 BuildRequires: pkgconfig(pygobject-3.0)
 
 
-Requires: python3-dnfdaemon
 Requires: python3-gobject
-Requires: python3-dnf
 Requires: libadwaita
 Requires: gtk4
 Requires: flatpak-libs
 
-# support for dnf5 backend
+# dnf4 requirements
+%if "%{dnf_backend}" == "DNF4"
+Requires: python3-dnfdaemon
+Requires: python3-dnf
+%endif
+
+# dnf5 requirements
 %if "%{dnf_backend}" == "DNF5"
 Requires: python3-libdnf5
+Requires: dnf5daemon-server
 %endif
 
 Obsoletes: yumex-dnf <= 4.5.1
