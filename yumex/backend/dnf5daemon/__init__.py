@@ -14,6 +14,9 @@ class YumexRootBackend:
         super().__init__()
         self.presenter = presenter
         self.last_transaction = None
+        self._downloads = {}
+        self._download_size = 0
+        self._download_done = 0
 
     @property
     def progress(self) -> YumexProgress:
@@ -60,16 +63,23 @@ class YumexRootBackend:
         if to_install:
             client.session.install(gv_list(to_install), {})
         if to_update:
-            client.session.update(gv_list(to_update), {})
-        res = client.session.resolve({})
+            client.session.upgrade(gv_list(to_update), {})
+        res = client.resolve({})
         content, rc = res
         return content, rc
+
+    def connect_signals(self, client):
+        client.session.download_add_new.connect(self.on_download_add_new)
+        client.session.download_progress.connect(self.on_download_progress)
+        client.session.download_end.connect(self.on_download_end)
+        client.session.repo_key_import_request.connect(self.on_repo_key_import_request)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
         with Dnf5DbusClient() as client:
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
+            self.connect_signals(client)
             log("DNF5_ROOT : building transaction")
             content, rc = self._build_translations(pkgs, client)
             log(f"DNF5_ROOT : build transaction: rc =  {rc}")
@@ -82,13 +92,47 @@ class YumexRootBackend:
                 return TransactionResult(False, error=errors)
 
     def run_transaction(self) -> TransactionResult:
+        self._downloads = {}
+        self._download_size = 0
+        self._download_done = 0
         with Dnf5DbusClient() as client:
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
+            self.connect_signals(client)
             log("DNF5_ROOT : building transaction")
             self._build_translations(self.last_transaction, client)
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
-            client.session.do_transaction({})
+            client.do_transaction({})
             self.progress.hide()
             return TransactionResult(True, data=None)
+
+    def on_download_add_new(self, session, package_no, name, size):
+        self._downloads[package_no] = (name, size)
+        self._download_size += size
+        log(f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size}")
+        if not self._downloads:
+            self.progress.set_title(_("Download Packages"))
+        self.progress.set_subtitle(_(f"Downloading : {name}"))
+
+    def on_download_progress(self, session, package_no, to_download, downloaded):
+        name, size = self._downloads[package_no]
+        log(
+            f"DNF5_ROOT : Signal : download_progress: {name} ({downloaded}/{to_download})"
+        )
+        self.progress.set_subtitle(_(f"Downloading : {name}"))
+        if self._download_size:
+            fraction = (self._download_done + downloaded) / self._download_size
+            self.progress.set_progress(fraction)
+
+    def on_download_end(self, session, package_no, rc, msg):
+        name, size = self._downloads[package_no]
+        self._download_done += size
+        log(f"DNF5_ROOT : Signal : download_end: {name} rc: {rc} msg: {msg}")
+        if self._download_size:
+            fraction = self._download_done / self._download_size
+            self.progress.set_progress(fraction)
+        # self.progress.set_subtitle("")
+
+    def on_repo_key_import_request(self, *args):
+        log(f"DNF5_ROOT : Signal : repo_key_import_request: {args}")
