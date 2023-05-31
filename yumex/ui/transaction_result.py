@@ -44,6 +44,8 @@ class YumexTransactionResult(Adw.Window):
 
     def populate(self, result_dict):
         for key in result_dict:
+            if key in ["replaced"]:
+                continue
             childen = [
                 ResultElem(result_elem=(name, repo, size))
                 for (name, repo), size in result_dict[key]
@@ -66,6 +68,8 @@ class YumexTransactionResult(Adw.Window):
             case "remove":
                 return _("Packages for deletion")
             case "update":
+                return _("Packages for updating")
+            case "upgrade":
                 return _("Packages for updating")
             case _:
                 return action
