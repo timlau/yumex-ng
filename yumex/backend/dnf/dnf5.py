@@ -237,8 +237,17 @@ class Backend(dnf.Base):
         log(f" DNF5: depsolve completted : {problems}")
         if problems == dnf.GoalProblem_NO_PROBLEM:
             for tspkg in transaction.get_transaction_packages():
+                print(
+                    tspkg.get_package().get_nevra(),
+                    tspkg.get_action(),
+                    dnf.Transaction.Transaction,
+                )
+                action = tspkg.get_action()
                 pkg = create_package(tspkg.get_package())
                 if pkg.nevra not in nevra_dict:
+                    # do not add replaced packages as dependencies
+                    if action == 6:  # TransactionItemAction::REPLACED
+                        break
                     log(f" DNF5: adding as dep : {pkg.nevra} ")
                     pkg.is_dep = True
                     deps.append(pkg)
