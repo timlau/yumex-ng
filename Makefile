@@ -114,7 +114,7 @@ inst-build-tools:
 
 # install packages needed for running with the dnf5 backend
 inst-deps-dnf5:
-	sudo dnf python3-libdnf5 dnf5daemon-server
+	sudo dnf python3-libdnf5 dnf5daemon-server python3-dasbus
 
 # install packages needed running and building
 inst-deps:

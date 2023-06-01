@@ -40,6 +40,7 @@ Requires: python3-dnf
 %if "%{dnf_backend}" == "DNF5"
 Requires: python3-libdnf5
 Requires: dnf5daemon-server
+Requires: python3-dasbus
 %endif
 
 Obsoletes: yumex-dnf <= 4.5.1
