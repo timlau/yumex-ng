@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import Self
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
@@ -9,14 +10,62 @@ from yumex.utils.enums import PackageState
 from .client import Dnf5DbusClient, gv_list
 
 
+@dataclass
+class DownloadPackage:
+    id: str
+    name: str
+    to_download: int
+    downloaded: int = 0
+
+
+@dataclass
+class DownloadQueue:
+    queue: dict[DownloadPackage] = field(default_factory=dict)
+
+    @property
+    def total(self):
+        total = 0
+        for pkg in self.queue.values():
+            total += pkg.to_download
+        return total
+
+    @property
+    def current(self):
+        current = 0
+        for pkg in self.queue.values():
+            current += pkg.downloaded
+        return current
+
+    @property
+    def fraction(self):
+        return float(self.current / self.total)
+
+    @property
+    def is_completted(self):
+        return self.current == self.total
+
+    def add(self, pkg):
+        self.queue[pkg.id] = pkg
+
+    def clear(self):
+        self.queue = {}
+
+    def get(self, id):
+        if id in self.queue:
+            return self.queue[id]
+        else:
+            return None
+
+    def __len__(self):
+        return len(self.queue)
+
+
 class YumexRootBackend:
     def __init__(self, presenter) -> None:
         super().__init__()
         self.presenter = presenter
         self.last_transaction = None
-        self._downloads = {}
-        self._download_size = 0
-        self._download_done = 0
+        self.download_queue = DownloadQueue()
 
     @property
     def progress(self) -> YumexProgress:
@@ -92,9 +141,7 @@ class YumexRootBackend:
                 return TransactionResult(False, error=errors)
 
     def run_transaction(self) -> TransactionResult:
-        self._downloads = {}
-        self._download_size = 0
-        self._download_done = 0
+        self.download_queue.clear()
         with Dnf5DbusClient() as client:
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
@@ -107,32 +154,33 @@ class YumexRootBackend:
             self.progress.hide()
             return TransactionResult(True, data=None)
 
-    def on_download_add_new(self, session, package_no, name, size):
-        self._downloads[package_no] = (name, size)
-        self._download_size += size
+    def on_download_add_new(self, session, package_id, name, size):
+        self.download_queue.add(DownloadPackage(package_id, name, size))
         log(f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size}")
-        if not self._downloads:
+        if len(self.download_queue) == 1:
             self.progress.set_title(_("Download Packages"))
         self.progress.set_subtitle(_(f"Downloading : {name}"))
 
-    def on_download_progress(self, session, package_no, to_download, downloaded):
-        name, size = self._downloads[package_no]
+    def on_download_progress(self, session, package_id, to_download, downloaded):
+        pkg: DownloadPackage = self.download_queue.get(package_id)
+        pkg.downloaded = downloaded
         log(
-            f"DNF5_ROOT : Signal : download_progress: {name} ({downloaded}/{to_download})"
+            f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})"
         )
-        self.progress.set_subtitle(_(f"Downloading : {name}"))
-        if self._download_size:
-            fraction = (self._download_done + downloaded) / self._download_size
-            self.progress.set_progress(fraction)
+        self.progress.set_subtitle(_(f"Downloading : {pkg.name}"))
+        fraction = self.download_queue.fraction
+        self.progress.set_progress(fraction)
 
-    def on_download_end(self, session, package_no, rc, msg):
-        name, size = self._downloads[package_no]
-        self._download_done += size
-        log(f"DNF5_ROOT : Signal : download_end: {name} rc: {rc} msg: {msg}")
-        if self._download_size:
-            fraction = self._download_done / self._download_size
-            self.progress.set_progress(fraction)
-        # self.progress.set_subtitle("")
+    def on_download_end(self, session, package_id, rc, msg):
+        pkg: DownloadPackage = self.download_queue.get(package_id)
+        if rc == 0:
+            pkg.downloaded = pkg.to_download
+        log(f"DNF5_ROOT : Signal : download_end: {pkg.name} rc: {rc} msg: {msg}")
+        fraction = self.download_queue.fraction
+        self.progress.set_progress(fraction)
+        if self.download_queue.is_completted:
+            self.progress.set_progress(1.0)
+            self.progress.set_subtitle(_("Download Completted"))
 
     def on_repo_key_import_request(self, *args):
         log(f"DNF5_ROOT : Signal : repo_key_import_request: {args}")
