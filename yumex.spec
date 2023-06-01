@@ -1,8 +1,9 @@
 %global app_id dk.yumex.Yumex
 %global app_build release
 %global dnf_backend DNF4
+%global app_name yumex
 
-Name:     yumex
+Name:     %{app_name}
 Version:  4.99.4
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
@@ -65,7 +66,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 %install
 %meson_install
 
-%find_lang %name
+%find_lang %{app_name}
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -81,12 +82,12 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %posttrans
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
-%files -f  %{name}.lang
+%files -f  %{app_name}.lang
 %doc README.md
 %license LICENSE
-%{_datadir}/%{name}
-%{_bindir}/%{name}
-%{python3_sitelib}/%{name}/
+%{_datadir}/%{app_name}
+%{_bindir}/%{app_name}
+%{python3_sitelib}/%{app_name}/
 %{_datadir}/applications/%{app_id}.desktop
 %{_datadir}/icons/hicolor/
 %{_metainfodir}/%{app_id}.metainfo.xml

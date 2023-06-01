@@ -1,5 +1,6 @@
 
 APPNAME = yumex
+APPNAME_DNF5 = yumex-dnf5
 DATADIR = /usr/share
 PYTHON = python3
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
@@ -69,6 +70,22 @@ test-release-dnf5:
 	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
 	# Build RPMS
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME}-${NEW_VER}.tar.gz
+	@$(MAKE) test-cleanup
+
+#make a test release with the dnf5 backend
+test-release-yumex-dnf5:
+	@git checkout -b release-test
+	# +1 Minor version and add 0.1-gitYYYYMMDD release
+	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '3 s/DNF4/DNF5/' -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME_DNF5}.spec
+	@git add ${APPNAME_DNF5}.spec
+	@git rm yumex.spec
+	@git commit -a -m "bumped ${APPNAME_DNF5} version ${NEW_VER}-${NEW_REL}"
+	# Make archive
+	@rm -rf ${APPNAME_DNF5}-${NEW_VER}.tar.gz
+	@git archive --format=tar --prefix=$(APPNAME_DNF5)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME_DNF5}-$(NEW_VER).tar.gz
+	# Build RPMS
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME_DNF5}-${NEW_VER}.tar.gz
+	@ rm -d ${APPNAME_DNF5}.spec
 	@$(MAKE) test-cleanup
 
 # make a test release and build rpms
