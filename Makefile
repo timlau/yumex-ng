@@ -35,6 +35,11 @@ copr-release:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ts ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
+# build local rpms and start a copr build
+copr-release-dnf5:
+	@$(MAKE) release-yumex-dnf5
+	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
+
 # create a release
 # commit, tag, push, build local rpm and start a copr build
 release:
@@ -85,6 +90,20 @@ test-release-yumex-dnf5:
 	@git archive --format=tar --prefix=$(APPNAME_DNF5)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME_DNF5}-$(NEW_VER).tar.gz
 	# Build RPMS
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME_DNF5}-${NEW_VER}.tar.gz
+	@ rm -d ${APPNAME_DNF5}.spec
+	@$(MAKE) test-cleanup
+
+release-yumex-dnf5:
+	@git checkout -b release-test
+	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '3 s/DNF4/DNF5/' > ${APPNAME_DNF5}.spec
+	@git add ${APPNAME_DNF5}.spec
+	@git rm yumex.spec
+	@git commit -a -m "bumped ${APPNAME_DNF5} to $(VERSION)"
+	# Make archive
+	@rm -rf ${APPNAME_DNF5}-${VERSION}.tar.gz
+	@git archive --format=tar --prefix=$(APPNAME_DNF5)-$(VERSION)/ HEAD | gzip -9v >${APPNAME_DNF5}-$(VERSION).tar.gz
+	# Build RPMS
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME_DNF5}-${VERSION}.tar.gz
 	@ rm -d ${APPNAME_DNF5}.spec
 	@$(MAKE) test-cleanup
 
