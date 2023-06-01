@@ -1,5 +1,5 @@
 from typing import Self
-from yumex.backend.daemon import TransactionResult
+from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 
 from yumex.ui.progress import YumexProgress

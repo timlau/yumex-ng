@@ -12,3 +12,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2023  Tim Lauridsen
+
+
+from dataclasses import dataclass, field
+
+
+@dataclass
+class TransactionResult:
+    """transaction result object
+    contains a state of the transaction and the the data
+    or an error string is transaction failed
+    """
+
+    completed: bool
+    data: dict = field(default_factory=dict)
+    error: str = ""
+    key_install: bool = False
+    key_values: tuple = None

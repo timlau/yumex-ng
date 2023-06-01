@@ -14,7 +14,7 @@
 # Copyright (C) 2023  Tim Lauridsen
 
 from typing import Iterable, Protocol, Self
-from yumex.backend.daemon import TransactionResult
+from yumex.backend import TransactionResult
 
 from yumex.utils.types import MainWindow
 from yumex.backend.dnf import YumexPackage

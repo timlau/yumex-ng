@@ -21,6 +21,7 @@ from yumex.backend.dnf import YumexPackage
 from yumex.ui.progress import YumexProgress
 from yumex.utils import log
 from yumex.utils.enums import PackageState
+from yumex.backend import TransactionResult
 
 
 @dataclass
@@ -31,20 +32,6 @@ class Result:
 
     completed: bool
     data: list = field(default_factory=list)
-
-
-@dataclass
-class TransactionResult:
-    """transaction result object
-    contains a state of the transaction and the the data
-    or an error string is transaction failed
-    """
-
-    completed: bool
-    data: dict = field(default_factory=dict)
-    error: str = ""
-    key_install: bool = False
-    key_values: tuple = None
 
 
 class YumexRootBackend(Client):

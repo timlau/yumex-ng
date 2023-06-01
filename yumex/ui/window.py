@@ -17,7 +17,7 @@ import re
 
 from gi.repository import Gtk, Adw, Gio  # type: ignore
 
-from yumex.backend.daemon import TransactionResult
+from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
