@@ -156,7 +156,9 @@ class YumexRootBackend:
 
     def on_download_add_new(self, session, package_id, name, size):
         self.download_queue.add(DownloadPackage(package_id, name, size))
-        log(f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size}")
+        log(
+            f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size} id: {package_id}"
+        )
         if len(self.download_queue) == 1:
             self.progress.set_title(_("Download Packages"))
         self.progress.set_subtitle(_(f"Downloading : {name}"))
