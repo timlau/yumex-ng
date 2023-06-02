@@ -52,11 +52,14 @@ release:
 	@$(MAKE) copr-release
 
 # cleanup the test branch used to create the test release
+test-checkout:
+	@git stash
+	@git checkout -b release-test
+
 test-cleanup:
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
-	@echo "Cleanup the git release-test local branch"
-	@git checkout -f
 	@git checkout ${GIT_MASTER}
+	@git stash apply
 	@git branch -D release-test
 
 show-vars:
@@ -64,9 +67,10 @@ show-vars:
 	@echo ${BUMPED_MINOR}
 	@echo ${NEW_VER}-${NEW_REL}
 
+
 #make a test release with the dnf5 backend
 test-release-dnf5:
-	@git checkout -b release-test
+	@$(MAKE) test-checkout
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
 	@cat ${APPNAME}.spec | sed  -e '3 s/DNF4/DNF5/' -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
 	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
@@ -79,7 +83,7 @@ test-release-dnf5:
 
 #make a test release with the dnf5 backend
 test-release-yumex-dnf5:
-	@git checkout -b release-test
+	@$(MAKE) test-checkout
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
 	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '3 s/DNF4/DNF5/' -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME_DNF5}.spec
 	@git add ${APPNAME_DNF5}.spec
@@ -94,7 +98,7 @@ test-release-yumex-dnf5:
 	@$(MAKE) test-cleanup
 
 release-yumex-dnf5:
-	@git checkout -b release-test
+	@$(MAKE) test-checkout
 	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '3 s/DNF4/DNF5/' > ${APPNAME_DNF5}.spec
 	@git add ${APPNAME_DNF5}.spec
 	@git rm yumex.spec
@@ -109,7 +113,7 @@ release-yumex-dnf5:
 
 # make a test release and build rpms
 test-release:
-	@git checkout -b release-test
+	@$(MAKE) test-checkout
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
 	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
 	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
