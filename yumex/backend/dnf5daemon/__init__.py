@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from enum import Enum, auto
 from typing import Self
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
@@ -10,12 +11,29 @@ from yumex.utils.enums import PackageState
 from .client import Dnf5DbusClient, gv_list
 
 
+class DownloadType(Enum):
+    REPO = auto()
+    PACKAGE = auto()
+    UNKNOWN = auto()
+
+
 @dataclass
 class DownloadPackage:
     id: str
     name: str
     to_download: int
     downloaded: int = 0
+
+    @property
+    def package_type(self) -> DownloadType:
+        prefix = self.id.split(":")[0]
+        match prefix:
+            case "repo":
+                return DownloadType.REPO
+            case "package":
+                return DownloadType.PACKAGE
+            case _:
+                return DownloadType.UNKNOWN
 
 
 @dataclass
@@ -155,34 +173,53 @@ class YumexRootBackend:
             return TransactionResult(True, data=None)
 
     def on_download_add_new(self, session, package_id, name, size):
-        self.download_queue.add(DownloadPackage(package_id, name, size))
+        pkg = DownloadPackage(package_id, name, size)
+        self.download_queue.add(pkg)
         log(
             f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size} id: {package_id}"
         )
         if len(self.download_queue) == 1:
-            self.progress.set_title(_("Download Packages"))
+            match pkg.package_type:
+                case DownloadType.PACKAGE:
+                    self.progress.set_title(_("Download Packages"))
+                case DownloadType.REPO:
+                    self.progress.set_title(_("Download Reposiory Information"))
+                case DownloadType.UNKNOWN:
+                    log(f"DNF5_ROOT : unknown download type : {pkg.id}")
         self.progress.set_subtitle(_(f"Downloading : {name}"))
 
     def on_download_progress(self, session, package_id, to_download, downloaded):
         pkg: DownloadPackage = self.download_queue.get(package_id)
-        pkg.downloaded = downloaded
         log(
             f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})"
         )
         self.progress.set_subtitle(_(f"Downloading : {pkg.name}"))
+        match pkg.package_type:
+            case DownloadType.PACKAGE:
+                pkg.downloaded = downloaded
+            case DownloadType.REPO:
+                if to_download > 0:
+                    pkg.downloaded = downloaded
+                    pkg.to_download = to_download
+            case DownloadType.UNKNOWN:
+                log(f"DNF5_ROOT : unknown download type : {pkg.id}")
         fraction = self.download_queue.fraction
         self.progress.set_progress(fraction)
 
     def on_download_end(self, session, package_id, rc, msg):
         pkg: DownloadPackage = self.download_queue.get(package_id)
-        if rc == 0:
-            pkg.downloaded = pkg.to_download
         log(f"DNF5_ROOT : Signal : download_end: {pkg.name} rc: {rc} msg: {msg}")
+        if rc == 0:
+            match pkg.package_type:
+                case DownloadType.PACKAGE:
+                    pkg.downloaded = pkg.to_download
+                case DownloadType.REPO:
+                    pkg.downloaded = 1
+                    pkg.to_download = 1
+                case DownloadType.UNKNOWN:
+                    log(f"DNF5_ROOT : unknown download type : {pkg.id}")
         fraction = self.download_queue.fraction
         self.progress.set_progress(fraction)
-        if self.download_queue.is_completted:
-            self.progress.set_progress(1.0)
-            self.progress.set_subtitle(_("Download Completted"))
 
     def on_repo_key_import_request(self, *args):
         log(f"DNF5_ROOT : Signal : repo_key_import_request: {args}")
