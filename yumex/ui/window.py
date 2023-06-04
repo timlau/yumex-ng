@@ -268,18 +268,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        values = (
-            "rpmfusion-nonfree-release,0,38,1,noarch,rpmfusion-nonfree",
-            "RPM Fusion nonfree repository for Fedora (2020) <rpmfusion-buildsys@lists.rpmfusion.org>",
-            "94843C65",
-            "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-38",
-            1571667044,
-        )
-        dialog = GPGDialog(self, values)
-        dialog.set_transient_for(self)
-        dialog.show()
-        if dialog.install_key:
-            log("Re-run transaction and import GPG keys")
         pass
 
     def on_apply_actions_clicked(self, *_args):
