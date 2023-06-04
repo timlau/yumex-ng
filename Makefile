@@ -53,15 +53,15 @@ release:
 
 # cleanup the test branch used to create the test release
 test-checkout:
-	@git stash
-	@git checkout -b release-test
+	@-git stash push -m "save local changes" -q
+	@git checkout -q -b release-test
 
 test-cleanup:
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
 	@git checkout -f
-	@git checkout ${GIT_MASTER}
-	@git stash apply
-	@git branch -D release-test
+	@git checkout -q ${GIT_MASTER}
+	@-git stash pop -q
+	@git branch -q -D release-test
 
 show-vars:
 	@echo ${GITDATE}
