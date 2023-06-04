@@ -213,6 +213,8 @@ class YumexRootBackend:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
                     pkg.downloaded = pkg.to_download
+                    if self.download_queue.is_completted:
+                        self.progress.set_title(_("Applying Transaction"))
                 case DownloadType.REPO:
                     pkg.downloaded = 1
                     pkg.to_download = 1
