@@ -56,7 +56,10 @@ class DownloadQueue:
 
     @property
     def fraction(self):
-        return float(self.current / self.total)
+        if self.total:
+            return float(self.current / self.total)
+        else:
+            return 0.0
 
     @property
     def is_completted(self):
