@@ -17,6 +17,7 @@
 #
 
 
+from pathlib import Path
 import sys
 import argparse
 import subprocess
@@ -197,6 +198,10 @@ Yum Extender is a Package management to install, update and remove packages
             exc_info=(exc_type, exc_value, exc_traceback),
         )
         msg = "".join(format_exception(exc_type, exc_value, exc_traceback, None))
+        tb_file = Path("~/.local/share/yumex/traceback.txt").expanduser()
+        tb_file.parent.mkdir(exist_ok=True)
+        tb_file.write_text(msg)
+        log(f"traceback written to {tb_file}")
         error_dialog(self.win, title="Uncaught exception", msg=msg)
 
 
