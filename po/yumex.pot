@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 08:40+0200\n"
+"POT-Creation-Date: 2023-06-08 08:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,28 +44,50 @@ msgstr ""
 msgid "Queued for updating"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:33 yumex/backend/flatpak/transaction.py:61
+#: yumex/ui/flatpak_result.py:36 yumex/backend/flatpak/transaction.py:61
 msgid "Installing"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:35
+#: yumex/ui/flatpak_result.py:38
 msgid "Unnstalling"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:37
+#: yumex/ui/flatpak_result.py:40
 msgid "Updateing"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:65
-msgid "Packages for installation"
+#: yumex/ui/flatpak_view.py:109
+#, python-brace-format
+msgid "{fp_id} is now installed"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:67
-msgid "Packages for deletion"
+#: yumex/ui/flatpak_view.py:120
+#, python-brace-format
+msgid "{selected[0].id} is now removed"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:69
-msgid "Packages for updating"
+#: yumex/ui/dialogs.py:15
+msgid "Quit"
+msgstr ""
+
+#: yumex/ui/dialogs.py:32
+msgid "Install GPG Key"
+msgstr ""
+
+#: yumex/ui/dialogs.py:41
+msgid "Yes"
+msgstr ""
+
+#: yumex/ui/dialogs.py:43
+msgid "No"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:96
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:97
+msgid "This make take a little while"
 msgstr ""
 
 #: yumex/ui/package_info.py:24
@@ -88,41 +110,32 @@ msgstr ""
 msgid "no update information found"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:106
-#, python-brace-format
-msgid "{fp_id} is now installed"
+#: yumex/ui/transaction_result.py:67
+msgid "Packages for installation"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:117
-#, python-brace-format
-msgid "{selected[0].id} is now removed"
+#: yumex/ui/transaction_result.py:69
+msgid "Packages for deletion"
 msgstr ""
 
-#: yumex/ui/dialogs.py:15
-msgid "Quit"
+#: yumex/ui/transaction_result.py:71 yumex/ui/transaction_result.py:73
+msgid "Packages for updating"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:96
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/pachage_view.py:97
-msgid "This make take a little while"
-msgstr ""
-
-#: yumex/ui/window.py:169 yumex/backend/daemon.py:73
+#: yumex/ui/window.py:171 yumex/backend/dnf5daemon/__init__.py:151
+#: yumex/backend/dnf5daemon/__init__.py:168 yumex/backend/daemon.py:64
 msgid "Building Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:183 yumex/backend/daemon.py:78
+#: yumex/ui/window.py:186 yumex/backend/daemon.py:69
 msgid "Running Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:201
+#: yumex/ui/window.py:221
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:264
+#: yumex/ui/window.py:284
 msgid "Transaction completted succesfully"
 msgstr ""
 
@@ -139,69 +152,80 @@ msgstr ""
 msgid "Updating"
 msgstr ""
 
-#: yumex/backend/daemon.py:80
+#: yumex/backend/dnf5daemon/__init__.py:172
+#: yumex/backend/dnf5daemon/__init__.py:220 yumex/backend/daemon.py:71
 msgid "Applying Transaction"
 msgstr ""
 
-#: yumex/backend/daemon.py:84
-msgid "Checking package signatures"
-msgstr ""
-
-#: yumex/backend/daemon.py:86 yumex/backend/daemon.py:88
+#: yumex/backend/dnf5daemon/__init__.py:187 yumex/backend/daemon.py:77
+#: yumex/backend/daemon.py:79
 msgid "Download Packages"
 msgstr ""
 
-#: yumex/backend/daemon.py:98
-#, python-brace-format
-msgid "Erasing : {pkg_name}"
+#: yumex/backend/dnf5daemon/__init__.py:189
+msgid "Download Reposiory Information"
 msgstr ""
 
-#: yumex/backend/daemon.py:100
-#, python-brace-format
-msgid "Installing : {pkg_name}"
-msgstr ""
-
-#: yumex/backend/daemon.py:102
-#, python-brace-format
-msgid "Updating : {pkg_name}"
-msgstr ""
-
-#: yumex/backend/daemon.py:106
-#, python-brace-format
-msgid "Verifying : {pkg_name}"
-msgstr ""
-
-#: yumex/backend/daemon.py:108
-#, python-brace-format
-msgid "Running scriptlets : {pkg_name}"
-msgstr ""
-
-#: yumex/backend/daemon.py:118
-msgid "Downloading Packages"
-msgstr ""
-
-#: yumex/backend/daemon.py:124
+#: yumex/backend/dnf5daemon/__init__.py:192 yumex/backend/daemon.py:117
 #, python-brace-format
 msgid "Downloading : {name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:134
+#: yumex/backend/dnf5daemon/__init__.py:199
+#, python-brace-format
+msgid "Downloading : {pkg.name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:75
+msgid "Checking package signatures"
+msgstr ""
+
+#: yumex/backend/daemon.py:89
+#, python-brace-format
+msgid "Erasing : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:91
+#, python-brace-format
+msgid "Installing : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:93
+#, python-brace-format
+msgid "Updating : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:97
+#, python-brace-format
+msgid "Verifying : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:99
+#, python-brace-format
+msgid "Running scriptlets : {pkg_name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:111
+msgid "Downloading Packages"
+msgstr ""
+
+#: yumex/backend/daemon.py:127
 msgid "Downloading Repository Metadata"
 msgstr ""
 
-#: yumex/backend/daemon.py:174
+#: yumex/backend/daemon.py:167
 msgid "Couldn't build transaction\n"
 msgstr ""
 
-#: yumex/backend/daemon.py:178
+#: yumex/backend/daemon.py:172
 msgid "Exception in Dnf Backend\n"
 msgstr ""
 
-#: yumex/backend/daemon.py:200
+#: yumex/backend/daemon.py:198
 msgid "Exception in Dnf Backend : "
 msgstr ""
 
-#: yumex/main.py:165
+#: yumex/main.py:166
 msgid ""
 "\n"
 "<ul>\n"
@@ -210,7 +234,7 @@ msgid ""
 "</ul>\n"
 msgstr ""
 
-#: yumex/main.py:173
+#: yumex/main.py:174
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
@@ -222,22 +246,6 @@ msgstr ""
 
 #: data/ui/queue_row.blp:35
 msgid "Remove item from queue"
-msgstr ""
-
-#: data/ui/package_info.blp:21
-msgid "Advisory ID"
-msgstr ""
-
-#: data/ui/package_info.blp:29
-msgid "Advisory Type"
-msgstr ""
-
-#: data/ui/package_info.blp:37
-msgid "Advisory Issued"
-msgstr ""
-
-#: data/ui/package_info.blp:52
-msgid "Bugzilla References"
 msgstr ""
 
 #: data/ui/flatpak_row.blp:35
@@ -543,6 +551,22 @@ msgstr ""
 msgid "Update Info"
 msgstr ""
 
+#: data/ui/package_info.blp:20
+msgid "Advisory ID"
+msgstr ""
+
+#: data/ui/package_info.blp:28
+msgid "Advisory Type"
+msgstr ""
+
+#: data/ui/package_info.blp:36
+msgid "Advisory Issued"
+msgstr ""
+
+#: data/ui/package_info.blp:51
+msgid "Bugzilla References"
+msgstr ""
+
 #: data/dk.yumex.Yumex.desktop.in.in:4
 msgid "Install, update and remove applications"
 msgstr ""
@@ -593,50 +617,63 @@ msgid "Browse Installed flatpaks"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:24
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:52
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:61
 msgid "Install, remove and update flatpaks"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:41
-msgid "Yum Extender 4.9.3 improve the flatpak installer"
+msgid "Yum Extender 4.9.4 add many fixes and small improvments"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:43
-msgid "flatpak install with search and select available results"
+msgid "Support for importing gpg keys from repositories"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:44
+msgid "fix installing and updating flatpaks at system location"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:45
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
 msgid "lot of code fixes and optimization"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:49
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:50
+msgid "Yum Extender 4.9.3 improve the flatpak installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:52
+msgid "flatpak install with search and select available results"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:58
 msgid "Yum Extender 4.9.2 adds support for flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
 msgid "Browse installed flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:57
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:66
 msgid "Yum Extender 4.9.1 is a total rewrite using a modern toolchain"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:59
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:68
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:69
 msgid "Using dnf directly for readonly actions"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:73
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:82
 msgid "yumex"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:74
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:83
 msgid "yumex-dnf"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:75
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:84
 msgid "Package Manager"
 msgstr ""
