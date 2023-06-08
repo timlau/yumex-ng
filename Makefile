@@ -53,6 +53,7 @@ release:
 
 # cleanup the test branch used to create the test release
 test-checkout:
+	@-git stash clear
 	@-git stash push -m "save local changes" -q
 	@git checkout -q -b release-test
 
