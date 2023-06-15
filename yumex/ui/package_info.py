@@ -13,19 +13,28 @@
 #
 # Copyright (C) 2023  Tim Lauridsen
 
-import hawkey
 
 from gi.repository import Gtk, Adw  # type: ignore
 
-from yumex.constants import ROOTDIR
+from yumex.constants import ROOTDIR, BACKEND
 from yumex.utils.enums import InfoType
 
-ADVISORY_TYPES = {
-    hawkey.ADVISORY_BUGFIX: _("Bugfix"),
-    hawkey.ADVISORY_UNKNOWN: _("New Package"),
-    hawkey.ADVISORY_SECURITY: _("Security"),
-    hawkey.ADVISORY_ENHANCEMENT: _("Enhancement"),
-}
+if BACKEND == "DNF4":
+    import hawkey
+
+    ADVISORY_TYPES = {
+        hawkey.ADVISORY_BUGFIX: _("Bugfix"),
+        hawkey.ADVISORY_UNKNOWN: _("New Package"),
+        hawkey.ADVISORY_SECURITY: _("Security"),
+        hawkey.ADVISORY_ENHANCEMENT: _("Enhancement"),
+    }
+else:
+    ADVISORY_TYPES = {
+        "bugfix": _("Bugfix"),
+        "newpackage": _("New Package"),
+        "security": _("Security"),
+        "enhancement": _("Enhancement"),
+    }
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_info.ui")
