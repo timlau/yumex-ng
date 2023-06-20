@@ -108,7 +108,13 @@ class YumexRootBackend:
             arch = pkg["arch"].get_string()
             evr = pkg["evr"].get_string()
             repo = pkg["repo_id"].get_string()
-            size = pkg["package_size"].get_uint64()
+            if "package_size" in pkg:
+                size = pkg["package_size"].get_uint64()
+            elif "install_size" in pkg:
+                size = pkg["install_size"].get_uint64()
+            else:
+                size = 0.0
+                log("no size found : {pkg}")
             nevra = f"{name}-{evr}.{arch}"
             result_dict[action].append(((nevra, repo), size))
         return result_dict
