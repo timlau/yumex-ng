@@ -39,12 +39,16 @@ class FlatpakBackend:
             [ref.get_name() for ref in self.system.list_installed_refs()]
         )
 
+    def get_installation(self, location: FlatpakLocation):
+        if location == FlatpakLocation.SYSTEM:
+            return self.system
+        else:
+            return self.user
+
     def find(self, source: str, key: str, location: FlatpakLocation) -> list[str]:
         """find an available id containing a key"""
-        if location == FlatpakLocation.SYSTEM:
-            refs = self.system.list_remote_refs_sync(source)
-        else:
-            refs = self.user.list_remote_refs_sync(source)
+        installation: Flatpak.Installation = self.get_installation(location)
+        refs = installation.list_remote_refs_sync(source)
         key = key.lower()
         found = []
         for ref in refs:
@@ -77,16 +81,16 @@ class FlatpakBackend:
 
     def get_remotes(self, location: FlatpakLocation) -> list[str]:
         """get a list of active flatpak remote names"""
-        if location is FlatpakLocation.SYSTEM:
-            remotes = sorted(
-                [remote.get_name() for remote in self.system.list_remotes()]
-            )
-            log(f"FLATPAK : system remotes: {remotes}")
-            return remotes
-        else:
-            remotes = sorted([remote.get_name() for remote in self.user.list_remotes()])
-            log(f"FLATPAK : user remotes: {remotes}")
-            return remotes
+        installation: Flatpak.Installation = self.get_installation(location)
+        remotes = sorted(
+            [
+                remote.get_name()
+                for remote in installation.list_remotes()
+                if not remote.get_disabled()
+            ]
+        )
+        log(f"FLATPAK : {location   } remotes: {remotes}")
+        return remotes
 
     def get_arch(self) -> str:
         """get the default arch"""

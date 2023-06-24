@@ -110,13 +110,13 @@ class YumexFlatpakInstaller(Adw.Window):
         """hander for location is changed"""
         location = FlatpakLocation(self.location.get_selected_item().get_string())
         remotes = self.backend.get_remotes(location=location)
+        model = Gtk.StringList.new()
         if remotes:
-            model = Gtk.StringList.new()
             for remote in remotes:
                 model.append(remote)
-            self.remote.set_model(model)
         else:
             self._clear()
+        self.remote.set_model(model)
 
     def _set_icon(self, id: str, remote_name: str):
         """set the flatpak icon in the ui of current found flatpak"""
