@@ -123,7 +123,8 @@ class YumexFlatpakInstaller(Adw.Window):
         if not remote_name:
             self.icon.set_from_icon_name("flatpak-symbolic")
             return
-        icon_path = self.backend.get_icon_path(remote_name)
+        location = FlatpakLocation(self.location.get_selected_item().get_string())
+        icon_path = self.backend.get_icon_path(remote_name, location)
         icon_file = Path(f"{icon_path}/{id}.png")
         if icon_file.exists():
             self.icon.set_from_file(icon_file.as_posix())
