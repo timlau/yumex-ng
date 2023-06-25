@@ -57,9 +57,10 @@ class FlatpakBackend:
                     found.append(ref.get_name())
         return found
 
-    def find_ref(self, source: str, key: str) -> str | None:
+    def find_ref(self, source: str, key: str, location: FlatpakLocation) -> str | None:
         """find the ref string containing a key"""
-        refs: list[FlatpakRef] = self.user.list_remote_refs_sync(source)
+        installation: Flatpak.Installation = self.get_installation(location)
+        refs = installation.list_remote_refs_sync(source)
         found = None
         for ref in refs:
             if ref.get_kind() == Flatpak.RefKind.APP:
@@ -71,9 +72,10 @@ class FlatpakBackend:
             return ref
         return None
 
-    def get_icon_path(self, remote_name: str) -> str | None:
+    def get_icon_path(self, remote_name: str, location: FlatpakLocation) -> str | None:
         """get the path to flatpak icon cache"""
-        remote = self.user.get_remote_by_name(remote_name)
+        installation: Flatpak.Installation = self.get_installation(location)
+        remote = installation.get_remote_by_name(remote_name)
         if remote:
             appstream_dir = remote.get_appstream_dir().get_path()
             return f"{appstream_dir}/icons/flatpak/128x128/"
