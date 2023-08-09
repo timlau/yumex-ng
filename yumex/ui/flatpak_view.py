@@ -81,7 +81,7 @@ class YumexFlatpakView(Gtk.ListView):
     def update(self, pkg) -> None:
         """update a flatpak"""
 
-        self.do_transaction(self.backend.do_update, pkg)
+        self.do_transaction(self.backend.do_update, [pkg])
 
     def install(self, *args) -> None:
         """install a new flatpak"""
