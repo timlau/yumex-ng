@@ -39,6 +39,8 @@ class FlatpakTransaction:
         self.backend = backend
         self.first_run = first_run
         self._current_result = None
+        self.failed = False
+        self.failed_msg = None
         if location is FlatpakLocation.SYSTEM:
             log(" FlatpakTransaction: setup system transaction")
             self.transaction = Flatpak.Transaction.new_for_installation(
@@ -71,7 +73,11 @@ class FlatpakTransaction:
         log(" FlatpakTransaction: ready")
         self.num_actions = len(transaction.get_operations())
         if not self.num_actions:
-            raise FlatPakNoOperations("FlatpakTransaction: no operations")
+            log(" FlatpakTransaction: nothing to do")
+            self.failed = True
+            self.failed_msg = "nothing to do"
+            return True
+            # raise FlatPakNoOperations("FlatpakTransaction: no operations")
         self.current_action = 0
         self.elem_progress = 1.0 / self.num_actions
         if self.first_run:
@@ -134,6 +140,11 @@ class FlatpakTransaction:
                 log(msg)
                 self.win.show_message(f"{msg}", timeout=2)
                 return False
+        if self.failed:
+            log(f" FlatpakTransaction: Transaction Failed : {self.failed_msg}")
+            msg = _("flatpak transaction failed") + f" : {self.failed_msg}"
+            self.win.show_message(f"{msg}", timeout=5)
+            return False
         log(" FlatpakTransaction: Running Transaction Ended")
         return True
 

@@ -146,6 +146,8 @@ class FlatpakBackend:
         transaction = FlatpakTransaction(self, location=location, first_run=False)
         transaction.populate(pkgs, action, source)
         transaction.run()
+        if transaction.failed:
+            log(f"  Error in flatpak transaction: {transaction.failed_msg}")
 
     def _do_transaction(
         self,
