@@ -16,7 +16,7 @@
 """ backend for handling flatpaks"""
 
 from gi.repository import Flatpak, GLib
-from yumex.backend.flatpak import FlatpakPackage
+from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 
 from yumex.utils import log
 from yumex.utils.types import FlatpakRefString
@@ -56,6 +56,9 @@ class FlatpakTransaction:
         self.transaction.connect("ready", self.on_ready)
         self.transaction.connect("new-operation", self.on_new_operation)
         self.transaction.connect("operation-done", self.operation_done)
+        self.transaction.connect("operation-error", self.operation_error)
+        self.transaction.connect("end-of-lifed", self.operation_eol)
+        self.transaction.connect("end-of-lifed-with-rebase", self.operation_eol_rebase)
 
     def _parse_operation(self, opration_type: Flatpak.TransactionOperationType) -> str:
         match opration_type.get_operation_type():
@@ -111,6 +114,28 @@ class FlatpakTransaction:
         if self.current_action == self.num_actions:
             log(" FlatpakTransaction: everyting is Done")
 
+    def operation_eol(self, transaction, ref, reason, rebase) -> None:
+        """signal handler for FlatPak.Transaction::end-of-lifed"""
+        log(" FlatpakTransaction: end-of-lifed")
+        log(f" FlatpakTransaction: --> {ref}")
+        log(f" FlatpakTransaction: --> {reason}")
+        log(f" FlatpakTransaction: --> {rebase}")
+
+    def operation_eol_rebase(
+        self, transaction, remote, ref, reason, rebase, prev_ids
+    ) -> None:
+        """signal handler for FlatPak.Transaction::end-of-lifed-with-rebase"""
+        log(" FlatpakTransaction: end-of-lifed-with-rebase")
+        log(f" FlatpakTransaction: --> {ref}")
+        log(f" FlatpakTransaction: --> {reason}")
+        log(f" FlatpakTransaction: --> {rebase}")
+        log(f" FlatpakTransaction: --> {prev_ids}")
+
+    def operation_error(self, transaction, operation, error, result) -> None:
+        """signal handler for FlatPak.Transaction::operation-error"""
+        log(" FlatpakTransaction: operation-error")
+        log(f" FlatpakTransaction:  --> {str(error)}")
+
     def add_install(self, to_inst: FlatpakRefString, source: str) -> None:
         """add ref sting to transaction for install"""
         log(f" FlatpakTransaction: adding {to_inst} for install")
@@ -123,8 +148,18 @@ class FlatpakTransaction:
 
     def add_update(self, pkg: FlatpakPackage) -> None:
         """add pkg to transaction for update"""
-        log(f" FlatpakTransaction: adding {pkg.id} for update")
-        self.transaction.add_update(pkg.ref.format_ref(), None, None)
+        if pkg.is_update == FlatpakUpdate.UPDATE:
+            self.transaction.add_update(pkg.ref.format_ref(), None, None)
+            log(f" FlatpakTransaction: adding {pkg.id} for update")
+        elif pkg.is_update == FlatpakUpdate.EOL:
+            rebase_ref = pkg.ref.get_eol_rebase()
+            log(f" FlatpakTransaction: adding {pkg.id} for rebase")
+            log(f" flatpak: rebase {pkg.ref.format_ref()} -> {rebase_ref}")
+            # rebase to new version
+            self.transaction.add_rebase(
+                pkg.origin, rebase_ref, None, [pkg.ref.get_name()]
+            )
+            self.add_remove(str(pkg))  # remove the old version
 
     def run(self) -> bool:
         """run the tranaction"""

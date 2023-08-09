@@ -15,6 +15,8 @@
 
 """ backend for handling flatpaks"""
 
+
+from enum import Enum, auto
 from gi.repository import Flatpak, GObject
 from yumex.utils import log
 
@@ -22,10 +24,21 @@ from yumex.utils.types import FlatpakRefString, FlatpakRef
 from yumex.utils.enums import FlatpakType, FlatpakLocation
 
 
+class FlatpakUpdate(Enum):
+    NO = auto()
+    UPDATE = auto()
+    EOL = auto()
+
+
 class FlatpakPackage(GObject.GObject):
     """wrapper for a installed flatpak"""
 
-    def __init__(self, ref: FlatpakRef, location: FlatpakLocation, is_update=False):
+    def __init__(
+        self,
+        ref: FlatpakRef,
+        location: FlatpakLocation,
+        is_update: FlatpakUpdate = FlatpakUpdate.NO,
+    ):
         super().__init__()
         self.ref: FlatpakRef = ref
         self.is_update = is_update

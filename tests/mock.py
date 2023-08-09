@@ -8,7 +8,7 @@ gi.require_version("Gtk", "4.0")
 from pathlib import Path
 
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.flatpak import FlatpakPackage
+from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.utils.enums import FlatpakLocation, PackageState
 
 from gi.repository import Flatpak, Gtk
@@ -87,7 +87,7 @@ def mock_presenter(remotes: list = None):
     mock.confirm_flatpak_transaction.return_value = True
     mock.get_repositories.return_value = [("fedora", "fedora packages", True)]
     fp_pkg = FlatpakPackage(
-        flatpak_ref(), location=FlatpakLocation.USER, is_update=True
+        flatpak_ref(), location=FlatpakLocation.USER, is_update=FlatpakUpdate.UPDATE
     )
     mock.get_installed.return_value = [fp_pkg]
     mock.install.return_value = [fp_pkg]

@@ -16,7 +16,7 @@
 """ backend for handling flatpaks"""
 
 from gi.repository import Flatpak, GLib
-from yumex.backend.flatpak import FlatpakPackage
+from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.backend.flatpak.transaction import (
     FlatPakFirstRun,
     FlatPakNoOperations,
@@ -112,10 +112,13 @@ class FlatpakBackend:
 
     def _get_package(self, ref, location: FlatpakLocation) -> FlatpakPackage:
         """create a flatpak pkg object with update status"""
-        if ref.get_name() in self.updates:
-            is_update = True
+        if eol := ref.get_eol():
+            log(f"flatpak: EOL : {eol}")
+            is_update = FlatpakUpdate.EOL
+        elif ref.get_name() in self.updates:
+            is_update = FlatpakUpdate.UPDATE
         else:
-            is_update = False
+            is_update = FlatpakUpdate.NO
         return FlatpakPackage(ref, location=location, is_update=is_update)
 
     def _build_transaction(

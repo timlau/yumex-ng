@@ -22,7 +22,7 @@ from pathlib import Path
 from gi.repository import Gtk, Gio, Adw
 
 from yumex.backend.presenter import YumexPresenter
-from yumex.backend.flatpak import FlatpakPackage
+from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.constants import ROOTDIR
 from yumex.utils import RunJob, log
 from yumex.ui.flatpak_installer import YumexFlatpakInstaller
@@ -158,7 +158,7 @@ class YumexFlatpakView(Gtk.ListView):
             row.icon.set_from_file(icon_file)
         row.user.set_label(pkg.location)
         row.origin.set_label(pkg.origin)
-        row.update.set_visible(pkg.is_update)
+        row.update.set_visible(pkg.is_update != FlatpakUpdate.NO)
         row.set_title(f"{pkg.name} - {pkg.version}")
         row.set_subtitle(pkg.summary)
 
