@@ -149,7 +149,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """handle the refressh signal from queue view"""
         self.package_view.refresh()
 
-    def show_message(self, title, timeout=2):
+    def show_message(self, title, timeout=5):
         """Create a toast with text and a given timeout"""
         toast = Adw.Toast(title=title)
         toast.set_timeout(timeout)

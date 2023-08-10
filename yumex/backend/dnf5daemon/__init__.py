@@ -160,12 +160,14 @@ class YumexRootBackend:
             content, rc = self._build_translations(pkgs, client)
             log(f"DNF5_ROOT : build transaction: rc =  {rc}")
             errors = client.session.get_transaction_problems_string()
-            log(f"DNF5_ROOT : build transaction: error =  {errors}")
+            for error in errors:
+                log(f"DNF5_ROOT : build transaction: error =  {error}")
             self.progress.hide()
             if rc == 0 or rc == 1:
                 return TransactionResult(True, data=self.build_result(content))
             elif rc == 2:
-                return TransactionResult(False, error=errors)
+                error_msgs = "\n".join(errors)
+                return TransactionResult(False, error=error_msgs)
 
     def run_transaction(self) -> TransactionResult:
         self.download_queue.clear()
