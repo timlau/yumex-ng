@@ -138,7 +138,7 @@ test-copr:
 
 test-copr-dnf5:
 	@$(MAKE) test-release-dnf5
-	copr-cli build yumex-ng -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 test-copr-yumex-dnf5:
 	@$(MAKE) test-release-yumex-dnf5
