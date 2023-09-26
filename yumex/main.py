@@ -198,7 +198,14 @@ Yum Extender is a Package management to install, update and remove packages
             exc_info=(exc_type, exc_value, exc_traceback),
         )
         msg = "".join(format_exception(exc_type, exc_value, exc_traceback, None))
-        tb_file = Path("~/.local/share/yumex/traceback.txt").expanduser()
+
+        # create timestamp
+        from datetime import datetime
+
+        current_datetime = datetime.now()
+        timestamp = current_datetime.strftime("%m-%d-%Y_%H%M%S")
+
+        tb_file = Path(f"~/.local/share/yumex/traceback_{timestamp}.txt").expanduser()
         tb_file.parent.mkdir(exist_ok=True)
         tb_file.write_text(msg)
         log(f"traceback written to {tb_file}")
