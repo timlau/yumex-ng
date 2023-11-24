@@ -19,22 +19,23 @@ from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: 
 
 
 class YumexPackage(GObject.GObject):
-    __slots__ = (  # define slots for better performance
-        "name",
-        "arch",
-        "epoch",
-        "version",
-        "release",
-        "repo",
-        "description",
-        "size",
-        "state",
-        "action",
-        "is_dep",
-        "queued",
-        "queue_action",
-        "ref_to",
-    )
+    __gtype_name__ = "YumexPackage"
+    # __slots__ = (  # define slots for better performance
+    #     "name",
+    #     "arch",
+    #     "epoch",
+    #     "version",
+    #     "release",
+    #     "repo",
+    #     "description",
+    #     "size",
+    #     "state",
+    #     "action",
+    #     "is_dep",
+    #     "queued",
+    #     "queue_action",
+    #     "ref_to",
+    # )
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__()
@@ -50,8 +51,18 @@ class YumexPackage(GObject.GObject):
         self.action: PackageAction = kwargs.pop("action", PackageAction.NONE)
         self.is_dep: bool = False
         self.ref_to: YumexPackage = None
-        self.queued: bool = False
+        self._queued: bool = False
         self.queue_action: bool = False
+
+    @GObject.Property(type=bool, default=False)
+    def queued(self) -> bool:
+        return self._queued
+
+    @queued.setter
+    def set_queued(self, state: bool):
+        if self._queued != state:
+            self._queued = state
+            self.notify("queued")
 
     @property
     def is_installed(self) -> bool:
