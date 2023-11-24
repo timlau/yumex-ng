@@ -33,12 +33,12 @@ archive:
 # build local rpms and start a copr build
 copr-release:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ts ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
-	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
+	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-39-x86_64 -r fedora-38-aarch64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # build local rpms and start a copr build
 copr-release-dnf5:
 	@$(MAKE) release-yumex-dnf5
-	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
+	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64  $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
 
 # create a release
 # commit, tag, push, build local rpm and start a copr build
@@ -134,7 +134,7 @@ rpm:
 # make a test-releases and build it in fedora copr
 test-copr:
 	@$(MAKE) test-release
-	copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 test-copr-dnf5:
 	@$(MAKE) test-release-dnf5
@@ -142,7 +142,7 @@ test-copr-dnf5:
 
 test-copr-yumex-dnf5:
 	@$(MAKE) test-release-yumex-dnf5
-	copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-37-x86_64 -r fedora-38-aarch64 -r fedora-37-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 
 # Make a local build and run it
