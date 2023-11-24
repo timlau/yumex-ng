@@ -285,6 +285,13 @@ class YumexPackageView(Gtk.ColumnView):
 
     @Gtk.Template.Callback()
     def on_queued_bind(self, widget, item):
-        label = item.get_child()  # Get the Gtk.Label stored in the ListItem
+        check_button = (
+            item.get_child()
+        )  # Get the Gtk.Checkbutton stored in the ListItem
         pkg = item.get_item()  # get the model item, connected to current ListItem
-        label.set_active(pkg.queued)  # Update Gtk.Label with data from model item
+        pkg.bind_property(
+            "queued", check_button, "active", GObject.BindingFlags.SYNC_CREATE
+        )
+        check_button.set_active(
+            pkg.queued
+        )  # Update Gtk.Label with data from model item

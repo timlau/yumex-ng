@@ -55,44 +55,44 @@ template YumexPackageView : Gtk.ColumnView {
 }
 
 Gtk.SignalListItemFactory name_factory {
-    setup => on_package_column_text_setup();
-    bind => on_name_bind();
+    setup => $on_package_column_text_setup();
+    bind => $on_name_bind();
 }
 
 Gtk.SignalListItemFactory version_factory {
-    setup => on_package_column_text_setup();
-    bind => on_version_bind();
+    setup => $on_package_column_text_setup();
+    bind => $on_version_bind();
 }
 
 Gtk.SignalListItemFactory repo_factory {
-    setup => on_package_column_text_setup();
-    bind => on_repo_bind();
+    setup => $on_package_column_text_setup();
+    bind => $on_repo_bind();
 }
 
 Gtk.SignalListItemFactory arch_factory {
-    setup => on_package_column_text_setup();
-    bind => on_arch_bind();
+    setup => $on_package_column_text_setup();
+    bind => $on_arch_bind();
 }
 
 Gtk.SignalListItemFactory size_factory {
-    setup => on_package_column_text_setup();
-    bind => on_size_bind();
+    setup => $on_package_column_text_setup();
+    bind => $on_size_bind();
 }
 
 Gtk.SignalListItemFactory queued_factory {
-    setup => on_package_column_checkmark_setup();
-    bind => on_queued_bind();
+    setup => $on_package_column_checkmark_setup();
+    bind => $on_queued_bind();
 }
 
 Gtk.SignalListItemFactory description_factory {
-    setup => on_package_column_text_setup();
-    bind => on_description_bind();
+    setup => $on_package_column_text_setup();
+    bind => $on_description_bind();
 }
 
 
 Gtk.SingleSelection selection {
     autoselect: true;
-    selection-changed => on_selection_changed();
+    selection-changed => $on_selection_changed();
 }
 
 menu package_header {
