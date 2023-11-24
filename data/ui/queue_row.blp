@@ -1,6 +1,6 @@
 using Gtk 4.0;
 
-template YumexQueueRow : Gtk.Box {
+template $YumexQueueRow : Gtk.Box {
     styles ["queue_row"]
     orientation: horizontal;
     Gtk.Image icon{
@@ -20,7 +20,7 @@ template YumexQueueRow : Gtk.Box {
 
     Gtk.Label text {
         hexpand: true;
-        halign: start;  
+        halign: start;
         label: "Some package";
     }
 
@@ -33,6 +33,6 @@ template YumexQueueRow : Gtk.Box {
         styles ["flat","circular"]
         icon-name: "x-circular-symbolic";
         tooltip-text: _("Remove item from queue");
-        clicked => on_delete_clicked();
+        clicked=> $on_delete_clicked();
     }
 }

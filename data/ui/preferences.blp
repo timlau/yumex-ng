@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template YumexPreferences: Adw.PreferencesWindow {
+template $YumexPreferences: Adw.PreferencesWindow {
   title: _("Preferences");
   default-height: 600;
   default-width: 600;
@@ -14,7 +14,7 @@ template YumexPreferences: Adw.PreferencesWindow {
       Adw.ComboRow fp_location {
         title: "Default Location";
         model: fp_locations;
-        notify::selected => on_location_selected();
+        notify::selected=> $on_location_selected();
       }
       Adw.ComboRow fp_remote {
         title: "Default Remote";

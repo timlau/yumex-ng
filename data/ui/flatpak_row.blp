@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template YumexFlatpakRow : Adw.ActionRow {
+template $YumexFlatpakRow : Adw.ActionRow {
     [prefix]
     Gtk.Image icon {
         height-request: 72;
@@ -34,12 +34,12 @@ template YumexFlatpakRow : Adw.ActionRow {
           icon-name: "emblem-synchronizing-symbolic";
           tooltip-text: _("Update is available");
           styles ["success","flat","circular"]
-          clicked => on_update_clicked();
+          clicked=> $on_update_clicked();
         }
         Gtk.Button {
           icon-name: "user-trash-symbolic" ;
           tooltip-text: _("Uninstall flatpak");
-          clicked => on_delete_clicked();
+          clicked=> $on_delete_clicked();
           styles ["flat","error","circular"]
         }
       }

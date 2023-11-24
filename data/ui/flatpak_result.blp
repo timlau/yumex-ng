@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template YumexFlatpakResult : Adw.Window {
+template $YumexFlatpakResult : Adw.Window {
     default-width: 900;
     default-height: 600;
     modal: true;
@@ -18,20 +18,20 @@ template YumexFlatpakResult : Adw.Window {
             [start]
             Gtk.Button cancel{
                 label: _("Cancel");
-                clicked => on_cancel_clicked();
+                clicked=> $on_cancel_clicked();
                 ShortcutController {
                   scope: managed;
                   Shortcut {
                     trigger: "Escape";
                     action: "activate";
                   }
-                } 
+                }
             }
             [end]
             Gtk.Button confirm {
                 label: _("Confirm");
                 styles ["destructive-action"]
-                clicked => on_confirm_clicked();
+                clicked=> $on_confirm_clicked();
                 ShortcutController {
                   scope: managed;
                   Shortcut {
@@ -73,6 +73,6 @@ Gtk.NoSelection selection {
 }
 
 Gtk.SignalListItemFactory result_factory {
-    setup => on_setup();
-    bind => on_bind();
+    setup=> $on_setup();
+    bind=> $on_bind();
 }

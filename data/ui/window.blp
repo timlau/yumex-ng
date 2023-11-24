@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template YumexMainWindow : Adw.ApplicationWindow {
+template $YumexMainWindow : Adw.ApplicationWindow {
   styles ["devel"]
   title: _("Yum Extender");
   default-width: 1000;
@@ -72,13 +72,13 @@ template YumexMainWindow : Adw.ApplicationWindow {
           orientation: vertical;
           Gtk.SearchBar search_bar {
             search-mode-enabled: bind search_button.active bidirectional;
-            key-capture-widget: YumexMainWindow;
+            key-capture-widget: template;
 
             child: Gtk.SearchEntry search_entry {
               max-width-chars: 40;
               search-delay: 500;
-              search-changed => on_search_changed();
-              activate => on_search_activate();
+              search-changed=> $on_search_changed();
+              activate=> $on_search_activate();
               placeholder-text: _("Package Name");
             };
           }

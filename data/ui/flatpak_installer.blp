@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template YumexFlatpakInstaller : Adw.Window {
+template $YumexFlatpakInstaller : Adw.Window {
     default-width: 700;
     default-height: 150;
     modal: true;
@@ -19,7 +19,7 @@ template YumexFlatpakInstaller : Adw.Window {
           [start]
           Gtk.Button cancel{
             label: _("Cancel");
-            clicked => on_cancel_clicked();
+            clicked => $on_cancel_clicked();
             ShortcutController {
               scope: managed;
               Shortcut {
@@ -36,7 +36,7 @@ template YumexFlatpakInstaller : Adw.Window {
           Gtk.Button confirm {
             label: _("Confirm");
             styles ["destructive-action"]
-            clicked => on_ok_clicked();
+            clicked => $on_ok_clicked();
             ShortcutController {
               scope: managed;
               Shortcut {
@@ -58,10 +58,10 @@ template YumexFlatpakInstaller : Adw.Window {
         Gtk.ListBoxRow {
           Gtk.SearchEntry search_id {
             search-delay: 400;
-            activate => on_search();
-            search-changed => on_search();
-            next-match => on_search_next_match();
-            previous-match => on_search_previous_match();
+            activate => $on_search();
+            search-changed => $on_search();
+            next-match => $on_search_next_match();
+            previous-match => $on_search_previous_match();
             styles ["flatpak_search"]
           }
         }
@@ -86,7 +86,7 @@ template YumexFlatpakInstaller : Adw.Window {
         Adw.ComboRow location {
           title: _("Install location");
           model: locations;
-          notify::selected => on_location_selected();
+          notify::selected => $on_location_selected();
         }
 
       }

@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template YumexPackageSettings : Gtk.Box {
+template $YumexPackageSettings : Gtk.Box {
     styles ["background"]
     orientation: vertical;
     width-request: 250;
@@ -66,7 +66,7 @@ template YumexPackageSettings : Gtk.Box {
         Adw.ComboRow sort_by {
             model: sort_attr;
             styles ["sorting-row"]
-            notify::selected => on_sort_by_selected();
+            notify::selected=> $on_sort_by_selected();
             [prefix]
             Gtk.Image  sort_icon {
                 icon-name: "view-sort-descending-rtl-symbolic";
@@ -77,7 +77,7 @@ template YumexPackageSettings : Gtk.Box {
        Adw.ComboRow info_type {
             model: info_types;
             styles ["sorting-row"]
-            notify::selected => on_info_type_selected();
+            notify::selected=> $on_info_type_selected();
             [prefix]
             Gtk.Image  show_icon {
                 icon-name: "diagnostics-symbolic";
