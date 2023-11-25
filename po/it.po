@@ -127,7 +127,7 @@ msgid "Running Flatpak Transaction"
 msgstr "Eseguendo Transazione Flatpak"
 
 #: yumex/ui/window.py:264
-msgid "Transaction completted succesfully"
+msgid "Transaction completed succesfully"
 msgstr "Transazione completata con successo"
 
 #: yumex/backend/dnf/dnf4.py:121

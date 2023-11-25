@@ -281,7 +281,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 # reset everything
                 self.package_view.reset()
                 self.search_bar.set_search_mode(False)
-                self.show_message(_("Transaction completted succesfully"), timeout=3)
+                self.show_message(_("Transaction completed succesfully"), timeout=3)
                 self.package_settings.unselect_all()
                 self.select_page(Page.PACKAGES)
                 self.load_packages(PackageFilter.INSTALLED)

@@ -234,7 +234,7 @@ class Backend(dnf.Base):
                     log(f" DNF5: add {nevra} to transaction for installation")
         transaction: dnf.Transaction = goal.resolve()
         problems = transaction.get_problems()
-        log(f" DNF5: depsolve completted : {problems}")
+        log(f" DNF5: depsolve completed : {problems}")
         if problems == dnf.GoalProblem_NO_PROBLEM:
             for tspkg in transaction.get_transaction_packages():
                 action = tspkg.get_action()
