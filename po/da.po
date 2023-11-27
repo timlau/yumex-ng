@@ -2,10 +2,10 @@
 # Copyright (C) 2023 Tim Lauridsen
 # This file is distributed under the GNU GPLv3 license.
 # Tim Lauridsen, 2023.
-# 
+#
 # Translators:
 # Tim Lauridsen <tla@rasmil.dk>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -127,7 +127,7 @@ msgid "Running Flatpak Transaction"
 msgstr ""
 
 #: yumex/ui/window.py:264
-msgid "Transaction completted succesfully"
+msgid "Transaction completed succesfully"
 msgstr ""
 
 #: yumex/backend/dnf/dnf4.py:121

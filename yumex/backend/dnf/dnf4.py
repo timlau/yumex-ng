@@ -505,7 +505,7 @@ class Backend(DnfBase):
                 log(f" DNF4: dnf package for {pkg} was not found")
         try:
             res = self.resolve(allow_erasing=True)
-            log(f" DNF4: depsolve completted : {res}")
+            log(f" DNF4: depsolve completed : {res}")
             for pkg in self.get_transaction():
                 if pkg.nevra not in nevra_dict:
                     log(f" DNF4: adding as dep : {pkg} ")

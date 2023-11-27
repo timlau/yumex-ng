@@ -62,7 +62,7 @@ class DownloadQueue:
             return 0.0
 
     @property
-    def is_completted(self):
+    def is_completed(self):
         return self.current == self.total
 
     def add(self, pkg):
@@ -224,7 +224,7 @@ class YumexRootBackend:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
                     pkg.downloaded = pkg.to_download
-                    if self.download_queue.is_completted:
+                    if self.download_queue.is_completed:
                         self.progress.set_title(_("Applying Transaction"))
                 case DownloadType.REPO:
                     pkg.downloaded = 1
