@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-08 08:33+0200\n"
+"POT-Creation-Date: 2023-11-27 15:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Queued for updating"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:36 yumex/backend/flatpak/transaction.py:61
+#: yumex/ui/flatpak_result.py:36 yumex/backend/flatpak/transaction.py:66
 msgid "Installing"
 msgstr ""
 
@@ -54,16 +54,6 @@ msgstr ""
 
 #: yumex/ui/flatpak_result.py:40
 msgid "Updateing"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:109
-#, python-brace-format
-msgid "{fp_id} is now installed"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:120
-#, python-brace-format
-msgid "{selected[0].id} is now removed"
 msgstr ""
 
 #: yumex/ui/dialogs.py:15
@@ -90,26 +80,6 @@ msgstr ""
 msgid "This make take a little while"
 msgstr ""
 
-#: yumex/ui/package_info.py:24
-msgid "Bugfix"
-msgstr ""
-
-#: yumex/ui/package_info.py:25
-msgid "New Package"
-msgstr ""
-
-#: yumex/ui/package_info.py:26
-msgid "Security"
-msgstr ""
-
-#: yumex/ui/package_info.py:27
-msgid "Enhancement"
-msgstr ""
-
-#: yumex/ui/package_info.py:59
-msgid "no update information found"
-msgstr ""
-
 #: yumex/ui/transaction_result.py:67
 msgid "Packages for installation"
 msgstr ""
@@ -122,8 +92,38 @@ msgstr ""
 msgid "Packages for updating"
 msgstr ""
 
-#: yumex/ui/window.py:171 yumex/backend/dnf5daemon/__init__.py:151
-#: yumex/backend/dnf5daemon/__init__.py:168 yumex/backend/daemon.py:64
+#: yumex/ui/flatpak_view.py:109
+#, python-brace-format
+msgid "{fp_id} is now installed"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:120
+#, python-brace-format
+msgid "{selected[0].id} is now removed"
+msgstr ""
+
+#: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33
+msgid "Bugfix"
+msgstr ""
+
+#: yumex/ui/package_info.py:27 yumex/ui/package_info.py:34
+msgid "New Package"
+msgstr ""
+
+#: yumex/ui/package_info.py:28 yumex/ui/package_info.py:35
+msgid "Security"
+msgstr ""
+
+#: yumex/ui/package_info.py:29 yumex/ui/package_info.py:36
+msgid "Enhancement"
+msgstr ""
+
+#: yumex/ui/package_info.py:68
+msgid "no update information found"
+msgstr ""
+
+#: yumex/ui/window.py:171 yumex/backend/dnf5daemon/__init__.py:157
+#: yumex/backend/dnf5daemon/__init__.py:176 yumex/backend/daemon.py:64
 msgid "Building Transaction"
 msgstr ""
 
@@ -144,34 +144,38 @@ msgstr ""
 msgid "Downloading repository information for {name}"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:63
+#: yumex/backend/flatpak/transaction.py:68
 msgid "Uninstalling"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:65
+#: yumex/backend/flatpak/transaction.py:70
 msgid "Updating"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:172
-#: yumex/backend/dnf5daemon/__init__.py:220 yumex/backend/daemon.py:71
+#: yumex/backend/flatpak/transaction.py:180
+msgid "flatpak transaction failed"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:180
+#: yumex/backend/dnf5daemon/__init__.py:228 yumex/backend/daemon.py:71
 msgid "Applying Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:187 yumex/backend/daemon.py:77
+#: yumex/backend/dnf5daemon/__init__.py:195 yumex/backend/daemon.py:77
 #: yumex/backend/daemon.py:79
 msgid "Download Packages"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:189
+#: yumex/backend/dnf5daemon/__init__.py:197
 msgid "Download Reposiory Information"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:192 yumex/backend/daemon.py:117
+#: yumex/backend/dnf5daemon/__init__.py:200 yumex/backend/daemon.py:117
 #, python-brace-format
 msgid "Downloading : {name}"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:199
+#: yumex/backend/dnf5daemon/__init__.py:207
 #, python-brace-format
 msgid "Downloading : {pkg.name}"
 msgstr ""
@@ -240,22 +244,6 @@ msgid ""
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 
-#: data/ui/queue_row.blp:17
-msgid "Added as a dependency"
-msgstr ""
-
-#: data/ui/queue_row.blp:35
-msgid "Remove item from queue"
-msgstr ""
-
-#: data/ui/flatpak_row.blp:35
-msgid "Update is available"
-msgstr ""
-
-#: data/ui/flatpak_row.blp:41
-msgid "Uninstall flatpak"
-msgstr ""
-
 #: data/ui/package_view.blp:18 data/ui/package_settings.blp:93
 msgid "Name"
 msgstr ""
@@ -288,139 +276,16 @@ msgstr ""
 msgid "Deselect All"
 msgstr ""
 
-#: data/ui/flatpak_result.blp:16
-msgid "Flatpak Transaction Result"
-msgstr ""
-
-#: data/ui/flatpak_result.blp:20 data/ui/transaction_result.blp:20
-#: data/ui/flatpak_installer.blp:21
-msgid "Cancel"
-msgstr ""
-
-#: data/ui/flatpak_result.blp:32 data/ui/transaction_result.blp:32
-#: data/ui/flatpak_installer.blp:37
-msgid "Confirm"
-msgstr ""
-
-#: data/ui/transaction_result.blp:16
-msgid "Transaction Result"
-msgstr ""
-
-#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
-msgid "Yum Extender"
-msgstr ""
-
-#: data/ui/window.blp:33
-msgid "Select Package filters"
-msgstr ""
-
-#: data/ui/window.blp:39 data/ui/package_settings.blp:49
-msgid "Search"
-msgstr ""
-
-#: data/ui/window.blp:55
-msgid "Main Menu"
-msgstr ""
-
-#: data/ui/window.blp:63
-msgid "Apply"
-msgstr ""
-
-#: data/ui/window.blp:66
-msgid "Apply Package Actions"
-msgstr ""
-
-#: data/ui/window.blp:82
-msgid "Package Name"
-msgstr ""
-
-#: data/ui/window.blp:93
-msgid "Packages"
-msgstr ""
-
-#: data/ui/window.blp:140
-msgid "Flatpaks"
-msgstr ""
-
-#: data/ui/window.blp:160
-msgid "Update All Flatpaks (Apps & Runtimes)"
-msgstr ""
-
-#: data/ui/window.blp:165
-msgid "install new flatpak"
-msgstr ""
-
-#: data/ui/window.blp:170
-msgid "uninstall selected flatpak"
-msgstr ""
-
-#: data/ui/window.blp:181
-msgid "Groups"
-msgstr ""
-
-#: data/ui/window.blp:191
-msgid "Queue"
-msgstr ""
-
-#: data/ui/window.blp:212
-msgid "Remove all from queue"
-msgstr ""
-
-#: data/ui/window.blp:235
-msgid "_Preferences"
-msgstr ""
-
-#: data/ui/window.blp:239
-msgid "Keyboard Shortcuts"
-msgstr ""
-
-#: data/ui/window.blp:243
-msgid "_About Yum Extender"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:17
-msgid "Install Flatpak"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:69
-msgid "Selected Flatpak (Ctrl+G/Shift+Ctrl+G to toggle)"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:83
-msgid "Remote"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:87
-msgid "Install location"
-msgstr ""
-
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
-msgid "Preferences"
-msgstr ""
-
-#: data/ui/preferences.blp:10
-msgid "Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:13
-msgid "Flatpak Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:30
-msgid "Repository Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:31
-msgid "The available and enabled repositories"
-msgstr ""
-
 #: data/ui/shortcuts.blp:8
 msgid "General"
 msgstr ""
 
 #: data/ui/shortcuts.blp:11
 msgid "Keyboard shortcuts"
+msgstr ""
+
+#: data/ui/shortcuts.blp:15 data/ui/preferences.blp:5
+msgid "Preferences"
 msgstr ""
 
 #: data/ui/shortcuts.blp:19
@@ -503,6 +368,60 @@ msgstr ""
 msgid "Previous Result"
 msgstr ""
 
+#: data/ui/flatpak_installer.blp:17
+msgid "Install Flatpak"
+msgstr ""
+
+#: data/ui/flatpak_installer.blp:21 data/ui/flatpak_result.blp:20
+#: data/ui/transaction_result.blp:20
+msgid "Cancel"
+msgstr ""
+
+#: data/ui/flatpak_installer.blp:37 data/ui/flatpak_result.blp:32
+#: data/ui/transaction_result.blp:32
+msgid "Confirm"
+msgstr ""
+
+#: data/ui/flatpak_installer.blp:69
+msgid "Selected Flatpak (Ctrl+G/Shift+Ctrl+G to toggle)"
+msgstr ""
+
+#: data/ui/flatpak_installer.blp:83
+msgid "Remote"
+msgstr ""
+
+#: data/ui/flatpak_installer.blp:87
+msgid "Install location"
+msgstr ""
+
+#: data/ui/flatpak_result.blp:16
+msgid "Flatpak Transaction Result"
+msgstr ""
+
+#: data/ui/flatpak_row.blp:35
+msgid "Update is available"
+msgstr ""
+
+#: data/ui/flatpak_row.blp:41
+msgid "Uninstall flatpak"
+msgstr ""
+
+#: data/ui/package_info.blp:20
+msgid "Advisory ID"
+msgstr ""
+
+#: data/ui/package_info.blp:28
+msgid "Advisory Type"
+msgstr ""
+
+#: data/ui/package_info.blp:36
+msgid "Advisory Issued"
+msgstr ""
+
+#: data/ui/package_info.blp:51
+msgid "Bugzilla References"
+msgstr ""
+
 #: data/ui/package_settings.blp:9
 msgid "Package filter"
 msgstr ""
@@ -517,6 +436,10 @@ msgstr ""
 
 #: data/ui/package_settings.blp:37
 msgid "All"
+msgstr ""
+
+#: data/ui/package_settings.blp:49 data/ui/window.blp:39
+msgid "Search"
 msgstr ""
 
 #: data/ui/package_settings.blp:62
@@ -551,20 +474,101 @@ msgstr ""
 msgid "Update Info"
 msgstr ""
 
-#: data/ui/package_info.blp:20
-msgid "Advisory ID"
+#: data/ui/preferences.blp:10
+msgid "Settings"
 msgstr ""
 
-#: data/ui/package_info.blp:28
-msgid "Advisory Type"
+#: data/ui/preferences.blp:13
+msgid "Flatpak Settings"
 msgstr ""
 
-#: data/ui/package_info.blp:36
-msgid "Advisory Issued"
+#: data/ui/preferences.blp:30
+msgid "Repository Settings"
 msgstr ""
 
-#: data/ui/package_info.blp:51
-msgid "Bugzilla References"
+#: data/ui/preferences.blp:31
+msgid "The available and enabled repositories"
+msgstr ""
+
+#: data/ui/queue_row.blp:17
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:35
+msgid "Remove item from queue"
+msgstr ""
+
+#: data/ui/transaction_result.blp:16
+msgid "Transaction Result"
+msgstr ""
+
+#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
+msgid "Yum Extender"
+msgstr ""
+
+#: data/ui/window.blp:33
+msgid "Select Package filters"
+msgstr ""
+
+#: data/ui/window.blp:55
+msgid "Main Menu"
+msgstr ""
+
+#: data/ui/window.blp:63
+msgid "Apply"
+msgstr ""
+
+#: data/ui/window.blp:66
+msgid "Apply Package Actions"
+msgstr ""
+
+#: data/ui/window.blp:82
+msgid "Package Name"
+msgstr ""
+
+#: data/ui/window.blp:93
+msgid "Packages"
+msgstr ""
+
+#: data/ui/window.blp:140
+msgid "Flatpaks"
+msgstr ""
+
+#: data/ui/window.blp:160
+msgid "Update All Flatpaks (Apps & Runtimes)"
+msgstr ""
+
+#: data/ui/window.blp:165
+msgid "install new flatpak"
+msgstr ""
+
+#: data/ui/window.blp:170
+msgid "uninstall selected flatpak"
+msgstr ""
+
+#: data/ui/window.blp:181
+msgid "Groups"
+msgstr ""
+
+#: data/ui/window.blp:191
+msgid "Queue"
+msgstr ""
+
+#: data/ui/window.blp:212
+msgid "Remove all from queue"
+msgstr ""
+
+#: data/ui/window.blp:235
+msgid "_Preferences"
+msgstr ""
+
+#: data/ui/window.blp:239
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: data/ui/window.blp:243
+msgid "_About Yum Extender"
 msgstr ""
 
 #: data/dk.yumex.Yumex.desktop.in.in:4
