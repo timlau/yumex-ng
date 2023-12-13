@@ -1,8 +1,4 @@
 {
-    "python.formatting.provider": "none",
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": false,
     "python.analysis.diagnosticSeverityOverrides": {
         "reportUndefinedVariable": "none",
         "reportMissingModuleSource": "none",
