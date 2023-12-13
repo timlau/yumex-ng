@@ -96,7 +96,7 @@ class YumexPackageInfo(Gtk.Box):
     def add_update_info(self, pkg_info):
         release = pkg_info["id"]
         self.release.set_label(release)
-        upd_type = ADVISORY_TYPES[pkg_info["type"]]
+        upd_type = ADVISORY_TYPES.get(pkg_info["type"], _("Undefined"))
         self.type.set_label(upd_type)
         issued = pkg_info["updated"]
         self.issued.set_label(issued)
