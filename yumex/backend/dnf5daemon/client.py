@@ -39,7 +39,8 @@ class AsyncDbusCaller:
 
     def call(self, mth, *args, **kwargs) -> Any:
         self.loop = EventLoop()
-        mth(*args, **kwargs, callback=self.callback)
+        # timeout = 10min
+        mth(*args, timeout=10 * 60 * 1000, **kwargs, callback=self.callback)
         self.loop.run()
         return self.res
 
