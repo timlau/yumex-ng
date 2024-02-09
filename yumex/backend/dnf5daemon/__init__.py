@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum, auto, IntEnum
 from typing import Self
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
@@ -11,10 +11,47 @@ from yumex.utils.enums import PackageState
 from .client import Dnf5DbusClient, gv_list
 
 
+class Action(IntEnum):
+    INSTALL = 1
+    UPGRADE = 2
+    DOWNGRADE = 3
+    REINSTALL = 4
+    REMOVE = 5
+    REPLACED = 6
+    REASON_CHANGE = 7
+    ENABLE = 8
+    DISABLE = 9
+    RESET = 10
+
+
 class DownloadType(Enum):
     REPO = auto()
     PACKAGE = auto()
     UNKNOWN = auto()
+
+
+def get_action(action: Action) -> str:
+    match action:
+        case Action.INSTALL:
+            return "Install"
+        case Action.UPGRADE:
+            return "Upgrade"
+        case Action.DOWNGRADE:
+            return "Downgrade"
+        case Action.REINSTALL:
+            return "Reinstall"
+        case Action.REMOVE:
+            return "Remove"
+        case Action.REPLACED:
+            return "Replaced"
+        case Action.REASON_CHANGE:
+            return "Reason Change"
+        case Action.ENABLE:
+            return "Enable"
+        case Action.DISABLE:
+            return "Disable"
+        case Action.RESET:
+            return "Reset"
 
 
 @dataclass
@@ -38,7 +75,7 @@ class DownloadPackage:
 
 @dataclass
 class DownloadQueue:
-    queue: dict[DownloadPackage] = field(default_factory=dict)
+    queue: dict = field(default_factory=dict)
 
     @property
     def total(self):
@@ -96,9 +133,9 @@ class YumexRootBackend:
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
-        ...
+        pass
 
-    def build_result(self, content: list) -> dict[str:list]:
+    def build_result(self, content: list) -> dict:
         result_dict = {}
         for _, action, _, _, pkg in content:
             action = action.lower()
@@ -149,6 +186,13 @@ class YumexRootBackend:
         client.session.download_progress.connect(self.on_download_progress)
         client.session.download_end.connect(self.on_download_end)
         client.session.repo_key_import_request.connect(self.on_repo_key_import_request)
+        # FIXME: Need changes in DNF5 :https://github.com/rpm-software-management/dnf5/pull/1232
+        try:
+            client.session.transaction_action_start.connect(
+                self.on_transaction_action_start
+            )
+        except Exception:
+            pass
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
@@ -165,7 +209,7 @@ class YumexRootBackend:
             self.progress.hide()
             if rc == 0 or rc == 1:
                 return TransactionResult(True, data=self.build_result(content))
-            elif rc == 2:
+            else:
                 error_msgs = "\n".join(errors)
                 return TransactionResult(False, error=error_msgs)
 
@@ -176,12 +220,19 @@ class YumexRootBackend:
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
             log("DNF5_ROOT : building transaction")
-            self._build_translations(self.last_transaction, client)
+            self._build_translations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
             client.do_transaction({})
             self.progress.hide()
-            return TransactionResult(True, data=None)
+            return TransactionResult(True, data=None)  # type: ignore
+
+    def on_transaction_action_start(self, session, package_id, action, total):
+        log(
+            f"DNF5_ROOT : Signal : transaction_action_start: action {action} total: {total} id: {package_id}"
+        )
+        action_str = get_action(action)
+        self.progress.set_subtitle(f" {action_str} {package_id}")
 
     def on_download_add_new(self, session, package_id, name, size):
         pkg = DownloadPackage(package_id, name, size)
@@ -200,7 +251,7 @@ class YumexRootBackend:
         self.progress.set_subtitle(_(f"Downloading : {name}"))
 
     def on_download_progress(self, session, package_id, to_download, downloaded):
-        pkg: DownloadPackage = self.download_queue.get(package_id)
+        pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
         log(
             f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})"
         )
@@ -218,7 +269,7 @@ class YumexRootBackend:
         self.progress.set_progress(fraction)
 
     def on_download_end(self, session, package_id, rc, msg):
-        pkg: DownloadPackage = self.download_queue.get(package_id)
+        pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
         log(f"DNF5_ROOT : Signal : download_end: {pkg.name} rc: {rc} msg: {msg}")
         if rc == 0:
             match pkg.package_type:
