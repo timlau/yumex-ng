@@ -184,7 +184,13 @@ class YumexRootBackend:
             client.session.transaction_action_start.connect(
                 self.on_transaction_action_start
             )
-        except Exception:
+            client.session.transaction_action_progress.connect(
+                self.on_transaction_action_progress
+            )
+            client.session.transaction_action_end.connect(
+                self.on_transaction_action_stop
+            )
+        except AttributeError:
             pass
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
@@ -226,6 +232,16 @@ class YumexRootBackend:
         )
         action_str = get_action(action)
         self.progress.set_subtitle(f" {action_str} {package_id}")
+
+    def on_transaction_action_progress(self, session, package_id, amount, total):
+        log(
+            f"DNF5_ROOT : Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}"
+        )
+
+    def on_transaction_action_stop(self, session, package_id, total):
+        log(
+            f"DNF5_ROOT : Signal : transaction_action_stop: total: {total} id: {package_id}"
+        )
 
     def on_download_add_new(self, session, package_id, name, size):
         pkg = DownloadPackage(package_id, name, size)

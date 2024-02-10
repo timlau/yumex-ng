@@ -1,5 +1,5 @@
 [flake8]
-max-line-length = 110
+max-line-length = 120
 extend-ignore = E203
 builtins = _
 ignore = E402
