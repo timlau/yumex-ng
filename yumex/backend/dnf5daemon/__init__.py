@@ -33,25 +33,18 @@ class DownloadType(Enum):
 def get_action(action: Action) -> str:
     match action:
         case Action.INSTALL:
-            return "Install"
+            return _("Installing")
         case Action.UPGRADE:
-            return "Upgrade"
+            return _("Upgrading")
         case Action.DOWNGRADE:
-            return "Downgrade"
+            return _("Downgrading")
         case Action.REINSTALL:
-            return "Reinstall"
+            return _("Reinstalling")
         case Action.REMOVE:
-            return "Remove"
+            return _("Removing")
         case Action.REPLACED:
-            return "Replaced"
-        case Action.REASON_CHANGE:
-            return "Reason Change"
-        case Action.ENABLE:
-            return "Enable"
-        case Action.DISABLE:
-            return "Disable"
-        case Action.RESET:
-            return "Reset"
+            return _("Replacing")
+    return ""
 
 
 @dataclass
