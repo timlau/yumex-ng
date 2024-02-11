@@ -49,7 +49,7 @@ msgid "Installing"
 msgstr ""
 
 #: yumex/ui/flatpak_result.py:38
-msgid "Unnstalling"
+msgid "Uninstalling"
 msgstr ""
 
 #: yumex/ui/flatpak_result.py:40
