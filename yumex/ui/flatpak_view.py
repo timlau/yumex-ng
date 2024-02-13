@@ -76,12 +76,14 @@ class YumexFlatpakView(Gtk.ListView):
     def update_all(self) -> None:
         """update all flatpaks with pending updates"""
 
-        self.do_transaction(self.backend.do_update_all)
+        if self.do_transaction(self.backend.do_update_all):
+            self.presenter.show_message(_("flatpaks was updated"), timeout=2)
 
     def update(self, pkg) -> None:
         """update a flatpak"""
 
-        self.do_transaction(self.backend.do_update, [pkg])
+        if self.do_transaction(self.backend.do_update, [pkg]):
+            self.presenter.show_message(_(f"{pkg.id} is now removed"), timeout=2)
 
     def install(self, *args) -> None:
         """install a new flatpak"""
@@ -104,10 +106,12 @@ class YumexFlatpakView(Gtk.ListView):
             )
             if ref:
                 if flatpak_installer.confirm:
-                    self.do_transaction(self.backend.do_install, ref, remote, location)
-                    self.presenter.show_message(
-                        _(f"{fp_id} is now installed"), timeout=2
-                    )
+                    if self.do_transaction(
+                        self.backend.do_install, ref, remote, location
+                    ):
+                        self.presenter.show_message(
+                            _(f"{fp_id} is now installed"), timeout=2
+                        )
 
             else:
                 self.presenter.show_message(f"{fp_id} is not found om {remote}")
@@ -116,10 +120,12 @@ class YumexFlatpakView(Gtk.ListView):
         """remove an flatpak"""
 
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
-        self.do_transaction(self.backend.do_remove, selected)
-        self.presenter.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
+        if self.do_transaction(self.backend.do_remove, selected):
+            self.presenter.show_message(
+                _(f"{selected[0].id} is now removed"), timeout=2
+            )
 
-    def do_transaction(self, method: Callable, *args) -> None:
+    def do_transaction(self, method: Callable, *args) -> bool:
         """Excute the transaction in two runs
 
         The first get the refs in the transaction and show a confirmation dialog
@@ -130,6 +136,7 @@ class YumexFlatpakView(Gtk.ListView):
         The provided callback will be called, with the state of second run
         """
         log(">> Start do_transaction")
+        confirm = False
         with RunJob(method, *args, execute=False) as job:
             refs = job.start()
         if refs:
@@ -141,6 +148,7 @@ class YumexFlatpakView(Gtk.ListView):
         self.presenter.progress.hide()
         self.reset()
         log("<< End do_transaction")
+        return confirm
 
     @Gtk.Template.Callback()
     def on_row_setup(self, widget, item) -> None:
@@ -177,7 +185,7 @@ class YumexFlatpakRow(Adw.ActionRow):
     def __init__(self, view, **kwargs) -> None:
         super().__init__(**kwargs)
         self.view: YumexFlatpakView = view
-        self.pkg: FlatpakPackage = None
+        self.pkg: FlatpakPackage = None  # type: ignore
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, widget) -> None:
