@@ -135,10 +135,6 @@ msgstr ""
 msgid "Downloading repository information for {name}"
 msgstr "indlæser kilde information for {name}"
 
-#: yumex/backend/flatpak/transaction.py:63
-msgid "Uninstalling"
-msgstr ""
-
 #: yumex/backend/flatpak/transaction.py:65
 msgid "Updating"
 msgstr ""
