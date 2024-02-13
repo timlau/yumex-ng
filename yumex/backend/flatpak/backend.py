@@ -91,7 +91,7 @@ class FlatpakBackend:
                 if not remote.get_disabled()
             ]
         )
-        log(f"FLATPAK : {location   } remotes: {remotes}")
+        log(f"FLATPAK : {location} remotes: {remotes}")
         return remotes
 
     def get_arch(self) -> str:
@@ -123,7 +123,7 @@ class FlatpakBackend:
 
     def _build_transaction(
         self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs
-    ) -> list[tuple[str, FlatpakAction, str]]:
+    ):
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
         transaction = FlatpakTransaction(self, location=location, first_run=True)
@@ -132,7 +132,7 @@ class FlatpakBackend:
             transaction.run()
             return []
         except FlatPakFirstRun:
-            result: list = transaction._current_result
+            result = transaction._current_result
             refs = [
                 (oper.get_ref(), action, oper.get_remote(), location) for oper in result
             ]
