@@ -169,6 +169,15 @@ template $YumexMainWindow : Adw.ApplicationWindow {
                         action-name: "app.flatpak_remove";
                         tooltip-text: _("uninstall selected flatpak");
                       }
+                      Gtk.Separator {
+                        styles ["spacer"]
+                      }
+                      Gtk.ToggleButton {
+                        icon-name: "library-symbolic";
+                        action-name: "app.flatpak_runtime";
+                        tooltip-text: _("show/hide runtimes");
+                      }
+
                     }
 
                   }

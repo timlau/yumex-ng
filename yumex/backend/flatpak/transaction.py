@@ -156,10 +156,11 @@ class FlatpakTransaction:
             log(f" FlatpakTransaction: adding {pkg.id} for rebase")
             log(f" flatpak: rebase {pkg.ref.format_ref()} -> {rebase_ref}")
             # rebase to new version
-            self.transaction.add_rebase(
-                pkg.origin, rebase_ref, None, [pkg.ref.get_name()]
-            )
-            self.add_remove(str(pkg))  # remove the old version
+            if rebase_ref:
+                self.transacton.add_rebase(
+                    pkg.origin, rebase_ref, None, [pkg.ref.get_name()]
+                )
+                self.add_remove(str(pkg))  # remove the old version
 
     def run(self) -> bool:
         """run the tranaction"""

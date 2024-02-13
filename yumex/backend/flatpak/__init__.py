@@ -52,12 +52,19 @@ class FlatpakPackage(GObject.GObject):
     @property
     def name(self) -> str:
         """return the application name (not id) : ex. Contrast"""
-        name = self.ref.get_appdata_name()
-        if not name:
-            id = self.ref.get_name()
-            name = id.split(".")[-1]
-            log(f"flatpak {id} don't have an appname, using {name}")
-        return name
+        return self.get_name()
+
+    @property
+    def sort_key(self):
+        match self.type:
+            case FlatpakType.APP:
+                return f"0{self.name}"
+            case FlatpakType.RUNTIME:
+                return f"1{self.name}"
+            case FlatpakType.LOCALE:
+                return f"2{self.name}"
+            case _:
+                return f"3{self.name}"
 
     @property
     def version(self) -> str:
@@ -96,6 +103,33 @@ class FlatpakPackage(GObject.GObject):
                 if self.id.endswith(".Locale"):
                     pak_type = FlatpakType.LOCALE
         return pak_type
+
+    def name_from_id(self):
+        id = self.ref.get_name()
+        ids = id.split(".")
+        match self.type:
+            case FlatpakType.APP:
+                return ids[-1]
+            case FlatpakType.RUNTIME:
+                return ids[-1]
+            case FlatpakType.LOCALE:
+                return ids[-2]
+            case _:
+                return id
+
+    def get_name(self):
+        name = self.ref.get_appdata_name()
+        if not name:
+            name = self.name_from_id()
+        match self.type:
+            case FlatpakType.APP:
+                return name
+            case FlatpakType.RUNTIME:
+                return f"Runtime: {name}"
+            case FlatpakType.LOCALE:
+                return f"Locale: {name}"
+            case _:
+                return f"Other: {name}"
 
     def __repr__(self) -> FlatpakRefString:
         """return the ref as string: ex. app/org.gnome.design.Contrast/x86_64/stable"""

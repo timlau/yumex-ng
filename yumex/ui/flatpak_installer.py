@@ -135,7 +135,7 @@ class YumexFlatpakInstaller(Adw.Window):
         """update the current selected number"""
         self.found_num.set_visible(True)
         num = len(self.found_ids)
-        label = f"{self.found_ndx+1}/{num}"
+        label = f"{self.found_ndx + 1}/{num}"
         self.found_num.set_label(label)
 
     def _clear(self) -> None:

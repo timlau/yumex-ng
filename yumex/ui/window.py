@@ -386,6 +386,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "flatpak_update":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.update_all()
+            case "flatpak_runtime":
+                if self.active_page == Page.FLATPAKS:
+                    self.flatpak_view.show_runtime()
             case "filter_installed":
                 if self.active_page == Page.PACKAGES:
                     self.on_filter_installed()

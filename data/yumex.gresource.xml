@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/dk/yumex/Yumex">
-    <file preprocess="xml-stripblanks">ui/window.ui</file>
-    <file preprocess="xml-stripblanks">ui/package_view.ui</file>
-    <file preprocess="xml-stripblanks">ui/queue_view.ui</file>
-    <file preprocess="xml-stripblanks">ui/queue_row.ui</file>
-    <file preprocess="xml-stripblanks">ui/preferences.ui</file>
-    <file preprocess="xml-stripblanks">ui/package_settings.ui</file>
-    <file preprocess="xml-stripblanks">ui/progress.ui</file>
-    <file preprocess="xml-stripblanks">ui/repository.ui</file>
-    <file preprocess="xml-stripblanks">ui/package_info.ui</file>
-    <file preprocess="xml-stripblanks">ui/transaction_result.ui</file>
-    <file preprocess="xml-stripblanks">ui/flatpak_view.ui</file>
-    <file preprocess="xml-stripblanks">ui/flatpak_row.ui</file>
-    <file preprocess="xml-stripblanks">ui/flatpak_installer.ui</file>
-    <file preprocess="xml-stripblanks">ui/flatpak_result.ui</file>
-    <file preprocess="xml-stripblanks" alias="gtk/help-overlay.ui">ui/shortcuts.ui</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/dock-left-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/test-pass-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/server-pick-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/flatpak-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/playback-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/resources-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/diagnostics-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/x-circular-symbolic.svg</file>
-    <file>style.css</file>
-  </gresource>
+    <gresource prefix="/dk/yumex/Yumex">
+        <file preprocess="xml-stripblanks">ui/window.ui</file>
+        <file preprocess="xml-stripblanks">ui/package_view.ui</file>
+        <file preprocess="xml-stripblanks">ui/queue_view.ui</file>
+        <file preprocess="xml-stripblanks">ui/queue_row.ui</file>
+        <file preprocess="xml-stripblanks">ui/preferences.ui</file>
+        <file preprocess="xml-stripblanks">ui/package_settings.ui</file>
+        <file preprocess="xml-stripblanks">ui/progress.ui</file>
+        <file preprocess="xml-stripblanks">ui/repository.ui</file>
+        <file preprocess="xml-stripblanks">ui/package_info.ui</file>
+        <file preprocess="xml-stripblanks">ui/transaction_result.ui</file>
+        <file preprocess="xml-stripblanks">ui/flatpak_view.ui</file>
+        <file preprocess="xml-stripblanks">ui/flatpak_row.ui</file>
+        <file preprocess="xml-stripblanks">ui/flatpak_installer.ui</file>
+        <file preprocess="xml-stripblanks">ui/flatpak_result.ui</file>
+        <file preprocess="xml-stripblanks" alias="gtk/help-overlay.ui">ui/shortcuts.ui</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/dock-left-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/test-pass-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/server-pick-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/flatpak-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/playback-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/resources-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/diagnostics-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/x-circular-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
+        <file>style.css</file>
+    </gresource>
 </gresources>

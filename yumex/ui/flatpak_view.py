@@ -39,6 +39,7 @@ class YumexFlatpakView(Gtk.ListView):
         super().__init__(**kwargs)
         self.presenter: YumexPresenter = presenter
         self.icons_paths = self.get_icon_paths()
+        self.show_all = False
         self.reset()
 
     def reset(self) -> None:
@@ -46,9 +47,9 @@ class YumexFlatpakView(Gtk.ListView):
         self.store = Gio.ListStore.new(FlatpakPackage)
         self.presenter.reset_flatpak_backend()
         for elem in self.backend.get_installed(location=FlatpakLocation.BOTH):
-            if elem.type == FlatpakType.APP:  # show only apps
+            if elem.type == FlatpakType.APP or self.show_all:  # show only apps
                 self.store.append(elem)
-        self.store.sort(lambda a, b: a.name > b.name)
+        self.store.sort(lambda a, b: a.sort_key > b.sort_key)
         self.selection.set_model(self.store)
         self.selection.set_selected(0)
         self.refresh_need_attention()
@@ -125,6 +126,11 @@ class YumexFlatpakView(Gtk.ListView):
                 _(f"{selected[0].id} is now removed"), timeout=2
             )
 
+    def show_runtime(self):
+        log("Show Runtime")
+        self.show_all = not self.show_all
+        self.reset()
+
     def do_transaction(self, method: Callable, *args) -> bool:
         """Excute the transaction in two runs
 
@@ -167,8 +173,12 @@ class YumexFlatpakView(Gtk.ListView):
         row.user.set_label(pkg.location)
         row.origin.set_label(pkg.origin)
         row.update.set_visible(pkg.is_update != FlatpakUpdate.NO)
-        row.set_title(f"{pkg.name} - {pkg.version}")
+        if pkg.version:
+            row.set_title(f"{pkg.name} - {pkg.version}")
+        else:
+            row.set_title(f"{pkg.name}")
         row.set_subtitle(pkg.summary)
+        row.set_tooltip_text(repr(pkg))
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_row.ui")
