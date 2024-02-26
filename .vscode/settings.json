@@ -27,4 +27,5 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
+    "C_Cpp.default.compileCommands": "/home/tim/udv/yumex-ng/builddir/compile_commands.json",
 }
