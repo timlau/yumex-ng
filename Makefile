@@ -13,6 +13,9 @@ DIST=${shell rpm --eval "%{dist}"}
 GIT_MASTER=main
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
+COPR_REL_DNF4 = -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64
+COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64
+COPR_REL_DNF5_SUBPKG = -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64
 
 all:
 	@echo "Nothing to do, use a specific target"
@@ -33,12 +36,12 @@ archive:
 # build local rpms and start a copr build
 copr-release:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ts ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
-	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-39-x86_64 -r fedora-38-aarch64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
+	@copr-cli build yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # build local rpms and start a copr build
 copr-release-dnf5:
 	@$(MAKE) release-yumex-dnf5
-	@copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64  $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
+	@copr-cli build yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
 
 # create a release
 # commit, tag, push, build local rpm and start a copr build
@@ -134,15 +137,15 @@ rpm:
 # make a test-releases and build it in fedora copr
 test-copr:
 	@$(MAKE) test-release
-	copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 test-copr-dnf5:
 	@$(MAKE) test-release-dnf5
-	copr-cli build yumex-ng -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 test-copr-yumex-dnf5:
 	@$(MAKE) test-release-yumex-dnf5
-	copr-cli build yumex-ng -r fedora-38-x86_64 -r fedora-38-aarch64 -r fedora-39-x86_64 -r fedora-39-aarch64 $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 
 # Make a local build and run it
