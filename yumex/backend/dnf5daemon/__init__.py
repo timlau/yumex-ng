@@ -11,6 +11,7 @@ from yumex.utils.enums import PackageState
 from .client import Dnf5DbusClient, gv_list
 
 
+# defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
 class Action(IntEnum):
     INSTALL = 1
     UPGRADE = 2
@@ -179,7 +180,8 @@ class YumexRootBackend:
         client.session.download_progress.connect(self.on_download_progress)
         client.session.download_end.connect(self.on_download_end)
         client.session.repo_key_import_request.connect(self.on_repo_key_import_request)
-        # FIXME: Need changes in DNF5 :https://github.com/rpm-software-management/dnf5/pull/1232
+        # FIXME:need dnf5 5.1.13 for the signals to be available in introspection
+        # we need to bump the requement to dnf5 3.1.13 and remove the try/except block.
         try:
             client.session.transaction_action_start.connect(
                 self.on_transaction_action_start
