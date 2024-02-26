@@ -113,7 +113,7 @@ class FlatpakBackend:
     def _get_package(self, ref, location: FlatpakLocation) -> FlatpakPackage:
         """create a flatpak pkg object with update status"""
         if eol := ref.get_eol():
-            log(f"flatpak: EOL : {eol}")
+            log(f"flatpak: EOL : {ref} {eol}")
             is_update = FlatpakUpdate.EOL
         elif ref.get_name() in self.updates:
             is_update = FlatpakUpdate.UPDATE
