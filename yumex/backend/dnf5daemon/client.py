@@ -13,6 +13,7 @@ from gi.repository import GLib  # type: ignore
 SYSTEM_BUS = SystemMessageBus()
 DNFDBUS_NAMESPACE = ("org", "rpm", "dnf", "v0")
 DNFDBUS = DBusServiceIdentifier(namespace=DNFDBUS_NAMESPACE, message_bus=SYSTEM_BUS)
+ASYNC_TIMEOUT = 20 * 60 * 1000  # 20 min in ms
 
 logger = getLogger("dnf5dbus")
 logging.basicConfig(
@@ -40,7 +41,7 @@ class AsyncDbusCaller:
     def call(self, mth, *args, **kwargs) -> Any:
         self.loop = EventLoop()
         # timeout = 10min
-        mth(*args, timeout=10 * 60 * 1000, **kwargs, callback=self.callback)
+        mth(*args, timeout=ASYNC_TIMEOUT, **kwargs, callback=self.callback)
         self.loop.run()
         return self.res
 
