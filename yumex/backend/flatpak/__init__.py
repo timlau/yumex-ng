@@ -18,7 +18,6 @@
 
 from enum import Enum, auto
 from gi.repository import Flatpak, GObject
-from yumex.utils import log
 
 from yumex.utils.types import FlatpakRefString, FlatpakRef
 from yumex.utils.enums import FlatpakType, FlatpakLocation
