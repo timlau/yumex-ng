@@ -168,7 +168,7 @@ inst-deps-dnf5:
 
 # install packages needed running and building
 inst-deps:
-	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf
+	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf gtk4-devel libadwaita-devel
 
 # generate the POTFILES from available source files with translations
 # POTFILES is source for what fies is used to generate the .POT file.
