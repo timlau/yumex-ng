@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2023  Tim Lauridsen
+# Copyright (C) 2024 Tim Lauridsen
 
 from gi.repository import Gtk, Adw, GLib, GObject, Gio
 
@@ -61,7 +61,7 @@ class YumexFlatpakResult(Adw.Window):
         self._loop.run()
 
     def populate(self, results: list[str, FlatpakAction, str]):
-        for (ref, action, source, location) in results:
+        for ref, action, source, location in results:
             elem = ResultElem(ref, action, source, location)
             log(f" --> Adding element {elem}")
             self.store.append(elem)

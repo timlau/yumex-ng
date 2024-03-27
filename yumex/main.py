@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Copyright (C) 2023  Tim Lauridsen
+# Copyright (C) 2024 Tim Lauridsen
 #
 #
 
@@ -160,7 +160,7 @@ class YumexApplication(Adw.Application):
             designers=[],
             documenters=[],
             translator_credits="",
-            copyright="© 2023 Tim Lauridsen",
+            copyright="© 2024 Tim Lauridsen",
             license_type=Gtk.License.GPL_3_0,
             version=f"{VERSION} ({BACKEND})",
             release_notes_version=VERSION,

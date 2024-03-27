@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2023  Tim Lauridsen
+# Copyright (C) 2024 Tim Lauridsen
 
 from time import time
 from typing import Iterable, Union
@@ -418,7 +418,11 @@ class DnfBase(dnf.Base):
                                 action=PackageAction.UPGRADE,
                             )
                         )
-                    case dnf.transaction.PKG_UPGRADED, dnf.transaction.PKG_OBSOLETED, dnf.transaction.PKG_DOWNGRADED:  # noqa
+                    case (
+                        dnf.transaction.PKG_UPGRADED,
+                        dnf.transaction.PKG_OBSOLETED,
+                        dnf.transaction.PKG_DOWNGRADED,
+                    ):  # noqa
                         pass
                     case _:
                         log(f" DNF4: unhandled transaction found: {tsi.action} ")
