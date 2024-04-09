@@ -43,12 +43,15 @@ class AsyncDbusCaller:
                 # This occours on long running transaction
                 case "Remote peer disconnected":
                     logger.error("Connection to dns5daemon lost")
+                    self.res = None
                 # This occours when PolicyKet autherization is not given before a time limit
                 case "Method call timed out":
                     logger.error("Dbus method call timeout")
+                    self.res = "PolicyKit Autherisation failed"
                 # This occours when PolicyKet autherization dialog is cancelled
                 case "Not authorized":
                     logger.error("PolicyKit Autherisation failed")
+                    self.res = "PolicyKit Autherisation failed"
                 case _:
                     logger.error(f"Error in dbus call : {msg}")
         self.loop.quit()

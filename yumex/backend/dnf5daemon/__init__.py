@@ -224,9 +224,13 @@ class YumexRootBackend:
             self._build_transations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
-            client.do_transaction({})
+            rc = client.do_transaction({})
+            log(f"run_transaction : {rc}")
             self.progress.hide()
-            return TransactionResult(True, data=None)  # type: ignore
+            if rc:
+                return TransactionResult(False, error=rc)  # type: ignore
+            else:
+                return TransactionResult(True, data=None)  # type: ignore
 
     def on_transaction_action_start(self, session, package_id, action, total):
         log(

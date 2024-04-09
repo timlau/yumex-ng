@@ -275,16 +275,16 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
         if queued := self.queue_view.get_queued():
             log(f"Execute the transaction on {len(queued)} packages")
-            done = self._do_transaction(queued)
-            log(f"Transaction execution ended : {done}")
-            if done:  # transaction completed without issues
-                # reset everything
-                self.package_view.reset()
-                self.search_bar.set_search_mode(False)
+            result = self._do_transaction(queued)
+            log(f"Transaction execution ended : {result}")
+            if result:  # transaction completed without issues
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
-                self.package_settings.unselect_all()
-                self.select_page(Page.PACKAGES)
-                self.load_packages(PackageFilter.INSTALLED)
+            # reset everything
+            self.package_view.reset()
+            self.search_bar.set_search_mode(False)
+            self.package_settings.unselect_all()
+            self.select_page(Page.PACKAGES)
+            self.load_packages(PackageFilter.INSTALLED)
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
