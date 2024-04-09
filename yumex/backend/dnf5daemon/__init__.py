@@ -150,7 +150,7 @@ class YumexRootBackend:
             result_dict[action].append(((nevra, repo), size))
         return result_dict
 
-    def _build_translations(self, pkgs: list[YumexPackage], client):
+    def _build_transations(self, pkgs: list[YumexPackage], client):
         to_install = []
         to_update = []
         to_remove = []
@@ -202,7 +202,7 @@ class YumexRootBackend:
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
             log("DNF5_ROOT : building transaction")
-            content, rc = self._build_translations(pkgs, client)
+            content, rc = self._build_transations(pkgs, client)
             log(f"DNF5_ROOT : build transaction: rc =  {rc}")
             errors = client.session.get_transaction_problems_string()
             for error in errors:
@@ -221,7 +221,7 @@ class YumexRootBackend:
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
             log("DNF5_ROOT : building transaction")
-            self._build_translations(self.last_transaction, client)  # type: ignore
+            self._build_transations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
             client.do_transaction({})
