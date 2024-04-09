@@ -35,7 +35,22 @@ class AsyncDbusCaller:
         self.loop = None
 
     def callback(self, call) -> None:
-        self.res = call()
+        try:
+            self.res = call()
+        except DBusError as e:
+            msg = str(e)
+            match msg:
+                # This occours on long running transaction
+                case "Remote peer disconnected":
+                    logger.error("Connection to dns5daemon lost")
+                # This occours when PolicyKet autherization is not given before a time limit
+                case "Method call timed out":
+                    logger.error("Dbus method call timeout")
+                # This occours when PolicyKet autherization dialog is cancelled
+                case "Not authorized":
+                    logger.error("PolicyKit Autherisation failed")
+                case _:
+                    logger.error(f"Error in dbus call : {msg}")
         self.loop.quit()
 
     def call(self, mth, *args, **kwargs) -> Any:
