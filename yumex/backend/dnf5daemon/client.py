@@ -28,7 +28,7 @@ def gv_list(var: list[str]) -> GLib.Variant:
     return GLib.Variant("as", var)
 
 
-def gv_string(var: str):
+def gv_string(var: str) -> GLib.Variant:
     return GLib.Variant("s", var)
 
 
