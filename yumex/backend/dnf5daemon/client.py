@@ -28,6 +28,10 @@ def gv_list(var: list[str]) -> GLib.Variant:
     return GLib.Variant("as", var)
 
 
+def gv_string(var: str):
+    return GLib.Variant("s", var)
+
+
 # async call handler class
 class AsyncDbusCaller:
     def __init__(self) -> None:

@@ -8,7 +8,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.utils import log
 from yumex.utils.enums import PackageState
 
-from .client import Dnf5DbusClient, gv_list
+from .client import Dnf5DbusClient, gv_list, gv_string
 
 
 # defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
@@ -224,7 +224,9 @@ class YumexRootBackend:
             self._build_transations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
-            rc = client.do_transaction({})
+            rc = client.do_transaction(
+                {"comment": gv_string("Yum Extender Transaction")}
+            )
             log(f"run_transaction : {rc}")
             self.progress.hide()
             if rc:
