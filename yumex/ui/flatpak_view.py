@@ -65,7 +65,10 @@ class YumexFlatpakView(Gtk.ListView):
 
     def get_icon_paths(self) -> list[str]:
         """list of possible icon location for installed flatpaks"""
-        return [f"{path}/icons/" for path in os.environ["XDG_DATA_DIRS"].split(":")]
+        if "XDG_DATA_DIRS" in os.environ:
+            return [f"{path}/icons/" for path in os.environ["XDG_DATA_DIRS"].split(":")]
+        else:
+            return []
 
     def find_icon(self, pkg: FlatpakPackage) -> str | None:
         """find icon file for an installed flatpak"""
