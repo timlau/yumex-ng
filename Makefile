@@ -137,15 +137,15 @@ rpm:
 # make a test-releases and build it in fedora copr
 test-copr:
 	@$(MAKE) test-release
-	copr-cli build yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build --nowait yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 test-copr-dnf5:
 	@$(MAKE) test-release-dnf5
-	copr-cli build yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 test-copr-yumex-dnf5:
 	@$(MAKE) test-release-yumex-dnf5
-	copr-cli build yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
+	copr-cli build --nowait yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
 
 all-test-copr:
 	@$(MAKE) test-copr
