@@ -147,6 +147,10 @@ test-copr-yumex-dnf5:
 	@$(MAKE) test-release-yumex-dnf5
 	copr-cli build yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
 
+all-test-copr:
+	@$(MAKE) test-copr
+	@$(MAKE) test-copr-dnf5
+	@$(MAKE) test-copr-yumex-dnf5
 
 # Make a local build and run it
 localbuild:
