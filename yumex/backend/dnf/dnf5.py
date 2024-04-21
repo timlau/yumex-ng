@@ -89,17 +89,17 @@ class Backend(dnf.Base):
     def __init__(self, presenter: Presenter, *args) -> None:
         super().__init__(*args)
         self.presenter: Presenter = presenter
-        self.load_config_from_file()
+        self.load_config()
         self.setup()
         self.reset_backend()
 
     def reset_backend(self) -> None:
         self.repo_sack = self.get_repo_sack()
         self.repo_sack.create_repos_from_system_configuration()
-        # FIXME: should be replaced with 
+        # FIXME: should be replaced with
         # self.repo_sack.load_repos()
         # update_and_load_enabled_repos() is being deprecated upstream in dnf5 5.2.0
-        # 
+        #
         self.repo_sack.update_and_load_enabled_repos(True)
 
     @property
