@@ -20,7 +20,9 @@ def get_package_selection_tooltip(pkg):
     """set tooltip based on package state and if it is an denpency"""
     tip = ""
     name = ""
-    if pkg and pkg.is_dep:
+    if not pkg:
+        return ""
+    if pkg.is_dep:
         if pkg.ref_to:
             name = f" ({str(pkg.ref_to.nevra)})"
         match pkg.state:
