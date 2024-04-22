@@ -160,19 +160,19 @@ localbuild:
 
 # install tools needed for unit testing
 inst-test-tools:
-	sudo dnf install python3-pytest python3-pytest-cov python3-pytest-mock
+	sudo dnf5 install python3-pytest python3-pytest-cov python3-pytest-mock
 
 # install tools needed for local/copr rpm building
 inst-build-tools:
-	sudo dnf install @fedora-packager copr-cli
+	sudo dnf5 install @fedora-packager copr-cli
 
 # install packages needed for running with the dnf5 backend
 inst-deps-dnf5:
-	sudo dnf python3-libdnf5 dnf5daemon-server python3-dasbus
+	sudo dnf5 python3-libdnf5 dnf5daemon-server python3-dasbus
 
 # install packages needed running and building
 inst-deps:
-	sudo dnf install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf gtk4-devel libadwaita-devel
+	sudo dnf5 install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf gtk4-devel libadwaita-devel python3-dnfdaemon
 
 # generate the POTFILES from available source files with translations
 # POTFILES is source for what fies is used to generate the .POT file.
