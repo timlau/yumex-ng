@@ -186,6 +186,8 @@ class YumexPackageView(Gtk.ColumnView):
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""
         pkg: YumexPackage = item.get_item()
+        if not pkg:
+            return
         checkbox = item.get_child()
         tip = get_package_selection_tooltip(pkg)
         checkbox.set_tooltip_text(tip)
