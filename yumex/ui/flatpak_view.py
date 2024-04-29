@@ -177,9 +177,9 @@ class YumexFlatpakView(Gtk.ListView):
         row.origin.set_label(pkg.origin)
         row.update.set_visible(pkg.is_update != FlatpakUpdate.NO)
         if pkg.version:
-            row.set_title(f"{pkg.id} - {pkg.version}")
+            row.set_title(f"{pkg.name} - {pkg.version}")
         else:
-            row.set_title(f"{pkg.id}")
+            row.set_title(f"{pkg.name}")
         row.set_subtitle(pkg.summary)
         row.set_tooltip_text(repr(pkg))
 
