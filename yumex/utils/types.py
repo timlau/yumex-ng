@@ -14,6 +14,7 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 """Custom types used for type hinting for more clarity"""
+
 from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:

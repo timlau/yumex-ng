@@ -59,9 +59,7 @@ class YumexFlatpakView(Gtk.ListView):
         return self.presenter.flatpak_backend
 
     def refresh_need_attention(self):
-        self.presenter.set_needs_attention(
-            Page.FLATPAKS, self.backend.number_of_updates()
-        )
+        self.presenter.set_needs_attention(Page.FLATPAKS, self.backend.number_of_updates())
 
     def get_icon_paths(self) -> list[str]:
         """list of possible icon location for installed flatpaks"""
@@ -105,17 +103,11 @@ class YumexFlatpakView(Gtk.ListView):
             remote = flatpak_installer.remote.get_selected_item().get_string()
             location = flatpak_installer.location.get_selected_item().get_string()
             ref = self.backend.find_ref(remote, fp_id, location)
-            log(
-                f"FlatPakView.install : remote: {remote} location: {location} ref: {ref}"
-            )
+            log(f"FlatPakView.install : remote: {remote} location: {location} ref: {ref}")
             if ref:
                 if flatpak_installer.confirm:
-                    if self.do_transaction(
-                        self.backend.do_install, ref, remote, location
-                    ):
-                        self.presenter.show_message(
-                            _(f"{fp_id} is now installed"), timeout=2
-                        )
+                    if self.do_transaction(self.backend.do_install, ref, remote, location):
+                        self.presenter.show_message(_(f"{fp_id} is now installed"), timeout=2)
 
             else:
                 self.presenter.show_message(f"{fp_id} is not found om {remote}")
@@ -125,9 +117,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
         if self.do_transaction(self.backend.do_remove, selected):
-            self.presenter.show_message(
-                _(f"{selected[0].id} is now removed"), timeout=2
-            )
+            self.presenter.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
 
     def show_runtime(self):
         log("Show Runtime")

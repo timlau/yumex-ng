@@ -72,9 +72,7 @@ class YumexPresenter:
     @property
     def package_root_backend(self) -> PackageBackend:
         if not self._root_backend:
-            self._root_backend: PackageBackend = (
-                self.dnf_backend_factory.get_root_backend()
-            )
+            self._root_backend: PackageBackend = self.dnf_backend_factory.get_root_backend()
         return self._root_backend
 
     @property
@@ -119,9 +117,7 @@ class YumexPresenter:
         return self.package_backend.depsolve(pkgs)
 
     # PackageCache protocol implementation
-    def get_packages_by_filter(
-        self, pkgfilter: PackageFilter, reset=False
-    ) -> list[YumexPackage]:
+    def get_packages_by_filter(self, pkgfilter: PackageFilter, reset=False) -> list[YumexPackage]:
         return self.package_cache.get_packages_by_filter(pkgfilter, reset)
 
     def get_packages(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:

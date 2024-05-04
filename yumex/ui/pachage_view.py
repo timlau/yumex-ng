@@ -105,9 +105,7 @@ class YumexPackageView(Gtk.ColumnView):
         """search for packages and add them to store"""
         if len(txt) > 2:
             log(f"search packages field:{field} value: {txt}")
-            pkgs = self.presenter.get_packages(
-                self.presenter.search(txt, field=field, limit=1)
-            )
+            pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=1))
             self.add_packages_to_store(pkgs)
 
     @timed
@@ -137,9 +135,7 @@ class YumexPackageView(Gtk.ColumnView):
     def set_styles(self, widget, pkg) -> None:
         """Set widget style based on pkg state"""
         current_styles = widget.get_css_classes()
-        current_styles = [
-            style for style in current_styles if style not in CLEAN_STYLES
-        ]
+        current_styles = [style for style in current_styles if style not in CLEAN_STYLES]
         match pkg.state:
             case PackageState.INSTALLED:
                 current_styles.append("success")
@@ -287,13 +283,7 @@ class YumexPackageView(Gtk.ColumnView):
 
     @Gtk.Template.Callback()
     def on_queued_bind(self, widget, item):
-        check_button = (
-            item.get_child()
-        )  # Get the Gtk.Checkbutton stored in the ListItem
+        check_button = item.get_child()  # Get the Gtk.Checkbutton stored in the ListItem
         pkg = item.get_item()  # get the model item, connected to current ListItem
-        pkg.bind_property(
-            "queued", check_button, "active", GObject.BindingFlags.SYNC_CREATE
-        )
-        check_button.set_active(
-            pkg.queued
-        )  # Update Gtk.Label with data from model item
+        pkg.bind_property("queued", check_button, "active", GObject.BindingFlags.SYNC_CREATE)
+        check_button.set_active(pkg.queued)  # Update Gtk.Label with data from model item

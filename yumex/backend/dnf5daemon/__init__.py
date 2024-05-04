@@ -183,15 +183,9 @@ class YumexRootBackend:
         # FIXME:need dnf5 5.1.13 for the signals to be available in introspection
         # we need to bump the requement to dnf5 3.1.13 and remove the try/except block.
         try:
-            client.session.transaction_action_start.connect(
-                self.on_transaction_action_start
-            )
-            client.session.transaction_action_progress.connect(
-                self.on_transaction_action_progress
-            )
-            client.session.transaction_action_end.connect(
-                self.on_transaction_action_stop
-            )
+            client.session.transaction_action_start.connect(self.on_transaction_action_start)
+            client.session.transaction_action_progress.connect(self.on_transaction_action_progress)
+            client.session.transaction_action_end.connect(self.on_transaction_action_stop)
         except AttributeError:
             pass
 
@@ -224,9 +218,7 @@ class YumexRootBackend:
             self._build_transations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
-            rc = client.do_transaction(
-                {"comment": gv_string("Yum Extender Transaction")}
-            )
+            rc = client.do_transaction({"comment": gv_string("Yum Extender Transaction")})
             log(f"run_transaction : {rc}")
             self.progress.hide()
             if rc:
@@ -235,28 +227,20 @@ class YumexRootBackend:
                 return TransactionResult(True, data=None)  # type: ignore
 
     def on_transaction_action_start(self, session, package_id, action, total):
-        log(
-            f"DNF5_ROOT : Signal : transaction_action_start: action {action} total: {total} id: {package_id}"
-        )
+        log(f"DNF5_ROOT : Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
         action_str = get_action(action)
         self.progress.set_subtitle(f" {action_str} {package_id}")
 
     def on_transaction_action_progress(self, session, package_id, amount, total):
-        log(
-            f"DNF5_ROOT : Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}"
-        )
+        log(f"DNF5_ROOT : Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}")
 
     def on_transaction_action_stop(self, session, package_id, total):
-        log(
-            f"DNF5_ROOT : Signal : transaction_action_stop: total: {total} id: {package_id}"
-        )
+        log(f"DNF5_ROOT : Signal : transaction_action_stop: total: {total} id: {package_id}")
 
     def on_download_add_new(self, session, package_id, name, size):
         pkg = DownloadPackage(package_id, name, size)
         self.download_queue.add(pkg)
-        log(
-            f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size} id: {package_id}"
-        )
+        log(f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size} id: {package_id}")
         if len(self.download_queue) == 1:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
@@ -269,9 +253,7 @@ class YumexRootBackend:
 
     def on_download_progress(self, session, package_id, to_download, downloaded):
         pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
-        log(
-            f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})"
-        )
+        log(f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})")
         self.progress.set_subtitle(_(f"Downloading : {pkg.name}"))
         match pkg.package_type:
             case DownloadType.PACKAGE:

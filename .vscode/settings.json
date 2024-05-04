@@ -25,6 +25,7 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 30000,
     "[python]": {
-        "editor.defaultFormatter": "charliermarsh.ruff"
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true
     },
 }

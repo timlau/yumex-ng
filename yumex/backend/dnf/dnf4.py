@@ -35,9 +35,7 @@ from yumex.utils.enums import (
 from yumex.backend.dnf import YumexPackage
 
 
-def create_package(
-    pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE
-) -> YumexPackage:
+def create_package(pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE) -> YumexPackage:
     return YumexPackage(
         name=pkg.name,
         arch=pkg.arch,
@@ -74,9 +72,7 @@ class UpdateInfo:
 
     @staticmethod
     def advisories_iter(po):
-        return itertools.chain(
-            po.get_advisories(hawkey.LT), po.get_advisories(hawkey.GT | hawkey.EQ)
-        )
+        return itertools.chain(po.get_advisories(hawkey.LT), po.get_advisories(hawkey.GT | hawkey.EQ))
 
     def advisories_list(self):
         """list containing advisory information."""
@@ -206,9 +202,7 @@ class Packages:
         newest available packages
         mark the installed ones
         """
-        return self.filter_installed(
-            query=self.query.available().filter(arch__neq="src").latest()
-        )
+        return self.filter_installed(query=self.query.available().filter(arch__neq="src").latest())
 
     @property
     def extras(self):
@@ -454,9 +448,7 @@ class Backend(DnfBase):
             case other:
                 raise ValueError(f"{other} is not an legal package filter")
 
-    def search(
-        self, txt: str, field: str = "name", limit: int = 1
-    ) -> list[YumexPackage]:
+    def search(self, txt: str, field: str = "name", limit: int = 1) -> list[YumexPackage]:
         return self.packages.search(txt, field=field, limit=limit)
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
@@ -502,9 +494,7 @@ class Backend(DnfBase):
                         log(f" DNF4: add {str(dnf_pkg)} to transaction for upgrade")
                     case PackageState.AVAILABLE:
                         self.package_install(dnf_pkg)
-                        log(
-                            f" DNF4: add {str(dnf_pkg)} to transaction for installation"
-                        )
+                        log(f" DNF4: add {str(dnf_pkg)} to transaction for installation")
             else:
                 log(f" DNF4: dnf package for {pkg} was not found")
         try:

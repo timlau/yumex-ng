@@ -80,9 +80,7 @@ class YumexRootBackend(Client):
             case _:
                 log(f" --> on_TransactionEvent : {event} : {data}")
 
-    def on_RPMProgress(
-        self, package, action, te_current, te_total, ts_current, ts_total
-    ):
+    def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
         pkg_name, repo = self.id_to_nevra(package)
         match action:
             case "erase":
@@ -150,9 +148,7 @@ class YumexRootBackend(Client):
                     case other:
                         raise ValueError(f"Unknown package state : {other}")
                 if not result.completed:
-                    log(
-                        " --> RootBackendError : Error in adding packages to transaction"
-                    )
+                    log(" --> RootBackendError : Error in adding packages to transaction")
                     if result.data:
                         for line in result.data:
                             log(f"     --> : {line}")
@@ -168,18 +164,14 @@ class YumexRootBackend(Client):
                 )
         except DaemonError as e:
             log(" --> RootBackendError : " + str(e))
-            return TransactionResult(
-                False, error=_("Exception in Dnf Backend\n") + str(e)
-            )
+            return TransactionResult(False, error=_("Exception in Dnf Backend\n") + str(e))
         except BaseException:  # Other exception should also unlock the backend daemon
             raise
 
     def build_result(self, result: list[str, list]) -> dict:
         result_dict = {}
         for action, pkgs in result:
-            result_dict[action] = [
-                (self.id_to_nevra(id), size) for id, size, extra in pkgs
-            ]
+            result_dict[action] = [(self.id_to_nevra(id), size) for id, size, extra in pkgs]
         return result_dict
 
     def run_transaction(self) -> TransactionResult:
@@ -188,15 +180,11 @@ class YumexRootBackend(Client):
             if rc == 0:
                 return TransactionResult(True, data={"msgs": msgs})
             elif rc == 1:  # gpg keys need to be confirmed
-                return TransactionResult(
-                    False, key_install=True, key_values=self.gpg_confirm
-                )
+                return TransactionResult(False, key_install=True, key_values=self.gpg_confirm)
             else:
                 return TransactionResult(False, error="\n".join(msgs))
         except DaemonError as e:
-            return TransactionResult(
-                False, error=_("Exception in Dnf Backend : ") + str(e)
-            )
+            return TransactionResult(False, error=_("Exception in Dnf Backend : ") + str(e))
 
     def do_gpg_import(self):
         (

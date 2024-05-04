@@ -40,9 +40,7 @@ class YumexApplication(Adw.Application):
     settings = Gio.Settings.new(APP_ID)
 
     def __init__(self) -> None:
-        super().__init__(
-            application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
-        )
+        super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.set_resource_base_path(ROOTDIR)
         self.style_manager = Adw.StyleManager.get_default()
         self.args = None
@@ -105,15 +103,9 @@ class YumexApplication(Adw.Application):
         self.win.load_packages("installed")
 
     def do_command_line(self, args) -> Literal[0]:
-        parser = argparse.ArgumentParser(
-            prog="yumex", description="Yum Extender package management application"
-        )
-        parser.add_argument(
-            "-d", "--debug", help="enable debug logging", action="store_true"
-        )
-        parser.add_argument(
-            "--exit", help="stop the dnfdaemon system daemon", action="store_true"
-        )
+        parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
+        parser.add_argument("-d", "--debug", help="enable debug logging", action="store_true")
+        parser.add_argument("--exit", help="stop the dnfdaemon system daemon", action="store_true")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.exit:
             subprocess.call(

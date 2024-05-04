@@ -46,10 +46,7 @@ class YumexTransactionResult(Adw.Window):
         for key in result_dict:
             if key in ["replaced"]:
                 continue
-            childen = [
-                ResultElem(result_elem=(name, repo, size))
-                for (name, repo), size in result_dict[key]
-            ]
+            childen = [ResultElem(result_elem=(name, repo, size)) for (name, repo), size in result_dict[key]]
             elem = ResultElem(title=self._get_title(key), children=childen)
             self.store.append(elem)
 

@@ -21,9 +21,7 @@ from yumex.utils.enums import FlatpakAction, FlatpakLocation
 
 
 class ResultElem(GObject.GObject):
-    def __init__(
-        self, ref: str, action: FlatpakAction, source: str, location: FlatpakLocation
-    ) -> None:
+    def __init__(self, ref: str, action: FlatpakAction, source: str, location: FlatpakLocation) -> None:
         super().__init__()
         self.ref: str = ref
         self.action: FlatpakAction = action

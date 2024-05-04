@@ -100,9 +100,7 @@ class Backend(dnf.Base):
         try:
             self.repo_sack.load_repos()  # dnf5 5.2.0
         except Exception:
-            log(
-                "repo_sack.load_repos() failed, fallback to update_and_load_enabled_repos"
-            )
+            log("repo_sack.load_repos() failed, fallback to update_and_load_enabled_repos")
             self.repo_sack.update_and_load_enabled_repos(True)  # dnf5 5.1.x
 
     @property
@@ -127,9 +125,7 @@ class Backend(dnf.Base):
         query.filter_latest_evr()
         return query
 
-    def _get_yumex_packages(
-        self, query: PackageQuery, state=PackageState.AVAILABLE
-    ) -> list[YumexPackage]:
+    def _get_yumex_packages(self, query: PackageQuery, state=PackageState.AVAILABLE) -> list[YumexPackage]:
         updates = self.updates
         nevra_dict = {}
         for pkg in query:
@@ -144,9 +140,7 @@ class Backend(dnf.Base):
                 log(f"Skipping duplicate : {ypkg}")
         return list(nevra_dict.values())
 
-    def search(
-        self, key: str, field: SearchField = SearchField.NAME, limit: int = 1
-    ) -> list[YumexPackage]:
+    def search(self, key: str, field: SearchField = SearchField.NAME, limit: int = 1) -> list[YumexPackage]:
         qa = PackageQuery(self)
         qa.filter_available()
         qa.filter_arch(["src"], QueryCmp_NEQ)

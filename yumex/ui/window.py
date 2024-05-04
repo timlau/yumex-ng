@@ -117,16 +117,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.content_queue.set_child(self.queue_view)
         # setup packages page
         self.package_view = YumexPackageView(self.presenter, self.queue_view)
-        self.package_view.connect(
-            "selection-changed", self.on_package_selection_changed
-        )
+        self.package_view.connect("selection-changed", self.on_package_selection_changed)
         self.content_packages.set_child(self.package_view)
         self.set_saved_setting()
         # setup package settings
         self.package_settings = YumexPackageSettings()
-        self.package_settings.connect(
-            "package-filter-changed", self.on_package_filter_changed
-        )
+        self.package_settings.connect("package-filter-changed", self.on_package_filter_changed)
         self.package_settings.connect("info-type-changed", self.on_info_type_changed)
         self.package_settings.connect("sort-attr-changed", self.on_sort_attr_changed)
         self.sidebar.set_flap(self.package_settings)
