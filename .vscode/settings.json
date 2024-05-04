@@ -25,7 +25,6 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 30000,
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
-    "C_Cpp.default.compileCommands": "/home/tim/udv/yumex-ng/builddir/compile_commands.json",
 }
