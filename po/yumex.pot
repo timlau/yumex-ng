@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 09:41+0100\n"
+"POT-Creation-Date: 2024-05-14 14:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: yumex/backend/flatpak/transaction.py:66
-#: yumex/backend/dnf5daemon/__init__.py:36 yumex/ui/flatpak_result.py:36
+#: yumex/backend/dnf5daemon/__init__.py:37 yumex/ui/flatpak_result.py:34
 msgid "Installing"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:38
+#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:36
 msgid "Uninstalling"
 msgstr ""
 
@@ -30,127 +30,116 @@ msgstr ""
 msgid "Updating"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:180
+#: yumex/backend/flatpak/transaction.py:181
 msgid "flatpak transaction failed"
 msgstr ""
 
-#: yumex/backend/dnf/dnf4.py:121
+#: yumex/backend/dnf/dnf4.py:117
 #, python-brace-format
 msgid "Downloading repository information for {name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:64 yumex/backend/dnf5daemon/__init__.py:200
-#: yumex/backend/dnf5daemon/__init__.py:219 yumex/ui/window.py:171
+#: yumex/backend/dnf5daemon/__init__.py:39
+msgid "Upgrading"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:41
+msgid "Downgrading"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:43
+msgid "Reinstalling"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:45
+msgid "Removing"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:47
+msgid "Replacing"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:196
+#: yumex/backend/dnf5daemon/__init__.py:215 yumex/backend/daemon.py:64
+#: yumex/ui/window.py:167
 msgid "Building Transaction"
 msgstr ""
 
-#: yumex/backend/daemon.py:69 yumex/ui/window.py:186
-msgid "Running Transaction"
+#: yumex/backend/dnf5daemon/__init__.py:219
+#: yumex/backend/dnf5daemon/__init__.py:278 yumex/backend/daemon.py:71
+msgid "Applying Transaction"
 msgstr ""
 
-#: yumex/backend/daemon.py:71 yumex/backend/dnf5daemon/__init__.py:223
-#: yumex/backend/dnf5daemon/__init__.py:288
-msgid "Applying Transaction"
+#: yumex/backend/dnf5daemon/__init__.py:247 yumex/backend/daemon.py:77
+#: yumex/backend/daemon.py:79
+msgid "Download Packages"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:249
+msgid "Download Reposiory Information"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:252 yumex/backend/daemon.py:115
+#, python-brace-format
+msgid "Downloading : {name}"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:257
+#, python-brace-format
+msgid "Downloading : {pkg.name}"
+msgstr ""
+
+#: yumex/backend/daemon.py:69 yumex/ui/window.py:182
+msgid "Running Transaction"
 msgstr ""
 
 #: yumex/backend/daemon.py:75
 msgid "Checking package signatures"
 msgstr ""
 
-#: yumex/backend/daemon.py:77 yumex/backend/daemon.py:79
-#: yumex/backend/dnf5daemon/__init__.py:255
-msgid "Download Packages"
-msgstr ""
-
-#: yumex/backend/daemon.py:89
+#: yumex/backend/daemon.py:87
 #, python-brace-format
 msgid "Erasing : {pkg_name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:91
+#: yumex/backend/daemon.py:89
 #, python-brace-format
 msgid "Installing : {pkg_name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:93
+#: yumex/backend/daemon.py:91
 #, python-brace-format
 msgid "Updating : {pkg_name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:97
+#: yumex/backend/daemon.py:95
 #, python-brace-format
 msgid "Verifying : {pkg_name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:99
+#: yumex/backend/daemon.py:97
 #, python-brace-format
 msgid "Running scriptlets : {pkg_name}"
 msgstr ""
 
-#: yumex/backend/daemon.py:111
+#: yumex/backend/daemon.py:109
 msgid "Downloading Packages"
 msgstr ""
 
-#: yumex/backend/daemon.py:117 yumex/backend/dnf5daemon/__init__.py:260
-#, python-brace-format
-msgid "Downloading : {name}"
-msgstr ""
-
-#: yumex/backend/daemon.py:127
+#: yumex/backend/daemon.py:125
 msgid "Downloading Repository Metadata"
 msgstr ""
 
-#: yumex/backend/daemon.py:167
+#: yumex/backend/daemon.py:163
 msgid "Couldn't build transaction\n"
 msgstr ""
 
-#: yumex/backend/daemon.py:172
+#: yumex/backend/daemon.py:167
 msgid "Exception in Dnf Backend\n"
 msgstr ""
 
-#: yumex/backend/daemon.py:198
+#: yumex/backend/daemon.py:187
 msgid "Exception in Dnf Backend : "
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:38
-msgid "Upgrading"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:40
-msgid "Downgrading"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:42
-msgid "Reinstalling"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:44
-msgid "Removing"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:46
-msgid "Replacing"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:257
-msgid "Download Reposiory Information"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:267
-#, python-brace-format
-msgid "Downloading : {pkg.name}"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:67
-msgid "Packages for installation"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:69
-msgid "Packages for deletion"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:71 yumex/ui/transaction_result.py:73
-msgid "Packages for updating"
 msgstr ""
 
 #: yumex/ui/dialogs.py:15
@@ -167,6 +156,45 @@ msgstr ""
 
 #: yumex/ui/dialogs.py:43
 msgid "No"
+msgstr ""
+
+#: yumex/ui/__init__.py:30
+#, python-brace-format
+msgid "Queued for deletion as a dependency {name}"
+msgstr ""
+
+#: yumex/ui/__init__.py:32
+#, python-brace-format
+msgid "Queued for installation as a dependency {name}"
+msgstr ""
+
+#: yumex/ui/__init__.py:34
+#, python-brace-format
+msgid "Queued for updating as a dependency {name}"
+msgstr ""
+
+#: yumex/ui/__init__.py:38
+msgid "Queued for deletion"
+msgstr ""
+
+#: yumex/ui/__init__.py:40
+msgid "Queued for installation"
+msgstr ""
+
+#: yumex/ui/__init__.py:42
+msgid "Queued for updating"
+msgstr ""
+
+#: yumex/ui/flatpak_result.py:38
+msgid "Updateing"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:96
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/pachage_view.py:97
+msgid "This make take a little while"
 msgstr ""
 
 #: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33
@@ -193,73 +221,46 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:80
+#: yumex/ui/transaction_result.py:64
+msgid "Packages for installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:66
+msgid "Packages for deletion"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:68 yumex/ui/transaction_result.py:70
+msgid "Packages for updating"
+msgstr ""
+
+#: yumex/ui/window.py:217
+msgid "Running Flatpak Transaction"
+msgstr ""
+
+#: yumex/ui/window.py:277
+msgid "Transaction completed succesfully"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:82
 msgid "flatpaks was updated"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:86
+#: yumex/ui/flatpak_view.py:88
 #, python-brace-format
 msgid "{pkg.id} is now removed"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:113
+#: yumex/ui/flatpak_view.py:110
 #, python-brace-format
 msgid "{fp_id} is now installed"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:125
+#: yumex/ui/flatpak_view.py:120
 #, python-brace-format
 msgid "{selected[0].id} is now removed"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:96
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/pachage_view.py:97
-msgid "This make take a little while"
-msgstr ""
-
-#: yumex/ui/window.py:221
-msgid "Running Flatpak Transaction"
-msgstr ""
-
-#: yumex/ui/window.py:284
-msgid "Transaction completed succesfully"
-msgstr ""
-
-#: yumex/ui/__init__.py:28
-#, python-brace-format
-msgid "Queued for deletion as a dependency {name}"
-msgstr ""
-
-#: yumex/ui/__init__.py:30
-#, python-brace-format
-msgid "Queued for installation as a dependency {name}"
-msgstr ""
-
-#: yumex/ui/__init__.py:32
-#, python-brace-format
-msgid "Queued for updating as a dependency {name}"
-msgstr ""
-
-#: yumex/ui/__init__.py:36
-msgid "Queued for deletion"
-msgstr ""
-
-#: yumex/ui/__init__.py:38
-msgid "Queued for installation"
-msgstr ""
-
-#: yumex/ui/__init__.py:40
-msgid "Queued for updating"
-msgstr ""
-
-#: yumex/ui/flatpak_result.py:40
-msgid "Updateing"
-msgstr ""
-
-#: yumex/main.py:166
+#: yumex/main.py:160
 msgid ""
 "\n"
 "<ul>\n"
@@ -268,7 +269,7 @@ msgid ""
 "</ul>\n"
 msgstr ""
 
-#: yumex/main.py:174
+#: yumex/main.py:168
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
@@ -456,11 +457,11 @@ msgstr ""
 msgid "Previous Result"
 msgstr ""
 
-#: data/ui/flatpak_row.blp:35
+#: data/ui/flatpak_row.blp:36
 msgid "Update is available"
 msgstr ""
 
-#: data/ui/flatpak_row.blp:41
+#: data/ui/flatpak_row.blp:42
 msgid "Uninstall flatpak"
 msgstr ""
 
@@ -565,27 +566,31 @@ msgstr ""
 msgid "uninstall selected flatpak"
 msgstr ""
 
-#: data/ui/window.blp:181
+#: data/ui/window.blp:178
+msgid "show/hide runtimes"
+msgstr ""
+
+#: data/ui/window.blp:190
 msgid "Groups"
 msgstr ""
 
-#: data/ui/window.blp:191
+#: data/ui/window.blp:200
 msgid "Queue"
 msgstr ""
 
-#: data/ui/window.blp:212
+#: data/ui/window.blp:221
 msgid "Remove all from queue"
 msgstr ""
 
-#: data/ui/window.blp:235
+#: data/ui/window.blp:244
 msgid "_Preferences"
 msgstr ""
 
-#: data/ui/window.blp:239
+#: data/ui/window.blp:248
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: data/ui/window.blp:243
+#: data/ui/window.blp:252
 msgid "_About Yum Extender"
 msgstr ""
 
