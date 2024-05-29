@@ -67,6 +67,7 @@ template $YumexFlatpakInstaller : Adw.Window {
         }
         Adw.ActionRow current_id {
           tooltip-text: _("Selected Flatpak (Ctrl+G/Shift+Ctrl+G to toggle)");
+          can-focus: false;
           [prefix]
           Gtk.Image icon {
             styles ["icon36"]
