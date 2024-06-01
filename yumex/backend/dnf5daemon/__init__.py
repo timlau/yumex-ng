@@ -187,7 +187,7 @@ class YumexRootBackend:
             client.session.transaction_action_progress.connect(self.on_transaction_action_progress)
             client.session.transaction_action_end.connect(self.on_transaction_action_stop)
         except AttributeError:
-            pass
+            log("DNF5_ROOT : dnf5 5.1.13 or higher required for transaction signals")
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
