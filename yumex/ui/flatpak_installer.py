@@ -171,7 +171,6 @@ class YumexFlatpakInstaller(Adw.Window):
             self.found_ndx += 1
         else:
             self.found_ndx = 0
-        log(f"search next match : {self.found_ndx}")
         self.update_current()
 
     @Gtk.Template.Callback()
@@ -181,7 +180,6 @@ class YumexFlatpakInstaller(Adw.Window):
             self.found_ndx -= 1
         else:
             self.found_ndx = len(self.found_ids) - 1
-        log(f"search previous match : {self.found_ndx}")
         self.update_current()
 
     def update_current(self):
