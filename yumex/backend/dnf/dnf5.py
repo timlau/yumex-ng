@@ -16,19 +16,15 @@
 import shutil
 import glob
 import os
+import getpass
 
-from typing import Iterable, List, Dict
+from typing import Iterable, List
 
 import libdnf5.base as dnf
 
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
-from libdnf5.common import (
-    QueryCmp_NEQ,
-    QueryCmp_NOT_IGLOB,
-    QueryCmp_ICONTAINS,
-    QueryCmp_IGLOB,
-)
+from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB, QueryCmp_EQ
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
@@ -180,17 +176,18 @@ class Backend(dnf.Base):
         # Get the current user's username
         username = getpass.getuser()
         # Construct the pattern with the username
-        pattern = f'/var/tmp/dnf-{username}*'
+        pattern = f"/var/tmp/dnf-{username}*"
         # List all directories matching the pattern
         directories = glob.glob(pattern)
         for directory in directories:
             if os.path.isdir(directory):
                 shutil.rmtree(directory)
-                shutil.rmtree(directory)
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF5 API."""
-        repo = self.repos.get(repo_name)
+        query = RepoQuery(self)
+        query.filter_id(repo_name, QueryCmp_EQ)
+        repo = list(query)[0]
         if repo:
             # dnf5 uses get_priority:
             # https://github.com/rpm-software-management/dnf5/blob/328dcead80a3cb611ef551e1768f059a54ee190d/libdnf5/repo/repo.cpp#L267
@@ -218,7 +215,7 @@ class Backend(dnf.Base):
             repo_priorities = [self.get_repo_priority(repo) for repo in repos]
 
             # Find the lowest priority among the repositories
-            lowest_priority = min(repo_priorities) if repo_priorities else float('99')
+            lowest_priority = min(repo_priorities) if repo_priorities else float("99")
 
             # Get the priority of the current package's repository
             pkg_repo_priority = self.get_repo_priority(pkg.repo)
@@ -237,7 +234,9 @@ class Backend(dnf.Base):
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
                 self.dnf_temp_cleanup()
-                return self.get_packages_with_lowest_priority(self._get_yumex_packages(self.updates, state=PackageState.UPDATE))
+                return self.get_packages_with_lowest_priority(
+                    self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
+                )
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
