@@ -14,7 +14,7 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 from time import time
-from typing import Iterable, Union, List, Dict
+from typing import Iterable, Union, List
 
 import dnf
 import dnf.yum
@@ -445,7 +445,7 @@ class Backend(DnfBase):
         # Get the current user's username
         username = getpass.getuser()
         # Construct the pattern with the username
-        pattern = f'/var/tmp/dnf-{username}*'
+        pattern = f"/var/tmp/dnf-{username}*"
         # List all directories matching the pattern
         directories = glob.glob(pattern)
         for directory in directories:
@@ -479,7 +479,7 @@ class Backend(DnfBase):
             repo_priorities = [self.get_repo_priority(repo) for repo in repos]
 
             # Find the lowest priority among the repositories
-            lowest_priority = min(repo_priorities) if repo_priorities else float('99')
+            lowest_priority = min(repo_priorities) if repo_priorities else float("99")
 
             # Get the priority of the current package's repository
             pkg_repo_priority = self.get_repo_priority(pkg.repo)
