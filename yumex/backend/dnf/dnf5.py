@@ -16,7 +16,6 @@
 import shutil
 import glob
 import os
-import getpass
 
 from typing import Iterable, List
 
@@ -173,10 +172,10 @@ class Backend(dnf.Base):
         return self._get_yumex_packages(qa)
 
     def dnf_temp_cleanup(self):
-        # Get the current user's username
-        username = getpass.getuser()
+        # Access the cache directory setting
+        cache_directory = self.get_config().get_cachedir_option().get_value()
         # Construct the pattern with the username
-        pattern = f"/var/tmp/dnf-{username}*"
+        pattern = f"{cache_directory}/*"
         # List all directories matching the pattern
         directories = glob.glob(pattern)
         for directory in directories:

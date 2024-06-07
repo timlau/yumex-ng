@@ -26,7 +26,6 @@ import itertools
 import shutil
 import glob
 import os
-import getpass
 
 from yumex.utils import log
 from yumex.utils.enums import (
@@ -442,10 +441,11 @@ class Backend(DnfBase):
         self.setup_base()
 
     def dnf_temp_cleanup(self):
-        # Get the current user's username
-        username = getpass.getuser()
+        # Access the cache directory setting
+        cache_directory = self.conf.cachedir
+        print(cache_directory)
         # Construct the pattern with the username
-        pattern = f"/var/tmp/dnf-{username}*"
+        pattern = f"{cache_directory}/*"
         # List all directories matching the pattern
         directories = glob.glob(pattern)
         for directory in directories:
