@@ -40,10 +40,10 @@ class YumexPreferences(Adw.PreferencesWindow):
     def setup_repo(self):
         # get repositories and add them
         repos = self.presenter.get_repositories()
-        for id, name, enabled in repos:
+        for id, name, enabled, prio in repos:
             repo_widget = YumexRepository()
             repo_widget.set_title(id)
-            repo_widget.set_subtitle(name)
+            repo_widget.set_subtitle(f"{name}( {prio})")
             repo_widget.enabled.set_state(enabled)
             self.repo_group.add(repo_widget)
 

@@ -14,7 +14,7 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 from time import time
-from typing import Iterable, Union
+from typing import Generator, Iterable, Union
 
 import dnf
 import dnf.yum
@@ -474,7 +474,7 @@ class Backend(DnfBase):
         repos = self.repos.all()
         for repo in repos:
             if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
-                yield (repo.id, repo.name, repo.enabled)
+                yield (repo.id, repo.name, repo.enabled, repo.priority)
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         """build a trasaction and retrun the dependencies"""
