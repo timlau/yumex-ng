@@ -268,11 +268,11 @@ class Backend(dnf.Base):
         else:
             raise ValueError(f"dnf package not found: {pkg}")
 
-    def get_repositories(self) -> list[tuple[str, str, bool]]:
+    def get_repositories(self) -> list[tuple[str, str, bool, int]]:
         query = RepoQuery(self)
         query.filter_id("*-source", QueryCmp_NOT_IGLOB)
         query.filter_id("*-debuginfo", QueryCmp_NOT_IGLOB)
-        return [(repo.get_id(), repo.get_name(), repo.is_enabled()) for repo in query]
+        return [(repo.get_id(), repo.get_name(), repo.is_enabled(), repo.get_priority()) for repo in query]
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         goal = dnf.Goal(self)

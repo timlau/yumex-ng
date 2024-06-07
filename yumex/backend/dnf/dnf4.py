@@ -528,7 +528,7 @@ class Backend(DnfBase):
         repos = self.repos.all()
         for repo in repos:
             if not repo.id.endswith("-source") and not repo.id.endswith("-debuginfo"):
-                yield (repo.id, repo.name, repo.enabled)
+                yield (repo.id, repo.name, repo.enabled, repo.priority)
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         """build a trasaction and retrun the dependencies"""
