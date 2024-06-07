@@ -106,11 +106,11 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:96
+#: yumex/ui/package_view.py:96
 msgid "Loading Packages"
 msgstr "Indlæser pakker"
 
-#: yumex/ui/pachage_view.py:97
+#: yumex/ui/package_view.py:97
 msgid "This make take a little while"
 msgstr "Dette kan tage et øjeblik"
 

@@ -193,11 +193,11 @@ msgstr "In coda per l'aggiornamento"
 msgid "Updateing"
 msgstr "Aggiornando"
 
-#: yumex/ui/pachage_view.py:96
+#: yumex/ui/package_view.py:96
 msgid "Loading Packages"
 msgstr "Caricamento dei Pacchetti"
 
-#: yumex/ui/pachage_view.py:97
+#: yumex/ui/package_view.py:97
 msgid "This make take a little while"
 msgstr "Questo richiede un po' di tempo"
 

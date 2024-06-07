@@ -47,7 +47,7 @@ yumex_ui_modules = [
 'ui/flatpak_installer.py',
 'ui/flatpak_result.py',
 'ui/flatpak_view.py',
-'ui/pachage_view.py',
+'ui/package_view.py',
 'ui/package_info.py',
 'ui/package_settings.py',
 'ui/preferences.py',

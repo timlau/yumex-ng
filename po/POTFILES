@@ -21,7 +21,7 @@ yumex/ui/dialogs.py
 yumex/ui/__init__.py
 yumex/ui/flatpak_installer.py
 yumex/ui/flatpak_result.py
-yumex/ui/pachage_view.py
+yumex/ui/package_view.py
 yumex/ui/package_info.py
 yumex/ui/package_settings.py
 yumex/ui/progress.py

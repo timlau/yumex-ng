@@ -216,11 +216,11 @@ msgstr "{fp_id} ara s'instal·la"
 msgid "{selected[0].id} is now removed"
 msgstr "{selected[0].id} ara se suprimeix"
 
-#: yumex/ui/pachage_view.py:96
+#: yumex/ui/package_view.py:96
 msgid "Loading Packages"
 msgstr "Es carreguen els paquets"
 
-#: yumex/ui/pachage_view.py:97
+#: yumex/ui/package_view.py:97
 msgid "This make take a little while"
 msgstr "Això pot trigar una mica"
 
