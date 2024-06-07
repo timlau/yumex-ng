@@ -185,13 +185,13 @@ class Backend(dnf.Base):
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF5 API."""
-        query = RepoQuery(self)
-        query.filter_id(repo_name, QueryCmp_EQ)
-        repo = list(query)[0]
-        if repo:
-            # dnf5 uses get_priority:
-            # https://github.com/rpm-software-management/dnf5/blob/328dcead80a3cb611ef551e1768f059a54ee190d/libdnf5/repo/repo.cpp#L267
-            return repo.get_priority()
+
+        repos_query = RepoQuery(self)
+
+        # Iterate through the repositories to find the one matching the repo_name
+        for repo in repos_query:
+            if repo.get_id() == repo_name:
+                return repo.get_priority()
         else:
             # Return a default value if the repository name was not found
             return 99
@@ -234,8 +234,9 @@ class Backend(dnf.Base):
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
                 self.dnf_temp_cleanup()
+                packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
                 return self.get_packages_with_lowest_priority(
-                    self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
+                    packages
                 )
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
