@@ -88,6 +88,13 @@ class UpdateInfo:
 class Backend(dnf.Base):
     def __init__(self, presenter: Presenter, *args) -> None:
         super().__init__(*args)
+
+        # Yumex is run as user, force it to use user cache instead of systems
+        # This allows it to refresh the metadata correctly.
+        # It already does the same thing in DNF4
+        cache_directory = self.get_config().get_cachedir_option().get_value()
+        self.get_config().get_system_cachedir_option().set(cache_directory)
+
         self.presenter: Presenter = presenter
         self.load_config()
         self.setup()
