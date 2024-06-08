@@ -23,7 +23,7 @@ import libdnf5.base as dnf
 
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
-from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB, QueryCmp_EQ
+from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
@@ -241,9 +241,7 @@ class Backend(dnf.Base):
             case PackageFilter.UPDATES:
                 self.dnf_temp_cleanup()
                 packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
-                return self.get_packages_with_lowest_priority(
-                    packages
-                )
+                return self.get_packages_with_lowest_priority(packages)
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
