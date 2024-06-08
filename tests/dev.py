@@ -22,7 +22,7 @@ def view(monkeypatch):
     monkeypatch.setattr(Gtk, "Template", TemplateUIFromFile)
 
     from yumex.ui.queue_view import YumexQueueView
-    from yumex.ui.pachage_view import YumexPackageView
+    from yumex.ui.package_view import YumexPackageView
 
     presenter = mock_presenter()
     queue_view = YumexQueueView(presenter=presenter)

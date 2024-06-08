@@ -24,7 +24,7 @@ from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
 from yumex.ui.dialogs import GPGDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
-from yumex.ui.pachage_view import YumexPackageView
+from yumex.ui.package_view import YumexPackageView
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress

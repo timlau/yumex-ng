@@ -189,11 +189,11 @@ msgstr ""
 msgid "Updateing"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:96
+#: yumex/ui/package_view.py:96
 msgid "Loading Packages"
 msgstr ""
 
-#: yumex/ui/pachage_view.py:97
+#: yumex/ui/package_view.py:97
 msgid "This make take a little while"
 msgstr ""
 

@@ -66,7 +66,7 @@ def view(monkeypatch, mocker):
     monkeypatch.setattr(Gtk, "Template", TemplateUIFromFile)
     monkeypatch.setattr(yumex.utils, "RunAsync", run_sync)
 
-    from yumex.ui.pachage_view import YumexPackageView
+    from yumex.ui.package_view import YumexPackageView
 
     presenter = mock_presenter()
     win = mock_win()
