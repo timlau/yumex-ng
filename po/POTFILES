@@ -1,7 +1,7 @@
 yumex/constants.py
 yumex/backend/flatpak/__init__.py
-yumex/backend/flatpak/backend.py
 yumex/backend/flatpak/transaction.py
+yumex/backend/flatpak/backend.py
 yumex/backend/dnf/factory.py
 yumex/backend/dnf/__init__.py
 yumex/backend/dnf/dnf4.py
@@ -21,15 +21,15 @@ yumex/ui/dialogs.py
 yumex/ui/__init__.py
 yumex/ui/flatpak_installer.py
 yumex/ui/flatpak_result.py
-yumex/ui/package_view.py
 yumex/ui/package_info.py
 yumex/ui/package_settings.py
 yumex/ui/progress.py
 yumex/ui/queue_view.py
 yumex/ui/transaction_result.py
-yumex/ui/window.py
-yumex/ui/preferences.py
 yumex/ui/flatpak_view.py
+yumex/ui/preferences.py
+yumex/ui/package_view.py
+yumex/ui/window.py
 yumex/__init__.py
 yumex/main.py
 data/ui/repository.blp

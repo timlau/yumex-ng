@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-14 14:46+0200\n"
+"POT-Creation-Date: 2024-06-08 07:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "flatpak transaction failed"
 msgstr ""
 
-#: yumex/backend/dnf/dnf4.py:117
+#: yumex/backend/dnf/dnf4.py:120
 #, python-brace-format
 msgid "Downloading repository information for {name}"
 msgstr ""
@@ -189,14 +189,6 @@ msgstr ""
 msgid "Updateing"
 msgstr ""
 
-#: yumex/ui/package_view.py:96
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/package_view.py:97
-msgid "This make take a little while"
-msgstr ""
-
 #: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33
 msgid "Bugfix"
 msgstr ""
@@ -233,14 +225,6 @@ msgstr ""
 msgid "Packages for updating"
 msgstr ""
 
-#: yumex/ui/window.py:217
-msgid "Running Flatpak Transaction"
-msgstr ""
-
-#: yumex/ui/window.py:277
-msgid "Transaction completed succesfully"
-msgstr ""
-
 #: yumex/ui/flatpak_view.py:82
 msgid "flatpaks was updated"
 msgstr ""
@@ -258,6 +242,22 @@ msgstr ""
 #: yumex/ui/flatpak_view.py:120
 #, python-brace-format
 msgid "{selected[0].id} is now removed"
+msgstr ""
+
+#: yumex/ui/package_view.py:96
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/package_view.py:97
+msgid "This make take a little while"
+msgstr ""
+
+#: yumex/ui/window.py:217
+msgid "Running Flatpak Transaction"
+msgstr ""
+
+#: yumex/ui/window.py:277
+msgid "Transaction completed succesfully"
 msgstr ""
 
 #: yumex/main.py:160
@@ -473,11 +473,11 @@ msgstr ""
 msgid "Selected Flatpak (Ctrl+G/Shift+Ctrl+G to toggle)"
 msgstr ""
 
-#: data/ui/flatpak_installer.blp:83
+#: data/ui/flatpak_installer.blp:84
 msgid "Remote"
 msgstr ""
 
-#: data/ui/flatpak_installer.blp:87
+#: data/ui/flatpak_installer.blp:88
 msgid "Install location"
 msgstr ""
 
