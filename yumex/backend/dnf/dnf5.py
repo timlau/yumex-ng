@@ -16,7 +16,6 @@
 import shutil
 import glob
 import os
-import getpass
 
 from typing import Iterable, List
 
@@ -89,6 +88,13 @@ class UpdateInfo:
 class Backend(dnf.Base):
     def __init__(self, presenter: Presenter, *args) -> None:
         super().__init__(*args)
+
+        # Yumex is run as user, force it to use user cache instead of systems
+        # This allows it to refresh the metadata correctly.
+        # It already does the same thing in DNF4
+        cache_directory = self.get_config().get_cachedir_option().get_value()
+        self.get_config().get_system_cachedir_option().set(cache_directory)
+
         self.presenter: Presenter = presenter
         self.load_config()
         self.setup()
@@ -173,10 +179,10 @@ class Backend(dnf.Base):
         return self._get_yumex_packages(qa)
 
     def dnf_temp_cleanup(self):
-        # Get the current user's username
-        username = getpass.getuser()
+        # Access the cache directory setting
+        cache_directory = self.get_config().get_cachedir_option().get_value()
         # Construct the pattern with the username
-        pattern = f"/var/tmp/dnf-{username}*"
+        pattern = f"{cache_directory}/*"
         # List all directories matching the pattern
         directories = glob.glob(pattern)
         for directory in directories:
