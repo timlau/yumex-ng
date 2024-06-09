@@ -23,40 +23,47 @@ from gi.repository import AppStream, Flatpak, Gio  # type: ignore # noqa: E402
 
 
 class AppStreamPackage:
+    """AppStream Package"""
+
     def __init__(self, comp: AppStream.Component, repo_name) -> None:
-        self.component = comp
-        self.repo_name = repo_name
+        self.component: AppStream.Component = comp
+        self.repo_name: str = repo_name
         bundle: AppStream.Bundle = comp.get_bundle(AppStream.BundleKind.FLATPAK)
-        self.flatpak_bundle = bundle.get_id()
+        self.flatpak_bundle: str = bundle.get_id()
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.component.get_name()
 
     @property
-    def summary(self):
+    def summary(self) -> str:
         return self.component.get_summary()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} - {self.summary} ({self.repo_name})"
 
 
 class AppstreamSearcher:
+    """Flatpak AppStream Package seacher"""
+
     def __init__(self) -> None:
         self.remotes: dict[str, list[AppStreamPackage]] = {}
 
     def add_installation(self, inst: Flatpak.Installation):
+        """Add enabled flatpak repositories from Flatpak.Installation"""
         remotes = inst.list_remotes()
         for remote in remotes:
             if not remote.get_disabled():
                 self.add_remote(remote)
 
     def add_remote(self, remote: Flatpak.Remote):
+        """Add packages for a given Flatpak.Remote"""
         remote_name = remote.get_name()
         if remote_name not in self.remotes:
             self.remotes[remote_name] = self._load_appstream_metadata(remote)
 
     def _load_appstream_metadata(self, remote: Flatpak.Remote) -> list[AppStreamPackage]:
+        """load AppStrean metadata and create AppStreamPackage objects"""
         packages = []
         metadata = AppStream.Metadata.new()
         metadata.set_format_style(AppStream.FormatStyle.CATALOG)
@@ -73,6 +80,7 @@ class AppstreamSearcher:
         return packages
 
     def search(self, keyword: str) -> list[AppStreamPackage]:
+        """Search packages matching a keyword"""
         search_results = []
         for remote_name in self.remotes.keys():
             packages = self.remotes[remote_name]
