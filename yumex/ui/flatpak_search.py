@@ -75,6 +75,8 @@ class YumexFlatpakSearch(Adw.Window):
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
+        if fp_location == "user":
+            self.on_location_selected()
 
     @Gtk.Template.Callback()
     def on_location_selected(self, *args):
