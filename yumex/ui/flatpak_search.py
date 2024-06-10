@@ -77,16 +77,14 @@ class YumexFlatpakSearch(Adw.Window):
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
-        self.app_search.add_installation(self.backend.get_installation(fp_location))
 
     @Gtk.Template.Callback()
     def on_location_selected(self, *args):
-        print("Location selected", self.location.get_selected_item().get_string())
-        self.store = Gio.ListStore.new(FoundElem)
-        self.selection.set_model(self.store)
+        log(f"fp_search: location changed : {self.location.get_selected_item().get_string()}")
         self.app_search = AppstreamSearcher()
         fp_location = FlatpakLocation(self.location.get_selected_item().get_string())
         self.app_search.add_installation(self.backend.get_installation(fp_location))
+        self.on_search(self.search_id)
 
     @Gtk.Template.Callback()
     def on_ok_clicked(self, *args):
@@ -119,8 +117,7 @@ class YumexFlatpakSearch(Adw.Window):
             return
         location = FlatpakLocation(self.location.get_selected_item().get_string())
         log(f"(flatpak_seach) key: {key}  location: {location}")
-        self.store = Gio.ListStore.new(FoundElem)
-        self.selection.set_model(self.store)
+        self._clear()
         packages = self.app_search.search(key)
         for package in packages:
             self.store.append(FoundElem(package))
