@@ -100,5 +100,6 @@ Gtk.SingleSelection selection {
 }
 
 Gtk.SignalListItemFactory result_factory {
-
+    setup=> $on_setup();
+    bind=> $on_bind();
 }

@@ -54,8 +54,8 @@ class YumexFlatpakSearch(Adw.Window):
         self._loop = GLib.MainLoop()
         self.search_id.set_key_capture_widget(self)
         self.search_id.grab_focus()
-        self.result_factory.connect("setup", self.on_setup)
-        self.result_factory.connect("bind", self.on_bind)
+        # self.result_factory.connect("setup", self.on_setup)
+        # self.result_factory.connect("bind", self.on_bind)
         self.store = Gio.ListStore.new(FoundElem)
         self.selection.set_model(self.store)
         self.app_search = AppstreamSearcher()
@@ -77,6 +77,15 @@ class YumexFlatpakSearch(Adw.Window):
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
+        self.app_search.add_installation(self.backend.get_installation(fp_location))
+
+    @Gtk.Template.Callback()
+    def on_location_selected(self, *args):
+        print("Location selected", self.location.get_selected_item().get_string())
+        self.store = Gio.ListStore.new(FoundElem)
+        self.selection.set_model(self.store)
+        self.app_search = AppstreamSearcher()
+        fp_location = FlatpakLocation(self.location.get_selected_item().get_string())
         self.app_search.add_installation(self.backend.get_installation(fp_location))
 
     @Gtk.Template.Callback()
@@ -116,13 +125,13 @@ class YumexFlatpakSearch(Adw.Window):
         for package in packages:
             self.store.append(FoundElem(package))
 
-    # @Gtk.Template.Callback()
+    @Gtk.Template.Callback()
     def on_setup(self, widget, item):
         """Setup the widget to show in the Gtk.Listview"""
         row = Row()
         item.set_child(row)
 
-    # @Gtk.Template.Callback()
+    @Gtk.Template.Callback()
     def on_bind(self, widget, item):
         """bind data from the store object to the widget"""
         row: Row = item.get_child()
