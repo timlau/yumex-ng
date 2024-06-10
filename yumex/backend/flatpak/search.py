@@ -72,17 +72,19 @@ class AppstreamSearcher:
 
     def __init__(self) -> None:
         self.remotes: dict[str, list[AppStreamPackage]] = {}
+        self.installed = []
 
     def add_installation(self, inst: Flatpak.Installation):
         """Add enabled flatpak repositories from Flatpak.Installation"""
         remotes = inst.list_remotes()
         for remote in remotes:
             if not remote.get_disabled():
-                self.add_remote(remote)
+                self.add_remote(remote, inst)
 
-    def add_remote(self, remote: Flatpak.Remote):
+    def add_remote(self, remote: Flatpak.Remote, inst: Flatpak.Installation):
         """Add packages for a given Flatpak.Remote"""
         remote_name = remote.get_name()
+        self.installed.extend([ref.format_ref() for ref in inst.list_installed_refs_by_kind(Flatpak.RefKind.APP)])
         if remote_name not in self.remotes:
             self.remotes[remote_name] = self._load_appstream_metadata(remote)
 
@@ -100,7 +102,9 @@ class AppstreamSearcher:
         for i in range(components.get_size()):
             component = components.index_safe(i)
             if component.get_kind() == AppStream.ComponentKind.DESKTOP_APP:
-                packages.append(AppStreamPackage(component, remote.get_name()))
+                bundle = component.get_bundle(AppStream.BundleKind.FLATPAK).get_id()
+                if bundle not in self.installed:
+                    packages.append(AppStreamPackage(component, remote.get_name()))
         return packages
 
     def search(self, keyword: str) -> list[AppStreamPackage]:

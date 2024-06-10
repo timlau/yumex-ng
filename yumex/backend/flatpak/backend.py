@@ -66,8 +66,8 @@ class FlatpakBackend:
                     found = ref
                     break
         if found:
-            ref = f"app/{found.get_name()}/{found.get_arch()}/{found.get_branch()}"
-            return ref
+            # ref = f"app/{found.get_name()}/{found.get_arch()}/{found.get_branch()}"
+            return ref.format_ref()
         return None
 
     def get_icon_path(self, remote_name: str, location: FlatpakLocation) -> str | None:
