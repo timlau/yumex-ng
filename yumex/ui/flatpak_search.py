@@ -59,7 +59,7 @@ class YumexFlatpakSearch(Adw.Window):
         self.store = Gio.ListStore.new(FoundElem)
         self.selection.set_model(self.store)
         self.app_search = AppstreamSearcher()
-        self.app_search.add_installation(self.backend.user)
+        self.setup_location()
 
     def show(self):
         self.present()
@@ -77,6 +77,7 @@ class YumexFlatpakSearch(Adw.Window):
         for ndx, location in enumerate(self.location.get_model()):
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
+        self.app_search.add_installation(self.backend.get_installation(fp_location))
 
     @Gtk.Template.Callback()
     def on_ok_clicked(self, *args):
