@@ -54,8 +54,6 @@ class YumexFlatpakSearch(Adw.Window):
         self._loop = GLib.MainLoop()
         self.search_id.set_key_capture_widget(self)
         self.search_id.grab_focus()
-        # self.result_factory.connect("setup", self.on_setup)
-        # self.result_factory.connect("bind", self.on_bind)
         self.store = Gio.ListStore.new(FoundElem)
         self.selection.set_model(self.store)
         self.app_search = AppstreamSearcher()
@@ -133,7 +131,12 @@ class YumexFlatpakSearch(Adw.Window):
         """bind data from the store object to the widget"""
         row: Row = item.get_child()
         pkg: AppStreamPackage = item.get_item().pkg
-        row.set_title(pkg.name)
+        version = pkg.version
+        if version:
+            row.set_title(f"{pkg.name} - {version}")
+        else:
+            row.set_title(f"{pkg.name}")
+
         row.set_subtitle(pkg.summary)
         row.set_tooltip_text(pkg.flatpak_bundle)
         row.repo.set_text(pkg.repo_name)
