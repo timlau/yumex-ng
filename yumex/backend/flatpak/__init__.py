@@ -13,8 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-""" backend for handling flatpaks"""
-
+"""backend for handling flatpaks"""
 
 from enum import Enum, auto
 from gi.repository import Flatpak, GObject

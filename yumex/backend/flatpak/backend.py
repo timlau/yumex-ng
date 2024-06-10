@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-""" backend for handling flatpaks"""
+"""backend for handling flatpaks"""
 
 from gi.repository import Flatpak, GLib
 from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
@@ -35,9 +35,7 @@ class FlatpakBackend:
         self.system: Flatpak.Installation = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
         self._installed = [ref.get_name() for ref in self.user.list_installed_refs()]
-        self._installed.extend(
-            [ref.get_name() for ref in self.system.list_installed_refs()]
-        )
+        self._installed.extend([ref.get_name() for ref in self.system.list_installed_refs()])
 
     def get_installation(self, location: FlatpakLocation):
         if location == FlatpakLocation.SYSTEM:
@@ -68,8 +66,8 @@ class FlatpakBackend:
                     found = ref
                     break
         if found:
-            ref = f"app/{found.get_name()}/{found.get_arch()}/{found.get_branch()}"
-            return ref
+            # ref = f"app/{found.get_name()}/{found.get_arch()}/{found.get_branch()}"
+            return ref.format_ref()
         return None
 
     def get_icon_path(self, remote_name: str, location: FlatpakLocation) -> str | None:
@@ -84,13 +82,7 @@ class FlatpakBackend:
     def get_remotes(self, location: FlatpakLocation) -> list[str]:
         """get a list of active flatpak remote names"""
         installation: Flatpak.Installation = self.get_installation(location)
-        remotes = sorted(
-            [
-                remote.get_name()
-                for remote in installation.list_remotes()
-                if not remote.get_disabled()
-            ]
-        )
+        remotes = sorted([remote.get_name() for remote in installation.list_remotes() if not remote.get_disabled()])
         log(f"FLATPAK : {location} remotes: {remotes}")
         return remotes
 
@@ -105,9 +97,7 @@ class FlatpakBackend:
     def _get_updates(self) -> list[str]:
         """get a list of flatpak ids with available updates"""
         updates = [ref.get_name() for ref in self.user.list_installed_refs_for_update()]
-        updates += [
-            ref.get_name() for ref in self.system.list_installed_refs_for_update()
-        ]
+        updates += [ref.get_name() for ref in self.system.list_installed_refs_for_update()]
         return updates
 
     def _get_package(self, ref, location: FlatpakLocation) -> FlatpakPackage:
@@ -121,9 +111,7 @@ class FlatpakBackend:
             is_update = FlatpakUpdate.NO
         return FlatpakPackage(ref, location=location, is_update=is_update)
 
-    def _build_transaction(
-        self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs
-    ):
+    def _build_transaction(self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs):
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
         transaction = FlatpakTransaction(self, location=location, first_run=True)
@@ -133,17 +121,13 @@ class FlatpakBackend:
             return []
         except FlatPakFirstRun:
             result = transaction._current_result
-            refs = [
-                (oper.get_ref(), action, oper.get_remote(), location) for oper in result
-            ]
+            refs = [(oper.get_ref(), action, oper.get_remote(), location) for oper in result]
             return refs
         except FlatPakNoOperations:
             log("FLATPAK : no operations")
             return []
 
-    def _execute_transaction(
-        self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs
-    ):
+    def _execute_transaction(self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs):
         """run the transaction, ask user for confirmation and apply it"""
         source = kwargs.pop("source", None)
         transaction = FlatpakTransaction(self, location=location, first_run=False)
@@ -205,12 +189,10 @@ class FlatpakBackend:
 
     def _get_all_updates(self):
         user_updates = [
-            self._get_package(ref, FlatpakAction.UPDATE)
-            for ref in self.user.list_installed_refs_for_update()
+            self._get_package(ref, FlatpakAction.UPDATE) for ref in self.user.list_installed_refs_for_update()
         ]
         system_updates = [
-            self._get_package(ref, FlatpakAction.UPDATE)
-            for ref in self.system.list_installed_refs_for_update()
+            self._get_package(ref, FlatpakAction.UPDATE) for ref in self.system.list_installed_refs_for_update()
         ]
         return user_updates, system_updates
 
@@ -224,21 +206,15 @@ class FlatpakBackend:
         # system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
 
         user_updates, system_updates = self._get_all_updates()
-        return self._do_transaction(
-            user_updates, system_updates, FlatpakAction.UPDATE, execute
-        )
+        return self._do_transaction(user_updates, system_updates, FlatpakAction.UPDATE, execute)
 
     def do_install(self, to_inst, source, location: FlatpakLocation, execute) -> None:
         """install a flatak by a ref string"""
         pkgs = [to_inst]
         if location == FlatpakLocation.USER:
-            return self._do_transaction(
-                pkgs, [], FlatpakAction.INSTALL, execute, source=source
-            )
+            return self._do_transaction(pkgs, [], FlatpakAction.INSTALL, execute, source=source)
         else:
-            return self._do_transaction(
-                [], pkgs, FlatpakAction.INSTALL, execute, source=source
-            )
+            return self._do_transaction([], pkgs, FlatpakAction.INSTALL, execute, source=source)
 
     def do_remove(self, pkgs: list[FlatpakPackage], execute: bool) -> None:
         """uninstall a flatpak pkg"""
@@ -260,9 +236,7 @@ class FlatpakBackend:
             execute=execute,
         )
 
-    def filter_by_location(
-        self, pkgs
-    ) -> tuple[list[FlatpakPackage], list[FlatpakPackage]]:
+    def filter_by_location(self, pkgs) -> tuple[list[FlatpakPackage], list[FlatpakPackage]]:
         user_pkgs: list[FlatpakPackage] = []
         system_pkgs: list[FlatpakPackage] = []
         for pkg in pkgs:
@@ -276,13 +250,9 @@ class FlatpakBackend:
         """get list of installed flatpak pkgs"""
         refs = []
         if location in (FlatpakLocation.USER, FlatpakLocation.BOTH):
-            refs += [
-                self._get_package(ref, location=FlatpakLocation.USER)
-                for ref in self.user.list_installed_refs()
-            ]
+            refs += [self._get_package(ref, location=FlatpakLocation.USER) for ref in self.user.list_installed_refs()]
         if location in (FlatpakLocation.SYSTEM, FlatpakLocation.BOTH):
             refs += [
-                self._get_package(ref, location=FlatpakLocation.SYSTEM)
-                for ref in self.system.list_installed_refs()
+                self._get_package(ref, location=FlatpakLocation.SYSTEM) for ref in self.system.list_installed_refs()
             ]
         return refs

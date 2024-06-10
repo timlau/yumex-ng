@@ -23,9 +23,10 @@ from gi.repository import Gtk, Gio, Adw
 
 from yumex.backend.presenter import YumexPresenter
 from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
+from yumex.backend.flatpak.search import AppStreamPackage
 from yumex.constants import ROOTDIR
+from yumex.ui.flatpak_search import YumexFlatpakSearch
 from yumex.utils import RunJob, log
-from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
 
@@ -87,6 +88,28 @@ class YumexFlatpakView(Gtk.ListView):
         if self.do_transaction(self.backend.do_update, [pkg]):
             self.presenter.show_message(_(f"{pkg.id} is now removed"), timeout=2)
 
+    def search(self):
+        self.presenter.select_page(Page.FLATPAKS)
+        flatpak_search = YumexFlatpakSearch(self.presenter)
+        flatpak_search.set_transient_for(self.presenter.get_main_window())
+        flatpak_search.show()
+        selected = flatpak_search.selection.get_selected_item()
+        if selected:
+            pkg: AppStreamPackage = flatpak_search.selection.get_selected_item().pkg
+            fp_id = pkg.id
+            if fp_id:
+                remote = pkg.repo_name
+                location = flatpak_search.location.get_selected_item().get_string()
+                ref = self.backend.find_ref(remote, fp_id, location)
+                log(f"FlatPakView.Search : remote: {remote} location: {location} ref: {ref}")
+                if ref:
+                    if flatpak_search.confirm:
+                        if self.do_transaction(self.backend.do_install, ref, remote, location):
+                            self.presenter.show_message(_(f"{fp_id} is now installed"), timeout=2)
+
+                else:
+                    self.presenter.show_message(f"{fp_id} is not found om {remote}")
+
     def install(self, *args) -> None:
         """install a new flatpak"""
 
@@ -125,7 +148,7 @@ class YumexFlatpakView(Gtk.ListView):
         self.reset()
 
     def do_transaction(self, method: Callable, *args) -> bool:
-        """Excute the transaction in two runs
+        """Execute the transaction in two runs
 
         The first get the refs in the transaction and show a confirmation dialog
         The second exceute the transaction

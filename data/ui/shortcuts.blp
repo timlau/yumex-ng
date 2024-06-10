@@ -81,25 +81,12 @@ ShortcutsWindow help_overlay {
     ShortcutsGroup {
       title: _("Flatpak View");
       ShortcutsShortcut {
-        title: _("Install new flatpak");
-        action-name: "app.flatpak_install";
+        title: _("Search for flatpaks to install");
+        action-name: "app.flatpak_search";
       }
       ShortcutsShortcut {
         title: _("Remove selected flatpak");
         action-name: "app.flatpak_remove";
-      }
-    }
-    ShortcutsGroup {
-      title: _("Flatpak Installer");
-      ShortcutsShortcut {
-        title: _("Next Result");
-        shortcut-type: accelerator;
-        accelerator: "<Ctrl>G";
-      }
-      ShortcutsShortcut {
-        title: _("Previous Result");
-        shortcut-type: accelerator;
-        accelerator: "<Shift><Ctrl>G";
       }
     }
   }
