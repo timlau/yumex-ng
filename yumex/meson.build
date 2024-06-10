@@ -41,6 +41,7 @@ yumex_ui_modules = [
   'ui/dialogs.py',
   'ui/flatpak_result.py',
   'ui/flatpak_view.py',
+  'ui/flatpak_search.py',
   'ui/package_view.py',
   'ui/package_info.py',
   'ui/package_settings.py',
