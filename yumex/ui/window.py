@@ -264,7 +264,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        pass
+        self.flatpak_view.search()
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""
@@ -379,6 +379,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     self.flatpak_view.remove()
             case "flatpak_install":
                 self.flatpak_view.install()
+            case "flatpak_search":
+                self.flatpak_view.search()
             case "flatpak_update":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.update_all()

@@ -16,10 +16,19 @@
 """Backend for searching in flatpak AppStream Metadata"""
 
 import gi
+from yumex.utils import log
+from enum import IntEnum
 
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
 from gi.repository import AppStream, Flatpak, Gio  # type: ignore # noqa: E402
+
+
+class Match(IntEnum):
+    NAME = 1
+    ID = 2
+    SUMMARY = 3
+    NONE = 4
 
 
 class AppStreamPackage:
@@ -30,6 +39,11 @@ class AppStreamPackage:
         self.repo_name: str = repo_name
         bundle: AppStream.Bundle = comp.get_bundle(AppStream.BundleKind.FLATPAK)
         self.flatpak_bundle: str = bundle.get_id()
+        self.match = Match.NONE
+
+    @property
+    def id(self) -> str:
+        return self.component.get_id()
 
     @property
     def name(self) -> str:
@@ -40,7 +54,17 @@ class AppStreamPackage:
         return self.component.get_summary()
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.summary} ({self.repo_name})"
+        return f"{self.name} - {self.summary} ({self.flatpak_bundle})"
+
+    def search(self, keyword):
+        if keyword in self.name.lower():
+            return Match.NAME
+        elif keyword in self.id.lower():
+            return Match.ID
+        elif keyword in self.summary.lower():
+            return Match.SUMMARY
+        else:
+            return Match.NONE
 
 
 class AppstreamSearcher:
@@ -82,9 +106,13 @@ class AppstreamSearcher:
     def search(self, keyword: str) -> list[AppStreamPackage]:
         """Search packages matching a keyword"""
         search_results = []
+        keyword = keyword.lower()
         for remote_name in self.remotes.keys():
             packages = self.remotes[remote_name]
             for package in packages:
-                if package.component.search_matches(keyword) > 0:
+                found = package.search(keyword)
+                if found != Match.NONE:
+                    log(f" found : {package} match: {found}")
+                    package.match = found
                     search_results.append(package)
-        return search_results
+        return sorted(search_results, key=lambda pkg: (pkg.match, pkg.name))
