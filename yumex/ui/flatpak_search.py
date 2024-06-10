@@ -16,6 +16,8 @@
 
 from gi.repository import Gtk, Adw, GLib, Gio, GObject
 
+from pathlib import Path
+
 from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.backend.flatpak.search import AppStreamPackage, AppstreamSearcher
 from yumex.backend.presenter import YumexPresenter
@@ -116,13 +118,35 @@ class YumexFlatpakSearch(Adw.Window):
     # @Gtk.Template.Callback()
     def on_setup(self, widget, item):
         """Setup the widget to show in the Gtk.Listview"""
-        label = Gtk.Label()
-        label.set_xalign(0.0)
-        item.set_child(label)
+        row = Row()
+        item.set_child(row)
 
     # @Gtk.Template.Callback()
     def on_bind(self, widget, item):
         """bind data from the store object to the widget"""
-        label = item.get_child()
-        obj: FoundElem = item.get_item()
-        label.set_text(str(obj))
+        row = item.get_child()
+        pkg: AppStreamPackage = item.get_item().pkg
+        row.set_title(pkg.name)
+        row.set_subtitle(pkg.summary)
+        row.set_tooltip_text(pkg.flatpak_bundle)
+        icon_file = self._get_icon(pkg.id, pkg.repo_name)
+        if icon_file:
+            row.icon.set_from_file(icon_file)
+
+    def _get_icon(self, id: str, remote_name: str):
+        """set the flatpak icon in the ui of current found flatpak"""
+        if not remote_name:
+            return
+        location = FlatpakLocation(self.location.get_selected_item().get_string())
+        icon_path = self.backend.get_icon_path(remote_name, location)
+        icon_file = Path(f"{icon_path}/{id}.png")
+        if icon_file.exists():
+            return icon_file.as_posix()
+
+
+class Row(Adw.ActionRow):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.icon = Gtk.Image().new_from_icon_name("flatpak-symbolic")
+        self.icon.set_icon_size(Gtk.IconSize.LARGE)
+        self.add_prefix(self.icon)

@@ -2,7 +2,7 @@ using Gtk 4.0;
 using Adw 1;
 
 template $YumexFlatpakSearch : Adw.Window {
-    default-width: 600;
+    default-width: 800;
     default-height: 600;
     modal: true;
     Gtk.Box {
@@ -50,7 +50,6 @@ template $YumexFlatpakSearch : Adw.Window {
         orientation: vertical;
         Gtk.ListBox list {
           margin-top: 20;
-          margin-bottom: 20;
           margin-start: 20;
           margin-end: 20;
           selection-mode: none;
@@ -71,18 +70,17 @@ template $YumexFlatpakSearch : Adw.Window {
 
         }
         Gtk.ScrolledWindow {
+          margin-top: 10;
+          margin-bottom: 20;
+          margin-start: 20;
+          margin-end: 20;
           Gtk.ListView result_view {
-            margin-start: 10;
-            margin-end: 10;
-            margin-top: 10;
-            margin-bottom: 10;
             name: "result_view";
             hexpand: true;
             vexpand: true;
             model: selection;
             factory: result_factory;
             single-click-activate: false;
-            styles ["data-list"]
           }
         }
 
