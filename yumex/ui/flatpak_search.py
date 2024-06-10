@@ -124,11 +124,13 @@ class YumexFlatpakSearch(Adw.Window):
     # @Gtk.Template.Callback()
     def on_bind(self, widget, item):
         """bind data from the store object to the widget"""
-        row = item.get_child()
+        row: Row = item.get_child()
         pkg: AppStreamPackage = item.get_item().pkg
         row.set_title(pkg.name)
         row.set_subtitle(pkg.summary)
         row.set_tooltip_text(pkg.flatpak_bundle)
+        row.repo.set_text(pkg.repo_name)
+        row.branch.set_text(pkg.flatpak_bundle.split("/")[-1])
         icon_file = self._get_icon(pkg.id, pkg.repo_name)
         if icon_file:
             row.icon.set_from_file(icon_file)
@@ -150,3 +152,16 @@ class Row(Adw.ActionRow):
         self.icon = Gtk.Image().new_from_icon_name("flatpak-symbolic")
         self.icon.set_icon_size(Gtk.IconSize.LARGE)
         self.add_prefix(self.icon)
+        box = Gtk.Box()
+        box.set_orientation(Gtk.Orientation.HORIZONTAL)
+        box.props.vexpand = False
+        box.props.hexpand = False
+        box.props.valign = Gtk.Align.START
+        self.branch = Gtk.Label()
+        self.branch.add_css_class("tag")
+        box.append(self.branch)
+        self.repo = Gtk.Label()
+        self.repo.add_css_class("tag")
+        self.repo.add_css_class("origin")
+        box.append(self.repo)
+        self.add_suffix(box)
