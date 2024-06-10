@@ -27,7 +27,6 @@ from yumex.backend.flatpak.search import AppStreamPackage
 from yumex.constants import ROOTDIR
 from yumex.ui.flatpak_search import YumexFlatpakSearch
 from yumex.utils import RunJob, log
-from yumex.ui.flatpak_installer import YumexFlatpakInstaller
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
 

@@ -85,7 +85,6 @@ class YumexApplication(Adw.Application):
         self.create_action("toggle_selection", self.win.on_actions, ["<Ctrl>space"])
         self.create_action("filter_search", None)
         self.create_action("flatpak_update", self.win.on_actions)
-        self.create_action("flatpak_install", self.win.on_actions, ["<Ctrl>I"])
         self.create_action("flatpak_search", self.win.on_actions, ["<Ctrl>S"])
         self.create_action("flatpak_remove", self.win.on_actions, ["Delete"])
         self.create_action("flatpak_runtime", self.win.on_actions)
