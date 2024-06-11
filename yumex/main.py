@@ -88,6 +88,7 @@ class YumexApplication(Adw.Application):
         self.create_action("flatpak_search", self.win.on_actions, ["<Ctrl>S"])
         self.create_action("flatpak_remove", self.win.on_actions, ["Delete"])
         self.create_action("flatpak_runtime", self.win.on_actions)
+        self.create_action("flatpak_remove_unused", self.win.on_actions)
 
         self.create_action("apply_actions", self.win.on_actions, ["<Ctrl>Return"])
         self.create_action("page_one", self.win.on_actions, ["<Alt>1"])

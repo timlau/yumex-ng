@@ -82,6 +82,12 @@ class YumexFlatpakView(Gtk.ListView):
         if self.do_transaction(self.backend.do_update_all):
             self.presenter.show_message(_("flatpaks was updated"), timeout=2)
 
+    def remove_unused(self) -> None:
+        """remove all unused flatpaks (runtimes etc)"""
+
+        if self.do_transaction(self.backend.do_remove_unused):
+            self.presenter.show_message(_("Unused flatpaks was removed"), timeout=2)
+
     def update(self, pkg) -> None:
         """update a flatpak"""
 
@@ -137,7 +143,6 @@ class YumexFlatpakView(Gtk.ListView):
 
     def remove(self, pkg=None) -> None:
         """remove an flatpak"""
-
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
         if self.do_transaction(self.backend.do_remove, selected):
             self.presenter.show_message(_(f"{selected[0].id} is now removed"), timeout=2)

@@ -384,6 +384,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "flatpak_update":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.update_all()
+            case "flatpak_remove_unused":
+                if self.active_page == Page.FLATPAKS:
+                    self.flatpak_view.remove_unused()
             case "flatpak_runtime":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.show_runtime()

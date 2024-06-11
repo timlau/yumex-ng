@@ -196,6 +196,11 @@ class FlatpakBackend:
         ]
         return user_updates, system_updates
 
+    def _get_all_unused(self):
+        user_unused = [self._get_package(ref, FlatpakAction.UNINSTALL) for ref in self.user.list_unused_refs()]
+        system_unused = [self._get_package(ref, FlatpakAction.UNINSTALL) for ref in self.system.list_unused_refs()]
+        return user_unused, system_unused
+
     def number_of_updates(self) -> int:
         """get the number of available updates."""
         return len(self.updates)
@@ -207,6 +212,11 @@ class FlatpakBackend:
 
         user_updates, system_updates = self._get_all_updates()
         return self._do_transaction(user_updates, system_updates, FlatpakAction.UPDATE, execute)
+
+    def do_remove_unused(self, execute) -> None:
+        """remove all runtimes (etc)"""
+        user_unused, system_unused = self._get_all_unused()
+        return self._do_transaction(user_unused, system_unused, FlatpakAction.UNINSTALL, execute)
 
     def do_install(self, to_inst, source, location: FlatpakLocation, execute) -> None:
         """install a flatak by a ref string"""
