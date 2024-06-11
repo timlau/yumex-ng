@@ -15,6 +15,7 @@
 
 """Backend for searching in flatpak AppStream Metadata"""
 
+from pathlib import Path
 import gi
 from yumex.utils import log
 from enum import IntEnum
@@ -102,19 +103,21 @@ class AppstreamSearcher:
         packages = []
         metadata = AppStream.Metadata.new()
         metadata.set_format_style(AppStream.FormatStyle.CATALOG)
-        metadata.parse_file(
-            Gio.File.new_for_path(remote.get_appstream_dir().get_path() + "/appstream.xml.gz"),
-            AppStream.FormatKind.XML,
-        )
-        components: AppStream.ComponentBox = metadata.get_components()
-        i = 0
-        for i in range(components.get_size()):
-            component = components.index_safe(i)
-            if component.get_kind() == AppStream.ComponentKind.DESKTOP_APP:
-                bundle = component.get_bundle(AppStream.BundleKind.FLATPAK).get_id()
-                if bundle not in self.installed:
-                    packages.append(AppStreamPackage(component, remote.get_name()))
-        return packages
+        appstream_file = Path(remote.get_appstream_dir().get_path() + "/appstream.xml.gz")
+        if appstream_file.exists():
+            metadata.parse_file(Gio.File.new_for_path(appstream_file.as_posix()), AppStream.FormatKind.XML)
+            components: AppStream.ComponentBox = metadata.get_components()
+            i = 0
+            for i in range(components.get_size()):
+                component = components.index_safe(i)
+                if component.get_kind() == AppStream.ComponentKind.DESKTOP_APP:
+                    bundle = component.get_bundle(AppStream.BundleKind.FLATPAK).get_id()
+                    if bundle not in self.installed:
+                        packages.append(AppStreamPackage(component, remote.get_name()))
+            return packages
+        else:
+            log(f"AppStream file not found: {appstream_file}")
+            return []
 
     def search(self, keyword: str) -> list[AppStreamPackage]:
         """Search packages matching a keyword"""
