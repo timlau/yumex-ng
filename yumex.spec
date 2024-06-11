@@ -4,7 +4,7 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  4.99.4
+Version:  5.0.0
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -94,6 +94,9 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %changelog
+
+* Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-1
+- the 5.0.0 release
 
 * Thu Apr 20 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.4-1
 - the 4.99.4 release
