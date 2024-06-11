@@ -159,7 +159,6 @@ class YumexPackageView(Gtk.ColumnView):
             self.queue_view.remove_packages(to_delete)
         self.refresh()
         self.batch_selection = False
-        return to_add, to_delete
 
     def _set_queued(self, pkg, is_queued: bool, to_list: list):
         pkg.queue_action = True
@@ -182,11 +181,15 @@ class YumexPackageView(Gtk.ColumnView):
     def on_queued_toggled(self, widget, item):
         """update the dataobject with the current check state"""
         pkg: YumexPackage = item.get_item()
+        # log(f"toggled : {pkg}")
         if not pkg:
             return
         checkbox = item.get_child()
         tip = get_package_selection_tooltip(pkg)
         checkbox.set_tooltip_text(tip)
+        # log(
+        #     f"PackageView.on_queued_toggled : {pkg} dep: {pkg.is_dep} qa: {pkg.queue_action} bs: {self.batch_selection}"  # noqa
+        # )
         # if a pkg is select as a dep, the the user can't deselect
         if pkg.is_dep:
             checkbox.set_sensitive(False)
@@ -198,8 +201,8 @@ class YumexPackageView(Gtk.ColumnView):
             # log(
             #     f"PackageView.on_queued_toggled : {pkg} dep: {pkg.is_dep} qa: {pkg.queue_action} bs: {self.batch_selection}"  # noqa
             # )
-            pkg.queued = widget.get_active()
             if not self.batch_selection:
+                pkg.queued = widget.get_active()
                 if pkg.queued:
                     self.queue_view.add_package(pkg)
                 else:

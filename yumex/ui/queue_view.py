@@ -57,6 +57,7 @@ class YumexQueueView(Gtk.ListView):
                 pkg.queue_action = True
                 pkg.is_dep = False
                 pkg.queued = True
+                pkg.queue_action = False
                 self.storage.insert_sorted(pkg, self.sort_by_state)
         RunAsync(self.presenter.depsolve, self.add_deps_to_queue, self.storage)
 
@@ -72,9 +73,10 @@ class YumexQueueView(Gtk.ListView):
             if store_pkg not in pkgs and not store_pkg.is_dep:
                 to_keep.append(store_pkg)
             else:  # reset properties for pkg to not keep in queue
+                store_pkg.queue_action = True
                 store_pkg.queued = False
                 store_pkg.is_dep = False
-                store_pkg.queue_action = True
+                store_pkg.queue_action = False
         store = self.storage.clear()
         if len(to_keep):  # check if there something in the queue
             for pkg in to_keep:
