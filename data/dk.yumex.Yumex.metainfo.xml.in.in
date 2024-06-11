@@ -37,6 +37,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="5.0.0" date="2024-06-11" type="devel"><description>
+        <p>Yum Extender 5.0.0 add many fixes and small improvments </p>
+        <ul>
+          <li>Support for update info with dnf5</li>
+          <li>new improved flatpak installer</li>
+          <li>cleanup unused flatpaks</li>
+          <li>lot of code fixes and optimization</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.9.4" date="2023-04-20" type="devel"><description>
         <p>Yum Extender 4.9.4 add many fixes and small improvments </p>
         <ul>

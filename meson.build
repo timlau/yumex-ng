@@ -1,9 +1,8 @@
 project(
     'yumex',
-    version: '4.99.4',
+    version: '5.0.0',
     meson_version: '>= 0.59.0',
 )
-
 
 APPLICATION_ID = 'dk.yumex.Yumex'
 BACKEND = get_option('dnf_backend')
@@ -17,7 +16,6 @@ dependency('glib-2.0')
 dependency('gtk4', version: '>= 4.8.0')
 dependency('libadwaita-1', version: '>= 1.2')
 dependency('pygobject-3.0', version: '>= 3.42.0')
-
 
 if get_option('buildtype') == 'debug'
     VCS_TAG = run_command('date', '+%Y%m%d', check: true).stdout().strip()

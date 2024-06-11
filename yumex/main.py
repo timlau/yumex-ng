@@ -159,10 +159,12 @@ class YumexApplication(Adw.Application):
             release_notes_version=VERSION,
             release_notes=_(
                 """
-<ul>
-<li>Browse installed flatpaks</li>
-<li>Install, remove and update flatpaks</li>
-</ul>
+        <ul>
+          <li>Support for update info with dnf5</li>
+          <li>new improved flatpak installer</li>
+          <li>cleanup unused flatpaks</li>
+          <li>lot of code fixes and optimization</li>
+        </ul>
 """
             ),
             comments=_(
