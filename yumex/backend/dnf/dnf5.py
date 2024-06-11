@@ -23,7 +23,8 @@ import libdnf5.base as dnf
 
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
-from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB
+from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB, QueryCmp_GT
+from libdnf5.advisory import AdvisoryQuery
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
@@ -264,6 +265,10 @@ class Backend(dnf.Base):
                     return dnf_pkg.get_files()
                 case InfoType.UPDATE_INFO:  # TODO: implement
                     # updinfo = UpdateInfo(dnf_pkg)
+                    advisories = [
+                        adv_pkg.get_advisory() for adv_pkg in AdvisoryQuery(self).get_advisory_packages_sorted(query)
+                    ]
+                    print(advisories)
                     # value = updinfo.advisories_list()
                     # return value
                     return None
