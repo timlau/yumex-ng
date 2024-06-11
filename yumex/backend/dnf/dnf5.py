@@ -18,13 +18,15 @@ import glob
 import os
 
 from typing import Iterable, List
+from datetime import datetime
+from dataclasses import asdict, dataclass
 
 import libdnf5.base as dnf
 
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
 from libdnf5.repo import RepoQuery, Repo  # noqa : F401
 from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB, QueryCmp_GT
-from libdnf5.advisory import AdvisoryQuery
+from libdnf5.advisory import AdvisoryQuery, Advisory, AdvisoryReference
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
@@ -54,36 +56,35 @@ def create_package(pkg: Package) -> YumexPackage:
     )
 
 
+@dataclass
 class UpdateInfo:
-    """Wrapper class for dnf update advisories on a given po."""
+    id: str
+    title: str
+    description: str
+    type: str
+    updated: str
+    references: list
 
-    UPDINFO_MAIN = ["id", "title", "type", "description"]
+    @classmethod
+    def from_advisory(cls, advisory: Advisory):
+        """make UpdateInfo object from an Advisory"""
+        # build list of references
+        refs: list[AdvisoryReference] = list(advisory.get_references())
+        ref_list = []
+        for ref in refs:
+            ref_list.append((ref.get_type(), ref.get_id(), ref.get_title(), ref.get_url()))
+        return cls(
+            id=advisory.get_name(),
+            title=advisory.get_title(),
+            description=advisory.get_description(),
+            type=advisory.get_type(),
+            updated=datetime.fromtimestamp(advisory.get_buildtime()).strftime("%Y-%m-%d %H:%M:%S"),
+            references=ref_list,
+        )
 
-    def __init__(self, po):
-        self.po = po
-
-    @staticmethod
-    def advisories_iter(po):
-        pass
-
-    def advisories_list(self):
-        """list containing advisory information."""
-        results = []
-        for adv in self.advisories_iter(self.po):
-            e = {}
-            # main fields
-            for field in UpdateInfo.UPDINFO_MAIN:
-                e[field] = getattr(adv, field)
-            dt = getattr(adv, "updated")
-            e["updated"] = dt.isoformat(" ")
-            # manage packages references
-            refs = []
-            for ref in adv.references:
-                ref_tuple = [ref.type, ref.id, ref.title, ref.url]
-                refs.append(ref_tuple)
-            e["references"] = refs
-            results.append(e)
-        return results
+    def as_dict(self):
+        """return dataclass as a dict"""
+        return asdict(self)
 
 
 class Backend(dnf.Base):
@@ -246,6 +247,17 @@ class Backend(dnf.Base):
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
+    def _get_advisory_info(self, query):
+        result = []
+        advisories = [adv_pkg.get_advisory() for adv_pkg in AdvisoryQuery(self).get_advisory_packages_sorted(query)]
+        for advisory in advisories:
+            upd_info = UpdateInfo.from_advisory(advisory)
+            result.append(upd_info.as_dict())
+        if result:
+            return result
+        else:
+            return None
+
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         query = PackageQuery(self)
         if pkg.state == PackageState.AVAILABLE:
@@ -265,13 +277,10 @@ class Backend(dnf.Base):
                     return dnf_pkg.get_files()
                 case InfoType.UPDATE_INFO:  # TODO: implement
                     # updinfo = UpdateInfo(dnf_pkg)
-                    advisories = [
-                        adv_pkg.get_advisory() for adv_pkg in AdvisoryQuery(self).get_advisory_packages_sorted(query)
-                    ]
-                    print(advisories)
                     # value = updinfo.advisories_list()
                     # return value
-                    return None
+
+                    return self._get_advisory_info(query)
                 case other:
                     raise ValueError(f"Unknown package info: {other}")
         else:
