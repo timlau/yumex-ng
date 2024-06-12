@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto, IntEnum
-import time
 from typing import Self
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
@@ -291,7 +290,8 @@ class YumexRootBackend:
 
     def on_repo_key_import_request(self, session, key_id, user_ids, key_fingerprint, key_url, timestamp):
         log(
-            f"DNF5_ROOT : Signal : repo_key_import_request: {session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
+            "DNF5_ROOT : Signal : repo_key_import_request: "
+            f"{session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
         )
         # <arg name="session_object_path" type="o" />
         # <arg name="key_id" type="s" />
