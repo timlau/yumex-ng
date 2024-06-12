@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto, IntEnum
+import time
 from typing import Self
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 
+from yumex.backend.presenter import YumexPresenter
 from yumex.ui.progress import YumexProgress
 from yumex.utils import log
 from yumex.utils.enums import PackageState
@@ -115,9 +117,10 @@ class DownloadQueue:
 class YumexRootBackend:
     def __init__(self, presenter) -> None:
         super().__init__()
-        self.presenter = presenter
+        self.presenter: YumexPresenter = presenter
         self.last_transaction = None
         self.download_queue = DownloadQueue()
+        self.client = None
 
     @property
     def progress(self) -> YumexProgress:
@@ -192,6 +195,7 @@ class YumexRootBackend:
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
         with Dnf5DbusClient() as client:
+            self.client = client
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
@@ -211,6 +215,7 @@ class YumexRootBackend:
     def run_transaction(self) -> TransactionResult:
         self.download_queue.clear()
         with Dnf5DbusClient() as client:
+            self.client = client
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
@@ -284,5 +289,16 @@ class YumexRootBackend:
         fraction = self.download_queue.fraction
         self.progress.set_progress(fraction)
 
-    def on_repo_key_import_request(self, *args):
-        log(f"DNF5_ROOT : Signal : repo_key_import_request: {args}")
+    def on_repo_key_import_request(self, session, key_id, user_ids, key_fingerprint, key_url, timestamp):
+        log(
+            f"DNF5_ROOT : Signal : repo_key_import_request: {session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
+        )
+        # <arg name="session_object_path" type="o" />
+        # <arg name="key_id" type="s" />
+        # <arg name="user_ids" type="as" />
+        # <arg name="key_fingerprint" type="s" />
+        # <arg name="key_url" type="s" />
+        # <arg name="timestamp" type="x" />
+        log(f"DNF5_ROOT : confirm gpg key import id: {key_id} user-id: {user_ids[0]}")
+        self.presenter.show_message(_("Importing RPM GPG key"))
+        self.client.confirm_key(key_id, True)

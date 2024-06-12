@@ -109,3 +109,6 @@ class Dnf5DbusClient:
     def do_transaction(self, *args):
         do_transaction = self._async_method("do_transaction")
         return do_transaction(*args)
+
+    def confirm_key(self, *args):
+        return self.session.confirm_key(*args)
