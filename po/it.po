@@ -30,7 +30,7 @@ msgstr "Installando"
 msgid "Uninstalling"
 msgstr "Disinstallando"
 
-#: yumex/backend/flatpak/transaction.py:70
+#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:38
 msgid "Updating"
 msgstr "Aggiornando"
 
@@ -188,10 +188,6 @@ msgstr "In coda per l'installazione"
 #: yumex/ui/__init__.py:42
 msgid "Queued for updating"
 msgstr "In coda per l'aggiornamento"
-
-#: yumex/ui/flatpak_result.py:38
-msgid "Updateing"
-msgstr "Aggiornando"
 
 #: yumex/ui/package_view.py:96
 msgid "Loading Packages"

@@ -24,12 +24,14 @@ BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gtk4)
 BuildRequires: pkgconfig(libadwaita-1)
 BuildRequires: pkgconfig(pygobject-3.0)
-
+BuildRequires: systemd-rpm-macros
 
 Requires: python3-gobject
 Requires: libadwaita
 Requires: gtk4
 Requires: flatpak-libs
+Requires: python3-dbus
+Requires: libappindicator-gtk3
 
 # dnf4 requirements
 %if "%{dnf_backend}" == "DNF4"
@@ -92,6 +94,40 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/icons/hicolor/
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
+%{_userunitdir}/*.service
+%{_prefix}/lib/systemd/user-preset/*.preset
+%{_datadir}/yumex/yumex-service.conf
+%{_bindir}/yumex_updater_systray
+
+%post
+glib-compile-schemas /usr/share/glib-2.0/schemas/
+%systemd_user_post yumex-updater-systray.service
+
+%posttrans
+%systemd_user_post yumex-updater-systray.service
+
+# Iterate over all user sessions
+for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
+    uid=$(loginctl show-session $session -p User --value)
+    user=$(getent passwd $uid | cut -d: -f1)
+
+    # Debug statement to verify user and UID
+    echo "Applying preset and restarting service for user $user with UID $uid"
+
+    # Set environment variables for the user session
+    XDG_RUNTIME_DIR="/run/user/$uid"
+    DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+
+    # Apply the preset for the user session
+    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user preset yumex-updater-systray.service" || echo "Failed to apply preset for user $user"
+
+    # Reload the user daemon and restart the service
+    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user daemon-reload" || echo "Failed to perform daemon-reload for user $user"
+    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater-systray.service" || echo "Failed to restart service for user $user"
+done
+
+%preun
+%systemd_user_preun yumex-updater-systray.service
 
 %changelog
 
