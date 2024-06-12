@@ -275,11 +275,7 @@ class Backend(dnf.Base):
                     return dnf_pkg.get_description()
                 case InfoType.FILES:
                     return dnf_pkg.get_files()
-                case InfoType.UPDATE_INFO:  # TODO: implement
-                    # updinfo = UpdateInfo(dnf_pkg)
-                    # value = updinfo.advisories_list()
-                    # return value
-
+                case InfoType.UPDATE_INFO:
                     return self._get_advisory_info(query)
                 case other:
                     raise ValueError(f"Unknown package info: {other}")
