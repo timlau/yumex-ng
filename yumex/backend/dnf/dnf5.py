@@ -263,7 +263,7 @@ class Backend(dnf.Base):
         if pkg.state == PackageState.AVAILABLE:
             query.filter_available()
         else:
-            query.filter_available()
+            query.filter_installed()
         query.filter_nevra([pkg.nevra])
         pkgs = list(query)
         if not pkgs:
