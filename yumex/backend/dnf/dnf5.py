@@ -214,9 +214,9 @@ class Backend(dnf.Base):
         return list(repos)
 
     def get_packages_with_lowest_priority(self, packages: List[YumexPackage]) -> List[YumexPackage]:
-        # Filter packages based on repository priority
-        filtered_packages = []
-        for pkg in packages:
+        updates_list = list(packages)
+        latest_versions = {}
+        for pkg in updates_list:
             repos = self.get_package_repos(pkg.name)
 
             # Get the priority for each repository and store them in a list
@@ -230,9 +230,13 @@ class Backend(dnf.Base):
 
             # Check if the priority of pkg.repo matches the lowest priority
             if pkg_repo_priority == lowest_priority:
-                filtered_packages.append(pkg)
+                if pkg.name in latest_versions:
+                    if pkg.evr > latest_versions[pkg.name].evr():
+                        latest_versions[pkg.name] = pkg
+                else:
+                    latest_versions[pkg.name] = pkg
 
-        return filtered_packages
+        return list(latest_versions.values())
 
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         match pkg_filter:
