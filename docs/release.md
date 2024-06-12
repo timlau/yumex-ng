@@ -5,6 +5,7 @@
   - bump the version number in .\yumex.spec
   - add changelog entry in .\yumex.spec
   - add new release in data/dk.yumex.Yumex.metainfo.xml.in.in
+  - comment out **styles ["devel"]** in data/ui/windows.blp
 - build the release
   - run `make release`
     - this will do the following:
@@ -22,3 +23,5 @@
   - add the src.rpm from ./build/SRPMS
   - set the pre-release checkmark
   - publish the release
+- make a yumex-dnf5 package in copr
+  - run `make copr-release-dnf5`
