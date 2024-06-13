@@ -6,7 +6,9 @@ from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
 from dasbus.loop import EventLoop
 from dasbus.error import DBusError  # noqa
-from gi.repository import GLib  # type: ignore
+from dasbus.typing import get_native, get_variant, Variant  # noqa: F401
+
+# from gi.repository import GLib  # type: ignore
 
 
 # Constants
@@ -24,12 +26,12 @@ logging.basicConfig(
 
 
 # GLib.Variant converters
-def gv_list(var: list[str]) -> GLib.Variant:
-    return GLib.Variant("as", var)
+def gv_list(var: list[str]) -> Variant:
+    return get_variant(list[str], var)
 
 
-def gv_string(var: str) -> GLib.Variant:
-    return GLib.Variant("s", var)
+def gv_string(var: str) -> Variant:
+    return get_variant(str, var)
 
 
 # async call handler class
@@ -65,7 +67,9 @@ class AsyncDbusCaller:
         # timeout = 10min
         mth(*args, timeout=ASYNC_TIMEOUT, **kwargs, callback=self.callback)
         self.loop.run()
-        return self.res
+        if self.res:
+            return get_native(self.res)
+        return None
 
 
 class Dnf5DbusClient:
@@ -106,9 +110,10 @@ class Dnf5DbusClient:
         resolve = self._async_method("resolve")
         return resolve(*args)
 
-    def do_transaction(self, *args):
+    def do_transaction(self):
         do_transaction = self._async_method("do_transaction")
-        return do_transaction(*args)
+        options = {"comment": get_variant(str, "Yum Extender Transaction")}
+        do_transaction(options)
 
     def confirm_key(self, *args):
         return self.session.confirm_key(*args)

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto, IntEnum
 from typing import Self
+
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 
@@ -137,14 +138,14 @@ class YumexRootBackend:
             action = action.lower()
             if action not in result_dict:
                 result_dict[action] = []
-            name = pkg["name"].get_string()
-            arch = pkg["arch"].get_string()
-            evr = pkg["evr"].get_string()
-            repo = pkg["repo_id"].get_string()
+            name = pkg["name"]
+            arch = pkg["arch"]
+            evr = pkg["evr"]
+            repo = pkg["repo_id"]
             if "package_size" in pkg:
-                size = pkg["package_size"].get_uint64()
+                size = pkg["package_size"]
             elif "install_size" in pkg:
-                size = pkg["install_size"].get_uint64()
+                size = pkg["install_size"]
             else:
                 size = 0.0
                 log("no size found : {pkg}")
@@ -222,13 +223,9 @@ class YumexRootBackend:
             self._build_transations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
             log("DNF5_ROOT : running transaction")
-            rc = client.do_transaction({"comment": gv_string("Yum Extender Transaction")})
-            log(f"run_transaction : {rc}")
+            client.do_transaction()
             self.progress.hide()
-            if rc:
-                return TransactionResult(False, error=rc)  # type: ignore
-            else:
-                return TransactionResult(True, data=None)  # type: ignore
+            return TransactionResult(True, data=None)  # type: ignore
 
     def on_transaction_action_start(self, session, package_id, action, total):
         log(f"DNF5_ROOT : Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
