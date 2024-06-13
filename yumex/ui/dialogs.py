@@ -1,4 +1,4 @@
-from gi.repository import Adw, GLib
+from gi.repository import Adw, GLib, Gtk
 
 from yumex.utils.types import MainWindow
 
@@ -29,12 +29,13 @@ class GPGDialog(Adw.MessageDialog):
             keyurl,
             timestamp,
         ) = key_values
+        self.props.default_width = 800
+        self.add_css_class("gpg_dialog")
         self.set_heading(_("Install GPG Key"))
         body = f"""
-        {userid}
-
-        {pkg_id}
-        """
+        User ID   : {userid}
+        Key       : {pkg_id}
+        """.lstrip()
         self.set_body(body)
         self.install_key = False
         self._loop = GLib.MainLoop()

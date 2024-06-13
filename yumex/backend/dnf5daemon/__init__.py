@@ -297,5 +297,11 @@ class YumexRootBackend:
         # <arg name="key_url" type="s" />
         # <arg name="timestamp" type="x" />
         log(f"DNF5_ROOT : confirm gpg key import id: {key_id} user-id: {user_ids[0]}")
-        self.presenter.show_message(_("Importing RPM GPG key"))
-        self.client.confirm_key(key_id, True)
+        key_values = (key_id, user_ids[0], key_fingerprint, key_url, timestamp)
+        ok = self.presenter.confirm_gpg_import(key_values)
+        if ok:
+            log("DNF5_ROOT : Importing RPM GPG key")
+            self.client.confirm_key(key_id, True)
+        else:
+            log("DNF5_ROOT : Denied RPM GPG key")
+            self.client.confirm_key(key_id, False)

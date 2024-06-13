@@ -145,3 +145,10 @@ spinner {
     color: @success_fg_color;
     background-color: @success_bg_color;
 }
+
+.gpg_dialog text {
+    font-family: monospace;
+    text-align: start;
+    margin-left: 10px;
+    margin-right: 10px;
+}

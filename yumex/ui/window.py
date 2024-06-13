@@ -183,13 +183,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
                         result: TransactionResult = root_backend.run_transaction()
                         if result.completed:
                             return True
-                        if result.key_install and result.key_values:
-                            self.progress.hide()
-                            dialog = GPGDialog(self, result.key_values)
-                            dialog.set_transient_for(self)
-                            dialog.show()
-                            log(f"Install key: {dialog.install_key}")
-                            if dialog.install_key:
+                        if result.key_install and result.key_values:  # Only on DNF4
+                            self.progress.hide(result.key_values)
+                            ok = self.confirm_gpg_import()
+                            if ok:
                                 log("Re-run transaction and import GPG keys")
                                 # tell the backend to import this gpg key in next run
                                 root_backend.do_gpg_import()
@@ -203,6 +200,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if result.error:
                 self.show_message(result.error)
             return False
+
+    def confirm_gpg_import(self, key_values):
+        dialog = GPGDialog(self, key_values)
+        dialog.set_transient_for(self)
+        dialog.show()
+        log(f"Install key: {dialog.install_key}")
+        return dialog.install_key
 
     def confirm_flatpak_transaction(self, refs: list) -> bool:
         log("Window: confirm flatpak transaction")

@@ -146,3 +146,6 @@ class YumexPresenter:
 
     def set_window_sesitivity(self, sensitive: bool):
         self._win.set_sesitivity(sensitive)
+
+    def confirm_gpg_import(self, key_values):
+        return self._win.confirm_gpg_import(key_values)
