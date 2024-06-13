@@ -7,7 +7,7 @@ The first steps is to build the GUI and later the real package handling function
 
 Follow news on the development on 
 
-[![Mastodon](data/gfx/Mastodon-Social-150px.png)](https://fosstodon.org/@nerdytim)
+[X/Twitter](https://x.com/NerdyTim_666)
 
 # how to test
 
@@ -15,27 +15,15 @@ Follow news on the development on
 - install deps `make inst-deps`
 - run `./local.sh`
 
-# Packages for Fedora 37 & Rawhide
+# Packages for Fedora 39,40 & Rawhide
 
 [Fedora Copr Repo](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng/)
 
-# what is working
-
-It is pretty early in development, but the basics are working
-
-- View packages filtered by installed, updates & available
-- Seach packages by name as you type (used .arch=noarch for searching for noarch in arch (.desc=... , .repo=..., .desc=...))
-- Add packages to queue
-- About Yum Extender
-- Appling the queue to the system
-
-# what is not working
+# what is not working yet
 
 - No group support
 - No history support
-- Automatic download and approval of new GPG keys for repositories
 - Changing enabled repositories in preferences
- 
 
 # current look
 
