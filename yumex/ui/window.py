@@ -184,8 +184,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                         if result.completed:
                             return True
                         if result.key_install and result.key_values:  # Only on DNF4
-                            self.progress.hide(result.key_values)
-                            ok = self.confirm_gpg_import()
+                            self.progress.hide()
+                            ok = self.confirm_gpg_import(result.key_values)
                             if ok:
                                 log("Re-run transaction and import GPG keys")
                                 # tell the backend to import this gpg key in next run
