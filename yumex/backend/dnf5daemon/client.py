@@ -25,13 +25,9 @@ logging.basicConfig(
 )
 
 
-# GLib.Variant converters
 def gv_list(var: list[str]) -> Variant:
+    """convert list of strings to a Variant of type (as)"""
     return get_variant(list[str], var)
-
-
-def gv_string(var: str) -> Variant:
-    return get_variant(str, var)
 
 
 # async call handler class
@@ -68,6 +64,7 @@ class AsyncDbusCaller:
         mth(*args, timeout=ASYNC_TIMEOUT, **kwargs, callback=self.callback)
         self.loop.run()
         if self.res:
+            # convert Variant return vlaues to native python format
             return get_native(self.res)
         return None
 

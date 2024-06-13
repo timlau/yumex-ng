@@ -10,7 +10,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.utils import log
 from yumex.utils.enums import PackageState
 
-from .client import Dnf5DbusClient, gv_list, gv_string
+from .client import Dnf5DbusClient, gv_list
 
 
 # defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
