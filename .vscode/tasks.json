@@ -19,9 +19,9 @@
             }
         },
         {
-            "label": "local build and run (DNF5)",
+            "label": "local build and run (DNF4)",
             "type": "shell",
-            "command": "${workspaceFolder}/local.sh DNF5",
+            "command": "${workspaceFolder}/local.sh DNF4",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
