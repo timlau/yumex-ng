@@ -1,4 +1,4 @@
-from gi.repository import Adw, GLib, Gtk
+from gi.repository import Adw, GLib
 
 from yumex.utils.types import MainWindow
 
