@@ -15,6 +15,7 @@
 
 """backend for handling flatpaks"""
 
+from pathlib import Path
 from gi.repository import Flatpak, GLib
 from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.backend.flatpak.transaction import (
@@ -93,6 +94,27 @@ class FlatpakBackend:
     def is_installed(self, ref: FlatpakRef) -> bool:
         """check if a ref is installed"""
         return ref.get_name() in self._installed
+
+    def install_flatpakref(self, flatpakref: Path, execute):
+        log(f"install flatpakref: {flatpakref}")
+        location = FlatpakLocation.USER
+        transaction = FlatpakTransaction(self, location=location, first_run=not execute)
+        transaction.add_install_flatpak_ref(flatpakref)
+        if not execute:
+            try:
+                transaction.run()
+                return []
+            except FlatPakFirstRun:
+                result = transaction._current_result
+                refs = [(oper.get_ref(), FlatpakAction.INSTALL, oper.get_remote(), location) for oper in result]
+                return refs
+            except FlatPakNoOperations:
+                log("FLATPAK : no operations")
+                return []
+        else:
+            transaction.run()
+            if transaction.failed:
+                log(f"  Error in flatpak transaction: {transaction.failed_msg}")
 
     def _get_updates(self) -> list[str]:
         """get a list of flatpak ids with available updates"""

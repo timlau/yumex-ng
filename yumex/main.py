@@ -101,12 +101,16 @@ class YumexApplication(Adw.Application):
 
         self.win.present()
         # click the Availble package filter, without looking the UI
-        self.win.load_packages("installed")
+        if self.args.flatpakref:
+            self.win.install_flatpakref(self.args.flatpakref)
+        else:
+            self.win.load_packages("installed")
 
     def do_command_line(self, args) -> Literal[0]:
         parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
         parser.add_argument("-d", "--debug", help="enable debug logging", action="store_true")
         parser.add_argument("--exit", help="stop the dnfdaemon system daemon", action="store_true")
+        parser.add_argument("--flatpakref", help="Install flatpak from a .flatpakref")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.exit:
             subprocess.call(

@@ -77,6 +77,11 @@ class YumexFlatpakView(Gtk.ListView):
                 return files[0].as_posix()
         return None
 
+    def install_flatpakref(self, flatpakref: Path):
+        log(f"install flatpakref: {flatpakref}")
+        if self.do_transaction(self.backend.install_flatpakref, flatpakref):
+            self.presenter.show_message(_(f"{flatpakref} was installed"), timeout=2)
+
     def update_all(self) -> None:
         """update all flatpaks with pending updates"""
 

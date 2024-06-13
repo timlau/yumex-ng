@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+from pathlib import Path
 import re
 
 from gi.repository import Gtk, Adw, Gio  # type: ignore
@@ -153,6 +154,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.toast_overlay.add_toast(toast)
         log(f"show_message : {title}")
         return toast
+
+    def install_flatpakref(self, flatpakref):
+        log(f"install flatpakref: {flatpakref}")
+        self.select_page(Page.FLATPAKS)
+        ref_file = Path(flatpakref)
+        self.flatpak_view.install_flatpakref(ref_file)
 
     def load_packages(self, pkg_filter: PackageFilter):
         """Helper for Trigger the activation of a given pkg filter"""
