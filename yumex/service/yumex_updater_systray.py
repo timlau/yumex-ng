@@ -5,16 +5,20 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("AppIndicator3", "0.1")
 gi.require_version("GLib", "2.0")
 gi.require_version("Flatpak", "1.0")
-from gi.repository import Gtk, AppIndicator3, GLib, Flatpak
-import subprocess
-from pathlib import Path
+
+import configparser
+import logging
 import shutil
+import subprocess
 import threading
 import time
+from pathlib import Path
+
 import dbus
-import dbus.service
 import dbus.mainloop.glib
-import configparser
+import dbus.service
+
+from gi.repository import AppIndicator3, Flatpak, GLib, Gtk
 
 from yumex.constants import BACKEND
 
@@ -23,8 +27,13 @@ if BACKEND == "DNF5":
 else:
     from yumex.service.dnf4 import UpdateChecker
 
-from typing import List, Set
-from packaging import version
+
+logger = getLogger("yumex_updater")
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
+    datefmt="%H:%M:%S",
+)
 
 # Define paths
 home_dir = Path.home()
@@ -67,12 +76,17 @@ def on_clicked_pm(widget: Gtk.Widget) -> None:
 
 
 def refresh_updates(widget: Gtk.Widget = None) -> None:
+    logger.debug("Refreshing updates")
     sys_update_count = len(UpdateChecker())
 
     flatpak_user_count = len(Flatpak.Installation.new_user().list_installed_refs_for_update())
     flatpak_sys_count = len(Flatpak.Installation.new_system().list_installed_refs_for_update())
 
     update_count = sys_update_count + flatpak_user_count + flatpak_sys_count
+
+    logger.debug(f" --> flatpak system : {flatpak_sys_count}")
+    logger.debug(f" --> flatpak user   : {flatpak_user_count}")
+    logger.debug(f" --> system         : {update_count}")
 
     hover_text_lines = ["There are updates available:"]
     if sys_update_count > 0:
