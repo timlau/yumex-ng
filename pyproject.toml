@@ -17,4 +17,4 @@ line-ending = "auto"
 
 [tool.ruff.lint]
 select = ["E", "F"]
-ignore = ["F821"]
+ignore = ["F821", "E402"]
