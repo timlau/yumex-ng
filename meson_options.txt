@@ -4,9 +4,3 @@ option(
     value: 'DNF5',
     description: 'The dnf backend to use',
 )
-option(
-    'with_updater',
-    type: 'boolean',
-    value: true,
-    description: 'build updater systray app',
-)

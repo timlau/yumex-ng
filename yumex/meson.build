@@ -24,6 +24,8 @@ configure_file(
   install_dir: PY_INSTALLDIR.get_install_dir() / 'yumex',
 )
 
+install_data('yumex_updater_systray', install_dir: get_option('bindir'))
+
 launcher = join_paths(meson.project_build_root(), 'yumex', 'local-' + meson.project_name())
 
 run_target('run', command: [launcher])
@@ -97,7 +99,5 @@ yumex_service_modules = [
   'service/__init__.py',
   'service/dnf4.py',
   'service/dnf5.py',
-  'service/yumex_updater_systray.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_service_modules, subdir: 'yumex/service')
-

@@ -4,6 +4,7 @@ METAINFO_DIR = join_paths(get_option('prefix'), get_option('datadir'), 'metainfo
 
 subdir('ui')
 subdir('icons')
+subdir('service')
 
 gnome.compile_resources(
   'yumex',
@@ -70,5 +71,3 @@ if appstream_util.found()
     args: ['validate', appstream_file.full_path()],
   )
 endif
-
-subdir('service')

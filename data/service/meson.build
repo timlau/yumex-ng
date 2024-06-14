@@ -1,27 +1,26 @@
-if (get_option('with_updater'))
-    # Install systemd service file
-    install_data(
-        'yumex-updater-systray.service',
-        install_dir: '/usr/lib/systemd/user/',
-    )
+prefixdir = get_option('prefix')
+userunitdir = prefixdir / 'lib/systemd/user'
+userpresetdir = prefixdir / 'lib/systemd/user-preset'
+summary(
+    {
+        'prefixdir': prefixdir,
+        'userunitdir': userunitdir,
+        'userpresetdir': userpresetdir,
 
-    # Install systemd preset file
-    install_data(
-        '50-yumex-updater-systray.preset',
-        install_dir: '/usr/lib/systemd/user-preset/',
-    )
+    },
+)
 
-    # Install service config
-    install_data('yumex-service.conf', install_dir: '/usr/share/yumex/')
+# Install systemd service file
+install_data(
+    'yumex-updater-systray.service',
+    install_dir: userunitdir,
+)
 
-    # Create a symlink in bindir to service/yumex_updater_systray.py
-    install_symlink(
-        'yumex_updater_systray',
-        install_dir: get_option('bindir'),
-        pointing_to: join_paths(
-            PY_INSTALLDIR.get_install_dir(),
-            'yumex',
-            'yumex_updater_systray.py',
-        ),
-    )
-endif
+# Install systemd preset file
+install_data(
+    '50-yumex-updater-systray.preset',
+    install_dir: userpresetdir,
+)
+
+# Install service config
+install_data('yumex-service.conf', install_dir: PKGDATA_DIR)
