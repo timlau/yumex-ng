@@ -36,6 +36,7 @@ def sync_updates():
             tray_icon_interface = dbus.Interface(tray_icon_object, "com.yumex.UpdateService")
             # Call the RefreshUpdates method
             tray_icon_interface.RefreshUpdates()
+            log("(sync_updates) triggered updater checker refresh")
         except DBusException as e:
             log(f"(sync_updates) DBusException: {e}")
             # Handle the exception or log it as needed
