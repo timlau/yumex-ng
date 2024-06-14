@@ -5,7 +5,7 @@
 
 Name:     %{app_name}
 Version:  5.0.0
-Release:  1%{?dist}
+Release:  2{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -73,6 +73,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 update-desktop-database %{_datadir}/applications &> /dev/null || :
+glib-compile-schemas /usr/share/glib-2.0/schemas/
+%systemd_user_post yumex-updater-systray.service
 
 %postun
 if [ $1 -eq 0 ] ; then
@@ -80,9 +82,6 @@ if [ $1 -eq 0 ] ; then
     /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 fi
 update-desktop-database %{_datadir}/applications &> /dev/null || :
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f  %{app_name}.lang
 %doc README.md
@@ -96,14 +95,10 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 %{_userunitdir}/*.service
 %{_prefix}/lib/systemd/user-preset/*.preset
-%{_datadir}/yumex/yumex-service.conf
 %{_bindir}/yumex_updater_systray
 
-%post
-glib-compile-schemas /usr/share/glib-2.0/schemas/
-%systemd_user_post yumex-updater-systray.service
-
 %posttrans
+/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %systemd_user_post yumex-updater-systray.service
 
 # Iterate over all user sessions
@@ -130,6 +125,9 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+
+* Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-2
+- added updater service
 
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-1
 - the 5.0.0 release
