@@ -23,7 +23,7 @@ import argparse
 import subprocess
 from traceback import format_exception
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gio, Adw  # type: ignore
 
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
@@ -103,6 +103,8 @@ class YumexApplication(Adw.Application):
         # click the Availble package filter, without looking the UI
         if self.args.flatpakref:
             self.win.install_flatpakref(self.args.flatpakref)
+        elif self.args.update:
+            self.win.load_packages("updates")
         else:
             self.win.load_packages("installed")
 
@@ -110,6 +112,7 @@ class YumexApplication(Adw.Application):
         parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
         parser.add_argument("-d", "--debug", help="enable debug logging", action="store_true")
         parser.add_argument("--exit", help="stop the dnfdaemon system daemon", action="store_true")
+        parser.add_argument("--update", help="start on update page", action="store_true")
         parser.add_argument("--flatpakref", help="Install flatpak from a .flatpakref")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.exit:
