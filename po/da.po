@@ -56,8 +56,8 @@ msgstr ""
 msgid "Uninstalling"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:37
-msgid "Updateing"
+#: yumex/ui/flatpak_result.py:37 yumex/backend/flatpak/transaction.py:65
+msgid "Updating"
 msgstr ""
 
 #: yumex/ui/transaction_result.py:65
@@ -134,10 +134,6 @@ msgstr ""
 #, python-brace-format
 msgid "Downloading repository information for {name}"
 msgstr "indlæser kilde information for {name}"
-
-#: yumex/backend/flatpak/transaction.py:65
-msgid "Updating"
-msgstr ""
 
 #: yumex/backend/daemon.py:80
 msgid "Applying Transaction"

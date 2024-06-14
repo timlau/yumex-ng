@@ -27,6 +27,7 @@ import shutil
 import glob
 import os
 
+from yumex.utils.dbus import sync_updates
 from yumex.utils import log
 from yumex.utils.enums import (
     PackageAction,
@@ -504,6 +505,7 @@ class Backend(DnfBase):
                 return self.packages.installed
             case PackageFilter.UPDATES:
                 self.dnf_temp_cleanup()
+                sync_updates()
                 return self.get_packages_with_lowest_priority(self.packages.updates)
             case other:
                 raise ValueError(f"{other} is not an legal package filter")

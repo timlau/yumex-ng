@@ -186,7 +186,7 @@ msgid "Queued for updating"
 msgstr ""
 
 #: yumex/ui/flatpak_result.py:38
-msgid "Updateing"
+msgid "Updating"
 msgstr ""
 
 #: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33

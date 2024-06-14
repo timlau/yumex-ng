@@ -1,7 +1,7 @@
 project(
     'yumex',
     version: '5.0.0',
-    meson_version: '>= 0.59.0',
+    meson_version: '>= 0.61.0',
 )
 
 APPLICATION_ID = 'dk.yumex.Yumex'

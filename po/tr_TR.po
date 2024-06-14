@@ -30,9 +30,9 @@ msgstr "Kuruluyor"
 msgid "Uninstalling"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:70
+#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:40
 msgid "Updating"
-msgstr ""
+msgstr "Güncelleniyor"
 
 #: yumex/backend/flatpak/transaction.py:180
 msgid "flatpak transaction failed"
@@ -258,10 +258,6 @@ msgstr "Kurulum için sıraya alındı"
 #: yumex/ui/__init__.py:40
 msgid "Queued for updating"
 msgstr "Güncellenmek üzere sıraya alındı"
-
-#: yumex/ui/flatpak_result.py:40
-msgid "Updateing"
-msgstr "Güncelleniyor"
 
 #: yumex/main.py:166
 msgid ""

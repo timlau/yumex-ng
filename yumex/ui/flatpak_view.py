@@ -28,6 +28,7 @@ from yumex.constants import ROOTDIR
 from yumex.ui.flatpak_search import YumexFlatpakSearch
 from yumex.utils import RunJob, log
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
+from yumex.utils.dbus import sync_updates
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_view.ui")
@@ -80,19 +81,23 @@ class YumexFlatpakView(Gtk.ListView):
         """update all flatpaks with pending updates"""
 
         if self.do_transaction(self.backend.do_update_all):
-            self.presenter.show_message(_("flatpaks was updated"), timeout=2)
+            self.presenter.show_message(_("flatpaks were updated"), timeout=2)
+            sync_updates()
 
     def remove_unused(self) -> None:
         """remove all unused flatpaks (runtimes etc)"""
 
         if self.do_transaction(self.backend.do_remove_unused):
-            self.presenter.show_message(_("Unused flatpaks was removed"), timeout=2)
+            self.presenter.show_message(_("Unused flatpaks were removed"), timeout=2)
+            sync_updates()
 
     def update(self, pkg) -> None:
         """update a flatpak"""
 
         if self.do_transaction(self.backend.do_update, [pkg]):
-            self.presenter.show_message(_(f"{pkg.id} is now removed"), timeout=2)
+            self.presenter.show_message(_(f"{pkg.id} is now updated"), timeout=2)
+            sync_updates()
+
 
     def search(self):
         self.presenter.select_page(Page.FLATPAKS)
@@ -112,9 +117,10 @@ class YumexFlatpakView(Gtk.ListView):
                     if flatpak_search.confirm:
                         if self.do_transaction(self.backend.do_install, ref, remote, location):
                             self.presenter.show_message(_(f"{fp_id} is now installed"), timeout=2)
+                            sync_updates()
 
                 else:
-                    self.presenter.show_message(f"{fp_id} is not found om {remote}")
+                    self.presenter.show_message(f"{fp_id} is not found on {remote}")
 
     def install(self, *args) -> None:
         """install a new flatpak"""
@@ -137,15 +143,17 @@ class YumexFlatpakView(Gtk.ListView):
                 if flatpak_installer.confirm:
                     if self.do_transaction(self.backend.do_install, ref, remote, location):
                         self.presenter.show_message(_(f"{fp_id} is now installed"), timeout=2)
+                        sync_updates()
 
             else:
-                self.presenter.show_message(f"{fp_id} is not found om {remote}")
+                self.presenter.show_message(f"{fp_id} is not found on {remote}")
 
     def remove(self, pkg=None) -> None:
         """remove an flatpak"""
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
         if self.do_transaction(self.backend.do_remove, selected):
             self.presenter.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
+            sync_updates()
 
     def show_runtime(self):
         log("Show Runtime")

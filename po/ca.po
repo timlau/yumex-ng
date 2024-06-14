@@ -30,7 +30,7 @@ msgstr "S'instal·la"
 msgid "Uninstalling"
 msgstr "Es desinstal·la"
 
-#: yumex/backend/flatpak/transaction.py:70
+#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:40
 msgid "Updating"
 msgstr "S'actualitza"
 
@@ -258,10 +258,6 @@ msgstr "A la cua per a la instal·lació"
 #: yumex/ui/__init__.py:40
 msgid "Queued for updating"
 msgstr "A la cua per a l'actualització"
-
-#: yumex/ui/flatpak_result.py:40
-msgid "Updateing"
-msgstr "S'actualitza"
 
 #: yumex/main.py:166
 msgid ""

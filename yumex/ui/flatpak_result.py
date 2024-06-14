@@ -35,7 +35,7 @@ class ResultElem(GObject.GObject):
             case FlatpakAction.UNINSTALL:
                 action_str = _("Uninstalling")
             case _:
-                action_str = _("Updateing")
+                action_str = _("Updating")
         return f"{action_str} : <i>{self.location.upper()}</i>  - <b>{self.ref}</b> <small>({self.source})</small> "  # noqa
 
 

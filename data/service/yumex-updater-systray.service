@@ -1,0 +1,14 @@
+[Unit]
+Description=Service to monitor and manage system updates.
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/yumex_updater_systray
+RestartSec=5
+Restart=on-failure
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
+
+[Install]
+WantedBy=default.target

@@ -32,6 +32,7 @@ from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import RunAsync, log
 from yumex.utils.enums import InfoType, PackageFilter, SearchField, Page, SortType
+from yumex.utils.dbus import sync_updates
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/window.ui")
@@ -277,7 +278,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             log(f"Execute the transaction on {len(queued)} packages")
             result = self._do_transaction(queued)
             log(f"Transaction execution ended : {result}")
-            if result:  # transaction completed without issues
+            if result:  # transaction completed without issues\
+                sync_updates()
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
             # reset everything
             self.package_view.reset()
