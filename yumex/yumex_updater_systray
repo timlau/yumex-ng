@@ -63,6 +63,7 @@ class UpdateService(dbus.service.Object):
 
     @dbus.service.method("com.yumex.UpdateService")
     def RefreshUpdates(self) -> None:
+        logger.debug("DBUS: RefreshUpdates")
         refresh_updates()
 
 
