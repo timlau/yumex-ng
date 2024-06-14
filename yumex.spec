@@ -89,7 +89,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/%{app_name}
 %{_bindir}/%{app_name}
 %{python3_sitelib}/%{app_name}/
-%{_datadir}/applications/%{app_id}.desktop
+%{_datadir}/applications/%{app_id}*.desktop
 %{_datadir}/icons/hicolor/
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
@@ -128,6 +128,7 @@ done
 
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-2
 - added updater service
+- include all .desktop files
 
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-1
 - the 5.0.0 release
