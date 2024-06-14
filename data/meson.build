@@ -46,9 +46,27 @@ desktop_file = i18n.merge_file(
   install_dir: join_paths(get_option('datadir'), 'applications'),
 )
 
+desktop_file_flatpakref = i18n.merge_file(
+  input: configure_file(
+    input: '@0@-flatpakref.desktop.in.in'.format(APPLICATION_ID),
+    output: '@BASENAME@',
+    configuration: conf,
+  ),
+  output: '@0@-flatpakref.desktop'.format(APPLICATION_ID),
+  type: 'desktop',
+  po_dir: '../po',
+  install: true,
+  install_dir: join_paths(get_option('datadir'), 'applications'),
+)
+
 desktop_utils = find_program('desktop-file-validate', required: false)
 if desktop_utils.found()
   test('Validate desktop file', desktop_utils, args: [desktop_file.full_path()])
+  test(
+    'Validate desktop file',
+    desktop_utils,
+    args: [desktop_file_flatpakref.full_path()],
+  )
 endif
 
 appstream_file = i18n.merge_file(

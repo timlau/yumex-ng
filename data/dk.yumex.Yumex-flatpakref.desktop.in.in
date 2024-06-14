@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Yum Extender Flatpak Installer
+Comment=Install flatpak defined in .flatpakref
+Exec=yumex --flatpakref %F
+Icon=@APP_ID@
+Terminal=false
+Type=Application
+Categories=System;
+StartupNotify=true
+GenericName=Software Installer
+NoDisplay=true
+MimeType=application/vnd.flatpak.ref
