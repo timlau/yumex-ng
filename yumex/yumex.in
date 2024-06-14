@@ -44,9 +44,7 @@ if __name__ == "__main__":
         sys.path.insert(1, "@PYTHON@")
 
         # In the local use case the installed schemas go in <builddir>/data
-        os.environ["XDG_DATA_DIRS"] = "@SCHEMAS_DIR@:" + os.environ.get(
-            "XDG_DATA_DIRS", ""
-        )
+        os.environ["XDG_DATA_DIRS"] = "@SCHEMAS_DIR@:" + os.environ.get("XDG_DATA_DIRS", "")
 
         shutil.copyfile(
             os.path.join("@BUILD_DIR@", "yumex", "constants.py"),
@@ -59,7 +57,7 @@ if __name__ == "__main__":
     gi.require_version("Gtk", "4.0")
     gi.require_version("Adw", "1")
 
-    from gi.repository import Gio
+    from gi.repository import Gio  # type: ignore
 
     resource = Gio.Resource.load(os.path.join(pkgdatadir, "yumex.gresource"))
     Gio.Resource._register(resource)
