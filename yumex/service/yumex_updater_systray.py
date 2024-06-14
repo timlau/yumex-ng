@@ -28,10 +28,10 @@ else:
     from yumex.service.dnf4 import UpdateChecker
 
 
-logger = getLogger("yumex_updater")
+logger = logging.getLogger("yumex_updater")
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
+    format="(%(name)-5s) -  %(message)s",
     datefmt="%H:%M:%S",
 )
 
