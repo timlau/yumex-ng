@@ -5,13 +5,14 @@ METAINFO_DIR = join_paths(get_option('prefix'), get_option('datadir'), 'metainfo
 subdir('ui')
 subdir('icons')
 
-gnome.compile_resources('yumex',
+gnome.compile_resources(
+  'yumex',
   'yumex.gresource.xml',
   gresource_bundle: true,
   source_dir: meson.current_build_dir(),
   install: true,
   install_dir: PKGDATA_DIR,
-  dependencies: blueprints
+  dependencies: blueprints,
 )
 
 configure_file(
@@ -19,13 +20,15 @@ configure_file(
   output: '@0@.gschema.xml'.format(APPLICATION_ID),
   configuration: conf,
   install: true,
-  install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
+  install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas'),
 )
 
 compile_schemas = find_program('glib-compile-schemas', required: false)
 if compile_schemas.found()
-  test('Validate schema file', compile_schemas,
-    args: ['--strict', '--dry-run', meson.current_source_dir()]
+  test(
+    'Validate schema file',
+    compile_schemas,
+    args: ['--strict', '--dry-run', meson.current_source_dir()],
   )
 endif
 
@@ -33,20 +36,18 @@ desktop_file = i18n.merge_file(
   input: configure_file(
     input: '@0@.desktop.in.in'.format(APPLICATION_ID),
     output: '@BASENAME@',
-    configuration: conf
+    configuration: conf,
   ),
   output: '@0@.desktop'.format(APPLICATION_ID),
   type: 'desktop',
   po_dir: '../po',
   install: true,
-  install_dir: join_paths(get_option('datadir'), 'applications')
+  install_dir: join_paths(get_option('datadir'), 'applications'),
 )
 
 desktop_utils = find_program('desktop-file-validate', required: false)
 if desktop_utils.found()
-  test('Validate desktop file', desktop_utils,
-    args: [desktop_file.full_path()]
-  )
+  test('Validate desktop file', desktop_utils, args: [desktop_file.full_path()])
 endif
 
 appstream_file = i18n.merge_file(
@@ -58,38 +59,16 @@ appstream_file = i18n.merge_file(
   output: '@0@.metainfo.xml'.format(APPLICATION_ID),
   po_dir: '../po',
   install: true,
-  install_dir: METAINFO_DIR
+  install_dir: METAINFO_DIR,
 )
 
 appstream_util = find_program('appstream-util', required: false)
 if appstream_util.found()
-  test('Validate appstream file', appstream_util,
-    args: ['validate', appstream_file.full_path()]
+  test(
+    'Validate appstream file',
+    appstream_util,
+    args: ['validate', appstream_file.full_path()],
   )
 endif
 
-# Install systemd service file
-install_data(
-  'service/yumex-updater-systray.service',
-  install_dir: '/usr/lib/systemd/user/'
-)
-
-# Install systemd preset file
-install_data(
-  'service/50-yumex-updater-systray.preset',
-  install_dir: '/usr/lib/systemd/user-preset/'
-)
-
-# Install service config
-install_data(
-  'service/yumex-service.conf',
-  install_dir: '/usr/share/yumex/'
-)
-
-# Create a symlink in bindir to service/yumex_updater_systray.py
-install_symlink(
-  'yumex_updater_systray',
-  install_dir: get_option('bindir'),
-  pointing_to: join_paths(PY_INSTALLDIR.get_install_dir(), 'yumex', 'service/yumex_updater_systray.py')
-)
-
+subdir('service')

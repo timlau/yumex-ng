@@ -1,1 +1,12 @@
-option('dnf_backend', type : 'string', value : 'DNF5', description : 'The dnf backend to use')
+option(
+    'dnf_backend',
+    type: 'string',
+    value: 'DNF5',
+    description: 'The dnf backend to use',
+)
+option(
+    'with_updater',
+    type: 'boolean',
+    value: true,
+    description: 'build updater systray app',
+)
