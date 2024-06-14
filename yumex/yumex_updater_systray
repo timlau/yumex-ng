@@ -18,7 +18,7 @@ import dbus
 import dbus.mainloop.glib
 import dbus.service
 
-from gi.repository import AppIndicator3, Flatpak, GLib, Gtk
+from gi.repository import AppIndicator3, Flatpak, GLib, Gtk  # type: ignore
 
 from yumex.constants import BACKEND
 
