@@ -69,11 +69,11 @@ class UpdateService(dbus.service.Object):
 
 def on_clicked_update(widget: Gtk.Widget) -> None:
     if custom_updater:
-        subprocess.Popen([custom_updater])
+        subprocess.Popen([custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def on_clicked_pm(widget: Gtk.Widget) -> None:
-    subprocess.Popen(["/usr/bin/yumex"])
+    subprocess.Popen(["/usr/bin/yumex"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def refresh_updates(widget: Gtk.Widget = None) -> None:
