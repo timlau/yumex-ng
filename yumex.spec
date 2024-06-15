@@ -29,7 +29,7 @@ BuildRequires: systemd-rpm-macros
 Requires: python3-gobject
 Requires: libadwaita
 Requires: gtk4
-Requires: flatpak-libs
+Requires: flatpak-libs > 1.15.0
 Requires: python3-dbus
 Requires: libappindicator-gtk3
 Requires: appstream >= 1.0.2
@@ -131,6 +131,7 @@ done
 - added updater service
 - include all .desktop files
 - add appstream requirement
+- add version requirement to flatpak-libs.
 
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-1
 - the 5.0.0 release
