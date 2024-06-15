@@ -32,6 +32,7 @@ Requires: gtk4
 Requires: flatpak-libs
 Requires: python3-dbus
 Requires: libappindicator-gtk3
+Requires: appstream >= 1.0.2
 
 # dnf4 requirements
 %if "%{dnf_backend}" == "DNF4"
@@ -129,6 +130,7 @@ done
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-2
 - added updater service
 - include all .desktop files
+- add appstream requirement
 
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-1
 - the 5.0.0 release
