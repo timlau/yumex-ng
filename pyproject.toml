@@ -24,3 +24,4 @@ exclude = ["**/builddir"]
 
 reportMissingImports = true
 reportUndefinedVariable = false
+reportMissingModuleSource = false
