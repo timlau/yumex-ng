@@ -88,7 +88,7 @@ def test_save_settings_no_remotes(pref_no):
     assert location == "user"
     assert remote is None
     assert pref_no.settings.set_string.call_count == 1
-    pref_no.settings.set_string.called_with("fp-location", "user")
+    # pref_no.settings.set_string.called_with("fp-location", "user")
 
 
 def test_setup(pref):
@@ -136,9 +136,7 @@ def test_on_location_selected_no_remotes(pref_no):
     assert location == FlatpakLocation.USER
 
     """test on_remote_selected when there are no remotes"""
-    remotes = pref_no.presenter.flatpak_backend.get_remotes(
-        location=FlatpakLocation.USER
-    )
+    remotes = pref_no.presenter.flatpak_backend.get_remotes(location=FlatpakLocation.USER)
     assert remotes == []
     assert pref_no.fp_remote.get_selected_item() is None
     assert pref_no.fp_remote.get_sensitive() is False

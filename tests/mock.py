@@ -85,10 +85,8 @@ def mock_presenter(remotes: list = None):
     mock.flatpak_backend.get_remotes.return_value = remotes
     mock.flatpak_backend.number_of_updates.return_value = 1
     mock.confirm_flatpak_transaction.return_value = True
-    mock.get_repositories.return_value = [("fedora", "fedora packages", True)]
-    fp_pkg = FlatpakPackage(
-        flatpak_ref(), location=FlatpakLocation.USER, is_update=FlatpakUpdate.UPDATE
-    )
+    mock.get_repositories.return_value = [("fedora", "fedora packages", True, 99)]
+    fp_pkg = FlatpakPackage(flatpak_ref(), location=FlatpakLocation.USER, is_update=FlatpakUpdate.UPDATE)
     mock.get_installed.return_value = [fp_pkg]
     mock.install.return_value = [fp_pkg]
     mock.number_of_updates.return_value = 1
