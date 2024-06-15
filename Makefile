@@ -11,6 +11,7 @@ NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0
 NEW_REL=0.1.${GITDATE}
 DIST=${shell rpm --eval "%{dist}"}
 GIT_MASTER=main
+GIT_CURRENT_BRANCH=${shell git rev-parse --abbrev-ref HEAD}
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 COPR_REL_DNF4 = -r fedora-39-x86_64 -r fedora-39-aarch64 -r fedora-40-x86_64 -r fedora-40-aarch64
@@ -63,7 +64,7 @@ test-checkout:
 test-cleanup:
 	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
 	@git checkout -f
-	@git checkout -q ${GIT_MASTER}
+	@git checkout -q ${GIT_CURRENT_BRANCH}
 	@-git stash pop -q
 	@git branch -q -D release-test
 
