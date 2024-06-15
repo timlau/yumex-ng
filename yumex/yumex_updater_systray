@@ -87,7 +87,7 @@ def refresh_updates(widget: Gtk.Widget = None) -> None:
 
     logger.debug(f" --> flatpak system : {flatpak_sys_count}")
     logger.debug(f" --> flatpak user   : {flatpak_user_count}")
-    logger.debug(f" --> system         : {update_count}")
+    logger.debug(f" --> {BACKEND}   : {sys_update_count}")
 
     hover_text_lines = ["There are updates available:"]
     if sys_update_count > 0:

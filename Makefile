@@ -11,7 +11,7 @@ NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0
 NEW_REL=0.1.${GITDATE}
 DIST=${shell rpm --eval "%{dist}"}
 GIT_MASTER=main
-GIT_CURRENT_BRANCH=${shell git rev-parse --abbrev-ref HEAD}
+GIT_BRANCH=${shell git rev-parse --abbrev-ref HEAD}
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 COPR_REL_DNF4 = -r fedora-39-x86_64 -r fedora-39-aarch64 -r fedora-40-x86_64 -r fedora-40-aarch64
@@ -72,6 +72,7 @@ show-vars:
 	@echo ${GITDATE}
 	@echo ${BUMPED_MINOR}
 	@echo ${NEW_VER}-${NEW_REL}
+	@echo ${GIT_BRANCH}
 
 
 #make a test release with the dnf5 backend
