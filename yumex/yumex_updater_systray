@@ -80,8 +80,13 @@ def refresh_updates(widget: Gtk.Widget = None) -> None:
     logger.debug("Refreshing updates")
     sys_update_count = len(UpdateChecker())
 
-    flatpak_user_count = len(Flatpak.Installation.new_user().list_installed_refs_for_update())
-    flatpak_sys_count = len(Flatpak.Installation.new_system().list_installed_refs_for_update())
+    user_installation = Flatpak.Installation.new_user()
+    flatpak_user_count = len(user_installation.list_installed_refs_for_update())
+    del user_installation
+
+    system_installation = Flatpak.Installation.new_system()
+    flatpak_sys_count = len(system_installation.list_installed_refs_for_update())
+    del system_installation
 
     update_count = sys_update_count + flatpak_user_count + flatpak_sys_count
 
