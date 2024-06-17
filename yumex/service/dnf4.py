@@ -2,7 +2,7 @@ import dnf as dnf
 from typing import List, Set
 
 
-def check_updates() -> List[dnf.package.Package]:
+def check_dnf_updates() -> List[dnf.package.Package]:
     base = dnf.Base()
     try:
         base.read_all_repos()

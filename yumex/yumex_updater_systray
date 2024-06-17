@@ -23,9 +23,9 @@ from gi.repository import AppIndicator3, Flatpak, GLib, Gtk  # type: ignore
 from yumex.constants import BACKEND
 
 if BACKEND == "DNF5":
-    from yumex.service.dnf5 import check_updates
+    from yumex.service.dnf5 import check_dnf_updates
 else:
-    from yumex.service.dnf4 import check_updates
+    from yumex.service.dnf4 import check_dnf_updates
 
 
 logger = logging.getLogger("yumex_updater")
@@ -78,7 +78,7 @@ def on_clicked_pm(widget: Gtk.Widget) -> None:
 
 def refresh_updates(widget: Gtk.Widget = None) -> None:
     logger.debug("Refreshing updates")
-    sys_update_count = len(check_updates())
+    sys_update_count = len(check_dnf_updates())
 
     user_installation = Flatpak.Installation.new_user()
     flatpak_user_count = len(user_installation.list_installed_refs_for_update())

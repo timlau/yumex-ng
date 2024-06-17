@@ -5,7 +5,7 @@ from libdnf5.common import QueryCmp_NEQ
 from typing import List
 
 
-def check_updates() -> List[Package]:
+def check_dnf_updates() -> List[Package]:
     base = dnf.base.Base()
     try:
         cache_directory = base.get_config().get_cachedir_option().get_value()
