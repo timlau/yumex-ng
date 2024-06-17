@@ -4,7 +4,8 @@ from libdnf5.repo import RepoQuery  # noqa: F401
 from libdnf5.common import QueryCmp_NEQ
 from typing import List
 
-def UpdateChecker() -> List[Package]:
+
+def check_updates() -> List[Package]:
     base = dnf.base.Base()
     try:
         cache_directory = base.get_config().get_cachedir_option().get_value()

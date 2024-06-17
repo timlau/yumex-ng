@@ -1,10 +1,12 @@
 import dnf as dnf
 from typing import List, Set
 
-def UpdateChecker() -> List[dnf.package.Package]:
+
+def check_updates() -> List[dnf.package.Package]:
     base = dnf.Base()
     try:
         base.read_all_repos()
+
         def metadata_refresh(base: dnf.Base) -> None:
             for repo in base.repos.iter_enabled():
                 repo.metadata_expire = 0
