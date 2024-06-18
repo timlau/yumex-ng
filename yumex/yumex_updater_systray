@@ -14,11 +14,11 @@ import threading
 import time
 from pathlib import Path
 
-import dbus
-import dbus.mainloop.glib
-import dbus.service
-
 from gi.repository import AppIndicator3, Flatpak, GLib, Gtk  # type: ignore
+
+from dasbus.server.interface import dbus_interface
+from dasbus.connection import SessionMessageBus
+from dasbus.loop import EventLoop
 
 from yumex.constants import BACKEND
 
@@ -56,26 +56,16 @@ always_hide = config.getboolean("DEFAULT", "always_hide", fallback=False)
 update_sync_interval = config.getint("DEFAULT", "update_sync_interval", fallback=3600)
 
 
-class UpdateService(dbus.service.Object):
-    def __init__(self, bus_name: dbus.service.BusName, object_path: str) -> None:
-        super().__init__(bus_name, object_path)
-
-    @dbus.service.method("com.yumex.UpdateService")
-    def RefreshUpdates(self) -> None:
-        logger.debug("DBUS: RefreshUpdates")
-        refresh_updates()
-
-
-def on_clicked_update(widget: Gtk.Widget) -> None:
+def on_clicked_update(*args) -> None:
     if custom_updater:
         subprocess.Popen([custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def on_clicked_pm(widget: Gtk.Widget) -> None:
+def on_clicked_pm(*args) -> None:
     subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def refresh_updates(widget: Gtk.Widget = None) -> None:
+def refresh_updates() -> None:
     logger.debug("Refreshing updates")
     sys_update_count = len(check_dnf_updates())
 
@@ -138,14 +128,22 @@ menu.append(pm_item)
 menu.show_all()
 indicator.set_menu(menu)
 
-# Setup Dbus Service
-dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-session_bus = dbus.SessionBus()
-bus_name = dbus.service.BusName("com.yumex.UpdateService", session_bus)
-update_service = UpdateService(bus_name, "/com/yumex/UpdateService")
+
+# Setup the DBus service
+@dbus_interface("com.yumex.UpdateService")
+class UpdateService(object):
+    def RefreshUpdates(self) -> None:
+        logger.debug("DBUS: RefreshUpdates")
+        refresh_updates()
+
+
+bus = SessionMessageBus()
+bus.publish_object("/com/yumex/UpdateService", UpdateService())
+bus.register_service("com.yumex.UpdateService")
 
 # Setup scheduled update check
 update_thread = threading.Thread(target=check_updates, daemon=True)
 update_thread.start()
 
-Gtk.main()
+loop = EventLoop()
+loop.run()

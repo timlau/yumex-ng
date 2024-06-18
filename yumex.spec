@@ -29,8 +29,8 @@ BuildRequires: systemd-rpm-macros
 Requires: python3-gobject
 Requires: libadwaita
 Requires: gtk4
+Requires: python3-dasbus
 Requires: flatpak-libs > 1.15.0
-Requires: python3-dbus
 Requires: libappindicator-gtk3
 Requires: appstream >= 1.0.2
 
@@ -44,7 +44,6 @@ Requires: python3-dnf
 %if "%{dnf_backend}" == "DNF5"
 Requires: python3-libdnf5
 Requires: dnf5daemon-server
-Requires: python3-dasbus
 %endif
 
 Obsoletes: yumex-dnf <= 4.5.1
