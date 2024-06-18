@@ -56,11 +56,15 @@ class Config:
             shutil.copy(default_config_path, user_config_path)
 
         # Read configuration file
+        logger.debug(f"CONFIG: Loading config from {user_config_path}")
         config = configparser.ConfigParser()
         config.read(user_config_path)
         custom_updater = config.get("DEFAULT", "custom_updater", fallback=None)
         always_hide = config.getboolean("DEFAULT", "always_hide", fallback=False)
         update_sync_interval = config.getint("DEFAULT", "update_sync_interval", fallback=3600)
+        logger.debug(f"CONFIG: custom_updater        = {custom_updater}")
+        logger.debug(f"CONFIG: always_hide           = {always_hide}")
+        logger.debug(f"CONFIG: update_sync_interval  = {update_sync_interval}")
         return cls(custom_updater, always_hide, update_sync_interval)
 
 
