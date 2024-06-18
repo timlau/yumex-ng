@@ -1,25 +1,29 @@
-import dbus
-from dbus.exceptions import DBusException
+from dasbus.connection import SessionMessageBus
+from dasbus.error import DBusError
+from dasbus.identifier import DBusServiceIdentifier
+from dasbus.typing import get_native
 
 from yumex.utils import log
+
+BUS = SessionMessageBus()
+SYSTEMD_NAMESPACE = ("org", "freedesktop", "systemd1")
+SYSTEMD = DBusServiceIdentifier(namespace=SYSTEMD_NAMESPACE, message_bus=BUS)
+
+YUMEX_UPDATER_NAMESPACE = ("dk", "yumex", "UpdateService")
+YUMEX_UPDATER = DBusServiceIdentifier(namespace=YUMEX_UPDATER_NAMESPACE, message_bus=BUS)
 
 
 def is_user_service_running(service_name):
     try:
-        # Connect to the user bus
-        bus = dbus.SessionBus()
-        # Get the systemd service manager object
-        systemd = bus.get_object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
-        manager = dbus.Interface(systemd, "org.freedesktop.systemd1.Manager")
-        # Get the unit status
-        unit_path = manager.GetUnit(service_name)
-        unit = bus.get_object("org.freedesktop.systemd1", unit_path)
-        unit_properties = dbus.Interface(unit, "org.freedesktop.DBus.Properties")
-        # Check the SubState of the service
-        sub_state = unit_properties.Get("org.freedesktop.systemd1.Unit", "SubState")
-        return sub_state == "running"
-    except DBusException as e:
-        log(f"(sync_updates) Error checking service status: {e}")
+        systemd = SYSTEMD.get_proxy(interface_name="org.freedesktop.systemd1.Manager")
+        unit_path = systemd.GetUnit(service_name)
+        log(f"DBus: systemd service object: {unit_path}")
+        unit = SYSTEMD.get_proxy(unit_path)
+        state = get_native(unit.Get("org.freedesktop.systemd1.Unit", "SubState"))
+        log(f"DBus: {service_name} is {state}")
+        return state == "running"
+    except DBusError as e:
+        log(f"DBus Error: {e}")
         return False
 
 
@@ -28,17 +32,14 @@ def sync_updates():
 
     if is_user_service_running(service_name):
         try:
-            # Connect to the session bus
-            bus = dbus.SessionBus()
-            # Get the object
-            tray_icon_object = bus.get_object("com.yumex.UpdateService", "/com/yumex/UpdateService")
-            # Get the interface
-            tray_icon_interface = dbus.Interface(tray_icon_object, "com.yumex.UpdateService")
-            # Call the RefreshUpdates method
-            tray_icon_interface.RefreshUpdates()
+            updater = YUMEX_UPDATER.get_proxy()
+            updater.RefreshUpdates()
             log("(sync_updates) triggered updater checker refresh")
-        except DBusException as e:
-            log(f"(sync_updates) DBusException: {e}")
-            # Handle the exception or log it as needed
+        except DBusError as e:
+            log(f"DBus Error: {e}")
     else:
         log(f"(sync_updates) The service {service_name} is not running.")
+
+
+if __name__ == "__main__":
+    sync_updates()

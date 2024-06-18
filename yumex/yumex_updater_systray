@@ -130,7 +130,7 @@ indicator.set_menu(menu)
 
 
 # Setup the DBus service
-@dbus_interface("com.yumex.UpdateService")
+@dbus_interface("dk.yumex.UpdateService")
 class UpdateService(object):
     def RefreshUpdates(self) -> None:
         logger.debug("DBUS: RefreshUpdates")
@@ -138,8 +138,8 @@ class UpdateService(object):
 
 
 bus = SessionMessageBus()
-bus.publish_object("/com/yumex/UpdateService", UpdateService())
-bus.register_service("com.yumex.UpdateService")
+bus.publish_object("/dk/yumex/UpdateService", UpdateService())
+bus.register_service("dk.yumex.UpdateService")
 
 # Setup scheduled update check
 update_thread = threading.Thread(target=check_updates, daemon=True)
