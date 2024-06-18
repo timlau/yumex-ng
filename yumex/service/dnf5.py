@@ -1,6 +1,8 @@
+from pathlib import Path
+
 import libdnf5 as dnf
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
-from libdnf5.repo import RepoQuery  # noqa: F401
+from libdnf5.repo import RepoQuery, RepoCache  # noqa: F401
 from libdnf5.common import QueryCmp_NEQ
 
 
@@ -40,11 +42,23 @@ def get_prioritied_packages(updates: PackageQuery, base):
     return list(latest_versions.values())
 
 
+def expire_metadata(base: dnf.base.Base, cachedir):
+    # get the repo cache dir
+    cachedir = Path(cachedir)
+    # interate through the repo cachedir
+    for fn in cachedir.iterdir():
+        # Setup a RepoCache at the current repo cachedir
+        repo_cache = RepoCache(base, fn.as_posix())
+        # expire the cache for the current repo
+        repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
+
+
 def check_dnf_updates() -> list[Package]:
     base = dnf.base.Base()
     try:
         # Setup dnf base
         cache_directory = base.get_config().get_cachedir_option().get_value()
+        expire_metadata(base, cache_directory)
         base.get_config().get_system_cachedir_option().set(cache_directory)
         base.load_config()
         base.setup()

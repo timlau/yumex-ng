@@ -13,20 +13,18 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-import shutil
-import glob
-import os
-
 from typing import Iterable, List
 from datetime import datetime
 from dataclasses import asdict, dataclass
+from pathlib import Path
 
 import libdnf5.base as dnf
 
 from libdnf5.rpm import PackageQuery, Package  # noqa: F401
-from libdnf5.repo import RepoQuery, Repo  # noqa : F401
+from libdnf5.repo import RepoQuery, RepoCache, Repo  # noqa : F401
 from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB
 from libdnf5.advisory import AdvisoryQuery, Advisory, AdvisoryReference
+
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
@@ -181,16 +179,17 @@ class Backend(dnf.Base):
         qa.update(qi)
         return self._get_yumex_packages(qa)
 
-    def dnf_temp_cleanup(self):
-        # Access the cache directory setting
-        cache_directory = self.get_config().get_cachedir_option().get_value()
-        # Construct the pattern with the username
-        pattern = f"{cache_directory}/*"
-        # List all directories matching the pattern
-        directories = glob.glob(pattern)
-        for directory in directories:
-            if os.path.isdir(directory):
-                shutil.rmtree(directory)
+    def expire_metadata(self):
+        # get the repo cache dir
+        cachedir = Path(self.get_config().get_cachedir_option().get_value())
+        log(f"DNF5: current cachedir : {cachedir}")
+        # interate through the repo cachedir
+        for fn in cachedir.iterdir():
+            print(f"DNF5: expire repo loacted at {fn}")
+            # Setup a RepoCache at the current repo cachedir
+            repo_cache = RepoCache(self, fn.as_posix())
+            # expire the cache for the current repo
+            repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF5 API."""
@@ -246,7 +245,7 @@ class Backend(dnf.Base):
             case PackageFilter.INSTALLED:
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
-                self.dnf_temp_cleanup()
+                self.expire_metadata()
                 sync_updates()
                 packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
                 return self.get_packages_with_lowest_priority(packages)
