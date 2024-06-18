@@ -65,7 +65,7 @@ def on_clicked_pm(*args) -> None:
     subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def refresh_updates() -> None:
+def refresh_updates(*args) -> None:
     logger.debug("Refreshing updates")
     sys_update_count = len(check_dnf_updates())
 
