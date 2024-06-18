@@ -95,13 +95,55 @@ class UpdateService(object):
         refresh_updates()
 
 
-# Setup Constants
-CONFIG = Config.from_file()
-INDICATOR = AppIndicator3.Indicator.new(
-    "System Update Monitor",
-    "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update.svg",
-    AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
-)
+class Indicator:
+    def __init__(self, callback):
+        self._indicator = None
+        self._callback = callback
+
+    @property
+    def indicator(self):
+        if not self._indicator:
+            self._indicator = self._factory()
+        return self._indicator
+
+    def clear(self):
+        del self._indicator
+        self._indicator = None
+
+    def _factory(self):
+        indicator = AppIndicator3.Indicator.new(
+            "System Update Monitor",
+            "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update.svg",
+            AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
+        )
+        indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+        indicator.set_title("Checking for updates...")
+        indicator.set_menu(self.get_menu())
+        return indicator
+
+    def on_clicked_custom(self, *args) -> None:
+        """start custom updater"""
+        subprocess.Popen([CONFIG.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    def on_clicked_pm(self, *args) -> None:
+        """start yumex"""
+        subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    def get_menu(self):
+        """build menu for sys tray indicator"""
+        menu = Gtk.Menu()
+        refresh_item = Gtk.MenuItem(label="Check for Updates")
+        refresh_item.connect("activate", self._callback)
+        menu.append(refresh_item)
+        if CONFIG.custom_updater:
+            update_item = Gtk.MenuItem(label="Update System")
+            update_item.connect("activate", self.on_clicked_custom)
+            menu.append(update_item)
+        pm_item = Gtk.MenuItem(label="Open Package Manager")
+        pm_item.connect("activate", self.on_clicked_pm)
+        menu.append(pm_item)
+        menu.show_all()
+        return menu
 
 
 def refresh_updates(*args) -> None:
@@ -124,37 +166,14 @@ def refresh_updates(*args) -> None:
     hover_text = "\n".join(hover_text_lines)
     if not CONFIG.always_hide:
         if update_count > 0:
-            GLib.idle_add(INDICATOR.set_title, hover_text)
-            GLib.idle_add(INDICATOR.set_status, AppIndicator3.IndicatorStatus.ACTIVE)
+            GLib.idle_add(INDICATOR.indicator.set_title, hover_text)
         else:
-            GLib.idle_add(INDICATOR.set_status, AppIndicator3.IndicatorStatus.PASSIVE)
+            INDICATOR.clear()
 
 
-def on_clicked_custom(*args) -> None:
-    """start custom updater"""
-    subprocess.Popen([CONFIG.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
-def on_clicked_pm(*args) -> None:
-    """start yumex"""
-    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
-def get_menu():
-    """build menu for sys tray indicator"""
-    menu = Gtk.Menu()
-    refresh_item = Gtk.MenuItem(label="Check for Updates")
-    refresh_item.connect("activate", refresh_updates)
-    menu.append(refresh_item)
-    if CONFIG.custom_updater:
-        update_item = Gtk.MenuItem(label="Update System")
-        update_item.connect("activate", on_clicked_custom)
-        menu.append(update_item)
-    pm_item = Gtk.MenuItem(label="Open Package Manager")
-    pm_item.connect("activate", on_clicked_pm)
-    menu.append(pm_item)
-    menu.show_all()
-    return menu
+# Setup Constants
+CONFIG = Config.from_file()
+INDICATOR = Indicator(callback=refresh_updates)
 
 
 def check_updates() -> None:
@@ -164,11 +183,6 @@ def check_updates() -> None:
 
 
 def main():
-    # Setup system tray indicator
-    INDICATOR.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-    INDICATOR.set_title("Checking for updates...")
-    INDICATOR.set_menu(get_menu())
-
     # Setup DBus Service
     bus = SessionMessageBus()
     bus.publish_object("/dk/yumex/UpdateService", UpdateService())
