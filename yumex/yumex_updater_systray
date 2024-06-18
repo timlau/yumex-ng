@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from dataclasses import dataclass
 import gi
 
 gi.require_version("Gtk", "3.0")
@@ -35,6 +36,27 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
+
+@dataclass
+class Updates:
+    sys_update_count: int
+    flatpak_user_count: int
+    flatpak_sys_count: int
+
+    @classmethod
+    def get_updates(cls):
+        sys_update_count = len(check_dnf_updates())
+
+        user_installation = Flatpak.Installation.new_user()
+        flatpak_user_count = len(user_installation.list_installed_refs_for_update())
+        del user_installation
+
+        system_installation = Flatpak.Installation.new_system()
+        flatpak_sys_count = len(system_installation.list_installed_refs_for_update())
+        del system_installation
+        return cls(sys_update_count, flatpak_user_count, flatpak_sys_count)
+
+
 # Define paths
 home_dir = Path.home()
 config_dir = home_dir / ".config" / "yumex"
@@ -67,31 +89,23 @@ def on_clicked_pm(*args) -> None:
 
 def refresh_updates(*args) -> None:
     logger.debug("Refreshing updates")
-    sys_update_count = len(check_dnf_updates())
+    updates: Updates = Updates.get_updates()
 
-    user_installation = Flatpak.Installation.new_user()
-    flatpak_user_count = len(user_installation.list_installed_refs_for_update())
-    del user_installation
+    update_count = updates.sys_update_count + updates.flatpak_user_count + updates.flatpak_sys_count
 
-    system_installation = Flatpak.Installation.new_system()
-    flatpak_sys_count = len(system_installation.list_installed_refs_for_update())
-    del system_installation
-
-    update_count = sys_update_count + flatpak_user_count + flatpak_sys_count
-
-    logger.debug(f" --> flatpak system : {flatpak_sys_count}")
-    logger.debug(f" --> flatpak user   : {flatpak_user_count}")
-    logger.debug(f" --> {BACKEND}   : {sys_update_count}")
+    logger.debug(f" --> flatpak system : {updates.flatpak_sys_count}")
+    logger.debug(f" --> flatpak user   : {updates.flatpak_user_count}")
+    logger.debug(f" --> {BACKEND}   : {updates.sys_update_count}")
 
     hover_text_lines = ["There are updates available:"]
     if sys_update_count > 0:
-        hover_text_lines.append(f"  System: {sys_update_count}")
+        hover_text_lines.append(f"  System: {updates.sys_update_count}")
     if flatpak_user_count > 0:
-        hover_text_lines.append(f"  Flatpak (user): {flatpak_user_count}")
+        hover_text_lines.append(f"  Flatpak (user): {updates.flatpak_user_count}")
     if flatpak_sys_count > 0:
-        hover_text_lines.append(f"  Flatpak (system): {flatpak_sys_count}")
+        hover_text_lines.append(f"  Flatpak (system): {updates.flatpak_sys_count}")
     hover_text = "\n".join(hover_text_lines)
-
+    del Updates
     if not always_hide:
         if update_count > 0:
             GLib.idle_add(indicator.set_title, hover_text)
