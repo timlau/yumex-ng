@@ -22,3 +22,14 @@
 - Uninstall the Contrast flatpak, by clicking on the trashcan button left of the flatpak in the list
 - Confirm the transaction (Ctrl+Return)
 - Contrast should no longer be on the list of installed flatpaks
+
+
+## Test Updater
+### Check service
+```bash
+systemctl --user status yumex-updater-systray.service
+```
+### Check log
+```bash
+journalctl --user-unit=yumex-updater-systray -n 20
+```
