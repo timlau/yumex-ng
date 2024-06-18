@@ -1,48 +1,59 @@
 import dnf as dnf
-from typing import List, Set
 
 
-def check_dnf_updates() -> List[dnf.package.Package]:
+def get_repo_priority(base, repo_name: str) -> int:
+    """get the priority of a given repo name"""
+    repo = base.repos.get(repo_name)
+    return repo.priority if repo else 99
+
+
+def get_package_repos(base, package_name: str) -> list[str]:
+    """get the repositories that a give package name exits in"""
+    repos: set[str] = set()
+    query = base.sack.query().available().filter(name=package_name)
+    for pkg in query.run():
+        repos.add(pkg.reponame)
+    return list(repos)
+
+
+def get_prioritied_packages(base, updates):
+    """Get Prioritized version of updates"""
+    latest_versions = {}
+    for pkg in updates:
+        repos = get_package_repos(base, pkg.get_name())
+        repo_priorities = [get_repo_priority(base, repo) for repo in repos]
+        lowest_priority = min(repo_priorities) if repo_priorities else 99
+        pkg_repo_priority = get_repo_priority(base, pkg.get_repo_id())
+
+        if pkg_repo_priority == lowest_priority:
+            if pkg.get_name() in latest_versions:
+                if pkg.get_evr() > latest_versions[pkg.get_name()].get_evr():
+                    latest_versions[pkg.get_name()] = pkg
+            else:
+                latest_versions[pkg.get_name()] = pkg
+
+    return list(latest_versions.values())
+
+
+def check_dnf_updates() -> list[dnf.package.Package]:
     base = dnf.Base()
     try:
+        # Read repo config
         base.read_all_repos()
-
-        def metadata_refresh(base: dnf.Base) -> None:
-            for repo in base.repos.iter_enabled():
-                repo.metadata_expire = 0
-                repo.load()
-
-        def get_repo_priority(repo_name: str) -> int:
-            repo = base.repos.get(repo_name)
-            return repo.priority if repo else 99
-
-        def get_package_repos(package_name: str) -> List[str]:
-            repos: Set[str] = set()
-            query = base.sack.query().available().filter(name=package_name)
-            for pkg in query.run():
-                repos.add(pkg.reponame)
-            return list(repos)
-
+        # refresh repo metadata
+        for repo in base.repos.iter_enabled():
+            repo.metadata_expire = 0
+            repo.load()
+        # setup sack
         base.fill_sack(load_system_repo=True)
+        # get updates
         q = base.sack.query()
         updates = q.upgrades().run()
+        return get_prioritied_packages(base, updates)
 
-        metadata_refresh(base)
-
-        latest_versions = {}
-        for pkg in updates:
-            repos = get_package_repos(pkg.name)
-            repo_priorities = [get_repo_priority(repo) for repo in repos]
-            lowest_priority = min(repo_priorities) if repo_priorities else 99
-            pkg_repo_priority = pkg.repo.priority
-
-            if pkg_repo_priority == lowest_priority:
-                if pkg.name in latest_versions:
-                    if pkg.evr > latest_versions[pkg.name].evr:
-                        latest_versions[pkg.name] = pkg
-                else:
-                    latest_versions[pkg.name] = pkg
-
-        return list(latest_versions.values())
     finally:
         base.close()
+
+
+if __name__ == "__main__":
+    print(check_dnf_updates())
