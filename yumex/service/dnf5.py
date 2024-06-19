@@ -23,7 +23,7 @@ def get_package_repos(base: dnf.base.Base, package_name: str) -> list[str]:
     return list(repos)
 
 
-def get_prioritied_packages(updates: PackageQuery, base):
+def get_prioritied_packages(updates: list[Package], base):
     """Get Prioritized version of updates"""
     latest_versions = {}
     for pkg in updates:
