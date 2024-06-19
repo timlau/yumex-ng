@@ -185,7 +185,7 @@ class Backend(dnf.Base):
         log(f"DNF5: current cachedir : {cachedir}")
         # interate through the repo cachedir
         for fn in cachedir.iterdir():
-            print(f"DNF5: expire repo loacted at {fn}")
+            log(f"DNF5: expire repo loacted at {fn}")
             # Setup a RepoCache at the current repo cachedir
             repo_cache = RepoCache(self, fn.as_posix())
             # expire the cache for the current repo
