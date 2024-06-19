@@ -58,11 +58,11 @@ def check_dnf_updates() -> list[Package]:
     try:
         # Setup dnf base
         cache_directory = base.get_config().get_cachedir_option().get_value()
-        expire_metadata(base, cache_directory)
         base.get_config().get_system_cachedir_option().set(cache_directory)
         base.load_config()
         base.setup()
         # Setup repositories
+        expire_metadata(base, cache_directory)
         base.repo_sack = base.get_repo_sack()
         base.repo_sack.create_repos_from_system_configuration()
         base.repo_sack.update_and_load_enabled_repos(True)
@@ -71,7 +71,7 @@ def check_dnf_updates() -> list[Package]:
         updates.filter_upgrades()
         updates.filter_arch(["src"], QueryCmp_NEQ)
         updates.filter_latest_evr()
-        return get_prioritied_packages(updates, base)
+        return get_prioritied_packages(list(updates), base)
     finally:
         del base
 
