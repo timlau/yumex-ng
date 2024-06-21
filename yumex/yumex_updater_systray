@@ -75,8 +75,8 @@ class Updates:
     flatpak_sys_count: int
 
     @classmethod
-    def get_updates(cls):
-        sys_update_count = len(check_dnf_updates())
+    def get_updates(cls, refresh):
+        sys_update_count = len(check_dnf_updates(refresh))
         user_installation = Flatpak.Installation.new_user()
         flatpak_user_count = len(user_installation.list_installed_refs_for_update())
         del user_installation
@@ -90,9 +90,9 @@ class Updates:
 # Setup the DBus service
 @dbus_interface("dk.yumex.UpdateService")
 class UpdateService(object):
-    def RefreshUpdates(self) -> None:
+    def RefreshUpdates(self, refresh: bool) -> None:
         logger.debug("DBUS: RefreshUpdates")
-        refresh_updates()
+        refresh_updates(refresh=refresh)
 
 
 class Indicator:
@@ -146,9 +146,9 @@ class Indicator:
         return menu
 
 
-def refresh_updates(*args) -> None:
-    logger.debug("Refreshing updates")
-    updates: Updates = Updates.get_updates()
+def refresh_updates(*args, refresh=True) -> None:
+    logger.debug(f"Refreshing updates ({refresh})")
+    updates: Updates = Updates.get_updates(refresh)
 
     update_count = updates.sys_update_count + updates.flatpak_user_count + updates.flatpak_sys_count
 

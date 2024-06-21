@@ -246,7 +246,7 @@ class Backend(dnf.Base):
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
                 self.expire_metadata()
-                sync_updates()
+                # sync_updates()
                 packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
                 return self.get_packages_with_lowest_priority(packages)
             case other:
