@@ -1,12 +1,11 @@
 import logging
 from functools import partial
 from logging import getLogger
-from typing import Self, Any
+from typing import Self
 from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
-from dasbus.loop import EventLoop
-from dasbus.error import DBusError  # noqa
 from dasbus.typing import get_native, get_variant, Variant  # noqa: F401
+from yumex.utils.dbus import AsyncDbusCaller
 
 # from gi.repository import GLib  # type: ignore
 
@@ -15,7 +14,6 @@ from dasbus.typing import get_native, get_variant, Variant  # noqa: F401
 SYSTEM_BUS = SystemMessageBus()
 DNFDBUS_NAMESPACE = ("org", "rpm", "dnf", "v0")
 DNFDBUS = DBusServiceIdentifier(namespace=DNFDBUS_NAMESPACE, message_bus=SYSTEM_BUS)
-ASYNC_TIMEOUT = 20 * 60 * 1000  # 20 min in ms
 
 logger = getLogger("dnf5dbus")
 logging.basicConfig(
@@ -28,45 +26,6 @@ logging.basicConfig(
 def gv_list(var: list[str]) -> Variant:
     """convert list of strings to a Variant of type (as)"""
     return get_variant(list[str], var)
-
-
-# async call handler class
-class AsyncDbusCaller:
-    def __init__(self) -> None:
-        self.res = None
-        self.loop = None
-
-    def callback(self, call) -> None:
-        try:
-            self.res = call()
-        except DBusError as e:
-            msg = str(e)
-            match msg:
-                # This occours on long running transaction
-                case "Remote peer disconnected":
-                    logger.error("Connection to dns5daemon lost")
-                    self.res = None
-                # This occours when PolicyKet autherization is not given before a time limit
-                case "Method call timed out":
-                    logger.error("Dbus method call timeout")
-                    self.res = "PolicyKit Autherisation failed"
-                # This occours when PolicyKet autherization dialog is cancelled
-                case "Not authorized":
-                    logger.error("PolicyKit Autherisation failed")
-                    self.res = "PolicyKit Autherisation failed"
-                case _:
-                    logger.error(f"Error in dbus call : {msg}")
-        self.loop.quit()
-
-    def call(self, mth, *args, **kwargs) -> Any:
-        self.loop = EventLoop()
-        # timeout = 10min
-        mth(*args, timeout=ASYNC_TIMEOUT, **kwargs, callback=self.callback)
-        self.loop.run()
-        if self.res:
-            # convert Variant return vlaues to native python format
-            return get_native(self.res)
-        return None
 
 
 class Dnf5DbusClient:
