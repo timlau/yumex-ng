@@ -30,7 +30,6 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
 from yumex.utils.enums import SearchField, PackageState, InfoType, PackageFilter
 
-from yumex.utils.dbus import sync_updates
 from yumex.utils import log
 
 
