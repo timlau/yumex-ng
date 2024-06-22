@@ -70,7 +70,7 @@ def is_user_service_running(service_name):
         return False
 
 
-def sync_updates(refresh: bool = True):
+def sync_updates(refresh: bool = False):
     service_name = "yumex-updater-systray.service"
 
     if is_user_service_running(service_name):

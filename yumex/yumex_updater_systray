@@ -92,7 +92,7 @@ class Updates:
 class UpdateService(object):
     def RefreshUpdates(self, refresh: bool) -> None:
         logger.debug("DBUS: RefreshUpdates")
-        refresh_updates(refresh=refresh)
+        GLib.idle_add(refresh_updates, refresh=refresh)
 
 
 class Indicator:
