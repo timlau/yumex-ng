@@ -75,9 +75,8 @@ def sync_updates(refresh: bool = False):
 
     if is_user_service_running(service_name):
         try:
-            async_call = AsyncDbusCaller().call
             updater = YUMEX_UPDATER.get_proxy()
-            async_call(updater.RefreshUpdates, refresh)
+            updater.RefreshUpdates(refresh)
             log("(sync_updates) triggered updater checker refresh")
         except DBusError as e:
             log(f"DBus Error: {e}")

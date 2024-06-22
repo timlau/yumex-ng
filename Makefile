@@ -157,7 +157,6 @@ all-test-copr:
 localbuild:
 	meson setup builddir --prefix="$(shell pwd)/builddir" --buildtype=debug --wipe
 	ninja -C builddir install
-	ninja -C builddir run
 
 # install tools needed for unit testing
 inst-test-tools:
