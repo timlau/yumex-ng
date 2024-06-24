@@ -53,7 +53,7 @@ def expire_metadata(base: dnf.base.Base, cachedir):
         repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
 
 
-def check_dnf_updates() -> list[Package]:
+def check_dnf_updates(refresh: bool) -> list[Package]:
     base = dnf.base.Base()
     try:
         # Setup dnf base
@@ -62,7 +62,8 @@ def check_dnf_updates() -> list[Package]:
         base.load_config()
         base.setup()
         # Setup repositories
-        expire_metadata(base, cache_directory)
+        if refresh:
+            expire_metadata(base, cache_directory)
         base.repo_sack = base.get_repo_sack()
         base.repo_sack.create_repos_from_system_configuration()
         base.repo_sack.update_and_load_enabled_repos(True)

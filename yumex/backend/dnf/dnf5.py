@@ -30,7 +30,6 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
 from yumex.utils.enums import SearchField, PackageState, InfoType, PackageFilter
 
-from yumex.utils.dbus import sync_updates
 from yumex.utils import log
 
 
@@ -246,7 +245,7 @@ class Backend(dnf.Base):
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
                 self.expire_metadata()
-                sync_updates()
+                # sync_updates()
                 packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
                 return self.get_packages_with_lowest_priority(packages)
             case other:

@@ -75,8 +75,8 @@ class Updates:
     flatpak_sys_count: int
 
     @classmethod
-    def get_updates(cls):
-        sys_update_count = len(check_dnf_updates())
+    def get_updates(cls, refresh):
+        sys_update_count = len(check_dnf_updates(refresh))
         user_installation = Flatpak.Installation.new_user()
         flatpak_user_count = len(user_installation.list_installed_refs_for_update())
         del user_installation
@@ -90,15 +90,14 @@ class Updates:
 # Setup the DBus service
 @dbus_interface("dk.yumex.UpdateService")
 class UpdateService(object):
-    def RefreshUpdates(self) -> None:
-        logger.debug("DBUS: RefreshUpdates")
-        refresh_updates()
+    def RefreshUpdates(self, refresh: bool) -> None:
+        logger.debug(f"DBUS: RefreshUpdates {refresh}")
+        GLib.idle_add(refresh_updates, refresh)
 
 
 class Indicator:
-    def __init__(self, callback):
+    def __init__(self):
         self._indicator = None
-        self._callback = callback
 
     @property
     def indicator(self):
@@ -129,11 +128,14 @@ class Indicator:
         """start yumex"""
         subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    def get_menu(self):
+    def on_check_updates(self, *args) -> None:
+        refresh_updates(True)
+
+    def get_menu(self) -> Gtk.Menu:
         """build menu for sys tray indicator"""
         menu = Gtk.Menu()
         refresh_item = Gtk.MenuItem(label="Check for Updates")
-        refresh_item.connect("activate", self._callback)
+        refresh_item.connect("activate", self.on_check_updates)
         menu.append(refresh_item)
         if CONFIG.custom_updater:
             update_item = Gtk.MenuItem(label="Update System")
@@ -146,9 +148,9 @@ class Indicator:
         return menu
 
 
-def refresh_updates(*args) -> None:
-    logger.debug("Refreshing updates")
-    updates: Updates = Updates.get_updates()
+def refresh_updates(refresh: bool) -> None:
+    logger.debug(f"Refreshing updates ({refresh})")
+    updates: Updates = Updates.get_updates(refresh)
 
     update_count = updates.sys_update_count + updates.flatpak_user_count + updates.flatpak_sys_count
 
@@ -173,12 +175,12 @@ def refresh_updates(*args) -> None:
 
 # Setup Constants
 CONFIG = Config.from_file()
-INDICATOR = Indicator(callback=refresh_updates)
+INDICATOR = Indicator()
 
 
 def check_updates() -> None:
     while True:
-        refresh_updates()
+        refresh_updates(True)
         time.sleep(CONFIG.update_sync_interval)
 
 

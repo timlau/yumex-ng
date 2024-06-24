@@ -35,15 +35,16 @@ def get_prioritied_packages(base, updates):
     return list(latest_versions.values())
 
 
-def check_dnf_updates() -> list[dnf.package.Package]:
+def check_dnf_updates(refresh: bool) -> list[dnf.package.Package]:
     base = dnf.Base()
     try:
         # Read repo config
         base.read_all_repos()
         # refresh repo metadata
-        for repo in base.repos.iter_enabled():
-            repo.metadata_expire = 0
-            repo.load()
+        if refresh:
+            for repo in base.repos.iter_enabled():
+                repo.metadata_expire = 0
+                repo.load()
         # setup sack
         base.fill_sack(load_system_repo=True)
         # get updates
