@@ -203,3 +203,23 @@ run-tests:
 # run unit tests and generate html coverage report
 run-test-report:
 	pytest --cov --cov-report html
+
+# dnf5 install python3-memray
+memray-updater:
+	@systemctl --user stop yumex-updater-systray.service 
+	@$(MAKE) localbuild
+	@-mkdir -p profile
+	@-rm profile/output.bin
+	@-rm profile/memray-flamegraph-output.html 
+	@-python3 -m memray run -o profile/output.bin ./builddir/bin/yumex_updater_systray
+	@-python3 -m memray flamegraph profile/output.bin
+
+# dnf5 install python3-memray
+memray-updater-live:
+	@-systemctl --user stop yumex-updater-systray.service 
+	@$(MAKE) localbuild
+	@-mkdir -p profile
+	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
+
+
+
