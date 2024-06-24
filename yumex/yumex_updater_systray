@@ -180,7 +180,7 @@ INDICATOR = Indicator()
 
 def check_updates() -> None:
     while True:
-        refresh_updates(True)
+        refresh_updates(False)
         time.sleep(CONFIG.update_sync_interval)
 
 
