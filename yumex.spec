@@ -5,7 +5,7 @@
 
 Name:     %{app_name}
 Version:  5.0.0
-Release:  2{?dist}
+Release:  3{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -31,8 +31,9 @@ Requires: libadwaita
 Requires: gtk4
 Requires: python3-dasbus
 Requires: flatpak-libs > 1.15.0
-Requires: libappindicator-gtk3
 Requires: appstream >= 1.0.2
+
+Recommends: yumex-updater-systray
 
 # dnf4 requirements
 %if "%{dnf_backend}" == "DNF4"
@@ -52,6 +53,17 @@ Obsoletes: yumex-dnf <= 4.5.1
 
 %description
 Graphical package tool for maintain packages on the system
+
+%package -n yumex-updater-systray
+Summary:  Yum Extender updater systray app
+Requires: %{name} = %{version}-%{release}
+Requires: python3-gobject
+Requires: gtk3
+Requires: python3-dasbus
+Requires: flatpak-libs > 1.15.0
+Requires: libappindicator-gtk3
+%description -n yumex-updater-systray
+Systray application to check and show available updates
 
 
 %prep
@@ -74,6 +86,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 update-desktop-database %{_datadir}/applications &> /dev/null || :
 glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+%post -n yumex-updater-systray
 %systemd_user_post yumex-updater-systray.service
 
 %postun
@@ -93,11 +107,17 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_datadir}/icons/hicolor/
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
+
+%files -n yumex-updater-systray
 %{_userunitdir}/*.service
 %{_prefix}/lib/systemd/user-preset/*.preset
 %{_bindir}/yumex_updater_systray
+%{_datadir}/icons/hicolor/scalable/apps/yumex-system-software-update.svg
 
 %posttrans
+/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
+
+%posttrans -n yumex-updater-systray
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %systemd_user_post yumex-updater-systray.service
 
@@ -121,10 +141,13 @@ for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
     su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater-systray.service" || echo "Failed to restart service for user $user"
 done
 
-%preun
+%preun -n yumex-updater-systray
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+
+* Tue Jun 25 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-3
+- split updater service into sub-package
 
 * Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-2
 - added updater service
