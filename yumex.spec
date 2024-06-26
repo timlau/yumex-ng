@@ -100,16 +100,17 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %files -f  %{app_name}.lang
 %doc README.md
 %license LICENSE
-%{_datadir}/%{app_name}
+%{_datadir}/%{app_name}/yumex.gresource
 %{_bindir}/%{app_name}
-%{python3_sitelib}/%{app_name}/
+%{python3_sitelib}/%{app_name}
 %{_datadir}/applications/%{app_id}*.desktop
-%{_datadir}/icons/hicolor/
+%{_datadir}/icons/hicolor/scalable/apps/dk.yumex.Yumex.svg
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %files -n yumex-updater-systray
 %{_userunitdir}/*.service
+%{_datadir}/%{app_name}/yumex-service.conf
 %{_prefix}/lib/systemd/user-preset/*.preset
 %{_bindir}/yumex_updater_systray
 %{_datadir}/icons/hicolor/scalable/apps/yumex-system-software-update.svg
