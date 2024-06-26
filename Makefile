@@ -103,6 +103,16 @@ test-release-yumex-dnf5:
 	@ rm -d ${APPNAME_DNF5}.spec
 	@$(MAKE) test-cleanup
 
+test-reinstall:
+	@$(MAKE) clean
+	@$(MAKE) test-release-yumex-dnf5
+	@-sudo dnf5 reinstall  build/RPMS/noarch/*.rpm
+
+test-update:
+	@$(MAKE) clean
+	@$(MAKE) test-release-yumex-dnf5
+	@-sudo dnf5 update build/RPMS/noarch/*.rpm
+
 release-yumex-dnf5:
 	@$(MAKE) test-checkout
 	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '3 s/DNF4/DNF5/' > ${APPNAME_DNF5}.spec
@@ -206,17 +216,17 @@ run-test-report:
 
 # dnf5 install python3-memray
 memray-updater:
-	@systemctl --user stop yumex-updater-systray.service 
+	@systemctl --user stop yumex-updater-systray.service
 	@$(MAKE) localbuild
 	@-mkdir -p profile
 	@-rm profile/output.bin
-	@-rm profile/memray-flamegraph-output.html 
+	@-rm profile/memray-flamegraph-output.html
 	@-python3 -m memray run -o profile/output.bin ./builddir/bin/yumex_updater_systray
 	@-python3 -m memray flamegraph profile/output.bin
 
 # dnf5 install python3-memray
 memray-updater-live:
-	@-systemctl --user stop yumex-updater-systray.service 
+	@-systemctl --user stop yumex-updater-systray.service
 	@$(MAKE) localbuild
 	@-mkdir -p profile
 	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
