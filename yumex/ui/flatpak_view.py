@@ -105,8 +105,7 @@ class YumexFlatpakView(Gtk.ListView):
 
     def refresh_updater(self):
         self.presenter.progress.show()
-        self.progress.set_title(_("Updating Yumex Updater"))
-        self.presenter.progress.set_title()
+        self.presenter.progress.set_title(_("Updating Yumex Updater"))
         sync_updates()
         self.presenter.progress.hide()
 
