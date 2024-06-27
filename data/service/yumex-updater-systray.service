@@ -1,6 +1,6 @@
 [Unit]
 Description=Service to monitor and manage system updates.
-After=graphical-session.target
+After=graphical.target
 
 [Service]
 Type=simple
@@ -11,4 +11,4 @@ Environment=DISPLAY=:0
 Environment=XAUTHORITY=%h/.Xauthority
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical.target
