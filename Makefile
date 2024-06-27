@@ -177,13 +177,10 @@ inst-test-tools:
 inst-build-tools:
 	sudo dnf5 install @fedora-packager copr-cli
 
-# install packages needed for running with the dnf5 backend
-inst-deps-dnf5:
-	sudo dnf5 python3-libdnf5 dnf5daemon-server python3-dasbus
-
 # install packages needed running and building
 inst-deps:
 	sudo dnf5 install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf gtk4-devel libadwaita-devel python3-dnfdaemon
+	sudo dnf5 python3-libdnf5 dnf5daemon-server python3-dasbus
 
 # generate the POTFILES from available source files with translations
 # POTFILES is source for what fies is used to generate the .POT file.
