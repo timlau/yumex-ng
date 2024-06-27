@@ -1,6 +1,6 @@
 project(
     'yumex',
-    version: '5.0.0',
+    version: '5.0.1',
     meson_version: '>= 0.61.0',
 )
 

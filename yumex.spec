@@ -4,8 +4,8 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.0.0
-Release:  3{?dist}
+Version:  5.0.1
+Release:  1{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -146,6 +146,9 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+
+* Thu Jun 27 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-1
+- the 5.0.1 release
 
 * Tue Jun 25 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-3
 - split updater service into sub-package

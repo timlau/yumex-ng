@@ -37,6 +37,13 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="5.0.1" date="2024-06-27" type="devel"><description>
+        <p>Yum Extender 5.0.1 add many fixes and small improvments </p>
+        <ul>
+          <li>Add yumex-updater-systray systray application there checks for updates</li>
+        </ul>
+      </description>
+    </release>
     <release version="5.0.0" date="2024-06-11" type="devel"><description>
         <p>Yum Extender 5.0.0 add many fixes and small improvments </p>
         <ul>
