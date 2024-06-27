@@ -5,7 +5,7 @@
 
 Name:     %{app_name}
 Version:  5.0.1
-Release:  1%{?dist}
+Release:  2%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -33,7 +33,7 @@ Requires: python3-dasbus
 Requires: flatpak-libs > 1.15.0
 Requires: appstream >= 1.0.2
 
-Recommends: yumex-updater-systray
+Recommends: %{name}-updater-systray
 
 # dnf4 requirements
 %if "%{dnf_backend}" == "DNF4"
@@ -54,7 +54,7 @@ Obsoletes: yumex-dnf <= 4.5.1
 %description
 Graphical package tool for maintain packages on the system
 
-%package -n yumex-updater-systray
+%package -n %{name}-updater-systray
 Summary:  Yum Extender updater systray app
 Requires: %{name} = %{version}-%{release}
 Requires: python3-gobject
@@ -62,7 +62,7 @@ Requires: gtk3
 Requires: python3-dasbus
 Requires: flatpak-libs > 1.15.0
 Requires: libappindicator-gtk3
-%description -n yumex-updater-systray
+%description -n %{name}-updater-systray
 Systray application to check and show available updates
 
 
@@ -87,7 +87,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 update-desktop-database %{_datadir}/applications &> /dev/null || :
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-%post -n yumex-updater-systray
+%post -n %{name}-updater-systray
 %systemd_user_post yumex-updater-systray.service
 
 %postun
@@ -108,7 +108,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
-%files -n yumex-updater-systray
+%files -n %{name}-updater-systray
 %{_userunitdir}/*.service
 %{_datadir}/%{app_name}/yumex-service.conf
 %{_prefix}/lib/systemd/user-preset/*.preset
@@ -118,7 +118,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %posttrans
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
-%posttrans -n yumex-updater-systray
+%posttrans -n %{name}-updater-systray
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %systemd_user_post yumex-updater-systray.service
 
@@ -142,10 +142,13 @@ for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
     su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater-systray.service" || echo "Failed to restart service for user $user"
 done
 
-%preun -n yumex-updater-systray
+%preun -n %{name}-updater-systray
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+
+* Thu Jun 27 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-2
+- fix nameing for yumex-dnf5 build
 
 * Thu Jun 27 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-1
 - the 5.0.1 release
