@@ -230,7 +230,7 @@ class Backend(dnf.Base):
             # Check if the priority of pkg.repo matches the lowest priority
             if pkg_repo_priority == lowest_priority:
                 if pkg.name in latest_versions:
-                    if pkg.evr > latest_versions[pkg.name].evr():
+                    if pkg.evr > latest_versions[pkg.name].evr:
                         latest_versions[pkg.name] = pkg
                 else:
                     latest_versions[pkg.name] = pkg
