@@ -36,12 +36,12 @@ archive:
 # build local rpms and start a copr build
 copr-release:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ts ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
-	@copr-cli build yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
+	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # build local rpms and start a copr build
 copr-release-dnf5:
 	@$(MAKE) release-yumex-dnf5
-	@copr-cli build yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
+	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
 
 # create a release
 # commit, tag, push, build local rpm and start a copr build
@@ -53,6 +53,7 @@ release:
 	@git push origin
 	@$(MAKE) archive
 	@$(MAKE) copr-release
+	@$(MAKE) copr-release-dnf5
 
 # cleanup the test branch used to create the test release
 test-checkout:

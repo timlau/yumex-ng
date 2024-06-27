@@ -15,8 +15,8 @@
       - make source archive
       - build the src.rpm
       - create a Fedora Copr build of the src.rpm
-- make a yumex-dnf5 package in copr
-  - run `make copr-release-dnf5`
+      - build the yumex-dnf5 src.rpm
+      - create a Fedora Copr build of the yumex-dnf src.rpm
 - make a new github release
   - https://github.com/timlau/yumex-ng/releases/new
   - select the release tag
