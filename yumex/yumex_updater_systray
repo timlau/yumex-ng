@@ -110,15 +110,18 @@ class Indicator:
         self._indicator = None
 
     def _factory(self):
-        indicator = AppIndicator3.Indicator.new(
-            "System Update Monitor",
-            "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update.svg",
-            AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
-        )
-        indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-        indicator.set_title("Checking for updates...")
-        indicator.set_menu(self.get_menu())
-        return indicator
+        try:
+            indicator = AppIndicator3.Indicator.new(
+                "System Update Monitor",
+                "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update.svg",
+                AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
+            )
+            indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+            indicator.set_title("Checking for updates...")
+            indicator.set_menu(self.get_menu())
+            return indicator
+        except Exception:
+            logger.error("Error in creating AppIndicator", exc_info=True)
 
     def on_clicked_custom(self, *args) -> None:
         """start custom updater"""
@@ -130,6 +133,11 @@ class Indicator:
 
     def on_check_updates(self, *args) -> None:
         refresh_updates(True)
+
+    def set_title(self, title):
+        indicator = self.indicator
+        if indicator:
+            indicator.set_title(title)
 
     def get_menu(self) -> Gtk.Menu:
         """build menu for sys tray indicator"""
@@ -168,7 +176,7 @@ def refresh_updates(refresh: bool) -> None:
     hover_text = "\n".join(hover_text_lines)
     if not CONFIG.always_hide:
         if update_count > 0:
-            GLib.idle_add(INDICATOR.indicator.set_title, hover_text)
+            GLib.idle_add(INDICATOR.set_title, hover_text)
         else:
             INDICATOR.clear()
 
