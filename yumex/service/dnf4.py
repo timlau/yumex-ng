@@ -20,17 +20,17 @@ def get_prioritied_packages(base, updates):
     """Get Prioritized version of updates"""
     latest_versions = {}
     for pkg in updates:
-        repos = get_package_repos(base, pkg.get_name())
+        repos = get_package_repos(base, pkg.name)
         repo_priorities = [get_repo_priority(base, repo) for repo in repos]
         lowest_priority = min(repo_priorities) if repo_priorities else 99
-        pkg_repo_priority = get_repo_priority(base, pkg.get_repo_id())
+        pkg_repo_priority = get_repo_priority(base, pkg.reponame)
 
         if pkg_repo_priority == lowest_priority:
-            if pkg.get_name() in latest_versions:
-                if pkg.get_evr() > latest_versions[pkg.get_name()].get_evr():
-                    latest_versions[pkg.get_name()] = pkg
+            if pkg.name in latest_versions:
+                if pkg.evr > latest_versions[pkg.name].evr:
+                    latest_versions[pkg.name] = pkg
             else:
-                latest_versions[pkg.get_name()] = pkg
+                latest_versions[pkg.name] = pkg
 
     return list(latest_versions.values())
 
