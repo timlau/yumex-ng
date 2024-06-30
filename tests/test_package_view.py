@@ -69,9 +69,8 @@ def view(monkeypatch, mocker):
     from yumex.ui.package_view import YumexPackageView
 
     presenter = mock_presenter()
-    win = mock_win()
     queue_view = mock_queueview()
-    view = YumexPackageView(win=win, presenter=presenter, qview=queue_view)
+    view = YumexPackageView(presenter=presenter, qview=queue_view)
     return view
 
 
