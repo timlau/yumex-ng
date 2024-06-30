@@ -1,3 +1,4 @@
+from turtle import update
 import pytest  # noqa: F401
 
 
@@ -92,9 +93,11 @@ def test_get_prioritied_packages(repo_query, package_query, base: Mock):
     package_query.return_value = package_query_factory()
     from yumex.service.dnf5 import get_prioritied_packages
 
-    res = get_prioritied_packages(packages_factory(), base)
+    updates = packages_factory(["pkg"])
+    assert len(list(updates)) == 2
+    res = get_prioritied_packages(updates, base)
     assert isinstance(res, list)
-    assert len(res) == 3
+    assert len(res) == 1
     # print()
     for pkg in res:
         # print(pkg.get_evr(), pkg.get_repo_id())
