@@ -51,8 +51,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
     sidebar = Gtk.Template.Child()
     stack = Gtk.Template.Child("view_stack")
     search_button = Gtk.Template.Child()
-    search_bar = Gtk.Template.Child()
-    search_entry = Gtk.Template.Child()
+    search_bar: Gtk.SearchBar = Gtk.Template.Child()
+    search_entry: Gtk.SearchEntry = Gtk.Template.Child()
     sidebar_button = Gtk.Template.Child("sidebar-button")
     package_paned = Gtk.Template.Child()
     update_info_box = Gtk.Template.Child()
@@ -426,7 +426,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     self.on_deselectall_activate()
             case "select_all":
                 if self.active_page in [Page.PACKAGES, Page.QUEUE]:
-                    self.on_selectall_activate()
+                    # dont select all when searching
+                    if not self.search_bar.props.search_mode_enabled:
+                        self.on_selectall_activate()
+                    else:
+                        # select all text in search entry
+                        self.search_entry.select_region(0, 100)
             case "toggle_selection":
                 if self.active_page == Page.PACKAGES:
                     self.package_view.toggle_selected()
