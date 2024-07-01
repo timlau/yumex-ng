@@ -78,11 +78,18 @@ def sync_updates(refresh: bool = False):
             updater = YUMEX_UPDATER.get_proxy()
             updater.RefreshUpdates(refresh)
             log("(sync_updates) triggered updater checker refresh")
+            return True, "RefreshUpdates triggered"
         except DBusError as e:
             log(f"DBus Error: {e}")
+            return False, f"DBusError : {str(e)}"
     else:
         log(f"(sync_updates) The service {service_name} is not running.")
+        return False, "yumex-updater-systray not running"
 
 
 if __name__ == "__main__":
-    sync_updates()
+    from yumex.utils import setup_logging
+
+    setup_logging()
+    is_user_service_running("dconf.service")
+    # sync_updates()
