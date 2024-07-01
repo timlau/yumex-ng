@@ -1,4 +1,3 @@
-from turtle import update
 import pytest  # noqa: F401
 
 
@@ -88,7 +87,7 @@ def test_get_repo_priority_default(mock_repo_query, base: MagicMock):
 
 @patch("yumex.service.dnf5.RepoQuery")
 @patch("yumex.service.dnf5.PackageQuery")
-def test_get_prioritied_packages(repo_query, package_query, base: Mock):
+def test_get_prioritied_packages(package_query, repo_query, base: Mock):
     repo_query.return_value = repo_query_factory()
     package_query.return_value = package_query_factory()
     from yumex.service.dnf5 import get_prioritied_packages
