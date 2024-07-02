@@ -64,7 +64,7 @@ class Config:
         custom_updater = config.get("DEFAULT", "custom_updater", fallback=None)
         always_hide = config.getboolean("DEFAULT", "always_hide", fallback=False)
         update_sync_interval = config.getint("DEFAULT", "update_sync_interval", fallback=3600)
-        notification = config.getboolean("DEFAULT", "send_notification", fallback=False)
+        notification = config.getboolean("DEFAULT", "send_notification", fallback=True)
         logger.debug(f"CONFIG: custom_updater        = {custom_updater}")
         logger.debug(f"CONFIG: always_hide           = {always_hide}")
         logger.debug(f"CONFIG: update_sync_interval  = {update_sync_interval}")
