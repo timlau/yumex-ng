@@ -73,8 +73,9 @@ class Config:
 
 
 class Indicator:
-    def __init__(self):
+    def __init__(self, custom_updater=None):
         self._indicator = None
+        self.custom_updater = custom_updater
 
     @property
     def indicator(self):
@@ -102,7 +103,7 @@ class Indicator:
 
     def on_clicked_custom(self, *args) -> None:
         """start custom updater"""
-        subprocess.Popen([CONFIG.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen([self.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def on_clicked_pm(self, *args) -> None:
         """start yumex"""
@@ -122,7 +123,7 @@ class Indicator:
         refresh_item = Gtk.MenuItem(label="Check for Updates")
         refresh_item.connect("activate", self.on_check_updates)
         menu.append(refresh_item)
-        if CONFIG.custom_updater:
+        if self.custom_updater:
             update_item = Gtk.MenuItem(label="Update System")
             update_item.connect("activate", self.on_clicked_custom)
             menu.append(update_item)

@@ -97,7 +97,7 @@ def open_yumex(*args):
 
 # Setup Global Constants
 CONFIG = Config.from_file()
-INDICATOR = Indicator()
+INDICATOR = Indicator(custom_updater=CONFIG.custom_updater)
 
 if CONFIG.send_notification:
     NOTIFICATION: Notification = setup_notification()
