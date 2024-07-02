@@ -212,6 +212,12 @@ run-tests:
 run-test-report:
 	pytest --cov --cov-report html
 
+
+run-updater:
+	@systemctl --user stop yumex-updater-systray.service
+	@$(MAKE) localbuild
+	@-./builddir/bin/yumex_updater_systray
+
 # dnf5 install python3-memray
 memray-updater:
 	@systemctl --user stop yumex-updater-systray.service
