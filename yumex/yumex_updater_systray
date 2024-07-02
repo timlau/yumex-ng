@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import gi
 
-
 gi.require_version("GLib", "2.0")
 
 import logging
@@ -19,6 +18,7 @@ from yumex.constants import BACKEND
 from yumex.service.notification import Notification, Action
 from yumex.service import Config, Indicator, Updates
 
+# Setup logger
 logger = logging.getLogger("yumex_updater")
 logging.basicConfig(
     level=logging.DEBUG,
@@ -26,20 +26,18 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
-# Setup Global Constants
-CONFIG = Config.from_file()
-INDICATOR = Indicator()
 
-
-# Setup the DBus service
 @dbus_interface("dk.yumex.UpdateService")
 class UpdateService(object):
+    """Dbus service for refreshing updates"""
+
     def RefreshUpdates(self, refresh: bool) -> None:
         logger.debug(f"DBUS: RefreshUpdates {refresh}")
         GLib.idle_add(refresh_updates, refresh)
 
 
 def refresh_updates(refresh: bool) -> None:
+    """check for new updates"""
     logger.debug(f"Refreshing updates ({refresh})")
     updates: Updates = Updates.get_updates(refresh)
 
@@ -75,23 +73,31 @@ def refresh_updates(refresh: bool) -> None:
 
 
 def check_updates() -> None:
+    """Main thread function for checking for new updates at a given time periode"""
     while True:
         refresh_updates(False)
         time.sleep(CONFIG.update_sync_interval)
 
 
 def setup_notification():
+    """Setup the notifier class"""
     app_name = "Yum Extender"
     icon_name = "software-update-available-symbolic"
-    actions = [Action("open", "Open Yum Extender", open_yumex)]
+    # action to show in notification
+    actions = [Action(id="open", title="Open Yum Extender", callback=open_yumex)]
     notification = Notification(app_name, icon_name, actions=actions)
     return notification
 
 
 def open_yumex(*args):
+    """launch yumex"""
     logger.info(f"open_yumex {args}")
     subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+
+# Setup Global Constants
+CONFIG = Config.from_file()
+INDICATOR = Indicator()
 
 if CONFIG.send_notification:
     NOTIFICATION: Notification = setup_notification()
@@ -108,6 +114,7 @@ def main():
     # Setup scheduled update check
     update_thread = threading.Thread(target=check_updates, daemon=True)
     update_thread.start()
+    # setup & run eventloop
     loop = EventLoop()
     loop.run()
 
