@@ -17,6 +17,8 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("AppIndicator3", "0.1")
+gi.require_version("Flatpak", "1.0")
+
 
 import configparser
 import shutil
@@ -24,7 +26,14 @@ import logging
 from pathlib import Path
 from dataclasses import dataclass
 
-from gi.repository import AppIndicator3, Gtk  # type: ignore
+from gi.repository import AppIndicator3, Gtk, Flatpak  # type: ignore
+from yumex.constants import BACKEND
+
+if BACKEND == "DNF5":
+    from yumex.service.dnf5 import check_dnf_updates
+else:
+    from yumex.service.dnf4 import check_dnf_updates
+
 
 logger = logging.getLogger("yumex_updater")
 
@@ -122,3 +131,22 @@ class Indicator:
         menu.append(pm_item)
         menu.show_all()
         return menu
+
+
+@dataclass
+class Updates:
+    sys_update_count: int
+    flatpak_user_count: int
+    flatpak_sys_count: int
+
+    @classmethod
+    def get_updates(cls, refresh):
+        sys_update_count = len(check_dnf_updates(refresh))
+        user_installation = Flatpak.Installation.new_user()
+        flatpak_user_count = len(user_installation.list_installed_refs_for_update())
+        del user_installation
+
+        system_installation = Flatpak.Installation.new_system()
+        flatpak_sys_count = len(system_installation.list_installed_refs_for_update())
+        del system_installation
+        return cls(sys_update_count, flatpak_user_count, flatpak_sys_count)
