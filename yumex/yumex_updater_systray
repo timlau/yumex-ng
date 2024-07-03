@@ -56,13 +56,13 @@ def refresh_updates(refresh: bool) -> None:
     noti_body = ""
     if updates.sys_update_count > 0:
         hover_text_lines.append(f"  System: {updates.sys_update_count}")
-        noti_body += f" {updates.sys_update_count} packages"
+        noti_body += f"{updates.sys_update_count} packages. "
     if updates.flatpak_user_count > 0:
         hover_text_lines.append(f"  Flatpak (user): {updates.flatpak_user_count}")
-        noti_body += f" {updates.flatpak_user_count} flatpaks (user)"
+        noti_body += f"{updates.flatpak_user_count} flatpaks (user). "
     if updates.flatpak_sys_count > 0:
         hover_text_lines.append(f"  Flatpak (system): {updates.flatpak_sys_count}")
-        noti_body += f" {updates.flatpak_sys_count} flatpaks (system)"
+        noti_body += f"{updates.flatpak_sys_count} flatpaks (system). "
     hover_text = "\n".join(hover_text_lines)
     if not CONFIG.always_hide:
         if update_count > 0:
