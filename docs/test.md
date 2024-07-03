@@ -29,7 +29,7 @@
 ```bash
 systemctl --user status yumex-updater-systray.service
 ```
-### Check log
+### Check log and follow log
 ```bash
-journalctl --user-unit=yumex-updater-systray -n 20
+journalctl --user-unit=yumex-updater-systray -f -n20
 ```
