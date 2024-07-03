@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 07:01+0200\n"
+"POT-Creation-Date: 2024-07-03 08:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -284,6 +284,10 @@ msgstr ""
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
+msgstr ""
+
+#: yumex/yumex_updater_systray:75
+msgid "Updates is available"
 msgstr ""
 
 #: data/ui/package_settings.blp:9
@@ -655,81 +659,89 @@ msgid "Browse Installed flatpaks"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:24
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:71
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:78
 msgid "Install, remove and update flatpaks"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:41
-msgid "Yum Extender 5.0.0 add many fixes and small improvments"
+msgid "Yum Extender 5.0.1 add many fixes and small improvments"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:43
+msgid "Add yumex-updater-systray systray application there checks for updates"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:48
+msgid "Yum Extender 5.0.0 add many fixes and small improvments"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:50
 msgid "Support for update info with dnf5"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:44
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
 msgid "new improved flatpak installer"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:45
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:52
 msgid "cleanup unused flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:46
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:55
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:63
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:62
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
 msgid "lot of code fixes and optimization"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:58
 msgid "Yum Extender 4.9.4 add many fixes and small improvments"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
 msgid "Support for importing gpg keys from repositories"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:54
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:61
 msgid "fix installing and updating flatpaks at system location"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:67
 msgid "Yum Extender 4.9.3 improve the flatpak installer"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:62
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:69
 msgid "flatpak install with search and select available results"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:68
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:75
 msgid "Yum Extender 4.9.2 adds support for flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:77
 msgid "Browse installed flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:76
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:83
 msgid "Yum Extender 4.9.1 is a total rewrite using a modern toolchain"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:78
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:85
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:79
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:86
 msgid "Using dnf directly for readonly actions"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:92
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:99
 msgid "yumex"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:93
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:100
 msgid "yumex-dnf"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:94
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:101
 msgid "Package Manager"
 msgstr ""
 
