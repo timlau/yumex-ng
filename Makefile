@@ -114,6 +114,11 @@ test-update:
 	@$(MAKE) test-release-yumex-dnf5
 	@-sudo dnf5 update build/RPMS/noarch/*.rpm
 
+test-install:
+	@$(MAKE) clean
+	@$(MAKE) test-release-yumex-dnf5
+	@-sudo dnf5 install build/RPMS/noarch/*.rpm
+
 release-yumex-dnf5:
 	@$(MAKE) test-checkout
 	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '3 s/DNF4/DNF5/' > ${APPNAME_DNF5}.spec
@@ -179,8 +184,16 @@ inst-build-tools:
 
 # install packages needed running and building
 inst-deps:
-	sudo dnf5 install gtk4 libadwaita glib2 meson blueprint-compiler python3-dnf gtk4-devel libadwaita-devel python3-dnfdaemon
-	sudo dnf5 python3-libdnf5 dnf5daemon-server python3-dasbus
+	@-sudo dnf5 install gtk4 libadwaita glib2 meson blueprint-compiler gtk4-devel libadwaita-devel python3-dasbus python3-devel -y
+
+inst-deps-dnf4:
+	@$(MAKE) inst-deps
+	@-sudo dnf5 install python3-dnfdaemon python3-dnf -y
+
+inst-deps-dnf5:
+	@$(MAKE) inst-deps
+	@-sudo dnf5 install python3-libdnf5 dnf5daemon-server -y
+
 
 # generate the POTFILES from available source files with translations
 # POTFILES is source for what fies is used to generate the .POT file.
