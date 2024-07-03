@@ -89,7 +89,7 @@ def setup_notification():
     app_name = "Yum Extender"
     icon_name = "software-update-available-symbolic"
     # action to show in notification
-    actions = [Action(id="open", title="Open Yum Extender", callback=open_yumex)]
+    actions = [Action(id="open-yumex", title="Open Yum Extender", callback=open_yumex)]
     notification = Notification(app_name, icon_name, actions=actions)
     return notification
 

@@ -47,10 +47,9 @@ class Notification:
 
     def on_action_invoked(self, id, action_id):
         logger.info(f"SIGNAL:ActionInvoked id: {id} action: {action_id}")
-        if id in self.send_ids:
-            if action_id in self.actions:
-                action = self.actions[action_id]
-                action.callback(action_id)
+        if action_id in self.actions:
+            action = self.actions[action_id]
+            action.callback(action_id)
 
 
 def callback(*args):
