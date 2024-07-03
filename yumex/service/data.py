@@ -73,9 +73,10 @@ class Config:
 
 
 class Indicator:
-    def __init__(self, custom_updater=None):
+    def __init__(self, custom_updater, refresh_func):
         self._indicator = None
         self.custom_updater = custom_updater
+        self.refresh_func = refresh_func
 
     @property
     def indicator(self):
@@ -110,7 +111,7 @@ class Indicator:
         subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def on_check_updates(self, *args) -> None:
-        refresh_updates(True)
+        self.refresh_func(True)
 
     def set_title(self, title):
         indicator = self.indicator
