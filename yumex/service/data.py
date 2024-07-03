@@ -23,6 +23,8 @@ gi.require_version("Flatpak", "1.0")
 import configparser
 import shutil
 import logging
+import subprocess
+
 from pathlib import Path
 from dataclasses import dataclass
 
