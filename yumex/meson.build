@@ -100,5 +100,6 @@ yumex_service_modules = [
     'service/dnf4.py',
     'service/dnf5.py',
     'service/notification.py',
+    'service/data.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_service_modules, subdir: 'yumex/service')

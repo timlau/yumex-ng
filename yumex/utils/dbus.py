@@ -6,7 +6,7 @@ from typing import Any
 from dasbus.loop import EventLoop
 from dasbus.error import DBusError  # noqa
 
-from yumex.utils import log
+from yumex.utils import log, timed
 
 BUS = SessionMessageBus()
 SYSTEMD_NAMESPACE = ("org", "freedesktop", "systemd1")
@@ -70,13 +70,15 @@ def is_user_service_running(service_name):
         return False
 
 
+@timed
 def sync_updates(refresh: bool = False):
     service_name = "yumex-updater-systray.service"
 
     if is_user_service_running(service_name):
         try:
             updater = YUMEX_UPDATER.get_proxy()
-            updater.RefreshUpdates(refresh)
+            async_caller = AsyncDbusCaller()
+            async_caller.call(updater.RefreshUpdates, refresh)
             log("(sync_updates) triggered updater checker refresh")
             return True, "RefreshUpdates triggered"
         except DBusError as e:
@@ -91,5 +93,5 @@ if __name__ == "__main__":
     from yumex.utils import setup_logging
 
     setup_logging()
-    is_user_service_running("dconf.service")
-    # sync_updates()
+    # is_user_service_running("dconf.service")
+    sync_updates()

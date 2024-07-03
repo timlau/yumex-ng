@@ -17,7 +17,7 @@ from dasbus.loop import EventLoop
 
 from yumex.constants import BACKEND, LOCALEDIR
 from yumex.service.notification import Notification, Action
-from yumex.service import Config, Indicator, Updates
+from yumex.service.data import Config, Indicator, Updates
 
 gettext.install("yumex", LOCALEDIR)
 locale.bindtextdomain("yumex", LOCALEDIR)
