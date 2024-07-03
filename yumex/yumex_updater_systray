@@ -7,16 +7,21 @@ import logging
 import subprocess
 import threading
 import time
-
+import locale
+import gettext
 from gi.repository import GLib  # type: ignore
 
 from dasbus.server.interface import dbus_interface
 from dasbus.connection import SessionMessageBus
 from dasbus.loop import EventLoop
 
-from yumex.constants import BACKEND
+from yumex.constants import BACKEND, LOCALEDIR
 from yumex.service.notification import Notification, Action
 from yumex.service import Config, Indicator, Updates
+
+gettext.install("yumex", LOCALEDIR)
+locale.bindtextdomain("yumex", LOCALEDIR)
+locale.textdomain("yumex")
 
 # Setup logger
 logger = logging.getLogger("yumex_updater")

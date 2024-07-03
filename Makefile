@@ -187,6 +187,7 @@ inst-deps:
 potfiles:
 	@echo "updating po/POTFILES with *.py, .in & *.blp files"
 	@find yumex -iname *.py > po/POTFILES
+	@find yumex -iname yumex_updater_systray >> po/POTFILES
 	@find data -iname *.blp >> po/POTFILES
 	@find data -iname *.in.in >> po/POTFILES
 

@@ -33,10 +33,12 @@ yumex/ui/package_view.py
 yumex/ui/window.py
 yumex/ui/flatpak_view.py
 yumex/__init__.py
-yumex/service/__init__.py
-yumex/service/dnf4.py
 yumex/service/dnf5.py
+yumex/service/dnf4.py
+yumex/service/notification.py
+yumex/service/__init__.py
 yumex/main.py
+yumex/yumex_updater_systray
 data/ui/repository.blp
 data/ui/queue_view.blp
 data/ui/package_settings.blp
