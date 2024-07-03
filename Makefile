@@ -184,7 +184,9 @@ inst-build-tools:
 
 # install packages needed running and building
 inst-deps:
-	@-sudo dnf5 install gtk4 libadwaita glib2 meson blueprint-compiler gtk4-devel libadwaita-devel python3-dasbus python3-devel -y
+	@-sudo dnf5 builddep yumex.spec -y
+	@-sudo dnf5 install python3-dasbus  -y
+
 
 inst-deps-dnf4:
 	@$(MAKE) inst-deps
