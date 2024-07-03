@@ -40,6 +40,12 @@ else:
 logger = logging.getLogger("yumex_updater")
 
 
+def open_yumex(*args):
+    """launch yumex"""
+    logger.info(f"open_yumex {args}")
+    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 @dataclass
 class Config:
     custom_updater: str
@@ -110,7 +116,7 @@ class Indicator:
 
     def on_clicked_pm(self, *args) -> None:
         """start yumex"""
-        subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        open_yumex()
 
     def on_check_updates(self, *args) -> None:
         self.refresh_func(True)

@@ -17,7 +17,7 @@ from dasbus.loop import EventLoop
 
 from yumex.constants import BACKEND, LOCALEDIR
 from yumex.service.notification import Notification, Action
-from yumex.service.data import Config, Indicator, Updates
+from yumex.service.data import Config, Indicator, Updates, open_yumex
 
 gettext.install("yumex", LOCALEDIR)
 locale.bindtextdomain("yumex", LOCALEDIR)
@@ -92,12 +92,6 @@ def setup_notification():
     actions = [Action(id="open-yumex", title="Open Yum Extender", callback=open_yumex)]
     notification = Notification(app_name, icon_name, actions=actions)
     return notification
-
-
-def open_yumex(*args):
-    """launch yumex"""
-    logger.info(f"open_yumex {args}")
-    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 # Setup Global Constants
