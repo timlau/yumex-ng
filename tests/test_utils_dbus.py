@@ -1,6 +1,8 @@
 import pytest  # noqa: F401
 from unittest.mock import patch, call
-from dasbus.error import DBusError  # noqa
+from dasbus.error import DBusError
+
+from tests.mock import Mock  # noqa
 
 
 def test_is_user_service_running():
@@ -42,8 +44,9 @@ def test_is_user_service_not_running_mocked(mock_systemd):
     assert call.get_proxy().Get("org.freedesktop.systemd1.Unit", "SubState") in calls
 
 
+@patch("yumex.utils.dbus.AsyncDbusCaller")
 @patch("yumex.utils.dbus.is_user_service_running")
-def test_sync_updates_not_running(mock_is_user_service_running):
+def test_sync_updates_not_running(mock_is_user_service_running, mock_async):
     mock_is_user_service_running.return_value = False
     from yumex.utils.dbus import sync_updates
 
@@ -52,9 +55,10 @@ def test_sync_updates_not_running(mock_is_user_service_running):
     assert msg == "yumex-updater-systray not running"
 
 
+@patch("yumex.utils.dbus.AsyncDbusCaller")
 @patch("yumex.utils.dbus.YUMEX_UPDATER")
 @patch("yumex.utils.dbus.is_user_service_running")
-def test_sync_updates_running(mock_is_user_service_running, mock_yumex_updater):
+def test_sync_updates_running(mock_is_user_service_running, mock_yumex_updater, mock_async):
     mock_is_user_service_running.return_value = True
     from yumex.utils.dbus import sync_updates
 
@@ -62,12 +66,13 @@ def test_sync_updates_running(mock_is_user_service_running, mock_yumex_updater):
     assert res
     assert msg == "RefreshUpdates triggered"
     mock_yumex_updater.get_proxy.assert_called_once()
-    assert call.get_proxy().RefreshUpdates(False) in mock_yumex_updater.mock_calls
+    assert call().call(mock_yumex_updater.get_proxy().RefreshUpdates, False) in mock_async.mock_calls
 
 
+@patch("yumex.utils.dbus.AsyncDbusCaller")
 @patch("yumex.utils.dbus.YUMEX_UPDATER")
 @patch("yumex.utils.dbus.is_user_service_running")
-def test_sync_updates_error(mock_is_user_service_running, mock_yumex_updater):
+def test_sync_updates_error(mock_is_user_service_running, mock_yumex_updater, mock_async):
     mock_is_user_service_running.return_value = True
     mock_yumex_updater.get_proxy.side_effect = DBusError
     from yumex.utils.dbus import sync_updates
