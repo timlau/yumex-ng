@@ -4,7 +4,6 @@ import gi
 gi.require_version("GLib", "2.0")
 
 import logging
-import subprocess
 import threading
 import time
 import locale
@@ -56,13 +55,13 @@ def refresh_updates(refresh: bool) -> None:
     noti_body = ""
     if updates.sys_update_count > 0:
         hover_text_lines.append(f"  System: {updates.sys_update_count}")
-        noti_body += f"{updates.sys_update_count} packages. "
+        noti_body += f"{updates.sys_update_count} package(s). "
     if updates.flatpak_user_count > 0:
         hover_text_lines.append(f"  Flatpak (user): {updates.flatpak_user_count}")
-        noti_body += f"{updates.flatpak_user_count} flatpaks (user). "
+        noti_body += f"{updates.flatpak_user_count} flatpak(s) (user). "
     if updates.flatpak_sys_count > 0:
         hover_text_lines.append(f"  Flatpak (system): {updates.flatpak_sys_count}")
-        noti_body += f"{updates.flatpak_sys_count} flatpaks (system). "
+        noti_body += f"{updates.flatpak_sys_count} flatpak(s) (system). "
     hover_text = "\n".join(hover_text_lines)
     if not CONFIG.always_hide:
         if update_count > 0:
@@ -71,10 +70,12 @@ def refresh_updates(refresh: bool) -> None:
             INDICATOR.clear()
 
     if CONFIG.send_notification:
-        if update_count > 0:
+        logger.debug(f"Notification : {update_count=} {NOTIFICATION.last_value=} ")
+        if update_count > 0 and update_count != NOTIFICATION.last_value:
             summary = _("Updates is available")
             body = noti_body
             NOTIFICATION.send(summary, body)
+            NOTIFICATION.last_value = update_count
 
 
 def check_updates() -> None:

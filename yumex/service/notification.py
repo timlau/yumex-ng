@@ -29,6 +29,7 @@ class Notification:
         self.icon_name = icon_name
         self.actions: dict[str, Action] = {action.id: action for action in actions}
         self.hints = hints
+        self.last_value = 0
         proxy = NOTIFICATION.get_proxy()
         proxy.ActionInvoked.connect(self.on_action_invoked)
 
