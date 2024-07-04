@@ -14,7 +14,6 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 from typing import Iterable, List
-from datetime import datetime
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -26,7 +25,7 @@ from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS,
 from libdnf5.advisory import AdvisoryQuery, Advisory, AdvisoryReference
 
 
-from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
 from yumex.backend.interface import Presenter
 from yumex.utils.enums import SearchField, PackageState, InfoType, PackageFilter
 
@@ -181,14 +180,18 @@ class Backend(dnf.Base):
     def expire_metadata(self):
         # get the repo cache dir
         cachedir = Path(self.get_config().get_cachedir_option().get_value())
-        log(f"DNF5: current cachedir : {cachedir}")
-        # interate through the repo cachedir
-        for fn in cachedir.iterdir():
-            log(f"DNF5: expire repo loacted at {fn}")
-            # Setup a RepoCache at the current repo cachedir
-            repo_cache = RepoCache(self, fn.as_posix())
-            # expire the cache for the current repo
-            repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
+        if reload_metadata_expired():
+            log(f"DNF5: current cachedir : {cachedir}")
+            # interate through the repo cachedir
+            for fn in cachedir.iterdir():
+                log(f"DNF5: expire repo loacted at {fn}")
+                # Setup a RepoCache at the current repo cachedir
+                repo_cache = RepoCache(self, fn.as_posix())
+                # expire the cache for the current repo
+                repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
+            update_metadata_timestamp()
+        else:
+            log("DNF5: Metadata is current")
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF5 API."""

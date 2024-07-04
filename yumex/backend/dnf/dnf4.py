@@ -35,7 +35,7 @@ from yumex.utils.enums import (
     InfoType,
     PackageFilter,
 )
-from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf import YumexPackage, reload_metadata_expired
 
 
 def create_package(pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE) -> YumexPackage:
@@ -440,17 +440,20 @@ class Backend(DnfBase):
         self.reset(goal=True, repos=True, sack=True)
         self.setup_base()
 
-    def dnf_temp_cleanup(self):
+    def expire_metadata(self):
         # Access the cache directory setting
-        cache_directory = self.conf.cachedir
-        print(cache_directory)
-        # Construct the pattern with the username
-        pattern = f"{cache_directory}/*"
-        # List all directories matching the pattern
-        directories = glob.glob(pattern)
-        for directory in directories:
-            if os.path.isdir(directory):
-                shutil.rmtree(directory)
+        if reload_metadata_expired:
+            cache_directory = self.conf.cachedir
+            # Construct the pattern with the username
+            pattern = f"{cache_directory}/*"
+            # List all directories matching the pattern
+            directories = glob.glob(pattern)
+            for directory in directories:
+                if os.path.isdir(directory):
+                    shutil.rmtree(directory)
+            update_metadata_timestamp()
+        else:
+            log("DNF4: Metadata is current")
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF4 API."""
@@ -503,7 +506,7 @@ class Backend(DnfBase):
             case PackageFilter.INSTALLED:
                 return self.packages.installed
             case PackageFilter.UPDATES:
-                self.dnf_temp_cleanup()
+                self.expire_metadata()
                 return self.get_packages_with_lowest_priority(self.packages.updates)
             case other:
                 raise ValueError(f"{other} is not an legal package filter")

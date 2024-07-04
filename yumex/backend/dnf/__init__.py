@@ -13,8 +13,10 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 from __future__ import annotations
-from gi.repository import GObject
-from yumex.utils import format_number
+from datetime import datetime, timedelta
+from gi.repository import GObject, Gio
+from yumex.constants import APP_ID
+from yumex.utils import format_number, log
 from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
 
 
@@ -125,3 +127,16 @@ class YumexPackage(GObject.GObject):
             repo,
         )
         return ",".join([str(elem) for elem in nevra_r])
+
+
+def reload_metadata_expired():
+    settings = Gio.Settings(APP_ID)
+    last_load: int = settings.get_int64("meta-load-time")
+    load_periode: int = settings.get_int("meta-load-periode")
+    update_time = datetime.fromtimestamp(last_load) + timedelta(seconds=load_periode)
+    log(f"reload_metadata: last update: {datetime.fromtimestamp(last_load)} next update: {update_time}")
+    return datetime.now() > update_time
+
+
+def update_metadata_timestamp():
+    self.settings.set_int64("meta-load-time", int(datetime.now().timestamp()))
