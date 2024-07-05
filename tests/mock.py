@@ -14,7 +14,7 @@ from yumex.utils.enums import FlatpakLocation, PackageState
 from gi.repository import Flatpak, Gtk
 
 
-def test_package():
+def dummy_package():
     pkg_dict = {
         "name": "mypkg",
         "version": "1",

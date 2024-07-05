@@ -15,7 +15,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk
-from .mock import TemplateUIFromFile, test_package
+from .mock import TemplateUIFromFile, dummy_package
 import yumex.utils
 
 
@@ -30,8 +30,8 @@ sys.modules["builtins"].__dict__["_"] = translate
 def mock_presenter():
     """Mock the presenter"""
     mock = MagicMock()
-    mock.get_packages_by_filter.return_value = [test_package()]
-    mock.search.return_value = [test_package()]
+    mock.get_packages_by_filter.return_value = [dummy_package()]
+    mock.search.return_value = [dummy_package()]
     # dont use cache, just return the same packages
     mock.get_packages.side_effect = lambda x: x
     return mock
@@ -76,7 +76,7 @@ def view(monkeypatch, mocker):
 
 def test_add_packages_to_store(view):
     """should add the package to the view storage"""
-    pkgs = [test_package()]
+    pkgs = [dummy_package()]
     view.add_packages_to_store(pkgs)
     assert len(view.storage) == 1
 
