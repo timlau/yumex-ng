@@ -27,6 +27,7 @@ class YumexPreferences(Adw.PreferencesWindow):
     fp_remote: Adw.ComboRow = Gtk.Template.Child()
     fp_location: Adw.ComboRow = Gtk.Template.Child()
 
+    md_period = Gtk.Template.Child()
     repo_group = Gtk.Template.Child()
 
     def __init__(self, presenter, **kwargs):
@@ -36,6 +37,7 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.connect("unrealize", self.save_settings)
         self.setup_repo()
         self.setup_flatpak()
+        self.setup_metadata()
 
     def setup_repo(self):
         # get repositories and add them
@@ -46,6 +48,10 @@ class YumexPreferences(Adw.PreferencesWindow):
             repo_widget.set_subtitle(f"{name}( {prio})")
             repo_widget.enabled.set_state(enabled)
             self.repo_group.add(repo_widget)
+
+    def setup_metadata(self):
+        period = self.settings.get_int("meta-load-periode")
+        self.md_period.set_text(str(period))
 
     def setup_flatpak(self):
         location = FlatpakLocation(self.settings.get_string("fp-location").lower())
@@ -78,6 +84,11 @@ class YumexPreferences(Adw.PreferencesWindow):
         remote = self.get_current_remote()
         if remote:
             self.settings.set_string("fp-remote", remote)
+        try:
+            period = int(self.md_period.get_text())
+            self.settings.set_int("meta-load-periode", period)
+        except ValueError:
+            pass
         return location, remote
 
     def update_remote(self, current_location) -> str | None:

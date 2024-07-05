@@ -21,6 +21,16 @@ template $YumexPreferences: Adw.PreferencesWindow {
         model: fp_remotes;
       }
     }
+    Adw.PreferencesGroup metadata {
+      title: _("Metadata Settings");
+      Adw.ActionRow md_periode_row {
+        title: "Update frequency (seconds)";
+        Gtk.Entry md_period {
+          text: "";
+        }
+      }
+    }
+
 
   }
   Adw.PreferencesPage  repo {
