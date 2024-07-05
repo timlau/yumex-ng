@@ -139,4 +139,5 @@ def reload_metadata_expired():
 
 
 def update_metadata_timestamp():
-    self.settings.set_int64("meta-load-time", int(datetime.now().timestamp()))
+    settings = Gio.Settings(APP_ID)
+    settings.set_int64("meta-load-time", int(datetime.now().timestamp()))
