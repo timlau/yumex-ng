@@ -58,11 +58,12 @@ class AsyncDbusCaller:
 
 def is_user_service_running(service_name):
     try:
+        async_caller = AsyncDbusCaller()
         systemd = SYSTEMD.get_proxy(interface_name="org.freedesktop.systemd1.Manager")
-        unit_path = systemd.GetUnit(service_name)
+        unit_path = async_caller.call(systemd.GetUnit, service_name)
         log(f"DBus: systemd service object: {unit_path}")
         unit = SYSTEMD.get_proxy(unit_path)
-        state = get_native(unit.Get("org.freedesktop.systemd1.Unit", "SubState"))
+        state = get_native(async_caller.call(unit.Get, "org.freedesktop.systemd1.Unit", "SubState"))
         log(f"DBus: {service_name} is {state}")
         return state == "running"
     except DBusError as e:

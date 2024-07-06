@@ -14,34 +14,30 @@ def test_is_user_service_running():
     assert not res
 
 
+@patch("yumex.utils.dbus.AsyncDbusCaller")
 @patch("yumex.utils.dbus.SYSTEMD")
-def test_is_user_service_running_mocked(mock_systemd):
-    mock_systemd.get_proxy().Get.return_value = "running"
-    mock_systemd.get_proxy().GetUnit.return_value = "/org/freedesktop/systemd1/unit/dconf_2eservice"
+def test_is_user_service_running_mocked(mock_systemd, mock_async):
+    mock_async().call.return_value = "running"
     from yumex.utils.dbus import is_user_service_running
 
     res = is_user_service_running("dconf.service")
     assert res
-    calls = mock_systemd.mock_calls
-    assert call.get_proxy(interface_name="org.freedesktop.systemd1.Manager") in calls
-    assert call.get_proxy().GetUnit("dconf.service") in calls
-    assert call.get_proxy("/org/freedesktop/systemd1/unit/dconf_2eservice") in calls
-    assert call.get_proxy().Get("org.freedesktop.systemd1.Unit", "SubState") in calls
+    assert call.get_proxy.called_with(interface_name="org.freedesktop.systemd1.Manager")
+    assert call().call.called_with(mock_systemd.get_proxy().GetUnit, "dconf.service")
+    assert call().call.called_with(mock_systemd.get_proxy().Get, "org.freedesktop.systemd1.Unit", "SubState")
 
 
+@patch("yumex.utils.dbus.AsyncDbusCaller")
 @patch("yumex.utils.dbus.SYSTEMD")
-def test_is_user_service_not_running_mocked(mock_systemd):
-    mock_systemd.get_proxy().Get.return_value = "dead"
-    mock_systemd.get_proxy().GetUnit.return_value = "/org/freedesktop/systemd1/unit/dconf_2eservice"
+def test_is_user_service_not_running_mocked(mock_systemd, mock_async):
+    mock_async().call.return_value = "dead"
     from yumex.utils.dbus import is_user_service_running
 
     res = is_user_service_running("dconf.service")
     assert not res
-    calls = mock_systemd.mock_calls
-    assert call.get_proxy(interface_name="org.freedesktop.systemd1.Manager") in calls
-    assert call.get_proxy().GetUnit("dconf.service") in calls
-    assert call.get_proxy("/org/freedesktop/systemd1/unit/dconf_2eservice") in calls
-    assert call.get_proxy().Get("org.freedesktop.systemd1.Unit", "SubState") in calls
+    assert call.get_proxy.called_with(interface_name="org.freedesktop.systemd1.Manager")
+    assert call().call.called_with(mock_systemd.get_proxy().GetUnit, "dconf.service")
+    assert call().call.called_with(mock_systemd.get_proxy().Get, "org.freedesktop.systemd1.Unit", "SubState")
 
 
 @patch("yumex.utils.dbus.AsyncDbusCaller")
