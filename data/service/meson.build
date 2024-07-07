@@ -21,6 +21,3 @@ install_data(
     '50-yumex-updater-systray.preset',
     install_dir: userpresetdir,
 )
-
-# Install service config
-install_data('yumex-service.conf', install_dir: PKGDATA_DIR)

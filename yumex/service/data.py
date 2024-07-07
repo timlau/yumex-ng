@@ -28,8 +28,8 @@ import subprocess
 from pathlib import Path
 from dataclasses import dataclass
 
-from gi.repository import AppIndicator3, Gtk, Flatpak  # type: ignore
-from yumex.constants import BACKEND
+from gi.repository import AppIndicator3, Gtk, Flatpak, Gio  # type: ignore
+from yumex.constants import APP_ID, BACKEND
 
 if BACKEND == "DNF5":
     from yumex.service.dnf5 import check_dnf_updates
@@ -54,30 +54,18 @@ class Config:
     send_notification: bool
 
     @classmethod
-    def from_file(cls):
-        # Define paths
-        config_dir = Path.home() / ".config" / "yumex"
-        default_config_path = "/usr/share/yumex/yumex-service.conf"
-        user_config_path = config_dir / "yumex-service.conf"
-        # Create the config directory if it doesn't exist
-        config_dir.mkdir(parents=True, exist_ok=True)
-        # Copy the default config file if the user config file doesn't exist
-        if not user_config_path.exists():
-            shutil.copy(default_config_path, user_config_path)
-
-        # Read configuration file
-        logger.debug(f"CONFIG: Loading config from {user_config_path}")
-        config = configparser.ConfigParser()
-        config.read(user_config_path)
-        custom_updater = config.get("DEFAULT", "custom_updater", fallback=None)
-        always_hide = config.getboolean("DEFAULT", "always_hide", fallback=False)
-        update_sync_interval = config.getint("DEFAULT", "update_sync_interval", fallback=3600)
-        notification = config.getboolean("DEFAULT", "send_notification", fallback=True)
+    def from_gsettings(cls):
+        logger.debug("CONFIG: Loading config from gsettings")
+        settings: Gio.Settings = Gio.Settings(APP_ID)
+        custom_updater = settings.get_string("upd-custom")
+        always_hide = settings.get_boolean("upd-always-hide")
+        update_interval = settings.get_int("upd-interval")
+        notification = settings.get_boolean("upd-notification")
         logger.debug(f"CONFIG: custom_updater        = {custom_updater}")
         logger.debug(f"CONFIG: always_hide           = {always_hide}")
-        logger.debug(f"CONFIG: update_sync_interval  = {update_sync_interval}")
+        logger.debug(f"CONFIG: update_sync_interval  = {update_interval}")
         logger.debug(f"CONFIG: send_notification     = {notification}")
-        return cls(custom_updater, always_hide, update_sync_interval, notification)
+        return cls(custom_updater, always_hide, update_interval, notification)
 
 
 class Indicator:

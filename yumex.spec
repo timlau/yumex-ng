@@ -5,7 +5,7 @@
 
 Name:     %{app_name}
 Version:  5.0.1
-Release:  2%{?dist}
+Release:  3%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -110,7 +110,6 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 
 %files -n %{name}-updater-systray
 %{_userunitdir}/*.service
-%{_datadir}/%{app_name}/yumex-service.conf
 %{_prefix}/lib/systemd/user-preset/*.preset
 %{_bindir}/yumex_updater_systray
 %{_datadir}/icons/hicolor/scalable/apps/yumex-system-software-update.svg
@@ -146,6 +145,9 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+
+* Sun Jul 7 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-3
+- remove updater .conf file
 
 * Thu Jun 27 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-2
 - fix nameing for yumex-dnf5 build

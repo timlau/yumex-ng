@@ -46,5 +46,17 @@
 		<key name="meta-load-periode" type="i">
 			<default>3600</default>
 		</key>
+		<key name="upd-custom" type="s">
+			<default>""</default>
+		</key>
+		<key name="upd-always-hide" type="b">
+			<default>false</default>
+		</key>
+		<key name="upd-interval" type="i">
+			<default>3600</default>
+		</key>
+		<key name="upd-notification" type="b">
+			<default>true</default>
+		</key>
 	</schema>
 </schemalist>
