@@ -18,6 +18,7 @@ from gi.repository import Gtk, Adw, Gio
 from yumex.constants import APP_ID, ROOTDIR
 from yumex.utils import log
 from yumex.utils.enums import FlatpakLocation
+from yumex.utils.dbus import is_user_service_running
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/preferences.ui")
@@ -30,6 +31,7 @@ class YumexPreferences(Adw.PreferencesWindow):
     md_period = Gtk.Template.Child()
     repo_group = Gtk.Template.Child()
 
+    updater = Gtk.Template.Child()
     upd_custom = Gtk.Template.Child()
     upd_interval = Gtk.Template.Child()
     upd_hide = Gtk.Template.Child()
@@ -44,6 +46,10 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.setup_flatpak()
         self.setup_metadata()
         self.setup_updater()
+        if is_user_service_running("yumex-updater-systray.service"):
+            self.updater.set_visible(True)
+        else:
+            self.updater.set_visible(False)
 
     def setup_repo(self):
         # get repositories and add them
