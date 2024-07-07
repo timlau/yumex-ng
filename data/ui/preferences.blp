@@ -3,7 +3,7 @@ using Adw 1;
 
 template $YumexPreferences: Adw.PreferencesWindow {
   title: _("Preferences");
-  default-height: 600;
+  default-height: 700;
   default-width: 600;
   modal: true;
   Adw.PreferencesPage  main {
@@ -12,21 +12,74 @@ template $YumexPreferences: Adw.PreferencesWindow {
     Adw.PreferencesGroup flatpak {
       title: _("Flatpak Settings");
       Adw.ComboRow fp_location {
-        title: "Default Location";
+        title: _("Default Location");
         model: fp_locations;
         notify::selected=> $on_location_selected();
       }
       Adw.ComboRow fp_remote {
-        title: "Default Remote";
+        title: _("Default Remote");
         model: fp_remotes;
       }
     }
     Adw.PreferencesGroup metadata {
       title: _("Metadata Settings");
       Adw.ActionRow md_periode_row {
-        title: "Update frequency (seconds)";
-        Gtk.Entry md_period {
-          text: "";
+        title: _("Min. Refresh interval (seconds)");
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+          Gtk.Entry md_period {
+            text: "";
+          }
+      }
+      }
+    }
+    Adw.PreferencesGroup updater {
+      title: _("Updater Settings");
+      Adw.ActionRow {
+        title: _("Custom System Updater (path)");
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+          halign: fill;
+
+          Gtk.Entry upd_custom {
+
+            text: "";
+          }
+        }
+      }
+      Adw.ActionRow {
+        title: _("Check updates interval (seconds)");
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+          Gtk.Entry upd_interval {
+            text: "3600";
+          }
+        }
+      }
+      Adw.ActionRow {
+        title: _("Don't show systray icon");
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+          Gtk.Switch upd_hide {
+          }
+        }
+      }
+      Adw.ActionRow {
+        title: _("Send Notification on updates");
+        Gtk.Box {
+        orientation: horizontal;
+        vexpand: false;
+        valign: center;
+          Gtk.Switch upd_notification {
+          }
         }
       }
     }

@@ -30,6 +30,11 @@ class YumexPreferences(Adw.PreferencesWindow):
     md_period = Gtk.Template.Child()
     repo_group = Gtk.Template.Child()
 
+    upd_custom = Gtk.Template.Child()
+    upd_interval = Gtk.Template.Child()
+    upd_hide = Gtk.Template.Child()
+    upd_notification = Gtk.Template.Child()
+
     def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
         self.presenter = presenter
@@ -38,6 +43,7 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.setup_repo()
         self.setup_flatpak()
         self.setup_metadata()
+        self.setup_updater()
 
     def setup_repo(self):
         # get repositories and add them
@@ -48,6 +54,14 @@ class YumexPreferences(Adw.PreferencesWindow):
             repo_widget.set_subtitle(f"{name}( {prio})")
             repo_widget.enabled.set_state(enabled)
             self.repo_group.add(repo_widget)
+
+    def setup_updater(self):
+        self.upd_custom.set_text(self.settings.get_string("upd-custom"))
+        self.upd_interval.set_text(str(self.settings.get_int("upd-interval")))
+        self.upd_hide.set_active(self.settings.get_boolean("upd-always-hide"))
+        self.upd_hide.set_state(self.settings.get_boolean("upd-always-hide"))
+        self.upd_notification.set_active(self.settings.get_boolean("upd-notification"))
+        self.upd_notification.set_state(self.settings.get_boolean("upd-notification"))
 
     def setup_metadata(self):
         period = self.settings.get_int("meta-load-periode")
@@ -89,6 +103,14 @@ class YumexPreferences(Adw.PreferencesWindow):
             self.settings.set_int("meta-load-periode", period)
         except ValueError:
             pass
+        # Updater Settings
+        self.settings.set_string("upd-custom", self.upd_custom.get_text())
+        try:
+            self.settings.set_int("upd-interval", int(self.upd_interval.get_text()))
+        except ValueError:
+            pass
+        self.settings.set_boolean("upd-always-hide", self.upd_hide.get_state())
+        self.settings.set_boolean("upd-notification", self.upd_notification.get_state())
         return location, remote
 
     def update_remote(self, current_location) -> str | None:
