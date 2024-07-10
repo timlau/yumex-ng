@@ -100,7 +100,8 @@ class Indicator:
 
     def on_clicked_custom(self, *args) -> None:
         """start custom updater"""
-        subprocess.Popen([self.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen([self.custom_updater], shell=True)
+
 
     def on_clicked_pm(self, *args) -> None:
         """start yumex"""
