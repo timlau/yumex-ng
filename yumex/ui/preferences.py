@@ -63,7 +63,7 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     def setup_updater(self):
         self.upd_custom.set_text(self.settings.get_string("upd-custom"))
-        self.upd_interval.set_text(str(self.settings.get_int("upd-interval")))
+        self.upd_interval.set_text(str(self.settings.get_int("upd-interval") // 60))
         self.upd_show.set_active(self.settings.get_boolean("upd-show-icon"))
         self.upd_show.set_state(self.settings.get_boolean("upd-show-icon"))
         self.upd_notification.set_active(self.settings.get_boolean("upd-notification"))
@@ -71,7 +71,7 @@ class YumexPreferences(Adw.PreferencesWindow):
 
     def setup_metadata(self):
         period = self.settings.get_int("meta-load-periode")
-        self.md_period.set_text(str(period))
+        self.md_period.set_text(str(period // 60))
 
     def setup_flatpak(self):
         location = FlatpakLocation(self.settings.get_string("fp-location").lower())
@@ -106,13 +106,13 @@ class YumexPreferences(Adw.PreferencesWindow):
             self.settings.set_string("fp-remote", remote)
         try:
             period = int(self.md_period.get_text())
-            self.settings.set_int("meta-load-periode", period)
+            self.settings.set_int("meta-load-periode", period * 60)
         except ValueError:
             pass
         # Updater Settings
         self.settings.set_string("upd-custom", self.upd_custom.get_text())
         try:
-            self.settings.set_int("upd-interval", int(self.upd_interval.get_text()))
+            self.settings.set_int("upd-interval", int(self.upd_interval.get_text()) * 60)
         except ValueError:
             pass
         self.settings.set_boolean("upd-show-icon", self.upd_show.get_state())
