@@ -22,6 +22,7 @@ gi.require_version("Flatpak", "1.0")
 
 import logging
 import subprocess
+import os
 
 from dataclasses import dataclass
 
@@ -40,7 +41,8 @@ logger = logging.getLogger("yumex_updater")
 def open_yumex(*args):
     """launch yumex"""
     logger.info(f"open_yumex {args}")
-    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    env = os.environ.copy()
+    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
 
 
 @dataclass
@@ -97,7 +99,9 @@ class Indicator:
 
     def on_clicked_custom(self, *args) -> None:
         """start custom updater"""
-        subprocess.Popen([self.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        env = os.environ.copy()
+        custom_updater_args = self.custom_updater.split()
+        subprocess.Popen(custom_updater_args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
 
     def on_clicked_pm(self, *args) -> None:
         """start yumex"""
