@@ -46,10 +46,7 @@ class YumexPreferences(Adw.PreferencesWindow):
         self.setup_flatpak()
         self.setup_metadata()
         self.setup_updater()
-        if is_user_service_running("yumex-updater-systray.service"):
-            self.updater.set_visible(True)
-        else:
-            self.updater.set_visible(False)
+        self.updater.set_visible(True)
 
     def setup_repo(self):
         # get repositories and add them
