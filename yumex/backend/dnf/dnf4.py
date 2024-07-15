@@ -35,7 +35,7 @@ from yumex.utils.enums import (
     InfoType,
     PackageFilter,
 )
-from yumex.backend.dnf import YumexPackage, reload_metadata_expired
+from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
 
 
 def create_package(pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE) -> YumexPackage:
