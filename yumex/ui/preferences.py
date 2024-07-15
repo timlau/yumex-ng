@@ -34,7 +34,7 @@ class YumexPreferences(Adw.PreferencesWindow):
     updater = Gtk.Template.Child()
     upd_custom = Gtk.Template.Child()
     upd_interval = Gtk.Template.Child()
-    upd_hide = Gtk.Template.Child()
+    upd_show = Gtk.Template.Child()
     upd_notification = Gtk.Template.Child()
 
     def __init__(self, presenter, **kwargs):
@@ -64,8 +64,8 @@ class YumexPreferences(Adw.PreferencesWindow):
     def setup_updater(self):
         self.upd_custom.set_text(self.settings.get_string("upd-custom"))
         self.upd_interval.set_text(str(self.settings.get_int("upd-interval")))
-        self.upd_hide.set_active(self.settings.get_boolean("upd-always-hide"))
-        self.upd_hide.set_state(self.settings.get_boolean("upd-always-hide"))
+        self.upd_show.set_active(self.settings.get_boolean("upd-show-icon"))
+        self.upd_show.set_state(self.settings.get_boolean("upd-show-icon"))
         self.upd_notification.set_active(self.settings.get_boolean("upd-notification"))
         self.upd_notification.set_state(self.settings.get_boolean("upd-notification"))
 
@@ -115,7 +115,7 @@ class YumexPreferences(Adw.PreferencesWindow):
             self.settings.set_int("upd-interval", int(self.upd_interval.get_text()))
         except ValueError:
             pass
-        self.settings.set_boolean("upd-always-hide", self.upd_hide.get_state())
+        self.settings.set_boolean("upd-show-icon", self.upd_show.get_state())
         self.settings.set_boolean("upd-notification", self.upd_notification.get_state())
         return location, remote
 
