@@ -18,7 +18,6 @@ from gi.repository import Gtk, Adw, Gio
 from yumex.constants import APP_ID, ROOTDIR
 from yumex.utils import log
 from yumex.utils.enums import FlatpakLocation
-from yumex.utils.dbus import is_user_service_running
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/preferences.ui")
