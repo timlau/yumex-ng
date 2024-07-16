@@ -75,10 +75,14 @@ def is_user_service_running(service_name):
 def sync_updates(refresh: bool = False):
     service_name = "yumex-updater-systray.service"
 
+    log("(sync_updates) check updater serive is running")  # FIXME: Debug logging
     if is_user_service_running(service_name):
         try:
+            log("(sync_updates) getting DBus proxy ")  # FIXME: Debug logging
             updater = YUMEX_UPDATER.get_proxy()
+            log("(sync_updates) got DBus proxy ")  # FIXME: Debug logging
             async_caller = AsyncDbusCaller()
+            log("(sync_updates) calling RefreshUpdates")  # FIXME: Debug logging
             async_caller.call(updater.RefreshUpdates, refresh)
             log("(sync_updates) triggered updater checker refresh")
             return True, "RefreshUpdates triggered"
