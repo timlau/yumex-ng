@@ -44,6 +44,7 @@ class YumexFlatpakSearch(Adw.Window):
     result_view = Gtk.Template.Child()
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
+    install: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self, presenter: YumexPresenter):
         super().__init__()
@@ -58,6 +59,7 @@ class YumexFlatpakSearch(Adw.Window):
         self.selection.set_model(self.store)
         self.app_search = AppstreamSearcher()
         self.setup_location()
+        self.install.set_sensitive(False)
 
     def show(self):
         self.present()
@@ -119,8 +121,12 @@ class YumexFlatpakSearch(Adw.Window):
         log(f"(flatpak_seach) key: {key}  location: {location}")
         self._clear()
         packages = self.app_search.search(key)
-        for package in packages:
-            self.store.append(FoundElem(package))
+        if packages:
+            self.install.set_sensitive(True)
+            for package in packages:
+                self.store.append(FoundElem(package))
+        else:
+            self.install.set_sensitive(False)
 
     @Gtk.Template.Callback()
     def on_setup(self, widget, item):

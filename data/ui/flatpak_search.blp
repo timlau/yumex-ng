@@ -1,105 +1,125 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexFlatpakSearch : Adw.Window {
-    default-width: 1000;
-    default-height: 800;
-    modal: true;
+template $YumexFlatpakSearch: Adw.Window {
+  default-width: 1000;
+  default-height: 800;
+  modal: true;
+
+  Gtk.Box {
+    orientation: vertical;
+
+    Adw.HeaderBar titlebar {
+      centering-policy: strict;
+      show-end-title-buttons: false;
+
+      [title]
+      Gtk.Label {
+        label: _("Search Flatpaks");
+      }
+
+      [start]
+      Gtk.Button cancel {
+        label: _("Cancel");
+        clicked => $on_cancel_clicked();
+
+        ShortcutController {
+          scope: managed;
+
+          Shortcut {
+            trigger: "Escape";
+            action: "activate";
+          }
+
+          Shortcut {
+            trigger: "<Ctrl>Escape";
+            action: "activate";
+          }
+        }
+      }
+
+      [end]
+      Gtk.Button install {
+        label: _("Install");
+
+        styles [
+          "destructive-action"
+        ]
+
+        clicked => $on_ok_clicked();
+
+        ShortcutController {
+          scope: managed;
+
+          Shortcut {
+            trigger: "<Ctrl>Return";
+            action: "activate";
+          }
+        }
+      }
+    }
+
     Gtk.Box {
       orientation: vertical;
-      Adw.HeaderBar titlebar {
-        centering-policy: strict;
-        show-end-title-buttons: false;
-        [title]
-        Gtk.Label {
-          label: _("Search Flatpaks");
-        }
-        [start]
-        Gtk.Button cancel{
-          label: _("Cancel");
-          clicked => $on_cancel_clicked();
-          ShortcutController {
-            scope: managed;
-            Shortcut {
-              trigger: "Escape";
-              action: "activate";
-            }
-            Shortcut {
-              trigger: "<Ctrl>Escape";
-              action: "activate";
-            }
+
+      Gtk.ListBox list {
+        margin-top: 20;
+        margin-start: 20;
+        margin-end: 20;
+        selection-mode: none;
+
+        styles [
+          "boxed-list"
+        ]
+
+        Gtk.ListBoxRow {
+          Gtk.SearchEntry search_id {
+            search-delay: 1000;
+            activate => $on_search();
+            search-changed => $on_search();
+
+            styles [
+              "flatpak_search"
+            ]
           }
         }
-        [end]
-        Gtk.Button confirm {
-          label: _("Install");
-          styles ["destructive-action"]
-          clicked => $on_ok_clicked();
-          ShortcutController {
-            scope: managed;
-            Shortcut {
-              trigger: "<Ctrl>Return";
-              action: "activate";
-            }
-          }
+
+        Adw.ComboRow location {
+          title: _("Install location");
+          model: locations;
+          notify::selected => $on_location_selected();
         }
       }
 
-      Gtk.Box {
-        orientation: vertical;
-        Gtk.ListBox list {
-          margin-top: 20;
-          margin-start: 20;
-          margin-end: 20;
-          selection-mode: none;
-          styles ["boxed-list"]
-          Gtk.ListBoxRow {
-            Gtk.SearchEntry search_id {
-              search-delay: 1000;
-              activate => $on_search();
-              search-changed => $on_search();
-              styles ["flatpak_search"]
-            }
-          }
-          Adw.ComboRow location {
-            title: _("Install location");
-            model: locations;
-            notify::selected => $on_location_selected();
-          }
+      Gtk.ScrolledWindow {
+        margin-top: 10;
+        margin-bottom: 20;
+        margin-start: 20;
+        margin-end: 20;
 
+        Gtk.ListView result_view {
+          name: "result_view";
+          hexpand: true;
+          vexpand: true;
+          model: selection;
+          factory: result_factory;
+          single-click-activate: false;
         }
-        Gtk.ScrolledWindow {
-          margin-top: 10;
-          margin-bottom: 20;
-          margin-start: 20;
-          margin-end: 20;
-          Gtk.ListView result_view {
-            name: "result_view";
-            hexpand: true;
-            vexpand: true;
-            model: selection;
-            factory: result_factory;
-            single-click-activate: false;
-          }
-        }
-
       }
+    }
   }
 }
 
-
 Gtk.StringList locations {
-    strings [
-        "user",
-        "system"
-    ]
+  strings [
+    "user",
+    "system"
+  ]
 }
 
-Gtk.SingleSelection selection {
-
-}
+Gtk.SingleSelection selection {}
 
 Gtk.SignalListItemFactory result_factory {
-    setup=> $on_setup();
-    bind=> $on_bind();
+  setup => $on_setup();
+  bind => $on_bind();
 }
