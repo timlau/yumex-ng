@@ -85,9 +85,43 @@ template $YumexFlatpakSearch: Adw.Window {
         }
 
         Adw.ComboRow location {
+          width-request: 300;
+          margin-start: 10;
+          margin-end: 10;
           title: _("Install location");
           model: locations;
           notify::selected => $on_location_selected();
+        }
+      }
+
+      Gtk.Box {
+        orientation: horizontal;
+        hexpand: true;
+        margin-top: 5;
+        margin-bottom: 5;
+        margin-start: 10;
+        margin-end: 10;
+
+        styles [
+          "accent"
+        ]
+
+        Gtk.Label {
+          sensitive: false;
+          halign: start;
+          margin-start: 10;
+          margin-end: 5;
+          label: _("Active Remotes: ");
+        }
+
+        Gtk.Label remotes {
+          styles [
+          ]
+
+          sensitive: false;
+          hexpand: true;
+          halign: start;
+          label: "";
         }
       }
 

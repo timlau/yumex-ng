@@ -45,6 +45,7 @@ class YumexFlatpakSearch(Adw.Window):
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
     install: Gtk.Button = Gtk.Template.Child()
+    remotes: Gtk.Label = Gtk.Template.Child()
 
     def __init__(self, presenter: YumexPresenter):
         super().__init__()
@@ -85,7 +86,10 @@ class YumexFlatpakSearch(Adw.Window):
         log(f"fp_search: location changed : {self.location.get_selected_item().get_string()}")
         self.app_search = AppstreamSearcher()
         fp_location = FlatpakLocation(self.location.get_selected_item().get_string())
-        self.app_search.add_installation(self.backend.get_installation(fp_location))
+        installation = self.backend.get_installation(fp_location)
+        self.app_search.add_installation(installation)
+        remotes = self.backend.get_remotes(fp_location)
+        self.remotes.set_label(", ".join(remotes))
         self.on_search(self.search_id)
 
     @Gtk.Template.Callback()
