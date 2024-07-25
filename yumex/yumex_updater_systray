@@ -63,7 +63,7 @@ def refresh_updates(refresh: bool) -> None:
         hover_text_lines.append(f"  Flatpak (system): {updates.flatpak_sys_count}")
         noti_body += f"{updates.flatpak_sys_count} flatpak(s) (system). "
     hover_text = "\n".join(hover_text_lines)
-    if not CONFIG.always_hide:
+    if CONFIG.show_icon:
         if update_count > 0:
             GLib.idle_add(INDICATOR.set_title, hover_text)
         else:

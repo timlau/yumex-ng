@@ -20,12 +20,10 @@ gi.require_version("AppIndicator3", "0.1")
 gi.require_version("Flatpak", "1.0")
 
 
-import configparser
-import shutil
 import logging
 import subprocess
+import os
 
-from pathlib import Path
 from dataclasses import dataclass
 
 from gi.repository import AppIndicator3, Gtk, Flatpak, Gio  # type: ignore
@@ -43,13 +41,14 @@ logger = logging.getLogger("yumex_updater")
 def open_yumex(*args):
     """launch yumex"""
     logger.info(f"open_yumex {args}")
-    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    env = os.environ.copy()
+    subprocess.Popen(["/usr/bin/yumex", "--update"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
 
 
 @dataclass
 class Config:
     custom_updater: str
-    always_hide: bool
+    show_icon: bool
     update_sync_interval: int
     send_notification: bool
 
@@ -58,14 +57,14 @@ class Config:
         logger.debug("CONFIG: Loading config from gsettings")
         settings: Gio.Settings = Gio.Settings(APP_ID)
         custom_updater = settings.get_string("upd-custom")
-        always_hide = settings.get_boolean("upd-always-hide")
+        show_icon = settings.get_boolean("upd-show-icon")
         update_interval = settings.get_int("upd-interval")
         notification = settings.get_boolean("upd-notification")
         logger.debug(f"CONFIG: custom_updater        = {custom_updater}")
-        logger.debug(f"CONFIG: always_hide           = {always_hide}")
+        logger.debug(f"CONFIG: show_icon             = {show_icon}")
         logger.debug(f"CONFIG: update_sync_interval  = {update_interval}")
         logger.debug(f"CONFIG: send_notification     = {notification}")
-        return cls(custom_updater, always_hide, update_interval, notification)
+        return cls(custom_updater, show_icon, update_interval, notification)
 
 
 class Indicator:
@@ -100,7 +99,9 @@ class Indicator:
 
     def on_clicked_custom(self, *args) -> None:
         """start custom updater"""
-        subprocess.Popen([self.custom_updater], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        env = os.environ.copy()
+        custom_updater_args = self.custom_updater.split()
+        subprocess.Popen(custom_updater_args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
 
     def on_clicked_pm(self, *args) -> None:
         """start yumex"""

@@ -24,7 +24,7 @@ template $YumexPreferences: Adw.PreferencesWindow {
     Adw.PreferencesGroup metadata {
       title: _("Metadata Settings");
       Adw.ActionRow md_periode_row {
-        title: _("Min. Refresh interval (seconds)");
+        title: _("Min. Refresh interval (minutes)");
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
@@ -52,23 +52,23 @@ template $YumexPreferences: Adw.PreferencesWindow {
         }
       }
       Adw.ActionRow {
-        title: _("Check updates interval (seconds)");
+        title: _("Check updates interval (minutes)");
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
           valign: center;
           Gtk.Entry upd_interval {
-            text: "3600";
+            text: "60";
           }
         }
       }
       Adw.ActionRow {
-        title: _("Don't show systray icon");
+        title: _("Show systray icon on updates");
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
           valign: center;
-          Gtk.Switch upd_hide {
+          Gtk.Switch upd_show {
           }
         }
       }
