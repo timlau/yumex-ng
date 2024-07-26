@@ -5,7 +5,7 @@
 
 Name:     %{app_name}
 Version:  5.0.2
-Release:  1%{?dist}
+Release:  2%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System

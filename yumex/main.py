@@ -147,7 +147,9 @@ class YumexApplication(Adw.Application):
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
     def on_about(self, *_args) -> None:
-        about = Adw.AboutDialog(
+        # FIXME: libadwaita 1.5 uses Adw.AboutDialog, Adw.AboutWindow will be deprecated in 1.6
+        #  about = Adw.AboutDialog(
+        about = Adw.AboutWindow(
             application_name="Yum Extender",
             application_icon=APP_ID,
             developer_name="Tim Lauridsen",
@@ -189,7 +191,10 @@ Yum Extender is a Package management to install, update and remove packages
         )
 
         # about.set_presentation_mode(Adw.DialogPresentationMode.ADW_DIALOG_FLOATING)
-        about.present(self.win)
+
+        # FIXME: for libadwaita 1.5 (Adw.AboutDialog) about.present(self.win)
+        about.present()
+        about.set_transient_for(self.win)  # FIXME: not needed for libadwaita 1.5
 
     def on_preferences(self, *_args) -> None:
         prefs = YumexPreferences(self.win.presenter)
