@@ -188,11 +188,12 @@ Yum Extender is a Package management to install, update and remove packages
             ["Thomas Crider https://github.com/GloriousEggroll"],
         )
 
-        about.present()
+        # about.set_presentation_mode(Adw.DialogPresentationMode.ADW_DIALOG_FLOATING)
+        about.present(self.win)
 
     def on_preferences(self, *_args) -> None:
         prefs = YumexPreferences(self.win.presenter)
-        prefs.set_presentation_mode(Adw.DialogPresentationMode.ADW_DIALOG_FLOATING)
+        prefs.set_transient_for(self.win)
         prefs.present()
 
     def exception_hook(self, exc_type, exc_value, exc_traceback) -> None:
