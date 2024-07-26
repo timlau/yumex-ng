@@ -4,8 +4,8 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.0.1
-Release:  3%{?dist}
+Version:  5.0.2
+Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -145,6 +145,9 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+
+* Fri Jul 26 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.2-1
+- the 5.0.2 release
 
 * Sun Jul 7 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-3
 - remove updater .conf file

@@ -1,6 +1,6 @@
 project(
     'yumex',
-    version: '5.0.1',
+    version: '5.0.2',
     meson_version: '>= 0.61.0',
 )
 
@@ -14,7 +14,7 @@ python = import('python')
 
 dependency('glib-2.0')
 dependency('gtk4', version: '>= 4.8.0')
-dependency('libadwaita-1', version: '>= 1.2')
+dependency('libadwaita-1', version: '>= 1.5')
 dependency('pygobject-3.0', version: '>= 3.42.0')
 
 if get_option('buildtype') == 'debug'
