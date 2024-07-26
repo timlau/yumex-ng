@@ -147,15 +147,14 @@ class YumexApplication(Adw.Application):
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
     def on_about(self, *_args) -> None:
-        about = Adw.AboutWindow(
-            transient_for=self.props.active_window,
+        about = Adw.AboutDialog(
             application_name="Yum Extender",
             application_icon=APP_ID,
             developer_name="Tim Lauridsen",
             website="https://yumex.dk",
             support_url="",
             issue_url="https://github.com/timlau/yumex-ng/issues",
-            developers=["Tim Lauridsen"],
+            developers=["Tim Lauridsen", "Thomas Crider (GloriousEggroll)"],
             artists=[],
             designers=[],
             documenters=[],
@@ -167,9 +166,9 @@ class YumexApplication(Adw.Application):
             release_notes=_(
                 """
         <ul>
-          <li>Support for update info with dnf5</li>
-          <li>new improved flatpak installer</li>
-          <li>cleanup unused flatpaks</li>
+          <li>Added background update checker</li>
+          <li>Sending Notifications on available updates</li>
+          <li>Show system tray icon on supported systems (gnome need appindicator extension)</li>
           <li>lot of code fixes and optimization</li>
         </ul>
 """
@@ -184,16 +183,16 @@ Yum Extender is a Package management to install, update and remove packages
         #     _("Section title"),
         #     ["Somebody https://yumex.dk"],
         # )
-        # about.add_acknowledgement_section(
-        #     _("Special thanks to"),
-        #     ["Somebody https://yumex.dk"],
-        # )
+        about.add_acknowledgement_section(
+            _("Special thanks to"),
+            ["Thomas Crider https://github.com/GloriousEggroll"],
+        )
 
         about.present()
 
     def on_preferences(self, *_args) -> None:
         prefs = YumexPreferences(self.win.presenter)
-        prefs.set_transient_for(self.win)
+        prefs.set_presentation_mode(Adw.DialogPresentationMode.ADW_DIALOG_FLOATING)
         prefs.present()
 
     def exception_hook(self, exc_type, exc_value, exc_traceback) -> None:
