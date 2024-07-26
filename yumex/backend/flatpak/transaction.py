@@ -167,8 +167,8 @@ class FlatpakTransaction:
             self.transaction.run()
         except GLib.GError as e:  # type: ignore
             msg = e.message
-            if msg == "Aborted by user" and self.first_run:
-                log(" FlatpakTransaction: First run, validate results")
+            if self.first_run:
+                log(f" FlatpakTransaction: First run, validate results : {msg}")
                 raise FlatPakFirstRun
             else:
                 log(msg)
