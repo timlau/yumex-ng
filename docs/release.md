@@ -5,7 +5,6 @@
   - bump the version number in .\yumex.spec
   - add changelog entry in .\yumex.spec
   - add new release in data/dk.yumex.Yumex.metainfo.xml.in.in
-  - comment out **styles ["devel"]** in data/ui/windows.blp
 - build the release
   - run `make release`
     - this will do the following:

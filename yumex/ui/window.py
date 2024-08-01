@@ -31,7 +31,7 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import RunAsync, log
+from yumex.utils import RunAsync, log, BUILD_TYPE
 from yumex.utils.enums import InfoType, PackageFilter, SearchField, Page, SortType
 from yumex.utils.dbus import sync_updates
 
@@ -102,6 +102,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def setup_gui(self):
         """Setup the gui"""
+        if BUILD_TYPE == "debug":
+            self.add_css_class("devel")
+
         self.progress = YumexProgress()
         self.progress.set_transient_for(self)
         self.setup_packages_and_queue()
