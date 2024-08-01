@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexMainWindow : Adw.ApplicationWindow {
+template $YumexMainWindow: Adw.ApplicationWindow {
   // styles ["devel"]
   title: _("Yum Extender");
   default-width: 1000;
@@ -9,6 +9,7 @@ template $YumexMainWindow : Adw.ApplicationWindow {
 
   ShortcutController {
     scope: managed;
+
     Shortcut {
       trigger: "<Ctrl>q";
       action: "action(window.close)";
@@ -16,226 +17,242 @@ template $YumexMainWindow : Adw.ApplicationWindow {
   }
 
   Adw.ToastOverlay toast_overlay {
-    Adw.Leaflet leaflet {
-      can-navigate-back: true;
-      can-unfold: false;
+    Adw.ToolbarView main_view {
+      // orientation: vertical;
 
-      Gtk.Box main_view {
+      [top]
+      Adw.HeaderBar titlebar {
+        centering-policy: strict;
+
+        [start]
+        ToggleButton sidebar-button {
+          // icon-name: "applications-utilities-symbolic";
+          icon-name: "dock-left-symbolic";
+          tooltip-text: _("Select Package filters");
+          action-name: "app.sidebar";
+        }
+
+        [start]
+        ToggleButton search_button {
+          icon-name: "system-search";
+          tooltip-text: _("Search");
+
+          ShortcutController {
+            scope: managed;
+
+            Shortcut {
+              trigger: "<Ctrl>F";
+              action: "activate";
+            }
+          }
+        }
+
+        [title]
+        Adw.ViewSwitcher title {
+          stack: view_stack;
+          policy: wide;
+        }
+
+        [end]
+        Gtk.MenuButton {
+          tooltip-text: _("Main Menu");
+          icon-name: "open-menu-symbolic";
+          menu-model: main-menu;
+        }
+
+        [end]
+        Button apply_button {
+          styles [
+            "suggested-action"
+          ]
+
+          Adw.ButtonContent {
+            label: _("Apply");
+            icon-name: "playback-symbolic";
+          }
+
+          tooltip-text: _("Apply Package Actions");
+          action-name: "app.apply_actions";
+        }
+      }
+
+      Gtk.Box {
         orientation: vertical;
 
-        Adw.HeaderBar titlebar {
-          centering-policy: strict;
+        Gtk.SearchBar search_bar {
+          search-mode-enabled: bind search_button.active bidirectional;
+          key-capture-widget: template;
 
-          [start]
-          ToggleButton sidebar-button {
-            // icon-name: "applications-utilities-symbolic";
-            icon-name: "dock-left-symbolic";
-            tooltip-text: _("Select Package filters");
-            action-name: "app.sidebar";
-          }
-          [start]
-          ToggleButton search_button {
-            icon-name: "system-search";
-            tooltip-text: _("Search");
-            ShortcutController {
-              scope: managed;
-              Shortcut {
-                trigger: "<Ctrl>F";
-                action: "activate";
-              }
-            }
-          }
-
-          [title]
-          Adw.ViewSwitcherTitle title {
-            stack: view_stack;
-          }
-          [end]
-          Gtk.MenuButton {
-            tooltip-text: _("Main Menu");
-            icon-name: "open-menu-symbolic";
-            menu-model: main-menu;
-          }
-          [end]
-          Button apply_button {
-            styles ["suggested-action"]
-            Adw.ButtonContent {
-              label: _("Apply");
-              icon-name: "playback-symbolic";
-            }
-            tooltip-text: _("Apply Package Actions");
-            action-name: "app.apply_actions";
-          }
-
+          child: Gtk.SearchEntry search_entry {
+            max-width-chars: 40;
+            search-delay: 500;
+            search-changed => $on_search_changed();
+            activate => $on_search_activate();
+            placeholder-text: _("Package Name");
+          };
         }
-        Gtk.Box {
-          orientation: vertical;
-          Gtk.SearchBar search_bar {
-            search-mode-enabled: bind search_button.active bidirectional;
-            key-capture-widget: template;
 
-            child: Gtk.SearchEntry search_entry {
-              max-width-chars: 40;
-              search-delay: 500;
-              search-changed=> $on_search_changed();
-              activate=> $on_search_activate();
-              placeholder-text: _("Package Name");
+        Adw.ViewStack view_stack {
+          vexpand: true;
+          hexpand: true;
+
+          Adw.ViewStackPage packages_page {
+            name: "packages";
+            title: _("Packages");
+            icon-name: "flatpak-symbolic";
+
+            child: Adw.OverlaySplitView sidebar {
+              collapsed: true;
+
+              [content]
+              Adw.Clamp clamp_packages {
+                maximum-size: 1024;
+
+                Gtk.Frame {
+                  margin-top: 20;
+                  margin-bottom: 20;
+                  margin-start: 10;
+                  margin-end: 10;
+
+                  Gtk.Paned package_paned {
+                    orientation: vertical;
+                    wide-handle: true;
+
+                    Gtk.ScrolledWindow content_packages {
+                      styles [
+                        "package_list"
+                      ]
+
+                      hexpand: true;
+                      vexpand: true;
+                      // package_view is added here
+                    }
+
+                    Gtk.ScrolledWindow content_desc {
+                      Gtk.Box {
+                        orientation: vertical;
+
+                        Gtk.Box update_info_box {
+                          // package_info is added her
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             };
           }
 
+          Adw.ViewStackPage flatpaks_page {
+            name: "flatpaks";
+            title: _("Flatpaks");
+            icon-name: "insert-object-symbolic";
 
-          Adw.ViewStack view_stack {
-            vexpand: true;
-            hexpand: true;
+            child: Adw.Clamp {
+              maximum-size: 1024;
 
-            Adw.ViewStackPage packages_page {
-              name: "packages";
-              title: _("Packages");
-              icon-name: "flatpak-symbolic";
-              child: Adw.Flap sidebar {
-                reveal-flap: false;
-                transition-type: over;
-                fold-policy: always;
-                // [flap]
-                // package_filter will be added here
-                [separator]
-                  Gtk.Separator {}
-                [content]
-                Adw.Clamp clamp_packages{
-                  maximum-size: 1024;
+              Gtk.Frame {
+                margin-top: 20;
+                margin-bottom: 20;
+                margin-start: 10;
+                margin-end: 10;
 
-                  Gtk.Frame {
-                    margin-top: 20;
-                    margin-bottom:  20;
-                    margin-start: 10;
-                    margin-end: 10;
-                    Gtk.Paned package_paned {
-                      orientation: vertical;
-                      wide-handle: true;
+                Gtk.Box {
+                  orientation: vertical;
 
-                      Gtk.ScrolledWindow content_packages  {
-                        styles ["package_list"]
-                        hexpand: true;
-                        vexpand: true;
-                          // package_view is added here
-                        }
-                        Gtk.ScrolledWindow content_desc {
-                          Gtk.Box {
-                            orientation: vertical;
-                            Gtk.Box update_info_box {
-                              // package_info is added her
-                            }
+                  Gtk.ScrolledWindow content_flatpaks {
+                    // flatpak_view is added here
+                  }
 
-                          }
-                        }
-                      }
+                  Gtk.ActionBar {
+                    Gtk.Button flatpak_update_all {
+                      sensitive: false;
+                      icon-name: "emblem-synchronizing-symbolic";
+                      action-name: "app.flatpak_update";
+                      tooltip-text: _("Update All Flatpaks (Apps & Runtimes)");
+                    }
 
+                    Gtk.Button {
+                      icon-name: "edit-find-symbolic";
+                      action-name: "app.flatpak_search";
+                      tooltip-text: _("search for new flatpak to install");
+                    }
+
+                    Gtk.Button {
+                      icon-name: "edit-delete-symbolic";
+                      action-name: "app.flatpak_remove";
+                      tooltip-text: _("uninstall selected flatpak");
+                    }
+
+                    Gtk.Button {
+                      icon-name: "user-trash-full-symbolic";
+                      action-name: "app.flatpak_remove_unused";
+                      tooltip-text: _("Remove unused flatpaks (runtimes etc.)");
+                    }
+
+                    Gtk.Separator {
+                      styles [
+                        "spacer"
+                      ]
+                    }
+
+                    Gtk.ToggleButton {
+                      icon-name: "library-symbolic";
+                      action-name: "app.flatpak_runtime";
+                      tooltip-text: _("show/hide runtimes");
                     }
                   }
-                };
-            }
+                }
+              }
+            };
+          }
 
-            Adw.ViewStackPage flatpaks_page {
-              name: "flatpaks";
-              title: _("Flatpaks");
-              icon-name: "insert-object-symbolic";
-              child: Adw.Clamp {
+          Adw.ViewStackPage groups_page {
+            name: "groups";
+            title: _("Groups");
+            visible: false;
+            icon-name: "resources-symbolic";
+
+            child: Gtk.Box content_groups {
+              orientation: vertical;
+            };
+          }
+
+          Adw.ViewStackPage queue_page {
+            name: "queue";
+            title: _("Queue");
+            icon-name: "test-pass-symbolic";
+
+            child: Gtk.Box {
+              orientation: vertical;
+
+              Adw.Clamp {
                 maximum-size: 1024;
+
                 Gtk.Frame {
                   margin-top: 20;
-                  margin-bottom:  20;
+                  margin-bottom: 20;
                   margin-start: 10;
                   margin-end: 10;
 
                   Gtk.Box {
                     orientation: vertical;
-                    Gtk.ScrolledWindow content_flatpaks  {
-                      // flatpak_view is added here
+
+                    Gtk.ScrolledWindow content_queue {
+                      // queue_view is added here
                     }
+
                     Gtk.ActionBar {
-                      Gtk.Button flatpak_update_all {
-                        sensitive: false;
-                        icon-name: "emblem-synchronizing-symbolic";
-                        action-name: "app.flatpak_update";
-                        tooltip-text: _("Update All Flatpaks (Apps & Runtimes)");
-                      }
                       Gtk.Button {
-                        icon-name: "edit-find-symbolic";
-                        action-name: "app.flatpak_search";
-                        tooltip-text: _("search for new flatpak to install");
-                      }
-                      Gtk.Button {
-                        icon-name: "edit-delete-symbolic";
-                        action-name: "app.flatpak_remove";
-                        tooltip-text: _("uninstall selected flatpak");
-                      }
-                      Gtk.Button {
-                        icon-name: "user-trash-full-symbolic";
-                        action-name: "app.flatpak_remove_unused";
-                        tooltip-text: _("Remove unused flatpaks (runtimes etc.)");
-                      }
-                      Gtk.Separator {
-                        styles ["spacer"]
-                      }
-                      Gtk.ToggleButton {
-                        icon-name: "library-symbolic";
-                        action-name: "app.flatpak_runtime";
-                        tooltip-text: _("show/hide runtimes");
-                      }
-
-                    }
-
-                  }
-                }
-              };
-            }
-
-            Adw.ViewStackPage groups_page{
-              name: "groups";
-              title: _("Groups");
-              visible: false;
-              icon-name: "resources-symbolic";
-              child: Gtk.Box content_groups {
-                orientation: vertical;
-              };
-            }
-
-            Adw.ViewStackPage queue_page{
-              name: "queue";
-              title: _("Queue");
-              icon-name: "test-pass-symbolic";
-
-              child: Gtk.Box {
-                orientation: vertical;
-                Adw.Clamp {
-                  maximum-size: 1024;
-                  Gtk.Frame {
-                    margin-top: 20;
-                    margin-bottom:  20;
-                    margin-start: 10;
-                    margin-end: 10;
-                    Gtk.Box {
-                      orientation: vertical;
-                      Gtk.ScrolledWindow content_queue  {
-                        // queue_view is added here
-                      }
-                      Gtk.ActionBar {
-                        Gtk.Button {
-                          icon-name: "edit-undo-symbolic";
-                          action-name: "app.clear_queue";
-                          tooltip-text: _("Remove all from queue");
-                        }
+                        icon-name: "edit-undo-symbolic";
+                        action-name: "app.clear_queue";
+                        tooltip-text: _("Remove all from queue");
                       }
                     }
                   }
                 }
-              };
-            }
-          }
-
-          Adw.ViewSwitcherBar {
-            stack: view_stack;
-            reveal: bind title.title-visible;
+              }
+            };
           }
         }
       }
@@ -249,14 +266,15 @@ menu main-menu {
       label: _("_Preferences");
       action: "app.preferences";
     }
+
     item {
       label: _("Keyboard Shortcuts");
       action: "win.show-help-overlay";
     }
+
     item {
       label: _("_About Yum Extender");
       action: "app.about";
     }
   }
 }
-

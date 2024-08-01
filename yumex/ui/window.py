@@ -127,7 +127,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_settings.connect("package-filter-changed", self.on_package_filter_changed)
         self.package_settings.connect("info-type-changed", self.on_info_type_changed)
         self.package_settings.connect("sort-attr-changed", self.on_sort_attr_changed)
-        self.sidebar.set_flap(self.package_settings)
+        self.sidebar.set_sidebar(self.package_settings)
         # setup package info
         self.package_info = YumexPackageInfo()
         self.update_info_box.append(self.package_info)
@@ -250,8 +250,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.queue_view.clear_all()
 
     def on_sidebar(self, *args):
-        state = not self.sidebar.get_reveal_flap()
-        self.sidebar.set_reveal_flap(state)
+        state = not self.sidebar.get_show_sidebar()
+        self.sidebar.set_show_sidebar(state)
         if state:
             self.package_settings.set_focus()
 
@@ -454,7 +454,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         entry = self.search_bar.get_child()
         entry.set_text("")
         pkg_filter = PackageFilter(pkg_filter)
-        self.sidebar.set_reveal_flap(False)
+        self.sidebar.set_show_sidebar(False)
         self.search_bar.set_search_mode(False)
         self.search_entry.set_text("")
         self.package_view.get_packages(pkg_filter)
