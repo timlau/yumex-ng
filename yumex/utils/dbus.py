@@ -43,6 +43,9 @@ class AsyncDbusCaller:
                     self.res = "PolicyKit Autherisation failed"
                 case _:
                     log(f"DbusError: Error in dbus call : {msg}")
+        except TimeoutError:
+            log("TimeoutError: The call timed out!")
+            self.res = "DBus Timeout error"
         self.loop.quit()
 
     def call(self, mth, *args, **kwargs) -> Any:
