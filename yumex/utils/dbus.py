@@ -14,7 +14,6 @@ SYSTEMD = DBusServiceIdentifier(namespace=SYSTEMD_NAMESPACE, message_bus=BUS)
 
 YUMEX_UPDATER_NAMESPACE = ("dk", "yumex", "UpdateService")
 YUMEX_UPDATER = DBusServiceIdentifier(namespace=YUMEX_UPDATER_NAMESPACE, message_bus=BUS)
-ASYNC_TIMEOUT = 20 * 60 * 1000  # 20 min in ms
 
 
 # async call handler class
@@ -52,7 +51,7 @@ class AsyncDbusCaller:
         self.loop = EventLoop()
         # timeout = 10min
         log(f" --> ASyncDbus: calling {mth.args} args: {args}")
-        mth(*args, timeout=ASYNC_TIMEOUT, **kwargs, callback=self.callback)
+        mth(*args, **kwargs, callback=self.callback)
         self.loop.run()
         if self.res:
             # convert Variant return vlaues to native python format
