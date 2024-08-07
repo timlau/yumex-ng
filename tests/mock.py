@@ -93,16 +93,36 @@ def mock_presenter(remotes: list = None):
     return mock
 
 
-def mock_settings_flatpak():
+def mock_gio_settings():
+    """Mock the Gio.Settings object with controlled return values"""
+
     def get_string(setting):
         match setting:
             case "fp-location":
                 return "user"
             case "fp-remote":
                 return "flathub"
+            case "upd-custom":
+                return ""
+
+    def get_int(setting):
+        match setting:
+            case "upd-interval":
+                return 3600
+            case "meta-load-periode":
+                return 3600
+
+    def get_boolean(setting):
+        match setting:
+            case "upd-show-icon":
+                return False
+            case "upd-notification":
+                return False
 
     mock = MagicMock()
     mock.get_string.side_effect = get_string
+    mock.get_int.side_effect = get_int
+    mock.get_boolean.side_effect = get_boolean
     return mock
 
 

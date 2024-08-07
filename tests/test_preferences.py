@@ -7,7 +7,7 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk
 from yumex.utils.enums import FlatpakLocation
-from .mock import mock_presenter, mock_settings_flatpak, TemplateUIFromFile
+from .mock import mock_presenter, mock_gio_settings, TemplateUIFromFile
 
 pytestmark = pytest.mark.guitest
 
@@ -19,7 +19,7 @@ def pref(mocker, monkeypatch):
     from yumex.ui.preferences import YumexPreferences
 
     mock = mocker.patch("yumex.ui.preferences.Gio")
-    mock.Settings.return_value = mock_settings_flatpak()
+    mock.Settings.return_value = mock_gio_settings()
     presenter = mock_presenter(
         [
             "flathub",
@@ -36,7 +36,7 @@ def pref_no(mocker, monkeypatch):
     from yumex.ui.preferences import YumexPreferences
 
     mock = mocker.patch("yumex.ui.preferences.Gio")
-    mock.Settings.return_value = mock_settings_flatpak()
+    mock.Settings.return_value = mock_gio_settings()
     presenter = mock_presenter([])
     return YumexPreferences(presenter=presenter)
 
@@ -77,9 +77,17 @@ def test_save_settings(pref):
     location, remote = pref.save_settings()
     assert location == "user"
     assert remote == "flathub"
-    assert pref.settings.set_string.call_count == 2
+    assert pref.settings.set_string.call_count == 3
     pref.settings.set_string.assert_any_call("fp-location", "user")
     pref.settings.set_string.assert_any_call("fp-remote", "flathub")
+    pref.settings.set_string.assert_any_call("upd-custom", "")
+    print(pref.settings.mock_calls)
+    assert pref.settings.set_boolean.call_count == 2
+    pref.settings.set_boolean.assert_any_call("upd-show-icon", False)
+    pref.settings.set_boolean.assert_any_call("upd-notification", False)
+    assert pref.settings.set_int.call_count == 2
+    pref.settings.set_int.assert_any_call("meta-load-periode", 3600)
+    pref.settings.set_int.assert_any_call("upd-interval", 3600)
 
 
 def test_save_settings_no_remotes(pref_no):
@@ -87,8 +95,9 @@ def test_save_settings_no_remotes(pref_no):
     location, remote = pref_no.save_settings()
     assert location == "user"
     assert remote is None
-    assert pref_no.settings.set_string.call_count == 1
-    # pref_no.settings.set_string.called_with("fp-location", "user")
+    assert pref_no.settings.set_string.call_count == 2
+    pref_no.settings.set_string.assert_any_call("fp-location", "user")
+    pref_no.settings.set_string.assert_any_call("upd-custom", "")
 
 
 def test_setup(pref):
