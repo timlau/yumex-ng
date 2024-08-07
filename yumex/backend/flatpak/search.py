@@ -58,10 +58,11 @@ class AppStreamPackage:
     def version(self) -> str:
         releases = self.component.get_releases_plain()
         if releases:
-            version = releases.index_safe(0).get_version()
-            return version
-        else:
-            return None
+            release = releases.index_safe(0)
+            if release:
+                version = release.get_version()
+                return version
+        return None
 
     def __str__(self) -> str:
         return f"{self.name} - {self.summary} ({self.flatpak_bundle})"
