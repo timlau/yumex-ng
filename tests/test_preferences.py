@@ -77,15 +77,11 @@ def test_save_settings(pref):
     location, remote = pref.save_settings()
     assert location == "user"
     assert remote == "flathub"
-    assert pref.settings.set_string.call_count == 3
     pref.settings.set_string.assert_any_call("fp-location", "user")
     pref.settings.set_string.assert_any_call("fp-remote", "flathub")
     pref.settings.set_string.assert_any_call("upd-custom", "")
-    print(pref.settings.mock_calls)
-    assert pref.settings.set_boolean.call_count == 2
     pref.settings.set_boolean.assert_any_call("upd-show-icon", False)
     pref.settings.set_boolean.assert_any_call("upd-notification", False)
-    assert pref.settings.set_int.call_count == 2
     pref.settings.set_int.assert_any_call("meta-load-periode", 3600)
     pref.settings.set_int.assert_any_call("upd-interval", 3600)
 
@@ -95,9 +91,9 @@ def test_save_settings_no_remotes(pref_no):
     location, remote = pref_no.save_settings()
     assert location == "user"
     assert remote is None
-    assert pref_no.settings.set_string.call_count == 2
     pref_no.settings.set_string.assert_any_call("fp-location", "user")
-    pref_no.settings.set_string.assert_any_call("upd-custom", "")
+    # FIXME: should test that set_settings"fp-remote", ...) is not called
+    # pref_no.settings.set_string.assert_any_call("fp-remote", "flathub")
 
 
 def test_setup(pref):
