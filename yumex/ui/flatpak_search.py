@@ -148,8 +148,8 @@ class YumexFlatpakSearch(Adw.Window):
             row.set_title(f"{pkg.name} - {version}")
         else:
             row.set_title(f"{pkg.name}")
-
-        row.set_subtitle(pkg.summary)
+        summary = GLib.markup_escape_text(pkg.summary)
+        row.set_subtitle(summary)
         row.set_tooltip_text(pkg.flatpak_bundle)
         row.repo.set_text(pkg.repo_name)
         row.branch.set_text(pkg.flatpak_bundle.split("/")[-1])
