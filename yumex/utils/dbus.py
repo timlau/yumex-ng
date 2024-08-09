@@ -78,7 +78,7 @@ def is_user_service_running(service_name):
 def sync_updates(refresh: bool = False):
     service_name = "yumex-updater-systray.service"
 
-    log("(sync_updates) check updater serive is running")  # FIXME: Debug logging
+    log("(sync_updates) check updater service is running")  # FIXME: Debug logging
     if is_user_service_running(service_name):
         try:
             log("(sync_updates) getting DBus proxy ")  # FIXME: Debug logging
