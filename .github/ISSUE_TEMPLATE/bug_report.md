@@ -14,7 +14,7 @@ A clear and concise description of what the bug is.
 What version of yumex are you running ?
 (Check About Yum Extender and click on version to copy it)
 
-What Distro  are you running ?
+What Distro are you running ?
 
-** Logs **
+**Logs**
 Run `yumex -d` in a terminal to show debug logging, attach the output in a comment below
