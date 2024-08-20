@@ -72,7 +72,7 @@ def refresh_updates(refresh: bool) -> None:
     if CONFIG.send_notification:
         logger.debug(f"Notification : {update_count=} {NOTIFICATION.last_value=} ")
         if update_count > 0 and update_count != NOTIFICATION.last_value:
-            summary = _("Updates is available")
+            summary = _("Updates are available")
             body = noti_body
             NOTIFICATION.send(summary, body)
             NOTIFICATION.last_value = update_count
