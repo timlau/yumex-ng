@@ -47,6 +47,8 @@ def expire_metadata(base: dnf.base.Base, cachedir):
     cachedir = Path(cachedir)
     # interate through the repo cachedir
     for fn in cachedir.iterdir():
+        if not fn.is_dir():
+            continue
         # Setup a RepoCache at the current repo cachedir
         repo_cache = RepoCache(base, fn.as_posix())
         # expire the cache for the current repo
