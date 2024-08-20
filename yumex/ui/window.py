@@ -471,14 +471,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         log(f"SIGNAL: info-type-changed : {info_type}")
         self.info_type = info_type
         self.package_view.on_selection_changed(self.package_view.get_model(), 0, 0)
-        self.sidebar.set_reveal_flap(False)
+        self.sidebar.set_show_sidebar(False)
 
     def on_sort_attr_changed(self, widget, sort_attr: str):
         sort_attr = SortType(sort_attr)
         log(f"SIGNAL: sort-attr-changed : {sort_attr}")
         self.package_view.sort(sort_attr)
         self.package_view.refresh()
-        self.sidebar.set_reveal_flap(False)
+        self.sidebar.set_show_sidebar(False)
 
     def set_needs_attention(self, page: Page, num: int):
         """set the page needs_attention state"""
