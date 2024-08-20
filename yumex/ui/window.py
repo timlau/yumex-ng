@@ -164,6 +164,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         ref_file = Path(flatpakref)
         self.flatpak_view.install_flatpakref(ref_file)
 
+    def show_flatpak_view(self):
+        self.load_packages("installed")
+        self.select_page(Page.FLATPAKS)
+
     def load_packages(self, pkg_filter: PackageFilter):
         """Helper for Trigger the activation of a given pkg filter"""
         self.package_settings.set_active_filter(pkg_filter)

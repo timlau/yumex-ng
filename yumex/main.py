@@ -105,6 +105,8 @@ class YumexApplication(Adw.Application):
             self.win.install_flatpakref(self.args.flatpakref)
         elif self.args.update:
             self.win.load_packages("updates")
+        elif self.args.flatpak:
+            self.win.show_flatpak_view()
         else:
             self.win.load_packages("installed")
 
@@ -114,6 +116,7 @@ class YumexApplication(Adw.Application):
         parser.add_argument("--exit", help="stop the dnfdaemon system daemon", action="store_true")
         parser.add_argument("--update", help="start on update page", action="store_true")
         parser.add_argument("--flatpakref", help="Install flatpak from a .flatpakref")
+        parser.add_argument("--flatpak", help="start on flatpak page", action="store_true")
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.exit:
             subprocess.call(
