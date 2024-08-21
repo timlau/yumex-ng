@@ -28,7 +28,7 @@ class AsyncDbusCaller:
         except DBusError as e:
             msg = str(e)
             match msg:
-                # This occours on long running transaction
+                # This could occours on long running transaction
                 case "Remote peer disconnected":
                     log("DbusError: Connection to dns5daemon lost")
                     self.res = None
@@ -42,7 +42,8 @@ class AsyncDbusCaller:
                     self.res = "PolicyKit Autherisation failed"
                 case _:
                     log(f"DbusError: Error in dbus call : {msg}")
-        except TimeoutError:
+                    self.res = None
+        except TimeoutError:  # This could occours when a transaction takes too long
             log("TimeoutError: The call timed out!")
             self.res = "DBus Timeout error"
         self.loop.quit()
@@ -50,7 +51,7 @@ class AsyncDbusCaller:
     def call(self, mth, *args, **kwargs) -> Any:
         self.loop = EventLoop()
         # timeout = 10min
-        log(f" --> ASyncDbus: calling {mth.args} args: {args}")
+        log(f" --> ASyncDbus: calling {mth} args: {args}")
         mth(*args, **kwargs, callback=self.callback)
         self.loop.run()
         if self.res:

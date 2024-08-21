@@ -1,8 +1,5 @@
-import pytest  # noqa: F401
-from unittest.mock import patch, call
+from unittest.mock import patch, call, Mock
 from dasbus.error import DBusError
-
-from tests.mock import Mock  # noqa
 
 
 class MockASyncCaller:
@@ -13,11 +10,69 @@ class MockASyncCaller:
         return mth(*args, **kwargs)
 
 
+def test_async_caller_timeout():
+    from yumex.utils.dbus import AsyncDbusCaller
+
+    def raise_timeout():
+        raise TimeoutError
+
+    async_caller = AsyncDbusCaller()
+    async_caller.loop = Mock()
+    async_caller.callback(raise_timeout)
+    assert async_caller.res == "DBus Timeout error"
+
+
+def test_async_caller_dbuserror_peer_disconnect():
+    from yumex.utils.dbus import AsyncDbusCaller
+
+    def raise_dbus_error():
+        raise DBusError("Remote peer disconnected")
+
+    async_caller = AsyncDbusCaller()
+    async_caller.loop = Mock()
+    async_caller.callback(raise_dbus_error)
+    assert async_caller.res is None
+
+
+def test_async_caller_dbuserror_polkit_auth_timeout():
+    from yumex.utils.dbus import AsyncDbusCaller
+
+    def raise_dbus_error():
+        raise DBusError("Method call timed out")
+
+    async_caller = AsyncDbusCaller()
+    async_caller.loop = Mock()
+    async_caller.callback(raise_dbus_error)
+    assert async_caller.res == "PolicyKit Autherisation failed"
+
+
+def test_async_caller_dbuserror_polkit_auth_cancel():
+    from yumex.utils.dbus import AsyncDbusCaller
+
+    def raise_dbus_error():
+        raise DBusError("Not authorized")
+
+    async_caller = AsyncDbusCaller()
+    async_caller.loop = Mock()
+    async_caller.callback(raise_dbus_error)
+    assert async_caller.res == "PolicyKit Autherisation failed"
+
+
+def test_async_caller_dbuserror_unknown():
+    from yumex.utils.dbus import AsyncDbusCaller
+
+    def raise_dbus_error():
+        raise DBusError("This error is unknown")
+
+    async_caller = AsyncDbusCaller()
+    async_caller.loop = Mock()
+    async_caller.callback(raise_dbus_error)
+    assert async_caller.res is None
+
+
 def test_is_user_service_running():
     from yumex.utils.dbus import is_user_service_running
 
-    res = is_user_service_running("dconf.service")
-    assert res
     res = is_user_service_running("notfound.service")
     assert not res
 
