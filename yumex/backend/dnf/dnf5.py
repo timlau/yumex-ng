@@ -105,7 +105,7 @@ class Backend(dnf.Base):
         # FIXME: should be cleaned up when dnf5 5.1.x support is not needed
         try:
             self.repo_sack.load_repos()  # dnf5 5.2.0
-        except Exception:
+        except AttributeError:
             logger.debug("repo_sack.load_repos() failed, fallback to update_and_load_enabled_repos")
             self.repo_sack.update_and_load_enabled_repos(True)  # dnf5 5.1.x
 
