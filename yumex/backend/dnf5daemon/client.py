@@ -69,7 +69,7 @@ class Dnf5DbusClient:
     def do_transaction(self):
         do_transaction = self._async_method("do_transaction")
         options = {"comment": get_variant(str, "Yum Extender Transaction")}
-        do_transaction(options)
+        return do_transaction(options)
 
     def confirm_key(self, *args):
         return self.session.confirm_key(*args)
