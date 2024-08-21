@@ -14,6 +14,7 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 import logging
+import logging.handlers
 import sys
 import threading
 import time
@@ -37,12 +38,14 @@ def setup_logging(debug=False):
             datefmt="%H:%M:%S",
         )
         log_file = Path("~/.local/share/yumex/yumex_debug.log").expanduser()
-        file_handler = logging.FileHandler(f"{log_file}", mode="w")
+        file_handler = logging.handlers.RotatingFileHandler(log_file, backupCount=5)
+        if log_file.exists():
+            file_handler.doRollover()
         filte_formatter = logging.Formatter(
             "%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s", datefmt="%H:%M:%S"
         )
         file_handler.setFormatter(filte_formatter)
-        logger.addHandler(file_handler)
+        logging.getLogger(name="yumex").addHandler(file_handler)
     else:
         logging.basicConfig(
             level=logging.WARNING,
