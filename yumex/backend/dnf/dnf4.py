@@ -27,7 +27,6 @@ import shutil
 import glob
 import os
 
-from yumex.utils import log
 from yumex.utils.enums import (
     PackageAction,
     PackageState,
@@ -36,6 +35,10 @@ from yumex.utils.enums import (
     PackageFilter,
 )
 from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def create_package(pkg, state=PackageState.AVAILABLE, action=PackageAction.NONE) -> YumexPackage:
@@ -111,12 +114,12 @@ class MDProgress(dnf.callback.DownloadProgress):
     def end(self, payload, status, msg):
         name = str(payload)
         if status == dnf.callback.STATUS_OK:
-            log(f" --> progress: {name} completed")
+            logger.debug(f" --> progress: {name} completed")
 
     def progress(self, payload, done):
         name = str(payload)
         if name != self._last_name:
-            log(f" --> progress: {name} started")
+            logger.debug(f" --> progress: {name} started")
             self.main.set_subtitle(_(f"Downloading repository information for {name}"))
             self._last_name = name
 
@@ -196,7 +199,7 @@ class Packages:
             if ypkg.nevra not in nevra_dict:
                 nevra_dict[ypkg.nevra] = ypkg
             else:
-                log(f"Skipping duplicate : {ypkg}")
+                logger.debug(f"Skipping duplicate : {ypkg}")
         return list(nevra_dict.values())
 
     @property
@@ -422,9 +425,9 @@ class DnfBase(dnf.Base):
                     ):  # noqa
                         pass
                     case _:
-                        log(f" DNF4: unhandled transaction found: {tsi.action} ")
+                        logger.debug(f" DNF4: unhandled transaction found: {tsi.action} ")
         if replaces:
-            log(f" DNF4: replaces found {replaces}")
+            logger.debug(f" DNF4: replaces found {replaces}")
         return tx_list
 
 
@@ -453,7 +456,7 @@ class Backend(DnfBase):
                     shutil.rmtree(directory)
             update_metadata_timestamp()
         else:
-            log("DNF4: Metadata is current")
+            logger.debug("DNF4: Metadata is current")
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF4 API."""
@@ -516,7 +519,7 @@ class Backend(DnfBase):
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> Union[str, None]:
         dnf_pkg = self.packages.find_package(pkg)
-        log(f" DNF4: dnf_pkg: {dnf_pkg} attribute : {attr}")
+        logger.debug(f" DNF4: dnf_pkg: {dnf_pkg} attribute : {attr}")
         if dnf_pkg:
             match attr:
                 case InfoType.DESCRIPTION:
@@ -530,7 +533,7 @@ class Backend(DnfBase):
                 case other:
                     raise ValueError(f"{other} is not an legal package info attribute")
         else:
-            log(f" DNF4: {pkg} was not found")
+            logger.debug(f" DNF4: {pkg} was not found")
             raise ValueError(f"dnf package not found: {pkg}")
 
     def get_repositories(self):
@@ -551,26 +554,26 @@ class Backend(DnfBase):
                 match pkg.state:
                     case PackageState.INSTALLED:
                         self.package_remove(dnf_pkg)
-                        log(f" DNF4: add {str(dnf_pkg)} to transaction for removal")
+                        logger.debug(f" DNF4: add {str(dnf_pkg)} to transaction for removal")
                     case PackageState.UPDATE:
                         self.package_upgrade(dnf_pkg)
-                        log(f" DNF4: add {str(dnf_pkg)} to transaction for upgrade")
+                        logger.debug(f" DNF4: add {str(dnf_pkg)} to transaction for upgrade")
                     case PackageState.AVAILABLE:
                         self.package_install(dnf_pkg)
-                        log(f" DNF4: add {str(dnf_pkg)} to transaction for installation")
+                        logger.debug(f" DNF4: add {str(dnf_pkg)} to transaction for installation")
             else:
-                log(f" DNF4: dnf package for {pkg} was not found")
+                logger.debug(f" DNF4: dnf package for {pkg} was not found")
         try:
             res = self.resolve(allow_erasing=True)
-            log(f" DNF4: depsolve completed : {res}")
+            logger.debug(f" DNF4: depsolve completed : {res}")
             for pkg in self.get_transaction():
                 if pkg.nevra not in nevra_dict:
-                    log(f" DNF4: adding as dep : {pkg} ")
+                    logger.debug(f" DNF4: adding as dep : {pkg} ")
                     pkg.is_dep = True
                     deps.append(pkg)
                 # else:
                 #     log(f" DNF4: skipping already in transaction : {pkg} ")
 
         except dnf.exceptions.DepsolveError as e:
-            log(f" DNF4: depsolve failed : {str(e)}")
+            logger.debug(f" DNF4: depsolve failed : {str(e)}")
         return deps

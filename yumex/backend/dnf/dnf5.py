@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+
 from typing import Iterable, List
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -29,7 +30,10 @@ from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_meta
 from yumex.backend.interface import Presenter
 from yumex.utils.enums import SearchField, PackageState, InfoType, PackageFilter
 
-from yumex.utils import log
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def create_package(pkg: Package) -> YumexPackage:
@@ -106,7 +110,7 @@ class Backend(dnf.Base):
         try:
             self.repo_sack.load_repos()  # dnf5 5.2.0
         except Exception:
-            log("repo_sack.load_repos() failed, fallback to update_and_load_enabled_repos")
+            logger.debug("repo_sack.load_repos() failed, fallback to update_and_load_enabled_repos")
             self.repo_sack.update_and_load_enabled_repos(True)  # dnf5 5.1.x
 
     @property
@@ -143,7 +147,7 @@ class Backend(dnf.Base):
             if ypkg.nevra not in nevra_dict:
                 nevra_dict[ypkg.nevra] = ypkg
             else:
-                log(f"Skipping duplicate : {ypkg}")
+                logger.debug(f"Skipping duplicate : {ypkg}")
         return list(nevra_dict.values())
 
     def search(self, key: str, field: SearchField = SearchField.NAME, limit: int = 1) -> list[YumexPackage]:
@@ -172,7 +176,7 @@ class Backend(dnf.Base):
                 qa.filter_summary([key], QueryCmp_ICONTAINS)
             case other:
                 msg = f"Search field : [{other}] not supported in dnf5 backend"
-                log(msg)
+                logger.debug(msg)
                 raise ValueError(msg)
         qa.update(qi)
         return self._get_yumex_packages(qa)
@@ -181,19 +185,19 @@ class Backend(dnf.Base):
         # get the repo cache dir
         cachedir = Path(self.get_config().get_cachedir_option().get_value())
         if reload_metadata_expired():
-            log(f"DNF5: current cachedir : {cachedir}")
+            logger.debug(f"DNF5: current cachedir : {cachedir}")
             # interate through the repo cachedir
             for fn in cachedir.iterdir():
                 if not fn.is_dir():
                     continue
-                log(f"DNF5: expire repo loacted at {fn}")
+                logger.debug(f"DNF5: expire repo loacted at {fn}")
                 # Setup a RepoCache at the current repo cachedir
                 repo_cache = RepoCache(self, fn.as_posix())
                 # expire the cache for the current repo
                 repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
             update_metadata_timestamp()
         else:
-            log("DNF5: Metadata is current")
+            logger.debug("DNF5: Metadata is current")
 
     def get_repo_priority(self, repo_name: str) -> int:
         """Fetches the priority of a specified repository using DNF5 API."""
@@ -308,16 +312,16 @@ class Backend(dnf.Base):
             match pkg.state:
                 case PackageState.INSTALLED:
                     goal.add_rpm_remove(nevra)
-                    log(f" DNF5: add {nevra} to transaction for removal")
+                    logger.debug(f" DNF5: add {nevra} to transaction for removal")
                 case PackageState.UPDATE:
                     goal.add_rpm_upgrade(nevra)
-                    log(f" DNF5: add {nevra} to transaction for upgrade")
+                    logger.debug(f" DNF5: add {nevra} to transaction for upgrade")
                 case PackageState.AVAILABLE:
                     goal.add_rpm_install(nevra)
-                    log(f" DNF5: add {nevra} to transaction for installation")
+                    logger.debug(f" DNF5: add {nevra} to transaction for installation")
         transaction: dnf.Transaction = goal.resolve()
         problems = transaction.get_problems()
-        log(f" DNF5: depsolve completed : {problems}")
+        logger.debug(f" DNF5: depsolve completed : {problems}")
         if problems == dnf.GoalProblem_NO_PROBLEM:
             for tspkg in transaction.get_transaction_packages():
                 action = tspkg.get_action()
@@ -326,14 +330,14 @@ class Backend(dnf.Base):
                     # do not add replaced packages as dependencies
                     if action == 6:  # TransactionItemAction::REPLACED
                         break
-                    log(f" DNF5: adding as dep : {pkg.nevra} ")
+                    logger.debug(f" DNF5: adding as dep : {pkg.nevra} ")
                     pkg.is_dep = True
                     deps.append(pkg)
                 else:
-                    log(f" DNF5: skipping already in transaction : {pkg.nevra} ")
+                    logger.debug(f" DNF5: skipping already in transaction : {pkg.nevra} ")
         else:
-            log(f" DNF5 depsolve failed with GoalProblem:  {problems}")
+            logger.debug(f" DNF5 depsolve failed with GoalProblem:  {problems}")
             msgs = transaction.get_resolve_logs_as_strings()
             for msg in msgs:
-                log(f"  ---> {msg}")
+                logger.debug(f"  ---> {msg}")
         return deps

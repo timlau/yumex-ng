@@ -19,9 +19,13 @@ from dnfdaemon.client import Client, DaemonError
 from yumex.backend.dnf import YumexPackage
 
 from yumex.ui.progress import YumexProgress
-from yumex.utils import log
 from yumex.utils.enums import PackageState
 from yumex.backend import TransactionResult
+
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -48,7 +52,7 @@ class YumexRootBackend(Client):
 
     def __enter__(self) -> Self:
         self._locked = self.lock()
-        log(f"  RootBackend :  locked : {self._locked}")
+        logger.debug(f"  RootBackend :  locked : {self._locked}")
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
@@ -78,7 +82,7 @@ class YumexRootBackend(Client):
             case "pkg-to-download":
                 self.progress.set_title(_("Download Packages"))
             case _:
-                log(f" --> on_TransactionEvent : {event} : {data}")
+                logger.debug(f" --> on_TransactionEvent : {event} : {data}")
 
     def on_RPMProgress(self, package, action, te_current, te_total, ts_current, ts_total):
         pkg_name, repo = self.id_to_nevra(package)
@@ -96,13 +100,13 @@ class YumexRootBackend(Client):
             case "scriptlet":
                 self.progress.set_subtitle(_(f"Running scriptlets : {pkg_name}"))
             case _:
-                log(f" --> on_RPMProgress : {package} : {action}")
+                logger.debug(f" --> on_RPMProgress : {package} : {action}")
 
     def on_GPGImport(self, pkg_id, userid, hexkeyid, keyurl, timestamp) -> None:
         # TODO: Handle GPG key inport verification
         values = (pkg_id, userid, hexkeyid, keyurl, timestamp)
         self.gpg_confirm = values
-        log(f"received signal : GPGImport {repr(values)}")
+        logger.debug(f"received signal : GPGImport {repr(values)}")
 
     def on_DownloadStart(self, num_files, num_bytes) -> None:
         """Starting a new parallel download batch"""
@@ -121,16 +125,16 @@ class YumexRootBackend(Client):
 
     def on_RepoMetaDataProgress(self, name, frac) -> None:
         """Repository Metadata Download progress"""
-        log(f" --> on_RepoMetaDataProgress : {name} : {frac}")
+        logger.debug(f" --> on_RepoMetaDataProgress : {name} : {frac}")
         self.progress.set_title(_("Downloading Repository Metadata"))
         self.progress.set_subtitle(name)
 
     def lock(self) -> bool:
-        log("  RootBackend: get dnfdaemon lock")
+        logger.debug("  RootBackend: get dnfdaemon lock")
         return self.Lock()
 
     def unlock(self) -> None:
-        log("  RootBackend: release dnfdaemon lock")
+        logger.debug("  RootBackend: release dnfdaemon lock")
         self.Unlock()
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
@@ -148,22 +152,22 @@ class YumexRootBackend(Client):
                     case other:
                         raise ValueError(f"Unknown package state : {other}")
                 if not result.completed:
-                    log(" --> RootBackendError : Error in adding packages to transaction")
+                    logger.debug(" --> RootBackendError : Error in adding packages to transaction")
                     if result.data:
                         for line in result.data:
-                            log(f"     --> : {line}")
+                            logger.debug(f"     --> : {line}")
 
             result = Result(*self.BuildTransaction())
             if result.completed:
                 return TransactionResult(True, data=self.build_result(result.data))
             else:
-                log(" --> RootBackendError : BuildTransaction failled ")
+                logger.debug(" --> RootBackendError : BuildTransaction failled ")
                 return TransactionResult(
                     False,
                     error=_("Couldn't build transaction\n") + "\n".join(result.data),
                 )
         except DaemonError as e:
-            log(" --> RootBackendError : " + str(e))
+            logger.debug(" --> RootBackendError : " + str(e))
             return TransactionResult(False, error=_("Exception in Dnf Backend\n") + str(e))
         except BaseException:  # Other exception should also unlock the backend daemon
             raise

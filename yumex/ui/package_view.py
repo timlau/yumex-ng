@@ -29,7 +29,12 @@ from yumex.utils.enums import (
     SearchField,
     SortType,
 )
-from yumex.utils import log, RunAsync, timed
+from yumex.utils import RunAsync, timed
+
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 CLEAN_STYLES = ["success", "error", "accent", "warning"]
 
@@ -67,7 +72,7 @@ class YumexPackageView(Gtk.ColumnView):
 
     def reset(self):
         """Reset the view"""
-        log("Reset Package View")
+        logger.debug("Reset Package View")
         self.queue_view.reset()
         self.setup()
         self.presenter.reset_backend()
@@ -91,7 +96,7 @@ class YumexPackageView(Gtk.ColumnView):
             # refresh the package description for the selected package in the view
             self.on_selection_changed(self.selection, 0, 0)
 
-        log(f"Loading packages : {pkg_filter}")
+        logger.debug(f"Loading packages : {pkg_filter}")
 
         self.presenter.progress.set_title(_("Loading Packages"))
         self.presenter.progress.set_subtitle(_("This make take a little while"))
@@ -104,14 +109,14 @@ class YumexPackageView(Gtk.ColumnView):
     def search(self, txt, field=SearchField.NAME):
         """search for packages and add them to store"""
         if len(txt) > 2:
-            log(f"search packages field:{field} value: {txt}")
+            logger.debug(f"search packages field:{field} value: {txt}")
             pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=1))
             self.add_packages_to_store(pkgs)
 
     @timed
     def add_packages_to_store(self, pkgs):
         """adding packages to store"""
-        log("Adding packages to store")
+        logger.debug("Adding packages to store")
         # create a new store and add packages (big speed improvement)
         self.storage.clear()
         # for pkg in sorted(pkgs, key=lambda n: n.name.lower()):
@@ -121,14 +126,14 @@ class YumexPackageView(Gtk.ColumnView):
                 self.storage.add_package(qpkg)
             else:
                 self.storage.add_package(pkg)
-        log(f" --> sorting by : {self.sort_attr}")
+        logger.debug(f" --> sorting by : {self.sort_attr}")
         self.store = self.storage.sort_by(self.sort_attr)
         self.selection.set_model(self.store)
-        log(f" --> number of packages : {len(list(pkgs))}")
+        logger.debug(f" --> number of packages : {len(list(pkgs))}")
 
     def sort(self, sort_attr: SortType):
         """Sort the packages in the store"""
-        log(f" --> sorting by : {sort_attr}")
+        logger.debug(f" --> sorting by : {sort_attr}")
         self.sort_attr = sort_attr
         self.store = self.storage.sort_by(sort_attr)
 
@@ -217,7 +222,7 @@ class YumexPackageView(Gtk.ColumnView):
         if len(self.store) > 0:
             pkg: YumexPackage = self.selection.get_selected_item()
             if self.last_selected is None or pkg != self.last_selected:
-                log(f"SIGNAL: emit selection_changed: {pkg}")
+                logger.debug(f"SIGNAL: emit selection_changed: {pkg}")
                 self.emit("selection-changed", pkg)
                 self.last_selected = pkg
         else:

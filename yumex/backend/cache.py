@@ -1,8 +1,11 @@
 from typing import Generator
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import PackageBackend
-from yumex.utils import log
 from yumex.utils.enums import PackageFilter, PackageState
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class YumexPackageCache:
@@ -37,7 +40,7 @@ class YumexPackageCache:
         else:
             cached_pkg = self._package_dict[pkg]
             if pkg.state != cached_pkg.state:
-                log(f" update state : {cached_pkg}{cached_pkg.state} {pkg}{pkg.state}")
+                logger.debug(f" update state : {cached_pkg}{cached_pkg.state} {pkg}{pkg.state}")
                 self._update_state(cached_pkg, pkg)
             # use the action from the newest pkg,
             # to get queued deps, sorted the right way

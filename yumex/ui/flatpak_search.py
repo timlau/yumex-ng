@@ -23,7 +23,10 @@ from yumex.backend.flatpak.search import AppStreamPackage, AppstreamSearcher
 from yumex.backend.presenter import YumexPresenter
 from yumex.utils.enums import FlatpakLocation
 from yumex.constants import APP_ID, ROOTDIR
-from yumex.utils import log
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FoundElem(GObject.GObject):
@@ -69,7 +72,7 @@ class YumexFlatpakSearch(Adw.Window):
     def setup_store(self):
         packages = self.app_search.search("torrent")
         for package in packages:
-            log(str(package))
+            logger.debug(str(package))
             self.store.append(FoundElem(package))
 
     def setup_location(self):
@@ -83,7 +86,7 @@ class YumexFlatpakSearch(Adw.Window):
 
     @Gtk.Template.Callback()
     def on_location_selected(self, *args):
-        log(f"fp_search: location changed : {self.location.get_selected_item().get_string()}")
+        logger.debug(f"fp_search: location changed : {self.location.get_selected_item().get_string()}")
         self.app_search = AppstreamSearcher()
         fp_location = FlatpakLocation(self.location.get_selected_item().get_string())
         installation = self.backend.get_installation(fp_location)
@@ -96,17 +99,17 @@ class YumexFlatpakSearch(Adw.Window):
     def on_ok_clicked(self, *args):
         """Ok button clicked"""
         self._loop.quit()
-        log("flafpak_search Ok clicked")
+        logger.debug("flafpak_search Ok clicked")
         self.confirm = True
         selected: AppStreamPackage = self.selection.get_selected_item().pkg
-        log(f"Selected : {selected.flatpak_bundle}")
+        logger.debug(f"Selected : {selected.flatpak_bundle}")
         self.close()
 
     @Gtk.Template.Callback()
     def on_cancel_clicked(self, *args):
         """Cancel buttton clicked"""
         self._loop.quit()
-        log("flafpak_search cancel clicked")
+        logger.debug("flafpak_search cancel clicked")
         self.close()
 
     def _clear(self) -> None:
@@ -122,7 +125,7 @@ class YumexFlatpakSearch(Adw.Window):
             self._clear()
             return
         location = FlatpakLocation(self.location.get_selected_item().get_string())
-        log(f"(flatpak_seach) key: {key}  location: {location}")
+        logger.debug(f"(flatpak_seach) key: {key}  location: {location}")
         self._clear()
         packages = self.app_search.search(key)
         if packages:

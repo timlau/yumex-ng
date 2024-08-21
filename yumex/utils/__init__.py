@@ -27,7 +27,7 @@ from gi.repository import GLib
 
 from yumex.constants import BUILD_TYPE
 
-logger = logging.getLogger(name="yumex")
+logger = logging.getLogger(__name__)
 
 
 def setup_logging(debug=False):
@@ -52,11 +52,6 @@ def setup_logging(debug=False):
         )
 
 
-def log(txt):
-    """debug logging"""
-    logger.debug(txt)
-
-
 class RunAsync(threading.Thread):
     def __init__(self, task_func, callback, *args, **kwargs):
         self.source_id = None
@@ -75,12 +70,12 @@ class RunAsync(threading.Thread):
     def target(self, *args, **kwargs):
         result = None
         error = None
-        log(f">> Running async job : {self.task_func.__name__}.")
+        logger.debug(f">> Running async job : {self.task_func.__name__}.")
 
         try:
             result = self.task_func(*args, **kwargs)
         except Exception as exception:
-            log("Error while running async job: " f"{self.task_func}\nException: {exception}")
+            logger.debug("Error while running async job: " f"{self.task_func}\nException: {exception}")
 
             error = exception
             _ex_type, _ex_value, trace = sys.exc_info()
@@ -88,7 +83,7 @@ class RunAsync(threading.Thread):
             # traceback_info = "\n".join(traceback.format_tb(trace))
             # log([str(exception), traceback_info])
         self.source_id = GLib.idle_add(self.callback, result, error)
-        log(f"<< Completed async job : {self.task_func.__name__}.")
+        logger.debug(f"<< Completed async job : {self.task_func.__name__}.")
         return self.source_id
 
 
@@ -115,12 +110,12 @@ class RunJob(threading.Thread):
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
-        log(f"<< Completed job : {self.task_func.__name__}.")
+        logger.debug(f"<< Completed job : {self.task_func.__name__}.")
         if self._loop.is_running():
             self._loop.quit()
 
     def start(self):
-        log(f">> Running job : {self.task_func.__name__}.")
+        logger.debug(f">> Running job : {self.task_func.__name__}.")
         super().start()
         self._loop.run()
         return self.result
@@ -179,11 +174,11 @@ def timed_parms(func):
     def new_func(*args, **kwargs):
         name = func.__name__
         call_args = repr(args[1:])
-        log(f">> starting {name} ({call_args})")
+        logger.debug(f">> starting {name} ({call_args})")
         t_start = time.perf_counter()
         rc = func(*args, **kwargs)
         t_end = time.perf_counter()
-        log(f"<< {name} took {t_end - t_start:.4f} sec")
+        logger.debug(f"<< {name} took {t_end - t_start:.4f} sec")
         return rc
 
     new_func.__name__ = func.__name__
@@ -199,11 +194,11 @@ def timed(func):
 
     def new_func(*args, **kwargs):
         name = func.__name__
-        log(f">> starting {name}")
+        logger.debug(f">> starting {name}")
         t_start = time.perf_counter()
         rc = func(*args, **kwargs)
         t_end = time.perf_counter()
-        log(f"<< {name} took {t_end - t_start:.4f} sec")
+        logger.debug(f"<< {name} took {t_end - t_start:.4f} sec")
         return rc
 
     new_func.__name__ = func.__name__

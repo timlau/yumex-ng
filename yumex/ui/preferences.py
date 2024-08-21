@@ -16,8 +16,11 @@
 from gi.repository import Gtk, Adw, Gio
 
 from yumex.constants import APP_ID, ROOTDIR
-from yumex.utils import log
 from yumex.utils.enums import FlatpakLocation
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/preferences.ui")
@@ -72,8 +75,8 @@ class YumexPreferences(Adw.PreferencesWindow):
     def setup_flatpak(self):
         location = FlatpakLocation(self.settings.get_string("fp-location").lower())
         remote = self.settings.get_string("fp-remote")
-        log(f" settings : {location=}")
-        log(f" settings : {remote=}")
+        logger.debug(f" settings : {location=}")
+        logger.debug(f" settings : {remote=}")
         self.set_selected_location(location)
         self.update_remote(location)
 
@@ -139,7 +142,7 @@ class YumexPreferences(Adw.PreferencesWindow):
         remotes = self.presenter.flatpak_backend.get_remotes(location=location)
         model = Gtk.StringList.new()
         if not remotes:
-            log(f"pref: No remotes found location {location}")
+            logger.debug(f"pref: No remotes found location {location}")
             return model
         for remote in remotes:
             model.append(remote)

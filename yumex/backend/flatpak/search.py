@@ -17,12 +17,15 @@
 
 from pathlib import Path
 import gi
-from yumex.utils import log
 from enum import IntEnum
 
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
 from gi.repository import AppStream, Flatpak, Gio  # type: ignore # noqa: E402
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Match(IntEnum):
@@ -117,7 +120,7 @@ class AppstreamSearcher:
                         packages.append(AppStreamPackage(component, remote.get_name()))
             return packages
         else:
-            log(f"AppStream file not found: {appstream_file}")
+            logger.debug(f"AppStream file not found: {appstream_file}")
             return []
 
     def search(self, keyword: str) -> list[AppStreamPackage]:
@@ -129,7 +132,7 @@ class AppstreamSearcher:
             for package in packages:
                 found = package.search(keyword)
                 if found != Match.NONE:
-                    log(f" found : {package} match: {found}")
+                    logger.debug(f" found : {package} match: {found}")
                     package.match = found
                     search_results.append(package)
         return sorted(search_results, key=lambda pkg: (pkg.match, pkg.name))

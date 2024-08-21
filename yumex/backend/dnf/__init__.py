@@ -16,8 +16,12 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from gi.repository import GObject, Gio
 from yumex.constants import APP_ID
-from yumex.utils import format_number, log
+from yumex.utils import format_number
 from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class YumexPackage(GObject.GObject):
@@ -134,7 +138,7 @@ def reload_metadata_expired():
     last_load: int = settings.get_int64("meta-load-time")
     load_periode: int = settings.get_int("meta-load-periode")
     update_time = datetime.fromtimestamp(last_load) + timedelta(seconds=load_periode)
-    log(f"reload_metadata: last update: {datetime.fromtimestamp(last_load)} next update: {update_time}")
+    logger.debug(f"reload_metadata: last update: {datetime.fromtimestamp(last_load)} next update: {update_time}")
     return datetime.now() > update_time
 
 

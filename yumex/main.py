@@ -27,10 +27,14 @@ from gi.repository import Gtk, Gio, Adw  # type: ignore
 
 from yumex.ui.window import YumexMainWindow
 from yumex.ui.preferences import YumexPreferences
-from yumex.utils import setup_logging, log, logger
+from yumex.utils import setup_logging
 from yumex.constants import ROOTDIR, APP_ID, VERSION, BACKEND, BUILD_TYPE
 from yumex.ui.dialogs import error_dialog
 from typing import Literal
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class YumexApplication(Adw.Application):
@@ -65,10 +69,10 @@ class YumexApplication(Adw.Application):
             window_width = self.settings.get_int("window-width")
             fullscreened = self.settings.get_boolean("window-fullscreen")
             maximized = self.settings.get_boolean("window-maximized")
-            log(f"window-height: {window_height}")
-            log(f"window-width: {window_width}")
-            log(f"fullscreened: {fullscreened}")
-            log(f"maximized: {maximized}")
+            logger.debug(f"window-height: {window_height}")
+            logger.debug(f"window-width: {window_width}")
+            logger.debug(f"fullscreened: {fullscreened}")
+            logger.debug(f"maximized: {maximized}")
 
         # create app actions
         self.create_action("about", self.on_about)
@@ -127,9 +131,9 @@ class YumexApplication(Adw.Application):
             return 0
         setup_logging(debug=self.args.debug)
         global is_local
-        log(f"Version:  {VERSION} ({BACKEND})")
-        log(f"executable : {args.get_arguments()[0]}")
-        log(f"commmand-line : {self.args}")
+        logger.debug(f"Version:  {VERSION} ({BACKEND})")
+        logger.debug(f"executable : {args.get_arguments()[0]}")
+        logger.debug(f"commmand-line : {self.args}")
         self.activate()
         return 0
 
@@ -220,7 +224,7 @@ Yum Extender is a Package management to install, update and remove packages
         tb_file = Path(f"~/.local/share/yumex/traceback_{timestamp}.txt").expanduser()
         tb_file.parent.mkdir(exist_ok=True)
         tb_file.write_text(msg)
-        log(f"traceback written to {tb_file}")
+        logger.debug(f"traceback written to {tb_file}")
         error_dialog(self.win, title="Uncaught exception", msg=msg)
 
 

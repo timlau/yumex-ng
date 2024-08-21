@@ -24,9 +24,12 @@ from yumex.backend.flatpak.transaction import (
     FlatpakTransaction,
 )
 
-from yumex.utils import log
 from yumex.utils.types import FlatpakRef, MainWindow
 from yumex.utils.enums import FlatpakLocation, FlatpakAction
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FlatpakBackend:
@@ -84,7 +87,7 @@ class FlatpakBackend:
         """get a list of active flatpak remote names"""
         installation: Flatpak.Installation = self.get_installation(location)
         remotes = sorted([remote.get_name() for remote in installation.list_remotes() if not remote.get_disabled()])
-        log(f"FLATPAK : {location} remotes: {remotes}")
+        logger.debug(f"FLATPAK : {location} remotes: {remotes}")
         return remotes
 
     def get_arch(self) -> str:
@@ -96,7 +99,7 @@ class FlatpakBackend:
         return ref.get_name() in self._installed
 
     def install_flatpakref(self, flatpakref: Path, execute):
-        log(f"install flatpakref: {flatpakref}")
+        logger.debug(f"install flatpakref: {flatpakref}")
         location = FlatpakLocation.USER
         transaction = FlatpakTransaction(self, location=location, first_run=not execute)
         transaction.add_install_flatpak_ref(flatpakref)
@@ -109,12 +112,12 @@ class FlatpakBackend:
                 refs = [(oper.get_ref(), FlatpakAction.INSTALL, oper.get_remote(), location) for oper in result]
                 return refs
             except FlatPakNoOperations:
-                log("FLATPAK : no operations")
+                logger.debug("FLATPAK : no operations")
                 return []
         else:
             transaction.run()
             if transaction.failed:
-                log(f"  Error in flatpak transaction: {transaction.failed_msg}")
+                logger.debug(f"  Error in flatpak transaction: {transaction.failed_msg}")
 
     def _get_updates(self) -> list[str]:
         """get a list of flatpak ids with available updates"""
@@ -125,7 +128,7 @@ class FlatpakBackend:
     def _get_package(self, ref, location: FlatpakLocation) -> FlatpakPackage:
         """create a flatpak pkg object with update status"""
         if eol := ref.get_eol():
-            log(f"flatpak: EOL : {ref} {eol}")
+            logger.debug(f"flatpak: EOL : {ref} {eol}")
             is_update = FlatpakUpdate.EOL
         elif ref.get_name() in self.updates:
             is_update = FlatpakUpdate.UPDATE
@@ -146,7 +149,7 @@ class FlatpakBackend:
             refs = [(oper.get_ref(), action, oper.get_remote(), location) for oper in result]
             return refs
         except FlatPakNoOperations:
-            log("FLATPAK : no operations")
+            logger.debug("FLATPAK : no operations")
             return []
 
     def _execute_transaction(self, pkgs: list[FlatpakPackage], location: FlatpakLocation, action, **kwargs):
@@ -156,7 +159,7 @@ class FlatpakBackend:
         transaction.populate(pkgs, action, source)
         transaction.run()
         if transaction.failed:
-            log(f"  Error in flatpak transaction: {transaction.failed_msg}")
+            logger.debug(f"  Error in flatpak transaction: {transaction.failed_msg}")
 
     def _do_transaction(
         self,
@@ -205,7 +208,7 @@ class FlatpakBackend:
 
         except GLib.GError as e:  # type: ignore
             msg = e.message
-            log(msg)
+            logger.debug(msg)
             self.win.show_message(f"{msg}", timeout=2)
             return False
 

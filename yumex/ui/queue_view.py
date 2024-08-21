@@ -19,8 +19,12 @@ from yumex.constants import ROOTDIR
 from yumex.utils.storage import PackageStorage
 from yumex.backend.dnf import YumexPackage
 from yumex.ui import get_package_selection_tooltip
-from yumex.utils import RunAsync, log
+from yumex.utils import RunAsync
 from yumex.utils.enums import PackageState, Page
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/queue_view.ui")
@@ -51,7 +55,7 @@ class YumexQueueView(Gtk.ListView):
 
     def add_packages(self, pkgs):
         """Add package to queue"""
-        log(f"QueueView.add_packages: {len(pkgs)}")
+        logger.debug(f"QueueView.add_packages: {len(pkgs)}")
         for pkg in pkgs:
             if pkg not in self.storage:
                 pkg.queue_action = True
@@ -66,7 +70,7 @@ class YumexQueueView(Gtk.ListView):
 
     def remove_packages(self, pkgs):
         """Remove package from queue"""
-        log(f"QueueView.remove_packages: {len(pkgs)}")
+        logger.debug(f"QueueView.remove_packages: {len(pkgs)}")
         to_keep = []
         for store_pkg in self.storage:
             # check if this package should be kept in the queue
@@ -87,9 +91,9 @@ class YumexQueueView(Gtk.ListView):
 
     def add_deps_to_queue(self, deps, error=None):
         if deps is None:
-            log("QueueView.add_deps_to_queue: deps = None")
+            logger.debug("QueueView.add_deps_to_queue: deps = None")
             return
-        log(f"QueueView.add_deps_to_queue: deps found : {len(deps)}")
+        logger.debug(f"QueueView.add_deps_to_queue: deps found : {len(deps)}")
         for dep in self.presenter.get_packages(deps):
             if dep not in self.storage:  # new dep not in queue
                 dep.is_dep = True

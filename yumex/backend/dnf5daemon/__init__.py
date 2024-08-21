@@ -7,10 +7,13 @@ from yumex.backend.dnf import YumexPackage
 
 from yumex.backend.presenter import YumexPresenter
 from yumex.ui.progress import YumexProgress
-from yumex.utils import log
 from yumex.utils.enums import PackageState
 
 from .client import Dnf5DbusClient, gv_list
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
@@ -148,7 +151,7 @@ class YumexRootBackend:
                 size = pkg["install_size"]
             else:
                 size = 0.0
-                log("no size found : {pkg}")
+                logger.debug("no size found : {pkg}")
             nevra = f"{name}-{evr}.{arch}"
             result_dict[action].append(((nevra, repo), size))
         return result_dict
@@ -160,13 +163,13 @@ class YumexRootBackend:
         for pkg in pkgs:
             match pkg.state:
                 case PackageState.AVAILABLE:
-                    log(f"DNF5_ROOT : adding {pkg.nevra} for install")
+                    logger.debug(f"DNF5_ROOT : adding {pkg.nevra} for install")
                     to_install.append(pkg.nevra)
                 case PackageState.UPDATE:
-                    log(f"DNF5_ROOT : adding {pkg.nevra} for update")
+                    logger.debug(f"DNF5_ROOT : adding {pkg.nevra} for update")
                     to_update.append(pkg.nevra)
                 case PackageState.INSTALLED:
-                    log(f"DNF5_ROOT : adding {pkg.nevra} for remove")
+                    logger.debug(f"DNF5_ROOT : adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
         if to_remove:
             client.session.remove(gv_list(to_remove), {})
@@ -190,7 +193,7 @@ class YumexRootBackend:
             client.session.transaction_action_progress.connect(self.on_transaction_action_progress)
             client.session.transaction_action_end.connect(self.on_transaction_action_stop)
         except AttributeError:
-            log("DNF5_ROOT : dnf5 5.1.13 or higher required for transaction signals")
+            logger.debug("DNF5_ROOT : dnf5 5.1.13 or higher required for transaction signals")
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
@@ -199,12 +202,12 @@ class YumexRootBackend:
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
-            log("DNF5_ROOT : building transaction")
+            logger.debug("DNF5_ROOT : building transaction")
             content, rc = self._build_transations(pkgs, client)
-            log(f"DNF5_ROOT : build transaction: rc =  {rc}")
+            logger.debug(f"DNF5_ROOT : build transaction: rc =  {rc}")
             errors = client.session.get_transaction_problems_string()
             for error in errors:
-                log(f"DNF5_ROOT : build transaction: error =  {error}")
+                logger.debug(f"DNF5_ROOT : build transaction: error =  {error}")
             self.progress.hide()
             if rc == 0 or rc == 1:
                 return TransactionResult(True, data=self.build_result(content))
@@ -219,12 +222,12 @@ class YumexRootBackend:
             self.progress.show()
             self.progress.set_title(_("Building Transaction"))
             self.connect_signals(client)
-            log("DNF5_ROOT : building transaction")
+            logger.debug("DNF5_ROOT : building transaction")
             self._build_transations(self.last_transaction, client)  # type: ignore
             self.progress.set_title(_("Applying Transaction"))
-            log("DNF5_ROOT : running transaction")
+            logger.debug("DNF5_ROOT : running transaction")
             res = client.do_transaction()
-            log(f"DNF5_ROOT : transaction rc: {res}")
+            logger.debug(f"DNF5_ROOT : transaction rc: {res}")
             self.progress.hide()
             if res:
                 return TransactionResult(False, error=res)
@@ -232,20 +235,22 @@ class YumexRootBackend:
                 return TransactionResult(True, data=None)  # type: ignore
 
     def on_transaction_action_start(self, session, package_id, action, total):
-        log(f"DNF5_ROOT : Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
+        logger.debug(f"DNF5_ROOT : Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
         action_str = get_action(action)
         self.progress.set_subtitle(f" {action_str} {package_id}")
 
     def on_transaction_action_progress(self, session, package_id, amount, total):
-        log(f"DNF5_ROOT : Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}")
+        logger.debug(
+            f"DNF5_ROOT : Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}"
+        )
 
     def on_transaction_action_stop(self, session, package_id, total):
-        log(f"DNF5_ROOT : Signal : transaction_action_stop: total: {total} id: {package_id}")
+        logger.debug(f"DNF5_ROOT : Signal : transaction_action_stop: total: {total} id: {package_id}")
 
     def on_download_add_new(self, session, package_id, name, size):
         pkg = DownloadPackage(package_id, name, size)
         self.download_queue.add(pkg)
-        log(f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size} id: {package_id}")
+        logger.debug(f"DNF5_ROOT : Signal : download_add_new: name: {name} size: {size} id: {package_id}")
         if len(self.download_queue) == 1:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
@@ -253,12 +258,12 @@ class YumexRootBackend:
                 case DownloadType.REPO:
                     self.progress.set_title(_("Download Reposiory Information"))
                 case DownloadType.UNKNOWN:
-                    log(f"DNF5_ROOT : unknown download type : {pkg.id}")
+                    logger.debug(f"DNF5_ROOT : unknown download type : {pkg.id}")
         self.progress.set_subtitle(_(f"Downloading : {name}"))
 
     def on_download_progress(self, session, package_id, to_download, downloaded):
         pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
-        log(f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})")
+        logger.debug(f"DNF5_ROOT : Signal : download_progress: {pkg.name} ({downloaded}/{to_download})")
         self.progress.set_subtitle(_(f"Downloading : {pkg.name}"))
         match pkg.package_type:
             case DownloadType.PACKAGE:
@@ -268,13 +273,13 @@ class YumexRootBackend:
                     pkg.downloaded = downloaded
                     pkg.to_download = to_download
             case DownloadType.UNKNOWN:
-                log(f"DNF5_ROOT : unknown download type : {pkg.id}")
+                logger.debug(f"DNF5_ROOT : unknown download type : {pkg.id}")
         fraction = self.download_queue.fraction
         self.progress.set_progress(fraction)
 
     def on_download_end(self, session, package_id, rc, msg):
         pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
-        log(f"DNF5_ROOT : Signal : download_end: {pkg.name} rc: {rc} msg: {msg}")
+        logger.debug(f"DNF5_ROOT : Signal : download_end: {pkg.name} rc: {rc} msg: {msg}")
         if rc == 0:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
@@ -285,12 +290,12 @@ class YumexRootBackend:
                     pkg.downloaded = 1
                     pkg.to_download = 1
                 case DownloadType.UNKNOWN:
-                    log(f"DNF5_ROOT : unknown download type : {pkg.id}")
+                    logger.debug(f"DNF5_ROOT : unknown download type : {pkg.id}")
         fraction = self.download_queue.fraction
         self.progress.set_progress(fraction)
 
     def on_repo_key_import_request(self, session, key_id, user_ids, key_fingerprint, key_url, timestamp):
-        log(
+        logger.debug(
             "DNF5_ROOT : Signal : repo_key_import_request: "
             f"{session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
         )
@@ -300,12 +305,12 @@ class YumexRootBackend:
         # <arg name="key_fingerprint" type="s" />
         # <arg name="key_url" type="s" />
         # <arg name="timestamp" type="x" />
-        log(f"DNF5_ROOT : confirm gpg key import id: {key_id} user-id: {user_ids[0]}")
+        logger.debug(f"DNF5_ROOT : confirm gpg key import id: {key_id} user-id: {user_ids[0]}")
         key_values = (key_id, user_ids[0], key_fingerprint, key_url, timestamp)
         ok = self.presenter.confirm_gpg_import(key_values)
         if ok:
-            log("DNF5_ROOT : Importing RPM GPG key")
+            logger.debug("DNF5_ROOT : Importing RPM GPG key")
             self.client.confirm_key(key_id, True)
         else:
-            log("DNF5_ROOT : Denied RPM GPG key")
+            logger.debug("DNF5_ROOT : Denied RPM GPG key")
             self.client.confirm_key(key_id, False)

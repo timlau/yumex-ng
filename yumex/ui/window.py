@@ -31,9 +31,13 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import RunAsync, log, BUILD_TYPE
+from yumex.utils import RunAsync, BUILD_TYPE
 from yumex.utils.enums import InfoType, PackageFilter, SearchField, Page, SortType
 from yumex.utils.dbus import sync_updates
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/window.ui")
@@ -155,11 +159,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         toast = Adw.Toast(title=title)
         toast.set_timeout(timeout)
         self.toast_overlay.add_toast(toast)
-        log(f"show_message : {title}")
+        logger.debug(f"show_message : {title}")
         return toast
 
     def install_flatpakref(self, flatpakref):
-        log(f"install flatpakref: {flatpakref}")
+        logger.debug(f"install flatpakref: {flatpakref}")
         self.select_page(Page.FLATPAKS)
         ref_file = Path(flatpakref)
         self.flatpak_view.install_flatpakref(ref_file)
@@ -202,7 +206,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                             self.progress.hide()
                             ok = self.confirm_gpg_import(result.key_values)
                             if ok:
-                                log("Re-run transaction and import GPG keys")
+                                logger.debug("Re-run transaction and import GPG keys")
                                 # tell the backend to import this gpg key in next run
                                 root_backend.do_gpg_import()
                                 # rebuild the transaction again, before re-run
@@ -220,11 +224,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         dialog = GPGDialog(self, key_values)
         dialog.set_transient_for(self)
         dialog.show()
-        log(f"Install key: {dialog.install_key}")
+        logger.debug(f"Install key: {dialog.install_key}")
         return dialog.install_key
 
     def confirm_flatpak_transaction(self, refs: list) -> bool:
-        log("Window: confirm flatpak transaction")
+        logger.debug("Window: confirm flatpak transaction")
         dialog = YumexFlatpakResult()
         dialog.set_transient_for(self)
         dialog.populate(refs)
@@ -278,7 +282,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_settings.on_package_filter_activated(button)
 
     def on_package_selection_changed(self, widget, pkg: YumexPackage):
-        log(f"Window: package selection changed : {pkg}")
+        logger.debug(f"Window: package selection changed : {pkg}")
         self.set_pkg_info(pkg)
 
     def on_testing(self, *args):
@@ -289,9 +293,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """handler for the apply button"""
 
         if queued := self.queue_view.get_queued():
-            log(f"Execute the transaction on {len(queued)} packages")
+            logger.debug(f"Execute the transaction on {len(queued)} packages")
             result = self._do_transaction(queued)
-            log(f"Transaction execution ended : {result}")
+            logger.debug(f"Transaction execution ended : {result}")
             if result:  # transaction completed without issues\
                 self.progress.show()
                 self.progress.set_title(_("Updating Yumex Updater"))
@@ -309,7 +313,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_search_changed(self, widget):
         """handler for changes in the seach entry"""
         search_txt = widget.get_text()
-        log(f"search changed : {search_txt}")
+        logger.debug(f"search changed : {search_txt}")
         if search_txt == "":
             if self.package_settings.current_pkg_filter == PackageFilter.SEARCH:
                 # self.last_pkg_filer.activate()
@@ -331,7 +335,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             "desc": SearchField.SUMMARY,
         }
         search_txt = widget.get_text()
-        log(f"search activate : {search_txt}")
+        logger.debug(f"search activate : {search_txt}")
         if search_txt[0] == ".":
             # syntax: .<field>=<value>
             cmds = re.compile(r"^\.(.*)=(.*)")
@@ -341,7 +345,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 if field in allowed_field_map:
                     field = allowed_field_map[field]
                     self.package_settings.unselect_all()
-                    log(f"searching for : {key} in pkg.{field}")
+                    logger.debug(f"searching for : {key} in pkg.{field}")
                     self.package_view.search(key, field=field)
 
         else:
@@ -443,12 +447,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 if self.active_page == Page.PACKAGES:
                     self.package_view.toggle_selected()
             case other:
-                log(f"ERROR: action: {other} not defined")
+                logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
-        log(f"stack changed : {self.active_page}")
+        logger.debug(f"stack changed : {self.active_page}")
         self.show_on_page()
         match self.active_page:
             case Page.PACKAGES:
@@ -457,7 +461,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.flatpak_view.refresh_need_attention()
 
     def on_package_filter_changed(self, widget, pkg_filter):
-        log(f"SIGNAL: package filter changed : {pkg_filter}")
+        logger.debug(f"SIGNAL: package filter changed : {pkg_filter}")
         entry = self.search_bar.get_child()
         entry.set_text("")
         pkg_filter = PackageFilter(pkg_filter)
@@ -468,14 +472,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_info_type_changed(self, widget, info_type: str):
         info_type = InfoType(info_type)
-        log(f"SIGNAL: info-type-changed : {info_type}")
+        logger.debug(f"SIGNAL: info-type-changed : {info_type}")
         self.info_type = info_type
         self.package_view.on_selection_changed(self.package_view.get_model(), 0, 0)
         self.sidebar.set_show_sidebar(False)
 
     def on_sort_attr_changed(self, widget, sort_attr: str):
         sort_attr = SortType(sort_attr)
-        log(f"SIGNAL: sort-attr-changed : {sort_attr}")
+        logger.debug(f"SIGNAL: sort-attr-changed : {sort_attr}")
         self.package_view.sort(sort_attr)
         self.package_view.refresh()
         self.sidebar.set_show_sidebar(False)
@@ -487,7 +491,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case Page.PACKAGES:
                 self.packages_page.set_needs_attention(state)
             case Page.FLATPAKS:
-                log(f"set_need_attetion (flatpak): state: {state} ")
+                logger.debug(f"set_need_attetion (flatpak): state: {state} ")
                 self.flatpaks_page.set_needs_attention(state)
                 if state:
                     self.flatpak_update_all.add_css_class("success")

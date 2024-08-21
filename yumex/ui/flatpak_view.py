@@ -26,9 +26,13 @@ from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.backend.flatpak.search import AppStreamPackage
 from yumex.constants import ROOTDIR
 from yumex.ui.flatpak_search import YumexFlatpakSearch
-from yumex.utils import RunJob, log
+from yumex.utils import RunJob
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 from yumex.utils.dbus import sync_updates
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_view.ui")
@@ -78,7 +82,7 @@ class YumexFlatpakView(Gtk.ListView):
         return None
 
     def install_flatpakref(self, flatpakref: Path):
-        log(f"install flatpakref: {flatpakref}")
+        logger.debug(f"install flatpakref: {flatpakref}")
         if self.do_transaction(self.backend.install_flatpakref, flatpakref):
             self.presenter.show_message(_(f"{flatpakref} was installed"), timeout=2)
 
@@ -122,7 +126,7 @@ class YumexFlatpakView(Gtk.ListView):
                 remote = pkg.repo_name
                 location = flatpak_search.location.get_selected_item().get_string()
                 ref = self.backend.find_ref(remote, fp_id, location)
-                log(f"FlatPakView.Search : remote: {remote} location: {location} ref: {ref}")
+                logger.debug(f"FlatPakView.Search : remote: {remote} location: {location} ref: {ref}")
                 if ref:
                     if flatpak_search.confirm:
                         if self.do_transaction(self.backend.do_install, ref, remote, location):
@@ -148,7 +152,7 @@ class YumexFlatpakView(Gtk.ListView):
             remote = flatpak_installer.remote.get_selected_item().get_string()
             location = flatpak_installer.location.get_selected_item().get_string()
             ref = self.backend.find_ref(remote, fp_id, location)
-            log(f"FlatPakView.install : remote: {remote} location: {location} ref: {ref}")
+            logger.debug(f"FlatPakView.install : remote: {remote} location: {location} ref: {ref}")
             if ref:
                 if flatpak_installer.confirm:
                     if self.do_transaction(self.backend.do_install, ref, remote, location):
@@ -166,7 +170,7 @@ class YumexFlatpakView(Gtk.ListView):
             self.refresh_updater()
 
     def show_runtime(self):
-        log("Show Runtime")
+        logger.debug("Show Runtime")
         self.show_all = not self.show_all
         self.reset()
 
@@ -180,7 +184,7 @@ class YumexFlatpakView(Gtk.ListView):
 
         The provided callback will be called, with the state of second run
         """
-        log(">> Start do_transaction")
+        logger.debug(">> Start do_transaction")
         confirm = False
         with RunJob(method, *args, execute=False) as job:
             refs = job.start()
@@ -192,7 +196,7 @@ class YumexFlatpakView(Gtk.ListView):
                     job.start()
         self.presenter.progress.hide()
         self.reset()
-        log("<< End do_transaction")
+        logger.debug("<< End do_transaction")
         return confirm
 
     @Gtk.Template.Callback()

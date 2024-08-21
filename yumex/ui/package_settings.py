@@ -16,8 +16,11 @@
 from gi.repository import Gtk, GObject, Adw
 
 from yumex.constants import ROOTDIR
-from yumex.utils import log
 from yumex.utils.enums import PackageFilter, SortType, InfoType
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_settings.ui")
@@ -75,22 +78,22 @@ class YumexPackageSettings(Gtk.Box):
         self.current_pkg_filter = pkg_filter
         if self.current_pkg_filter != self.previuos_pkg_filter:
             self.previuos_pkg_filter = pkg_filter
-            log(f"SIGNAL: emit package-filter-changed: {pkg_filter}")
+            logger.debug(f"SIGNAL: emit package-filter-changed: {pkg_filter}")
             self.emit("package-filter-changed", pkg_filter)
 
     @Gtk.Template.Callback()
     def on_info_type_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
         info_type = self.get_info_type()
-        log(f"SIGNAL: emit info-type-changed: {info_type}")
+        logger.debug(f"SIGNAL: emit info-type-changed: {info_type}")
         self.emit("info-type-changed", info_type)
 
     @Gtk.Template.Callback()
     def on_sort_by_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        log(f"sort_by changed {self.sort_by.get_selected()}")
+        logger.debug(f"sort_by changed {self.sort_by.get_selected()}")
         sort_attr = self.get_sort_attr()
-        log(f"SIGNAL: emit sort-arre-changed: {sort_attr}")
+        logger.debug(f"SIGNAL: emit sort-arre-changed: {sort_attr}")
         self.emit("sort-attr-changed", sort_attr)
 
     @GObject.Signal(arg_types=(str,))

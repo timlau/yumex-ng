@@ -6,7 +6,11 @@ from typing import Any
 from dasbus.loop import EventLoop
 from dasbus.error import DBusError  # noqa
 
-from yumex.utils import log, timed
+from yumex.utils import timed
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 BUS = SessionMessageBus()
 SYSTEMD_NAMESPACE = ("org", "freedesktop", "systemd1")
@@ -30,28 +34,28 @@ class AsyncDbusCaller:
             match msg:
                 # This could occours on long running transaction
                 case "Remote peer disconnected":
-                    log("DbusError: Connection to dns5daemon lost")
+                    logger.debug("DbusError: Connection to dns5daemon lost")
                     self.res = None
                 # This occours when PolicyKet autherization is not given before a time limit
                 case "Method call timed out":
-                    log("DbusError: Dbus method call timeout")
+                    logger.debug("DbusError: Dbus method call timeout")
                     self.res = "PolicyKit Autherisation failed"
                 # This occours when PolicyKet autherization dialog is cancelled
                 case "Not authorized":
-                    log("DbusError: PolicyKit Autherisation failed")
+                    logger.debug("DbusError: PolicyKit Autherisation failed")
                     self.res = "PolicyKit Autherisation failed"
                 case _:
-                    log(f"DbusError: Error in dbus call : {msg}")
+                    logger.debug(f"DbusError: Error in dbus call : {msg}")
                     self.res = None
         except TimeoutError:  # This could occours when a transaction takes too long
-            log("TimeoutError: The call timed out!")
+            logger.debug("TimeoutError: The call timed out!")
             self.res = "DBus Timeout error"
         self.loop.quit()
 
     def call(self, mth, *args, **kwargs) -> Any:
         self.loop = EventLoop()
         # timeout = 10min
-        log(f" --> ASyncDbus: calling {mth} args: {args}")
+        logger.debug(f" --> ASyncDbus: calling {mth} args: {args}")
         mth(*args, **kwargs, callback=self.callback)
         self.loop.run()
         if self.res:
@@ -65,13 +69,13 @@ def is_user_service_running(service_name):
         async_caller = AsyncDbusCaller()
         systemd = SYSTEMD.get_proxy(interface_name="org.freedesktop.systemd1.Manager")
         unit_path = async_caller.call(systemd.GetUnit, service_name)
-        log(f"DBus: systemd service object: {unit_path}")
+        logger.debug(f"DBus: systemd service object: {unit_path}")
         unit = SYSTEMD.get_proxy(unit_path)
         state = get_native(async_caller.call(unit.Get, "org.freedesktop.systemd1.Unit", "SubState"))
-        log(f"DBus: {service_name} is {state}")
+        logger.debug(f"DBus: {service_name} is {state}")
         return state == "running"
     except DBusError as e:
-        log(f"DBus Error: {e}")
+        logger.debug(f"DBus Error: {e}")
         return False
 
 
@@ -79,22 +83,22 @@ def is_user_service_running(service_name):
 def sync_updates(refresh: bool = False):
     service_name = "yumex-updater-systray.service"
 
-    log("(sync_updates) check updater service is running")  # FIXME: Debug logging
+    logger.debug("(sync_updates) check updater service is running")  # FIXME: Debug logging
     if is_user_service_running(service_name):
         try:
-            log("(sync_updates) getting DBus proxy ")  # FIXME: Debug logging
+            logger.debug("(sync_updates) getting DBus proxy ")  # FIXME: Debug logging
             updater = YUMEX_UPDATER.get_proxy()
-            log("(sync_updates) got DBus proxy ")  # FIXME: Debug logging
+            logger.debug("(sync_updates) got DBus proxy ")  # FIXME: Debug logging
             async_caller = AsyncDbusCaller()
-            log("(sync_updates) calling RefreshUpdates")  # FIXME: Debug logging
+            logger.debug("(sync_updates) calling RefreshUpdates")  # FIXME: Debug logging
             async_caller.call(updater.RefreshUpdates, refresh)
-            log("(sync_updates) triggered updater checker refresh")
+            logger.debug("(sync_updates) triggered updater checker refresh")
             return True, "RefreshUpdates triggered"
         except DBusError as e:
-            log(f"DBus Error: {e}")
+            logger.debug(f"DBus Error: {e}")
             return False, f"DBusError : {str(e)}"
     else:
-        log(f"(sync_updates) The service {service_name} is not running.")
+        logger.debug(f"(sync_updates) The service {service_name} is not running.")
         return False, "yumex-updater-systray not running"
 
 

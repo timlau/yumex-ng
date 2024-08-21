@@ -1,4 +1,3 @@
-import logging
 from functools import partial
 from logging import getLogger
 from typing import Self
@@ -15,12 +14,7 @@ SYSTEM_BUS = SystemMessageBus()
 DNFDBUS_NAMESPACE = ("org", "rpm", "dnf", "v0")
 DNFDBUS = DBusServiceIdentifier(namespace=DNFDBUS_NAMESPACE, message_bus=SYSTEM_BUS)
 
-logger = getLogger("dnf5dbus")
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
-    datefmt="%H:%M:%S",
-)
+logger = getLogger(__name__)
 
 
 def gv_list(var: list[str]) -> Variant:

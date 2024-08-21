@@ -16,8 +16,11 @@
 from gi.repository import Gtk, Adw, GLib, GObject, Gio
 
 from yumex.constants import ROOTDIR
-from yumex.utils import log
 from yumex.utils.enums import FlatpakAction, FlatpakLocation
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ResultElem(GObject.GObject):
@@ -61,7 +64,7 @@ class YumexFlatpakResult(Adw.Window):
     def populate(self, results: list[str, FlatpakAction, str]):
         for ref, action, source, location in results:
             elem = ResultElem(ref, action, source, location)
-            log(f" --> Adding element {elem}")
+            logger.debug(f" --> Adding element {elem}")
             self.store.append(elem)
         self.store.sort(lambda a, b: a.location + a.ref > b.location + b.ref)
 
