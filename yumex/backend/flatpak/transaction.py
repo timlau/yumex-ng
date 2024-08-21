@@ -46,10 +46,10 @@ class FlatpakTransaction:
         self.failed = False
         self.failed_msg = None
         if location is FlatpakLocation.SYSTEM:
-            logger.debug(" FlatpakTransaction: setup system transaction")
+            logger.debug("setup system transaction")
             self.transaction = Flatpak.Transaction.new_for_installation(self.backend.system)
         else:
-            logger.debug(" FlatpakTransaction: setup user transaction")
+            logger.debug("setup user transaction")
             self.transaction = Flatpak.Transaction.new_for_installation(self.backend.user)
         self.num_actions = 0
         self.current_action = 0
@@ -73,10 +73,10 @@ class FlatpakTransaction:
 
     def on_ready(self, transaction: Flatpak.Transaction) -> bool:
         """signal handler for FlatPak.Transaction::ready"""
-        logger.debug(" FlatpakTransaction: ready")
+        logger.debug("ready")
         self.num_actions = len(transaction.get_operations())
         if not self.num_actions:
-            logger.debug(" FlatpakTransaction: nothing to do")
+            logger.debug("nothing to do")
             self.failed = True
             self.failed_msg = "nothing to do"
             return True
@@ -97,66 +97,66 @@ class FlatpakTransaction:
 
     def on_new_operation(self, transaction, operation, progress) -> None:
         """signal handler for FlatPak.Transaction::new-operation"""
-        logger.debug(" FlatpakTransaction: new-operation")
+        logger.debug("new-operation")
         self.current_action += 1
         progress.connect("changed", self.on_changed)
         ref = operation.get_ref()
         operation_type = self._parse_operation(operation)
         msg = f"{operation_type} {ref}"
         self.win.progress.set_subtitle(msg)
-        logger.debug(f" FlatpakTransaction: {msg}")
+        logger.debug(f"{msg}")
 
     def operation_done(self, transaction, operation, commit, result) -> None:
         """signal handler for FlatPak.Transaction::operation-done"""
-        logger.debug(" FlatpakTransaction: operation-done")
+        logger.debug("operation-done")
         if self.current_action == self.num_actions:
-            logger.debug(" FlatpakTransaction: everyting is Done")
+            logger.debug("everyting is Done")
 
     def operation_eol(self, transaction, ref, reason, rebase) -> None:
         """signal handler for FlatPak.Transaction::end-of-lifed"""
-        logger.debug(" FlatpakTransaction: end-of-lifed")
-        logger.debug(f" FlatpakTransaction: --> {ref}")
-        logger.debug(f" FlatpakTransaction: --> {reason}")
-        logger.debug(f" FlatpakTransaction: --> {rebase}")
+        logger.debug("end-of-lifed")
+        logger.debug(f"--> {ref}")
+        logger.debug(f"--> {reason}")
+        logger.debug(f"--> {rebase}")
 
     def operation_eol_rebase(self, transaction, remote, ref, reason, rebase, prev_ids) -> None:
         """signal handler for FlatPak.Transaction::end-of-lifed-with-rebase"""
-        logger.debug(" FlatpakTransaction: end-of-lifed-with-rebase")
-        logger.debug(f" FlatpakTransaction: --> {ref}")
-        logger.debug(f" FlatpakTransaction: --> {reason}")
-        logger.debug(f" FlatpakTransaction: --> {rebase}")
-        logger.debug(f" FlatpakTransaction: --> {prev_ids}")
+        logger.debug("end-of-lifed-with-rebase")
+        logger.debug(f"--> {ref}")
+        logger.debug(f"--> {reason}")
+        logger.debug(f"--> {rebase}")
+        logger.debug(f"--> {prev_ids}")
 
     def operation_error(self, transaction, operation, error, result) -> None:
         """signal handler for FlatPak.Transaction::operation-error"""
-        logger.debug(" FlatpakTransaction: operation-error")
-        logger.debug(f" FlatpakTransaction:  --> {str(error)}")
+        logger.debug("operation-error")
+        logger.debug(f" --> {str(error)}")
 
     def add_install(self, to_inst: FlatpakRefString, source: str) -> None:
         """add ref sting to transaction for install"""
-        logger.debug(f" FlatpakTransaction: adding {to_inst} for install")
+        logger.debug(f"adding {to_inst} for install")
         self.transaction.add_install(source, to_inst, None)
 
     def add_install_flatpak_ref(self, flatpak_ref: Path) -> None:
         """add flatpakref to transaction for install"""
-        logger.debug(f" FlatpakTransaction: adding flatpakref {flatpak_ref} for install")
+        logger.debug(f"adding flatpakref {flatpak_ref} for install")
         ref_bytes = flatpak_ref.read_bytes()
         gl_bytes = GLib.Bytes.new(ref_bytes)
         self.transaction.add_install_flatpakref(gl_bytes)
 
     def add_remove(self, to_remove: FlatpakRefString) -> None:
         """add ref sting to transaction for uninstall"""
-        logger.debug(f" FlatpakTransaction: adding {to_remove} for uninstall")
+        logger.debug(f"adding {to_remove} for uninstall")
         self.transaction.add_uninstall(to_remove)
 
     def add_update(self, pkg: FlatpakPackage) -> None:
         """add pkg to transaction for update"""
         if pkg.is_update == FlatpakUpdate.UPDATE:
             self.transaction.add_update(pkg.ref.format_ref(), None, None)
-            logger.debug(f" FlatpakTransaction: adding {pkg.id} for update")
+            logger.debug(f"adding {pkg.id} for update")
         elif pkg.is_update == FlatpakUpdate.EOL:
             rebase_ref = pkg.ref.get_eol_rebase()
-            logger.debug(f" FlatpakTransaction: adding {pkg.id} for rebase")
+            logger.debug(f"adding {pkg.id} for rebase")
             logger.debug(f" flatpak: rebase {pkg.ref.format_ref()} -> {rebase_ref}")
             # rebase to new version
             if rebase_ref:
@@ -165,24 +165,24 @@ class FlatpakTransaction:
 
     def run(self) -> bool:
         """run the tranaction"""
-        logger.debug(" FlatpakTransaction: Running Transaction")
+        logger.debug("Running Transaction")
         try:
             self.transaction.run()
         except GLib.GError as e:  # type: ignore
             msg = e.message
             if self.first_run:
-                logger.debug(f" FlatpakTransaction: First run, validate results : {msg}")
+                logger.debug(f"First run, validate results : {msg}")
                 raise FlatPakFirstRun
             else:
                 logger.debug(msg)
                 self.win.show_message(f"{msg}", timeout=2)
                 return False
         if self.failed:
-            logger.debug(f" FlatpakTransaction: Transaction Failed : {self.failed_msg}")
+            logger.debug(f"Transaction Failed : {self.failed_msg}")
             msg = _("flatpak transaction failed") + f" : {self.failed_msg}"
             self.win.show_message(f"{msg}", timeout=5)
             return False
-        logger.debug(" FlatpakTransaction: Running Transaction Ended")
+        logger.debug("Running Transaction Ended")
         return True
 
     def populate(self, pkgs: list[FlatpakPackage], action: FlatpakAction, source: str | None):

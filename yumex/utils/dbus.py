@@ -54,7 +54,7 @@ class AsyncDbusCaller:
     def call(self, mth, *args, **kwargs) -> Any:
         self.loop = EventLoop()
         # timeout = 10min
-        logger.debug(f" --> ASyncDbus: calling {mth} args: {args}")
+        logger.debug(f"ASyncDbus: calling {mth} args: {args}")
         mth(*args, **kwargs, callback=self.callback)
         self.loop.run()
         if self.res:
