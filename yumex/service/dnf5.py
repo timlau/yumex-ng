@@ -75,6 +75,9 @@ def check_dnf_updates(refresh: bool) -> list[Package]:
         updates.filter_arch(["src"], QueryCmp_NEQ)
         updates.filter_latest_evr()
         return get_prioritied_packages(list(updates), base)
+    except Exception:
+        logger.exception("Could not get dnf updates")
+        return 0
     finally:
         del base
 
