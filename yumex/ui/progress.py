@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from gi.repository import Gtk, Adw
+from gi.repository import Adw, Gtk
 
 from yumex.constants import ROOTDIR
 

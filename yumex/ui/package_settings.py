@@ -13,12 +13,12 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from gi.repository import Gtk, GObject, Adw
+import logging
+
+from gi.repository import Adw, GObject, Gtk
 
 from yumex.constants import ROOTDIR
-from yumex.utils.enums import PackageFilter, SortType, InfoType
-
-import logging
+from yumex.utils.enums import InfoType, PackageFilter, SortType
 
 logger = logging.getLogger(__name__)
 

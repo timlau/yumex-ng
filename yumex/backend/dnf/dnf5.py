@@ -14,24 +14,20 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 
-from typing import Iterable, List
+import logging
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Iterable, List
 
 import libdnf5.base as dnf
-
-from libdnf5.rpm import PackageQuery, Package  # noqa: F401
-from libdnf5.repo import RepoQuery, RepoCache, Repo  # noqa : F401
-from libdnf5.common import QueryCmp_NEQ, QueryCmp_NOT_IGLOB, QueryCmp_ICONTAINS, QueryCmp_IGLOB
-from libdnf5.advisory import AdvisoryQuery, Advisory, AdvisoryReference
-
+from libdnf5.advisory import Advisory, AdvisoryQuery, AdvisoryReference
+from libdnf5.common import QueryCmp_ICONTAINS, QueryCmp_IGLOB, QueryCmp_NEQ, QueryCmp_NOT_IGLOB
+from libdnf5.repo import Repo, RepoCache, RepoQuery  # noqa : F401
+from libdnf5.rpm import Package, PackageQuery  # noqa: F401
 
 from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
 from yumex.backend.interface import Presenter
-from yumex.utils.enums import SearchField, PackageState, InfoType, PackageFilter
-
-
-import logging
+from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 
 logger = logging.getLogger(__name__)
 

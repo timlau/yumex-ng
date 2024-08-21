@@ -13,17 +13,16 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from dataclasses import dataclass
-import sys
 import logging
-import traceback
+import sys
 import threading
 import time
-from typing import Any, Callable
+import traceback
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, Callable
 
 from gi.repository import GLib
-
 
 from yumex.constants import BUILD_TYPE
 

@@ -16,19 +16,18 @@
 from __future__ import annotations
 
 from typing import Iterable
-from yumex.backend.dnf.factory import DnfBackendFactory
 
-from yumex.utils.types import MainWindow
 from yumex.backend.cache import YumexPackageCache
 from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf.factory import DnfBackendFactory
 from yumex.backend.flatpak.backend import FlatpakBackend
-from yumex.constants import BACKEND
 from yumex.backend.interface import (
     BackendFactory,
     PackageBackend,
     PackageCache,
     Progress,
 )
+from yumex.constants import BACKEND
 from yumex.utils.enums import (
     InfoType,
     PackageBackendType,
@@ -36,6 +35,7 @@ from yumex.utils.enums import (
     Page,
     SearchField,
 )
+from yumex.utils.types import MainWindow
 
 
 class YumexPresenter:

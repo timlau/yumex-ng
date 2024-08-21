@@ -1,9 +1,9 @@
 from pathlib import Path
 
 import libdnf5 as dnf
-from libdnf5.rpm import PackageQuery, Package  # noqa: F401
-from libdnf5.repo import RepoQuery, RepoCache  # noqa: F401
 from libdnf5.common import QueryCmp_NEQ
+from libdnf5.repo import RepoCache, RepoQuery  # noqa: F401
+from libdnf5.rpm import Package, PackageQuery  # noqa: F401
 
 
 def get_repo_priority(base: dnf.base.Base, repo_name: str) -> int:

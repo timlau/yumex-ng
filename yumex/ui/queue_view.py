@@ -13,16 +13,16 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from gi.repository import Gtk, GObject
+import logging
 
-from yumex.constants import ROOTDIR
-from yumex.utils.storage import PackageStorage
+from gi.repository import GObject, Gtk
+
 from yumex.backend.dnf import YumexPackage
+from yumex.constants import ROOTDIR
 from yumex.ui import get_package_selection_tooltip
 from yumex.utils import RunAsync
 from yumex.utils.enums import PackageState, Page
-
-import logging
+from yumex.utils.storage import PackageStorage
 
 logger = logging.getLogger(__name__)
 

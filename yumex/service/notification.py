@@ -2,9 +2,10 @@
 #
 # https://specifications.freedesktop.org/notification-spec/latest/ar01s09.html
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from typing import Callable
+
 from dasbus.connection import SessionMessageBus
 from dasbus.identifier import DBusServiceIdentifier
 from dasbus.loop import EventLoop

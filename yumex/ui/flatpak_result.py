@@ -13,12 +13,12 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from gi.repository import Gtk, Adw, GLib, GObject, Gio
+import logging
+
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from yumex.constants import ROOTDIR
 from yumex.utils.enums import FlatpakAction, FlatpakLocation
-
-import logging
 
 logger = logging.getLogger(__name__)
 

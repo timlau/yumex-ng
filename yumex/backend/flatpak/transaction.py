@@ -15,14 +15,14 @@
 
 """backend for handling flatpaks"""
 
-from pathlib import Path
-from gi.repository import Flatpak, GLib
-from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
-
-from yumex.utils.types import FlatpakRefString
-from yumex.utils.enums import FlatpakAction, FlatpakLocation
-
 import logging
+from pathlib import Path
+
+from gi.repository import Flatpak, GLib
+
+from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
+from yumex.utils.enums import FlatpakAction, FlatpakLocation
+from yumex.utils.types import FlatpakRefString
 
 logger = logging.getLogger(__name__)
 

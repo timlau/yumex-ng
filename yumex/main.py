@@ -17,22 +17,21 @@
 #
 
 
-from pathlib import Path
-import sys
 import argparse
+import logging
 import subprocess
+import sys
+from pathlib import Path
 from traceback import format_exception
-
-from gi.repository import Gtk, Gio, Adw  # type: ignore
-
-from yumex.ui.window import YumexMainWindow
-from yumex.ui.preferences import YumexPreferences
-from yumex.utils import setup_logging
-from yumex.constants import ROOTDIR, APP_ID, VERSION, BACKEND, BUILD_TYPE
-from yumex.ui.dialogs import error_dialog
 from typing import Literal
 
-import logging
+from gi.repository import Adw, Gio, Gtk  # type: ignore
+
+from yumex.constants import APP_ID, BACKEND, BUILD_TYPE, ROOTDIR, VERSION
+from yumex.ui.dialogs import error_dialog
+from yumex.ui.preferences import YumexPreferences
+from yumex.ui.window import YumexMainWindow
+from yumex.utils import setup_logging
 
 logger = logging.getLogger(__name__)
 

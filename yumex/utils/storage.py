@@ -1,6 +1,6 @@
 from gi.repository import Gio
-from yumex.backend.dnf import YumexPackage
 
+from yumex.backend.dnf import YumexPackage
 from yumex.utils.enums import SortType
 
 

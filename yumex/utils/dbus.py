@@ -1,14 +1,13 @@
-from dasbus.connection import SessionMessageBus
-from dasbus.error import DBusError
-from dasbus.identifier import DBusServiceIdentifier
-from dasbus.typing import get_native
+import logging
 from typing import Any
-from dasbus.loop import EventLoop
+
+from dasbus.connection import SessionMessageBus
 from dasbus.error import DBusError  # noqa
+from dasbus.identifier import DBusServiceIdentifier
+from dasbus.loop import EventLoop
+from dasbus.typing import get_native
 
 from yumex.utils import timed
-
-import logging
 
 logger = logging.getLogger(__name__)
 

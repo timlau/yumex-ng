@@ -21,12 +21,12 @@ gi.require_version("Flatpak", "1.0")
 
 
 import logging
-import subprocess
 import os
-
+import subprocess
 from dataclasses import dataclass
 
-from gi.repository import AppIndicator3, Gtk, Flatpak, Gio  # type: ignore
+from gi.repository import AppIndicator3, Flatpak, Gio, Gtk  # type: ignore
+
 from yumex.constants import APP_ID, BACKEND
 
 if BACKEND == "DNF5":

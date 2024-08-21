@@ -14,17 +14,16 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 
-from gi.repository import Gtk, Adw, GLib, Gio, GObject
-
+import logging
 from pathlib import Path
+
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.backend.flatpak.search import AppStreamPackage, AppstreamSearcher
 from yumex.backend.presenter import YumexPresenter
-from yumex.utils.enums import FlatpakLocation
 from yumex.constants import APP_ID, ROOTDIR
-
-import logging
+from yumex.utils.enums import FlatpakLocation
 
 logger = logging.getLogger(__name__)
 

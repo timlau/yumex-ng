@@ -13,29 +13,28 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from pathlib import Path
+import logging
 import re
+from pathlib import Path
 
-from gi.repository import Gtk, Adw, Gio  # type: ignore
+from gi.repository import Adw, Gio, Gtk  # type: ignore
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
-from yumex.constants import ROOTDIR, APP_ID, PACKAGE_COLUMNS
+from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
 from yumex.ui.dialogs import GPGDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
-from yumex.ui.package_view import YumexPackageView
-from yumex.ui.queue_view import YumexQueueView
-from yumex.ui.package_settings import YumexPackageSettings
-from yumex.ui.progress import YumexProgress
 from yumex.ui.package_info import YumexPackageInfo
+from yumex.ui.package_settings import YumexPackageSettings
+from yumex.ui.package_view import YumexPackageView
+from yumex.ui.progress import YumexProgress
+from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import RunAsync, BUILD_TYPE
-from yumex.utils.enums import InfoType, PackageFilter, SearchField, Page, SortType
+from yumex.utils import BUILD_TYPE, RunAsync
 from yumex.utils.dbus import sync_updates
-
-import logging
+from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField, SortType
 
 logger = logging.getLogger(__name__)
 

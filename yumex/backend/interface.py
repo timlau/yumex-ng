@@ -14,11 +14,11 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 from typing import Iterable, Protocol, Self
-from yumex.backend import TransactionResult
 
-from yumex.utils.types import MainWindow
+from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
-from yumex.utils.enums import PackageFilter, Page, SearchField, InfoType
+from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField
+from yumex.utils.types import MainWindow
 
 
 class PackageCache(Protocol):

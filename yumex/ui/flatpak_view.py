@@ -14,23 +14,21 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 
+import logging
 import os
-
-from typing import Callable
 from pathlib import Path
+from typing import Callable
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Adw, Gio, Gtk
 
-from yumex.backend.presenter import YumexPresenter
 from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.backend.flatpak.search import AppStreamPackage
+from yumex.backend.presenter import YumexPresenter
 from yumex.constants import ROOTDIR
 from yumex.ui.flatpak_search import YumexFlatpakSearch
 from yumex.utils import RunJob
-from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 from yumex.utils.dbus import sync_updates
-
-import logging
+from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
 
 logger = logging.getLogger(__name__)
 

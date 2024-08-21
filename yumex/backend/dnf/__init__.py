@@ -13,13 +13,15 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 from __future__ import annotations
+
+import logging
 from datetime import datetime, timedelta
-from gi.repository import GObject, Gio
+
+from gi.repository import Gio, GObject
+
 from yumex.constants import APP_ID
 from yumex.utils import format_number
 from yumex.utils.enums import PackageAction, PackageState, SearchField  # noqa: F401
-
-import logging
 
 logger = logging.getLogger(__name__)
 

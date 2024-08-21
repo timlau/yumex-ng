@@ -14,9 +14,9 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 
-from gi.repository import Gtk, Adw  # type: ignore
+from gi.repository import Adw, Gtk  # type: ignore
 
-from yumex.constants import ROOTDIR, BACKEND
+from yumex.constants import BACKEND, ROOTDIR
 from yumex.utils.enums import InfoType
 
 if BACKEND == "DNF4":

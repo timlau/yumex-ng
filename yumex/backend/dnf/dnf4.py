@@ -13,30 +13,29 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+import glob
+import itertools
+import logging
+import os
+import shutil
 from time import time
-from typing import Iterable, Union, List
+from typing import Iterable, List, Union
 
 import dnf
-import dnf.yum
-import dnf.const
 import dnf.conf
+import dnf.const
 import dnf.subject
+import dnf.yum
 import hawkey
-import itertools
-import shutil
-import glob
-import os
 
+from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
 from yumex.utils.enums import (
+    InfoType,
     PackageAction,
+    PackageFilter,
     PackageState,
     SearchField,
-    InfoType,
-    PackageFilter,
 )
-from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
-
-import logging
 
 logger = logging.getLogger(__name__)
 

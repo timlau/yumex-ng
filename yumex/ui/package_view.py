@@ -14,24 +14,24 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 
-from gi.repository import Gtk, GObject
+import logging
 
+from gi.repository import GObject, Gtk
+
+from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
+from yumex.constants import ROOTDIR
+from yumex.ui import get_package_selection_tooltip
 from yumex.ui.dialogs import error_dialog
 from yumex.ui.queue_view import YumexQueueView
-from yumex.utils.storage import PackageStorage
-from yumex.constants import ROOTDIR
-from yumex.backend.dnf import YumexPackage
-from yumex.ui import get_package_selection_tooltip
+from yumex.utils import RunAsync, timed
 from yumex.utils.enums import (
     PackageFilter,
     PackageState,
     SearchField,
     SortType,
 )
-from yumex.utils import RunAsync, timed
-
-import logging
+from yumex.utils.storage import PackageStorage
 
 logger = logging.getLogger(__name__)
 

@@ -1,9 +1,9 @@
+import logging
 from typing import Generator
+
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import PackageBackend
 from yumex.utils.enums import PackageFilter, PackageState
-
-import logging
 
 logger = logging.getLogger(__name__)
 

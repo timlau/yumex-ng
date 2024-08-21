@@ -1,9 +1,11 @@
 from functools import partial
 from logging import getLogger
 from typing import Self
+
 from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
-from dasbus.typing import get_native, get_variant, Variant  # noqa: F401
+from dasbus.typing import Variant, get_native, get_variant  # noqa: F401
+
 from yumex.utils.dbus import AsyncDbusCaller
 
 # from gi.repository import GLib  # type: ignore

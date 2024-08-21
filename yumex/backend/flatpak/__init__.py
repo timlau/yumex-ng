@@ -16,10 +16,11 @@
 """backend for handling flatpaks"""
 
 from enum import Enum, auto
+
 from gi.repository import Flatpak, GObject
 
-from yumex.utils.types import FlatpakRefString, FlatpakRef
-from yumex.utils.enums import FlatpakType, FlatpakLocation
+from yumex.utils.enums import FlatpakLocation, FlatpakType
+from yumex.utils.types import FlatpakRef, FlatpakRefString
 
 
 class FlatpakUpdate(Enum):

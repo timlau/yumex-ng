@@ -13,17 +13,16 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+import logging
 from dataclasses import dataclass, field
 from typing import Self
-from dnfdaemon.client import Client, DaemonError
-from yumex.backend.dnf import YumexPackage
 
+from dnfdaemon.client import Client, DaemonError
+
+from yumex.backend import TransactionResult
+from yumex.backend.dnf import YumexPackage
 from yumex.ui.progress import YumexProgress
 from yumex.utils.enums import PackageState
-from yumex.backend import TransactionResult
-
-
-import logging
 
 logger = logging.getLogger(__name__)
 

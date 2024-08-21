@@ -15,7 +15,7 @@
 
 """Custom types used for type hinting for more clarity"""
 
-from typing import Type, TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow

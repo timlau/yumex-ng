@@ -1,17 +1,15 @@
+import logging
 from dataclasses import dataclass, field
-from enum import Enum, auto, IntEnum
+from enum import Enum, IntEnum, auto
 from typing import Self
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
-
 from yumex.backend.presenter import YumexPresenter
 from yumex.ui.progress import YumexProgress
 from yumex.utils.enums import PackageState
 
 from .client import Dnf5DbusClient, gv_list
-
-import logging
 
 logger = logging.getLogger(__name__)
 
