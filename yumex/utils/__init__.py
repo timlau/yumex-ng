@@ -20,6 +20,7 @@ import traceback
 import threading
 import time
 from typing import Any, Callable
+from pathlib import Path
 
 from gi.repository import GLib
 
@@ -36,6 +37,13 @@ def setup_logging(debug=False):
             format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
             datefmt="%H:%M:%S",
         )
+        log_file = Path("~/.local/share/yumex/yumex_debug.log").expanduser()
+        file_handler = logging.FileHandler(f"{log_file}", mode="w")
+        filte_formatter = logging.Formatter(
+            "%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s", datefmt="%H:%M:%S"
+        )
+        file_handler.setFormatter(filte_formatter)
+        logger.addHandler(file_handler)
     else:
         logging.basicConfig(
             level=logging.WARNING,
