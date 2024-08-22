@@ -3,17 +3,15 @@
 This is repository contains the next generation of yum extender
 with a more modern look & feel using gtk4/libadwaita etc.
 
-Follow news on the development on 
+Follow news in [Announcements](https://github.com/timlau/yumex-ng/discussions/categories/announcements)
 
-[X/Twitter](https://x.com/NerdyTim_666)
-
-# how to test
+## how to test
 
 - check out this repository
 - install deps `make inst-deps-dnf5` (or `make inst-deps-dnf4` for dnf4 backend)
 - run `./local.sh` (or `./local.sh DNF4` for dnf4 backend)
 
-# build and install local test rpms
+## build and install local test rpms
 
 - check out this repository
 - install deps `make inst-deps-dnf5` 
@@ -22,7 +20,7 @@ Follow news on the development on
 - `make test-update` ( if yumex-dnf5 is installed on a previous date )
 - `make test-reinst` ( if yumex-dnf5 is installed on the same date )
 
-# Packages for Fedora 39,40 & Rawhide (COPR)
+## Packages for Fedora 39,40 & Rawhide (COPR)
 
 **Stable**
 [yumex-ng](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng/)
@@ -30,28 +28,28 @@ Follow news on the development on
 **Development**
 [yumex-ng-dev](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng-dev/)
 
-# Troubleshooting
+## Troubleshooting
 
 [Check Here](docs/debug.md)
 
-# current look
+## current look
 
-## Packages Page
+### Packages Page
 ![packages](data/gfx/yumex-ng-main.png) 
 
-## package view settings
+### package view settings
 ![package settings](data/gfx/yumex-ng-package-setting.png) 
 
-## package search
+### package search
 ![package search](data/gfx/yumex-ng-search.png) 
 
-## Queue Page
+### Queue Page
 ![queue](data/gfx/yumex-ng-queue.png) 
 
-## flatpaks page
+### flatpaks page
 ![flatpak](data/gfx/yumex-ng-flatpaks.png) 
 
-## flatpak installer
+### flatpak installer
 ![flatpak-installer](data/gfx/yumex-ng-flatpaks-install.png) 
 
 
