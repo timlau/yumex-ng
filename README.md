@@ -1,6 +1,6 @@
 # Yum Extender (NextGen)
 
-This is repository contains the first steps to create a future yum extender
+This is repository contains the next generation of yum extender
 with a more modern look & feel using gtk4/libadwaita etc.
 
 Follow news on the development on 
@@ -22,9 +22,17 @@ Follow news on the development on
 - `make test-update` ( if yumex-dnf5 is installed on a previous date )
 - `make test-reinst` ( if yumex-dnf5 is installed on the same date )
 
-# Packages for Fedora 39,40 & Rawhide
+# Packages for Fedora 39,40 & Rawhide (COPR)
 
-[Fedora Copr Repo](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng/)
+**Stable**
+[yumex-ng](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng/)
+
+**Development**
+[yumex-ng-dev](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng-dev/)
+
+# Troubleshooting
+
+[Check Here](docs/debug.md)
 
 # current look
 
