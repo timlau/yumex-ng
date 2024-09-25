@@ -1,22 +1,14 @@
 {
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportUndefinedVariable": "none",
-        "reportMissingModuleSource": "none",
-    },
     "mesonbuild.configureOnOpen": false,
     "files.associations": {
         "*.py.in": "python"
     },
     "css.validate": false,
-    "python.analysis.exclude": [
-        "**/builddir"
-    ],
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
     "workbench.colorCustomizations": {
         "titleBar.activeBackground": "#553955" // Change this color!
     },
-    "python.analysis.typeCheckingMode": "off",
     "python.testing.pytestArgs": [
         "tests"
     ],

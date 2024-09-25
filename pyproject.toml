@@ -20,8 +20,8 @@ select = ["E", "F"]
 ignore = ["F821", "E402"]
 
 [tool.pyright]
+typeCheckingMode = "off"
 exclude = ["**/builddir"]
-
 reportMissingImports = true
 reportUndefinedVariable = false
 reportMissingModuleSource = false
