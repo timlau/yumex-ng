@@ -74,6 +74,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.root_backend = None
         self._last_selected_pkg: YumexPackage = None
         self.info_type: InfoType = InfoType.DESCRIPTION
+        self._last_filter: PackageFilter | None = None
 
         # save settings on windows close
         self.connect("unrealize", self.save_window_props)
@@ -137,6 +138,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # setup package info
         self.package_info = YumexPackageInfo()
         self.update_info_box.append(self.package_info)
+        # setup search
+        # self.search_entry.connect("move-focus", lambda _: True)
 
     def set_saved_setting(self):
         # set columns width from settings
@@ -308,21 +311,34 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.select_page(Page.PACKAGES)
             self.load_packages(PackageFilter.INSTALLED)
 
+    def do_search(self, text, field=None):
+        # remove selection in package filter (sidebar)
+        if not self._last_filter:
+            self._last_filter = self.package_settings.current_pkg_filter
+        self.package_settings.unselect_all()
+        if field:
+            self.package_view.search(text, field=field)
+        else:
+            self.package_view.search(text)
+
+    def reset_search(self):
+        # if self.package_settings.current_pkg_filter == PackageFilter.SEARCH:
+        logger.debug("Reset search")
+        # GLib.idle_add(self.load_packages, self._last_filter)
+        self.load_packages(self._last_filter)
+        self._last_filter = None
+
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
         """handler for changes in the seach entry"""
         search_txt = widget.get_text()
         logger.debug(f"search changed : {search_txt}")
-        if search_txt == "":
-            if self.package_settings.current_pkg_filter == PackageFilter.SEARCH:
-                # self.last_pkg_filer.activate()
-                self.load_packages(self.package_settings.previuos_pkg_filter)
-                return False
-        elif search_txt[0] != ".":
-            # remove selection in package filter (sidebar)
-            self.package_settings.unselect_all()
-            self.package_view.search(search_txt)
-            self.package_settings.current_pkg_filter = PackageFilter.SEARCH
+        # if search_txt == "":
+        #     self.reset_search()
+        #     return True
+        if search_txt and search_txt[0] != ".":
+            self.do_search(search_txt)
+        return True
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
@@ -335,7 +351,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         }
         search_txt = widget.get_text()
         logger.debug(f"search activate : {search_txt}")
-        if search_txt[0] == ".":
+        if search_txt == "":
+            self.reset_search()
+        elif search_txt[0] == ".":
             # syntax: .<field>=<value>
             cmds = re.compile(r"^\.(.*)=(.*)")
             res = cmds.match(search_txt)
@@ -345,13 +363,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     field = allowed_field_map[field]
                     self.package_settings.unselect_all()
                     logger.debug(f"searching for : {key} in pkg.{field}")
-                    self.package_view.search(key, field=field)
-
+                    self.do_search(key, field=field)  # search by field
         else:
-            # remove selection in package filter (sidebar)
-            self.package_settings.unselect_all()
-            self.package_view.search(search_txt)
-        self.package_settings.current_pkg_filter = PackageFilter.SEARCH
+            self.do_search(search_txt)
+        return True
 
     def on_selectall_activate(self):
         """handler for select all on selection column right click menu"""
@@ -461,12 +476,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_package_filter_changed(self, widget, pkg_filter):
         logger.debug(f"SIGNAL: package filter changed : {pkg_filter}")
-        entry = self.search_bar.get_child()
-        entry.set_text("")
+        # entry = self.search_bar.get_child()
+        # entry.set_text("")
         pkg_filter = PackageFilter(pkg_filter)
         self.sidebar.set_show_sidebar(False)
         self.search_bar.set_search_mode(False)
-        self.search_entry.set_text("")
+        self.search_entry.delete_text(0, -1)
         self.package_view.get_packages(pkg_filter)
 
     def on_info_type_changed(self, widget, info_type: str):

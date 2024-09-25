@@ -53,6 +53,8 @@ class YumexPackageSettings(Gtk.Box):
                 self.filter_installed.activate()
             case PackageFilter.AVAILABLE:
                 self.filter_available.activate()
+            case _:
+                logger.debug(f"unknown package filter: {pkg_filter}")
 
     def unselect_all(self):
         """Unselect all filters, so we can re-select one"""
