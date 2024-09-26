@@ -251,12 +251,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if self._last_selected_pkg and pkg == self._last_selected_pkg:
             return
         self._last_selected_pkg = pkg
-        RunAsync(
-            self.presenter.get_package_info,
-            completed,
-            pkg,
-            self.info_type,
-        )
+        RunAsync(self.presenter.get_package_info, completed, pkg, self.info_type)
 
     def on_clear_queue(self, *args):
         """app.clear_queue action handler"""
@@ -333,10 +328,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """handler for changes in the seach entry"""
         search_txt = widget.get_text()
         logger.debug(f"search changed : {search_txt}")
-        # if search_txt == "":
-        #     self.reset_search()
-        #     return True
-        if search_txt and search_txt[0] != ".":
+        if search_txt == "":
+            self.reset_search()
+        elif search_txt and search_txt[0] != ".":
             self.do_search(search_txt)
         return True
 
