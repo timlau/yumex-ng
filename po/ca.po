@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 07:01+0200\n"
+"POT-Creation-Date: 2024-07-03 08:13+0200\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>, 2024\n"
 "Language-Team: Catalan (https://app.transifex.com/timlau/teams/16939/ca/)\n"
@@ -45,23 +45,23 @@ msgstr "Es baixa la informació del dipòsit per a {name}"
 
 #: yumex/backend/dnf5daemon/__init__.py:41
 msgid "Upgrading"
-msgstr ""
+msgstr "S'actualitza"
 
 #: yumex/backend/dnf5daemon/__init__.py:43
 msgid "Downgrading"
-msgstr ""
+msgstr "Es reverteix"
 
 #: yumex/backend/dnf5daemon/__init__.py:45
 msgid "Reinstalling"
-msgstr ""
+msgstr "Es reinstal·la"
 
 #: yumex/backend/dnf5daemon/__init__.py:47
 msgid "Removing"
-msgstr ""
+msgstr "Se suprimeix"
 
 #: yumex/backend/dnf5daemon/__init__.py:49
 msgid "Replacing"
-msgstr ""
+msgstr "Es reemplaça"
 
 #: yumex/backend/dnf5daemon/__init__.py:200
 #: yumex/backend/dnf5daemon/__init__.py:220 yumex/backend/daemon.py:64
@@ -195,7 +195,7 @@ msgstr "no s'ha trobat informació de l'actualització"
 
 #: yumex/ui/package_info.py:99
 msgid "Undefined"
-msgstr ""
+msgstr "No definit"
 
 #: yumex/ui/transaction_result.py:64
 msgid "Packages for installation"
@@ -239,7 +239,7 @@ msgstr "Execució de la transacció de Flatpak"
 
 #: yumex/ui/window.py:290 yumex/ui/flatpak_view.py:108
 msgid "Updating Yumex Updater"
-msgstr ""
+msgstr "S'actualitza l'actualitzador Yumex"
 
 #: yumex/ui/window.py:293
 msgid "Transaction completed succesfully"
@@ -248,20 +248,20 @@ msgstr "La transacció s'ha completat correctament."
 #: yumex/ui/flatpak_view.py:83
 #, python-brace-format
 msgid "{flatpakref} was installed"
-msgstr ""
+msgstr "S'ha instal·lat {flatpakref}"
 
 #: yumex/ui/flatpak_view.py:89
 msgid "flatpaks were updated"
-msgstr ""
+msgstr "S'han actualitzat els flatpaks."
 
 #: yumex/ui/flatpak_view.py:96
 msgid "Unused flatpaks were removed"
-msgstr ""
+msgstr "S'han suprimit els flatpaks no usats."
 
 #: yumex/ui/flatpak_view.py:103
 #, python-brace-format
 msgid "{pkg.id} is now updated"
-msgstr ""
+msgstr "{pkg.id} ara està actualitzat."
 
 #: yumex/ui/flatpak_view.py:129 yumex/ui/flatpak_view.py:155
 #, python-brace-format
@@ -283,6 +283,13 @@ msgid ""
 "          <li>lot of code fixes and optimization</li>\n"
 "        </ul>\n"
 msgstr ""
+"\n"
+"        <ul>\n"
+"          <li>Suport per a la informació d'actualització amb dnf5</li>\n"
+"          <li>nou instal·lador millorat de flatpaks</li>\n"
+"          <li>neteja els flatpacks no usats</li>\n"
+"          <li>moltes correccions de codi i optimitzacions</li>\n"
+"        </ul>\n"
 
 #: yumex/main.py:178
 msgid ""
@@ -291,6 +298,10 @@ msgid ""
 msgstr ""
 "\n"
 "El Yum Extender és un gestor per instal·lar, actualitzar i suprimir paquets.\n"
+
+#: yumex/yumex_updater_systray:75
+msgid "Updates is available"
+msgstr "Hi ha actualitzacions disponibles."
 
 #: data/ui/package_settings.blp:9
 msgid "Package filter"
@@ -515,7 +526,7 @@ msgstr "Visualització dels Flatpaks"
 
 #: data/ui/shortcuts.blp:84
 msgid "Search for flatpaks to install"
-msgstr ""
+msgstr "Cerca de flatpaks per instal·lar"
 
 #: data/ui/shortcuts.blp:88
 msgid "Remove selected flatpak"
@@ -523,11 +534,11 @@ msgstr "Suprimeix el flatpak seleccionat"
 
 #: data/ui/flatpak_search.blp:15
 msgid "Search Flatpaks"
-msgstr ""
+msgstr "Cerca flatpaks"
 
 #: data/ui/flatpak_search.blp:35
 msgid "Install"
-msgstr ""
+msgstr "Instal·la"
 
 #: data/ui/flatpak_search.blp:65
 msgid "Install location"
@@ -572,7 +583,7 @@ msgstr "Actualitza tots els Flatpaks (aplicacions i entorns d'execució)"
 
 #: data/ui/window.blp:165
 msgid "search for new flatpak to install"
-msgstr ""
+msgstr "Cerca flatpaks nous per instal·lar"
 
 #: data/ui/window.blp:170
 msgid "uninstall selected flatpak"
@@ -580,11 +591,11 @@ msgstr "desinstal·la el flatpak seleccionat"
 
 #: data/ui/window.blp:175
 msgid "Remove unused flatpaks (runtimes etc.)"
-msgstr ""
+msgstr "Suprimeix els flatpacks no usats (entorns d'execució, etc.)"
 
 #: data/ui/window.blp:183
 msgid "show/hide runtimes"
-msgstr ""
+msgstr "mostra / amaga entorns d'execució"
 
 #: data/ui/window.blp:195
 msgid "Groups"
@@ -666,93 +677,103 @@ msgid "Browse Installed flatpaks"
 msgstr "Exploreu els flatpaks instal·lats"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:24
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:71
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:78
 msgid "Install, remove and update flatpaks"
 msgstr "Instal·leu, suprimiu i actualitzeu flatpaks"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:41
-msgid "Yum Extender 5.0.0 add many fixes and small improvments"
-msgstr ""
+msgid "Yum Extender 5.0.1 add many fixes and small improvments"
+msgstr "El Yum Extender 5.0.1 afegeix moltes correccions i petites millores."
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:43
+msgid "Add yumex-updater-systray systray application there checks for updates"
+msgstr ""
+"Afegiu l'aplicació yumex-updater-systray a la safata del sistema per "
+"comprovar si hi ha actualitzacions."
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:48
+msgid "Yum Extender 5.0.0 add many fixes and small improvments"
+msgstr "El Yum Extender 5.0.0 afegeix moltes correccions i petites millores."
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:50
 msgid "Support for update info with dnf5"
-msgstr ""
+msgstr "Suport per a la informació d'actualització amb dnf5"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:44
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
 msgid "new improved flatpak installer"
-msgstr ""
+msgstr "nou instal·lador millorat de flatpak"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:45
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:52
 msgid "cleanup unused flatpaks"
-msgstr ""
+msgstr "neteja els flatpacks no usats"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:46
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:55
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:63
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:62
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
 msgid "lot of code fixes and optimization"
 msgstr "moltes correccions de codi i optimitzacions"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:58
 msgid "Yum Extender 4.9.4 add many fixes and small improvments"
 msgstr "El Yum Extender 4.9.4 afegeix moltes correccions i petites millores."
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
 msgid "Support for importing gpg keys from repositories"
 msgstr "Suport per a la importació de claus gpg dels repositoris"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:54
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:61
 msgid "fix installing and updating flatpaks at system location"
 msgstr ""
 "Correcció de la instal·lació i l'actualització de flatpaks a la ubicació del"
 " sistema."
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:67
 msgid "Yum Extender 4.9.3 improve the flatpak installer"
 msgstr "El Yum Extender 4.9.3 millora l'instal·lador de flatpaks"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:62
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:69
 msgid "flatpak install with search and select available results"
 msgstr ""
 "instal·lació de flatpaks amb cerca i selecció dels resultats disponibles"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:68
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:75
 msgid "Yum Extender 4.9.2 adds support for flatpaks"
 msgstr "El Yum Extender 4.9.2 afegeix suport per a flatpaks"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:77
 msgid "Browse installed flatpaks"
 msgstr "Exploreu els flatpaks instal·lats"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:76
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:83
 msgid "Yum Extender 4.9.1 is a total rewrite using a modern toolchain"
 msgstr ""
 "El Yum Extender 4.9.1 és una reescriptura total que usa una cadena d'eines "
 "moderna"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:78
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:85
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
 msgstr "Interfície d'usuari nova i escalable amb Gtk4 i Libadwaita"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:79
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:86
 msgid "Using dnf directly for readonly actions"
 msgstr "Ús de dnf directament per a accions de només lectura"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:92
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:99
 msgid "yumex"
 msgstr "yumex"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:93
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:100
 msgid "yumex-dnf"
 msgstr "yumex-dnf"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:94
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:101
 msgid "Package Manager"
 msgstr "Gestor de paquets"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:3
 msgid "Yum Extender Flatpak Installer"
-msgstr ""
+msgstr "Instal·lador de flatpaks Yum Extender"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:4
 msgid "Install flatpak defined in .flatpakref"
-msgstr ""
+msgstr "Instal·leu un flatpak definit a .flatpakref"
