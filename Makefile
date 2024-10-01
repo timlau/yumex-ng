@@ -13,7 +13,7 @@ DIST=${shell rpm --eval "%{dist}"}
 GIT_MASTER=main
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
-COPR_REL_DNF4 = -r fedora-39-x86_64 -r fedora-39-aarch64 -r fedora-40-x86_64 -r fedora-40-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64
+COPR_REL_DNF4 = -r fedora-39-x86_64 -r fedora-39-aarch64 -r fedora-40-x86_64 -r fedora-40-aarch64
 COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64
 COPR_REL_DNF5_SUBPKG = -r fedora-39-x86_64 -r fedora-39-aarch64 -r fedora-40-x86_64 -r fedora-40-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64
 
