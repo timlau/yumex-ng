@@ -51,6 +51,7 @@ class Config:
     show_icon: bool
     update_sync_interval: int
     send_notification: bool
+    use_dark_icon: bool
 
     @classmethod
     def from_gsettings(cls):
@@ -60,15 +61,18 @@ class Config:
         show_icon = settings.get_boolean("upd-show-icon")
         update_interval = settings.get_int("upd-interval")
         notification = settings.get_boolean("upd-notification")
+        use_dark_icon = settings.get_boolean("upd-use-dark-icon")
         logger.debug(f"CONFIG: custom_updater        = {custom_updater}")
         logger.debug(f"CONFIG: show_icon             = {show_icon}")
         logger.debug(f"CONFIG: update_sync_interval  = {update_interval}")
         logger.debug(f"CONFIG: send_notification     = {notification}")
-        return cls(custom_updater, show_icon, update_interval, notification)
+        logger.debug(f"CONFIG: use_dark_icon         = {use_dark_icon}")
+        return cls(custom_updater, show_icon, update_interval, notification, use_dark_icon)
 
 
 class Indicator:
-    def __init__(self, custom_updater, refresh_func):
+    def __init__(self, use_dark_icon, custom_updater, refresh_func):
+        self.use_dark_icon = use_dark_icon
         self._indicator = None
         self.custom_updater = custom_updater
         self.refresh_func = refresh_func
@@ -85,9 +89,11 @@ class Indicator:
 
     def _factory(self):
         try:
+            icon_path = "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update-dark.svg" if self.use_dark_icon else "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update-light.svg"
+            logger.debug(f"Creating indicator with icon: {icon_path}")
             indicator = AppIndicator3.Indicator.new(
                 "System Update Monitor",
-                "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update.svg",
+                icon_path,
                 AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
             )
             indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
@@ -128,9 +134,28 @@ class Indicator:
         pm_item = Gtk.MenuItem(label="Open Package Manager")
         pm_item.connect("activate", self.on_clicked_pm)
         menu.append(pm_item)
+
+        dark_icon_item = Gtk.CheckMenuItem(label="Use Dark Theme Tray Icon")
+        dark_icon_item.set_active(self.use_dark_icon)
+        dark_icon_item.connect("toggled", self.on_toggle_dark_icon)
+        menu.append(dark_icon_item)
+
         menu.show_all()
         return menu
 
+    def on_toggle_dark_icon(self, menu_item):
+        """Toggle dark icon preference"""
+        self.use_dark_icon = menu_item.get_active()
+        settings = Gio.Settings(APP_ID)
+        settings.set_boolean("upd-use-dark-icon", self.use_dark_icon)
+        settings.sync()  # Ensure the setting is applied immediately
+
+        # Update the icon
+        icon_path = "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update-dark.svg" if self.use_dark_icon else "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update-light.svg"
+        self.indicator.set_icon_full(icon_path, "System Update Monitor")
+
+        # Update the menu
+        self.indicator.set_menu(self.get_menu())
 
 @dataclass
 class Updates:

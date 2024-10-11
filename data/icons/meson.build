@@ -4,6 +4,10 @@ install_data(
   install_dir: join_paths(get_option('datadir'), 'icons', scalable_dir)
 )
 install_data(
-  join_paths(scalable_dir, 'yumex-system-software-update.svg'),
+  join_paths(scalable_dir, 'yumex-system-software-update-light.svg'),
+  install_dir: join_paths(get_option('datadir'), 'icons', scalable_dir)
+)
+install_data(
+  join_paths(scalable_dir, 'yumex-system-software-update-dark.svg'),
   install_dir: join_paths(get_option('datadir'), 'icons', scalable_dir)
 )
