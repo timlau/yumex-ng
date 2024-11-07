@@ -49,7 +49,7 @@ release:
 # build local rpms with dnf5 backend and start a copr build
 copr-release-dnf5:
 	@$(MAKE) archive
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${VERSION}.tar.gz
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # build local rpms with dnf4 backend and start a copr build 
