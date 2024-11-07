@@ -1,11 +1,11 @@
 %global app_id dk.yumex.Yumex
 %global app_build release
-%global dnf_backend DNF4
+%global dnf_backend DNF5
 %global app_name yumex
 
 Name:     %{app_name}
 Version:  5.0.2
-Release:  2%{?dist}
+Release:  3%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -45,6 +45,7 @@ Requires: python3-dnf
 %if "%{dnf_backend}" == "DNF5"
 Requires: python3-libdnf5
 Requires: dnf5daemon-server
+Obsoletes: yumex-dnf5 <= 5.0.2
 %endif
 
 Obsoletes: yumex-dnf <= 4.5.1
