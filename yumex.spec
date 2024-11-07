@@ -64,6 +64,12 @@ Requires: gtk3
 Requires: python3-dasbus
 Requires: flatpak-libs > 1.15.0
 Requires: libappindicator-gtk3
+
+%if "%{dnf_backend}" == "DNF5"
+Provides: yumex-dnf5-updater-systray = %{version}-%{release}
+Obsoletes: yumex-dnf5-updater-systray < %{version}-%{release}
+%endif
+
 %description -n %{name}-updater-systray
 Systray application to check and show available updates
 
