@@ -46,7 +46,7 @@ Requires: python3-dnf
 Requires: python3-libdnf5
 Requires: dnf5daemon-server
 Provides: yumex-dnf5 = %{version}-%{release}
-Obsoletes: yumex-dnf5 <= 5.0.2
+Obsoletes: yumex-dnf5 < %{version}-%{release}
 %endif
 
 Obsoletes: yumex-dnf <= 4.5.1
