@@ -15,7 +15,7 @@
 
 """Custom types used for type hinting for more clarity"""
 
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Type, NewType
 
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow
@@ -28,5 +28,5 @@ from gi.repository import Flatpak
 # we can not use the YumexMainWindow direct, because of circular imports
 
 MainWindow = Type["YumexMainWindow"]
-FlatpakRefString = str  # ex. app/org.gnome.design.Contrast/x86_64/stable
-FlatpakRef = Flatpak.Ref
+FlatpakRefString = NewType("FlatpakRefString", str)  # ex. app/org.gnome.design.Contrast/x86_64/stable
+FlatpakRef = FlatpakRef = NewType("FlatpakRef", Flatpak.Ref)
