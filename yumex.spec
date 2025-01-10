@@ -1,11 +1,11 @@
 %global app_id dk.yumex.Yumex
 %global app_build release
-%global dnf_backend DNF4
+%global dnf_backend DNF5
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.0.2
-Release:  2%{?dist}
+Version:  5.0.3
+Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -45,6 +45,8 @@ Requires: python3-dnf
 %if "%{dnf_backend}" == "DNF5"
 Requires: python3-libdnf5
 Requires: dnf5daemon-server
+Provides: yumex-dnf5 = %{version}-%{release}
+Obsoletes: yumex-dnf5 < %{version}-%{release}
 %endif
 
 Obsoletes: yumex-dnf <= 4.5.1
@@ -62,6 +64,12 @@ Requires: gtk3
 Requires: python3-dasbus
 Requires: flatpak-libs > 1.15.0
 Requires: libappindicator-gtk3
+
+%if "%{dnf_backend}" == "DNF5"
+Provides: yumex-dnf5-updater-systray = %{version}-%{release}
+Obsoletes: yumex-dnf5-updater-systray < %{version}-%{release}
+%endif
+
 %description -n %{name}-updater-systray
 Systray application to check and show available updates
 
@@ -145,6 +153,8 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+* Thu Nov 7 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.3-1
+- the 5.0.3 release
 
 * Fri Jul 26 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.2-1
 - the 5.0.2 release
