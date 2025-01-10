@@ -143,7 +143,7 @@ class YumexRootBackend:
             arch = pkg["arch"]
             evr = pkg["evr"]
             repo = pkg["repo_id"]
-            if "package_size" in pkg:
+            if "package_size" in pkg:   
                 size = pkg["package_size"]
             elif "install_size" in pkg:
                 size = pkg["install_size"]
@@ -176,7 +176,10 @@ class YumexRootBackend:
         if to_update:
             client.session.upgrade(gv_list(to_update), {})
         res = client.resolve({})
-        content, rc = res
+        if res:
+            content, rc = res
+        else:  # Something went very wrong
+            content, rc = [], 2
         return content, rc
 
     def connect_signals(self, client):
@@ -292,7 +295,7 @@ class YumexRootBackend:
 
     def on_repo_key_import_request(self, session, key_id, user_ids, key_fingerprint, key_url, timestamp):
         logger.debug(
-            "Signal : repo_key_import_request: " f"{session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
+            f"Signal : repo_key_import_request: {session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
         )
         # <arg name="session_object_path" type="o" />
         # <arg name="key_id" type="s" />
