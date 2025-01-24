@@ -38,6 +38,8 @@ def setup_logging(debug=False):
             datefmt="%H:%M:%S",
         )
         log_file = Path("~/.local/share/yumex/yumex_debug.log").expanduser()
+        log_file.parent.mkdir(exist_ok=True)
+
         file_handler = logging.handlers.RotatingFileHandler(log_file, backupCount=5)
         if log_file.exists():
             file_handler.doRollover()
@@ -77,7 +79,7 @@ class RunAsync(threading.Thread):
         try:
             result = self.task_func(*args, **kwargs)
         except Exception as exception:
-            logger.debug("Error while running async job: " f"{self.task_func}\nException: {exception}")
+            logger.debug(f"Error while running async job: {self.task_func}\nException: {exception}")
 
             error = exception
             _ex_type, _ex_value, trace = sys.exc_info()
