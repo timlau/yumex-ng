@@ -123,8 +123,7 @@ class YumexApplication(Adw.Application):
         self.args = parser.parse_args(args.get_arguments()[1:])
         if self.args.exit:
             subprocess.call(
-                "/usr/bin/dbus-send --system --print-reply "
-                "--dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit",
+                "/usr/bin/dbus-send --system --print-reply --dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit",
                 shell=True,
             )
             return 0
