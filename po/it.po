@@ -5,15 +5,16 @@
 # 
 # Translators:
 # Paco Len, 2024
+# Mimì, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 07:01+0200\n"
+"POT-Creation-Date: 2024-09-26 07:38+0200\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
-"Last-Translator: Paco Len, 2024\n"
+"Last-Translator: Mimì, 2024\n"
 "Language-Team: Italian (https://app.transifex.com/timlau/teams/16939/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,128 +22,128 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: yumex/backend/flatpak/transaction.py:63
-#: yumex/backend/dnf5daemon/__init__.py:39 yumex/ui/flatpak_result.py:34
-msgid "Installing"
-msgstr "Installando"
-
-#: yumex/backend/flatpak/transaction.py:65 yumex/ui/flatpak_result.py:36
-msgid "Uninstalling"
-msgstr "Disinstallando"
-
-#: yumex/backend/flatpak/transaction.py:67 yumex/ui/flatpak_result.py:38
-msgid "Updating"
-msgstr "Aggiornando"
-
-#: yumex/backend/flatpak/transaction.py:179
-msgid "flatpak transaction failed"
-msgstr "transazione flatpak fallita"
-
-#: yumex/backend/dnf/dnf4.py:120
+#: yumex/backend/dnf/dnf4.py:122
 #, python-brace-format
 msgid "Downloading repository information for {name}"
-msgstr "Download delle informazioni sul repository per {name}"
+msgstr "Recupero informazioni repository per {name}"
 
-#: yumex/backend/dnf5daemon/__init__.py:41
+#: yumex/backend/dnf5daemon/__init__.py:40
+#: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
+msgid "Installing"
+msgstr "Installazione"
+
+#: yumex/backend/dnf5daemon/__init__.py:42
 msgid "Upgrading"
 msgstr "Aggiornamento"
 
-#: yumex/backend/dnf5daemon/__init__.py:43
+#: yumex/backend/dnf5daemon/__init__.py:44
 msgid "Downgrading"
-msgstr "Retrocedendo"
+msgstr "Retrocessione"
 
-#: yumex/backend/dnf5daemon/__init__.py:45
+#: yumex/backend/dnf5daemon/__init__.py:46
 msgid "Reinstalling"
 msgstr "Reinstallazione"
 
-#: yumex/backend/dnf5daemon/__init__.py:47
+#: yumex/backend/dnf5daemon/__init__.py:48
 msgid "Removing"
 msgstr "Rimozione"
 
-#: yumex/backend/dnf5daemon/__init__.py:49
+#: yumex/backend/dnf5daemon/__init__.py:50
 msgid "Replacing"
 msgstr "Sostituzione"
 
-#: yumex/backend/dnf5daemon/__init__.py:200
-#: yumex/backend/dnf5daemon/__init__.py:220 yumex/backend/daemon.py:64
-#: yumex/ui/window.py:175
+#: yumex/backend/dnf5daemon/__init__.py:201
+#: yumex/backend/dnf5daemon/__init__.py:221 yumex/backend/daemon.py:67
+#: yumex/ui/window.py:188
 msgid "Building Transaction"
-msgstr "Preparando la Transazione"
+msgstr "Preparazione transazione"
 
-#: yumex/backend/dnf5daemon/__init__.py:224
-#: yumex/backend/dnf5daemon/__init__.py:279 yumex/backend/daemon.py:71
+#: yumex/backend/dnf5daemon/__init__.py:225
+#: yumex/backend/dnf5daemon/__init__.py:284 yumex/backend/daemon.py:74
 msgid "Applying Transaction"
-msgstr "Applicando la Transazione"
+msgstr "Esecuzione transazione"
 
-#: yumex/backend/dnf5daemon/__init__.py:248 yumex/backend/daemon.py:77
-#: yumex/backend/daemon.py:79
+#: yumex/backend/dnf5daemon/__init__.py:253 yumex/backend/daemon.py:80
+#: yumex/backend/daemon.py:82
 msgid "Download Packages"
-msgstr "Scaricare i Pacchetti"
+msgstr "Scarica pacchetti"
 
-#: yumex/backend/dnf5daemon/__init__.py:250
+#: yumex/backend/dnf5daemon/__init__.py:255
 msgid "Download Reposiory Information"
-msgstr "Scarica Informazioni Repository"
+msgstr "Scarica informazioni repository"
 
-#: yumex/backend/dnf5daemon/__init__.py:253 yumex/backend/daemon.py:115
+#: yumex/backend/dnf5daemon/__init__.py:258 yumex/backend/daemon.py:118
 #, python-brace-format
 msgid "Downloading : {name}"
-msgstr "Scaricando : {name}"
+msgstr "Prelievo : {name}"
 
-#: yumex/backend/dnf5daemon/__init__.py:258
+#: yumex/backend/dnf5daemon/__init__.py:263
 #, python-brace-format
 msgid "Downloading : {pkg.name}"
-msgstr "Scaricando : {pkg.name}"
+msgstr "Prelievo : {pkg.name}"
 
-#: yumex/backend/daemon.py:69 yumex/ui/window.py:190
+#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
+msgid "Uninstalling"
+msgstr "Disinstallazione"
+
+#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:41
+msgid "Updating"
+msgstr "Aggiornamento"
+
+#: yumex/backend/flatpak/transaction.py:182
+msgid "flatpak transaction failed"
+msgstr "Transazione Flatpak fallita"
+
+#: yumex/backend/daemon.py:72 yumex/ui/window.py:203
 msgid "Running Transaction"
-msgstr "Transazione in Corso"
+msgstr "Transazione in corso"
 
-#: yumex/backend/daemon.py:75
+#: yumex/backend/daemon.py:78
 msgid "Checking package signatures"
-msgstr "Controllo delle firme dei pacchetti"
+msgstr "Controllo firme pacchetti"
 
-#: yumex/backend/daemon.py:87
+#: yumex/backend/daemon.py:90
 #, python-brace-format
 msgid "Erasing : {pkg_name}"
-msgstr "Cancellando : {pkg_name}"
+msgstr "Elimina : {pkg_name}"
 
-#: yumex/backend/daemon.py:89
+#: yumex/backend/daemon.py:92
 #, python-brace-format
 msgid "Installing : {pkg_name}"
-msgstr "Installando : {pkg_name}"
+msgstr "Installa : {pkg_name}"
 
-#: yumex/backend/daemon.py:91
+#: yumex/backend/daemon.py:94
 #, python-brace-format
 msgid "Updating : {pkg_name}"
-msgstr "Aggiornando : {pkg_name}"
+msgstr "Aggiorna : {pkg_name}"
 
-#: yumex/backend/daemon.py:95
+#: yumex/backend/daemon.py:98
 #, python-brace-format
 msgid "Verifying : {pkg_name}"
-msgstr "Verificando : {pkg_name}"
+msgstr "Verifica : {pkg_name}"
 
-#: yumex/backend/daemon.py:97
+#: yumex/backend/daemon.py:100
 #, python-brace-format
 msgid "Running scriptlets : {pkg_name}"
-msgstr "Eseguendo gli scriptlets : {pkg_name}"
+msgstr "Esecuzione scriptlets : {pkg_name}"
 
-#: yumex/backend/daemon.py:109
+#: yumex/backend/daemon.py:112
 msgid "Downloading Packages"
-msgstr "Scaricando i Pacchetti"
+msgstr "Scaricamento pacchetti"
 
-#: yumex/backend/daemon.py:125
+#: yumex/backend/daemon.py:128
 msgid "Downloading Repository Metadata"
-msgstr "Scaricando Metadati Repository"
+msgstr "Recupero metadati repository"
 
-#: yumex/backend/daemon.py:163
+#: yumex/backend/daemon.py:166
 msgid "Couldn't build transaction\n"
 msgstr "Impossibile preparare la transazione\n"
 
-#: yumex/backend/daemon.py:167
+#: yumex/backend/daemon.py:170
 msgid "Exception in Dnf Backend\n"
 msgstr "Eccezione nel backend di Dnf\n"
 
-#: yumex/backend/daemon.py:187
+#: yumex/backend/daemon.py:190
 msgid "Exception in Dnf Backend : "
 msgstr "Eccezione nel backend di Dnf :"
 
@@ -173,13 +174,61 @@ msgstr "In coda per l'installazione"
 msgid "Queued for updating"
 msgstr "In coda per l'aggiornamento"
 
+#: yumex/ui/dialogs.py:15
+msgid "Quit"
+msgstr "Chiudi"
+
+#: yumex/ui/dialogs.py:34
+msgid "Install GPG Key"
+msgstr "Installa chiave GPG"
+
+#: yumex/ui/dialogs.py:42
+msgid "Yes"
+msgstr "Sì"
+
+#: yumex/ui/dialogs.py:44
+msgid "No"
+msgstr "No"
+
+#: yumex/ui/flatpak_view.py:85
+#, python-brace-format
+msgid "{flatpakref} was installed"
+msgstr "{flatpakref} è stato installato"
+
+#: yumex/ui/flatpak_view.py:91
+msgid "flatpaks were updated"
+msgstr "Flatpaks aggiornati"
+
+#: yumex/ui/flatpak_view.py:98
+msgid "Unused flatpaks were removed"
+msgstr "Flatpaks inutilizzati rimossi"
+
+#: yumex/ui/flatpak_view.py:105
+#, python-brace-format
+msgid "{pkg.id} is now updated"
+msgstr "{pkg.id} è stato aggiornato"
+
+#: yumex/ui/flatpak_view.py:110 yumex/ui/window.py:298
+msgid "Updating Yumex Updater"
+msgstr "Aggiornamento Yumex Updater"
+
+#: yumex/ui/flatpak_view.py:131 yumex/ui/flatpak_view.py:157
+#, python-brace-format
+msgid "{fp_id} is now installed"
+msgstr "{fp_id} è stato installato"
+
+#: yumex/ui/flatpak_view.py:167
+#, python-brace-format
+msgid "{selected[0].id} is now removed"
+msgstr "{selected[0].id} è stato rimosso"
+
 #: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33
 msgid "Bugfix"
-msgstr "Correzione del bug"
+msgstr "Problemi corretti"
 
 #: yumex/ui/package_info.py:27 yumex/ui/package_info.py:34
 msgid "New Package"
-msgstr "Nuovo Pacchetto"
+msgstr "Nuovo pacchetto"
 
 #: yumex/ui/package_info.py:28 yumex/ui/package_info.py:35
 msgid "Security"
@@ -191,11 +240,19 @@ msgstr "Miglioramento"
 
 #: yumex/ui/package_info.py:68
 msgid "no update information found"
-msgstr "non sono state trovate informazioni di aggiornamento"
+msgstr "Non sono state trovate informazioni di aggiornamento"
 
 #: yumex/ui/package_info.py:99
 msgid "Undefined"
 msgstr "Indefinito"
+
+#: yumex/ui/package_view.py:101
+msgid "Loading Packages"
+msgstr "Caricamento pacchetti"
+
+#: yumex/ui/package_view.py:102
+msgid "This make take a little while"
+msgstr "Potrebbe richiedere un po' di tempo."
 
 #: yumex/ui/transaction_result.py:64
 msgid "Packages for installation"
@@ -209,88 +266,93 @@ msgstr "Pacchetti da rimuovere"
 msgid "Packages for updating"
 msgstr "Pacchetti da aggiornare"
 
-#: yumex/ui/dialogs.py:15
-msgid "Quit"
-msgstr "Chiudi"
-
-#: yumex/ui/dialogs.py:34
-msgid "Install GPG Key"
-msgstr "Installare chiave GPG"
-
-#: yumex/ui/dialogs.py:42
-msgid "Yes"
-msgstr "Sì"
-
-#: yumex/ui/dialogs.py:44
-msgid "No"
-msgstr "No"
-
-#: yumex/ui/package_view.py:96
-msgid "Loading Packages"
-msgstr "Caricamento dei Pacchetti"
-
-#: yumex/ui/package_view.py:97
-msgid "This make take a little while"
-msgstr "Questo richiede un po' di tempo"
-
-#: yumex/ui/window.py:229
+#: yumex/ui/window.py:242
 msgid "Running Flatpak Transaction"
-msgstr "Eseguendo Transazione Flatpak"
+msgstr "Transazione Flatpak in corso"
 
-#: yumex/ui/window.py:290 yumex/ui/flatpak_view.py:108
-msgid "Updating Yumex Updater"
-msgstr ""
-
-#: yumex/ui/window.py:293
+#: yumex/ui/window.py:301
 msgid "Transaction completed succesfully"
 msgstr "Transazione completata con successo"
 
-#: yumex/ui/flatpak_view.py:83
-#, python-brace-format
-msgid "{flatpakref} was installed"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:89
-msgid "flatpaks were updated"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:96
-msgid "Unused flatpaks were removed"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:103
-#, python-brace-format
-msgid "{pkg.id} is now updated"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:129 yumex/ui/flatpak_view.py:155
-#, python-brace-format
-msgid "{fp_id} is now installed"
-msgstr "{fp_id} è ora installato"
-
-#: yumex/ui/flatpak_view.py:165
-#, python-brace-format
-msgid "{selected[0].id} is now removed"
-msgstr "{selected[0].id} è stato rimosso"
-
-#: yumex/main.py:168
+#: yumex/main.py:175
 msgid ""
 "\n"
 "        <ul>\n"
-"          <li>Support for update info with dnf5</li>\n"
-"          <li>new improved flatpak installer</li>\n"
-"          <li>cleanup unused flatpaks</li>\n"
+"          <li>Added background update checker</li>\n"
+"          <li>Sending Notifications on available updates</li>\n"
+"          <li>Show system tray icon on supported systems (gnome need appindicator extension)</li>\n"
 "          <li>lot of code fixes and optimization</li>\n"
 "        </ul>\n"
 msgstr ""
 
-#: yumex/main.py:178
+#: yumex/main.py:185
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 "\n"
 "Yum Extender gestisce l'installazione, l'aggiornamento e la rimozione dei pacchetti.\n"
+
+#: yumex/main.py:195
+msgid "Special thanks to"
+msgstr "Ringraziamenti"
+
+#: yumex/yumex_updater_systray:75
+msgid "Updates are available"
+msgstr "Aggiornamenti disponibili"
+
+#: data/ui/flatpak_result.blp:16
+msgid "Flatpak Transaction Result"
+msgstr "Risultato transazione Flatpak"
+
+#: data/ui/flatpak_result.blp:20 data/ui/flatpak_search.blp:23
+#: data/ui/transaction_result.blp:20
+msgid "Cancel"
+msgstr "Annulla"
+
+#: data/ui/flatpak_result.blp:32 data/ui/transaction_result.blp:32
+msgid "Confirm"
+msgstr "Conferma"
+
+#: data/ui/flatpak_row.blp:36
+msgid "Update is available"
+msgstr "È disponibile un aggiornamento"
+
+#: data/ui/flatpak_row.blp:42
+msgid "Uninstall flatpak"
+msgstr "Disinstalla Flatpak"
+
+#: data/ui/flatpak_search.blp:18
+msgid "Search Flatpaks"
+msgstr "Cerca Flatpak"
+
+#: data/ui/flatpak_search.blp:43
+msgid "Install"
+msgstr "Installa"
+
+#: data/ui/flatpak_search.blp:91
+msgid "Install location"
+msgstr "Posizione installazione"
+
+#: data/ui/flatpak_search.blp:113
+msgid "Active Remotes: "
+msgstr ""
+
+#: data/ui/package_info.blp:20
+msgid "Advisory ID"
+msgstr "ID Avviso"
+
+#: data/ui/package_info.blp:28
+msgid "Advisory Type"
+msgstr "Tipo Avviso"
+
+#: data/ui/package_info.blp:36
+msgid "Advisory Issued"
+msgstr "Avviso Emesso"
+
+#: data/ui/package_info.blp:51
+msgid "Bugzilla References"
+msgstr "Riferimenti Bugzilla"
 
 #: data/ui/package_settings.blp:9
 msgid "Package filter"
@@ -308,13 +370,13 @@ msgstr "Aggiornamenti"
 msgid "All"
 msgstr "Tutto"
 
-#: data/ui/package_settings.blp:49 data/ui/window.blp:39
+#: data/ui/package_settings.blp:49 data/ui/window.blp:36
 msgid "Search"
 msgstr "Cerca"
 
 #: data/ui/package_settings.blp:62
 msgid "View Settings"
-msgstr "Visualizza le Impostazioni"
+msgstr "Opzioni Vista"
 
 #: data/ui/package_settings.blp:73
 msgid "Select what attribute to sort by"
@@ -338,7 +400,7 @@ msgstr "Dimensione"
 
 #: data/ui/package_settings.blp:96
 msgid "Repo"
-msgstr "Repo"
+msgstr "Repository"
 
 #: data/ui/package_settings.blp:102
 msgid "Description"
@@ -346,80 +408,11 @@ msgstr "Descrizione"
 
 #: data/ui/package_settings.blp:103
 msgid "Filelist"
-msgstr "Elenco dei file"
+msgstr "File Installati"
 
 #: data/ui/package_settings.blp:104
 msgid "Update Info"
 msgstr "Info Aggiornamento"
-
-#: data/ui/queue_row.blp:17
-msgid "Added as a dependency"
-msgstr "Aggiunto come dipendenza"
-
-#: data/ui/queue_row.blp:35
-msgid "Remove item from queue"
-msgstr "Rimuovere elemento dalla coda"
-
-#: data/ui/transaction_result.blp:16
-msgid "Transaction Result"
-msgstr "Risultato della Transazione"
-
-#: data/ui/transaction_result.blp:20 data/ui/flatpak_result.blp:20
-#: data/ui/flatpak_search.blp:19
-msgid "Cancel"
-msgstr "Annulla"
-
-#: data/ui/transaction_result.blp:32 data/ui/flatpak_result.blp:32
-msgid "Confirm"
-msgstr "Conferma"
-
-#: data/ui/flatpak_row.blp:36
-msgid "Update is available"
-msgstr "È disponibile un aggiornamento"
-
-#: data/ui/flatpak_row.blp:42
-msgid "Uninstall flatpak"
-msgstr "Disinstalla flatpak"
-
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
-msgid "Preferences"
-msgstr "Preferenze"
-
-#: data/ui/preferences.blp:10
-msgid "Settings"
-msgstr "Impostazioni"
-
-#: data/ui/preferences.blp:13
-msgid "Flatpak Settings"
-msgstr "Impostazioni Flatpak"
-
-#: data/ui/preferences.blp:27 data/ui/package_view.blp:48
-msgid "Repository"
-msgstr "Repository"
-
-#: data/ui/preferences.blp:30
-msgid "Repository Settings"
-msgstr "Impostazioni del Repository"
-
-#: data/ui/preferences.blp:31
-msgid "The available and enabled repositories"
-msgstr "I repository disponibili e abilitati"
-
-#: data/ui/package_info.blp:20
-msgid "Advisory ID"
-msgstr "ID Avviso"
-
-#: data/ui/package_info.blp:28
-msgid "Advisory Type"
-msgstr "Tipo di Avviso"
-
-#: data/ui/package_info.blp:36
-msgid "Advisory Issued"
-msgstr "Avviso Emesso"
-
-#: data/ui/package_info.blp:51
-msgid "Bugzilla References"
-msgstr "Riferimenti Bugzilla"
 
 #: data/ui/package_view.blp:24
 msgid "Version"
@@ -427,11 +420,15 @@ msgstr "Versione"
 
 #: data/ui/package_view.blp:30
 msgid "Arch."
-msgstr "Arch."
+msgstr "Arch"
 
 #: data/ui/package_view.blp:42
 msgid "Summary"
 msgstr "Descrizione"
+
+#: data/ui/package_view.blp:48 data/ui/preferences.blp:90
+msgid "Repository"
+msgstr "Repository"
 
 #: data/ui/package_view.blp:100 data/ui/shortcuts.blp:51
 msgid "Select All"
@@ -441,9 +438,13 @@ msgstr "Seleziona Tutto"
 msgid "Deselect All"
 msgstr "Deseleziona Tutto"
 
-#: data/ui/flatpak_result.blp:16
-msgid "Flatpak Transaction Result"
-msgstr "Risultato Transazione Flatpak"
+#: data/ui/queue_row.blp:17
+msgid "Added as a dependency"
+msgstr "Aggiunto come dipendenza"
+
+#: data/ui/queue_row.blp:35
+msgid "Remove item from queue"
+msgstr "Rimuovere elemento dalla coda"
 
 #: data/ui/shortcuts.blp:8
 msgid "General"
@@ -451,43 +452,47 @@ msgstr "Generale"
 
 #: data/ui/shortcuts.blp:11
 msgid "Keyboard shortcuts"
-msgstr "Scorciatoie da tastiera"
+msgstr "Scorciatoie Tastiera"
+
+#: data/ui/shortcuts.blp:15 data/ui/preferences.blp:5
+msgid "Preferences"
+msgstr "Preferenze"
 
 #: data/ui/shortcuts.blp:19
 msgid "Apply Actions/Confirm"
-msgstr "Applica Azioni/Confermare"
+msgstr "Applica/Conferma"
 
 #: data/ui/shortcuts.blp:23
 msgid "Close Dialog/Cancel"
-msgstr "Chiudere finestra di dialogo/Annullare"
+msgstr "Chiudi/Annulla"
 
 #: data/ui/shortcuts.blp:28
 msgid "Select Packages"
-msgstr "Seleziona Pacchetti"
+msgstr "Mostra Pacchetti"
 
 #: data/ui/shortcuts.blp:32
 msgid "Select Flatpaks"
-msgstr "Seleziona Flatpak"
+msgstr "Mostra Flatpak"
 
 #: data/ui/shortcuts.blp:36
 msgid "Select Queue"
-msgstr "Seleziona Coda"
+msgstr "Mostra In Coda"
 
 #: data/ui/shortcuts.blp:41
 msgid "Package View"
-msgstr "Visuale Pacchetto"
+msgstr "Vista Pacchetti"
 
 #: data/ui/shortcuts.blp:43
 msgid "Show/Hide Sidebar"
-msgstr "Mostra/Nascondi Barra laterale"
+msgstr "Mostra/Nascondi Pannello"
 
 #: data/ui/shortcuts.blp:47
 msgid "Toggled queued"
-msgstr "Accodato"
+msgstr "In Coda"
 
 #: data/ui/shortcuts.blp:60
 msgid "Package Filters"
-msgstr "Filtri Pacchetto"
+msgstr "Filtro Pacchetti"
 
 #: data/ui/shortcuts.blp:62
 msgid "Show Installed"
@@ -503,121 +508,173 @@ msgstr "Mostra Tutto"
 
 #: data/ui/shortcuts.blp:75
 msgid "Queue View"
-msgstr "Visuale Coda"
+msgstr "Vista In Coda"
 
 #: data/ui/shortcuts.blp:77
 msgid "Clear Queue"
-msgstr "Pulisci Coda"
+msgstr "Pulisci In Coda"
 
 #: data/ui/shortcuts.blp:82
 msgid "Flatpak View"
-msgstr "Visuale Flatpak"
+msgstr "Vista Flatpak"
 
 #: data/ui/shortcuts.blp:84
 msgid "Search for flatpaks to install"
-msgstr ""
+msgstr "Cerca Flatpak da installare"
 
 #: data/ui/shortcuts.blp:88
 msgid "Remove selected flatpak"
-msgstr "Rimuovi flatpak selezionato"
+msgstr "Rimuovi Flatpak selezionato"
 
-#: data/ui/flatpak_search.blp:15
-msgid "Search Flatpaks"
-msgstr ""
+#: data/ui/transaction_result.blp:16
+msgid "Transaction Result"
+msgstr "Risultato della transazione"
 
-#: data/ui/flatpak_search.blp:35
-msgid "Install"
-msgstr ""
+#: data/ui/preferences.blp:10
+msgid "Settings"
+msgstr "Impostazioni"
 
-#: data/ui/flatpak_search.blp:65
-msgid "Install location"
-msgstr "Destinazione installazione"
+#: data/ui/preferences.blp:13
+msgid "Flatpak Settings"
+msgstr "Flatpak"
 
-#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
+#: data/ui/preferences.blp:15
+msgid "Default Location"
+msgstr "Posizione predefinita"
+
+#: data/ui/preferences.blp:20
+msgid "Default Remote"
+msgstr "Origine predefinita"
+
+#: data/ui/preferences.blp:25
+msgid "Metadata Settings"
+msgstr "Metadati"
+
+#: data/ui/preferences.blp:27
+msgid "Min. Refresh interval (minutes)"
+msgstr "Intervallo di aggiornamento (minuti)"
+
+#: data/ui/preferences.blp:39
+msgid "Updater Settings"
+msgstr "Aggiornamenti"
+
+#: data/ui/preferences.blp:41
+msgid "Custom System Updater (path)"
+msgstr "Gestore personalizzato (percorso)"
+
+#: data/ui/preferences.blp:55
+msgid "Check updates interval (minutes)"
+msgstr "Intervallo controllo aggiornamenti (minuti)"
+
+#: data/ui/preferences.blp:66
+msgid "Show systray icon on updates"
+msgstr "Mostra icona per gli aggiornamenti"
+
+#: data/ui/preferences.blp:76
+msgid "Send Notification on updates"
+msgstr "Invia notifiche sugli aggiornamenti"
+
+#: data/ui/preferences.blp:93
+msgid "Repository Settings"
+msgstr "Repository"
+
+#: data/ui/preferences.blp:94
+msgid "The available and enabled repositories"
+msgstr "Elenco repository disponibili e abilitati"
+
+#: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:3
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:7
 msgid "Yum Extender"
 msgstr "Yum Extender"
 
-#: data/ui/window.blp:33
+#: data/ui/window.blp:29
 msgid "Select Package filters"
 msgstr "Selezionare i filtri del pacchetto"
 
-#: data/ui/window.blp:55
+#: data/ui/window.blp:56
 msgid "Main Menu"
 msgstr "Menu Principale"
 
-#: data/ui/window.blp:63
+#: data/ui/window.blp:68
 msgid "Apply"
 msgstr "Applica"
 
-#: data/ui/window.blp:66
+#: data/ui/window.blp:72
 msgid "Apply Package Actions"
 msgstr "Applica Azioni Pacchetto"
 
-#: data/ui/window.blp:82
+#: data/ui/window.blp:89
 msgid "Package Name"
 msgstr "Nome Pacchetto"
 
-#: data/ui/window.blp:93
+#: data/ui/window.blp:99
 msgid "Packages"
 msgstr "Pacchetti"
 
-#: data/ui/window.blp:140
+#: data/ui/window.blp:146
 msgid "Flatpaks"
 msgstr "Flatpak"
 
-#: data/ui/window.blp:160
+#: data/ui/window.blp:170
 msgid "Update All Flatpaks (Apps & Runtimes)"
 msgstr "Aggiorna Tutti i Flatpak (Applicazioni e Runtime)"
 
-#: data/ui/window.blp:165
+#: data/ui/window.blp:176
 msgid "search for new flatpak to install"
-msgstr ""
+msgstr "Cerca Flatpack da installare"
 
-#: data/ui/window.blp:170
+#: data/ui/window.blp:182
 msgid "uninstall selected flatpak"
-msgstr "disinstalla flatpak selezionato"
+msgstr "Disinstalla Flatpak selezionato"
 
-#: data/ui/window.blp:175
+#: data/ui/window.blp:188
 msgid "Remove unused flatpaks (runtimes etc.)"
-msgstr ""
+msgstr "Rimuovi Flatpak inutilizzati (e runtime)"
 
-#: data/ui/window.blp:183
+#: data/ui/window.blp:200
 msgid "show/hide runtimes"
-msgstr "mostra/nascondi i runtime"
+msgstr "Mostra/Nascondi i runtime"
 
-#: data/ui/window.blp:195
+#: data/ui/window.blp:210
 msgid "Groups"
 msgstr "Gruppi"
 
-#: data/ui/window.blp:205
+#: data/ui/window.blp:221
 msgid "Queue"
-msgstr "Coda"
+msgstr "In Coda"
 
-#: data/ui/window.blp:226
+#: data/ui/window.blp:247
 msgid "Remove all from queue"
-msgstr "Rimuovere tutto dalla coda"
+msgstr "Svuota tutta la coda"
 
-#: data/ui/window.blp:249
+#: data/ui/window.blp:264
 msgid "_Preferences"
 msgstr "_Preferenze"
 
-#: data/ui/window.blp:253
+#: data/ui/window.blp:269
 msgid "Keyboard Shortcuts"
-msgstr "Scorciatoie da Tastiera"
+msgstr "Scorciatoie Tastiera"
 
-#: data/ui/window.blp:257
+#: data/ui/window.blp:274
 msgid "_About Yum Extender"
-msgstr "_A proposito di Yum Extender"
+msgstr "_Informazioni su Yum Extender"
+
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:3
+msgid "Yum Extender Flatpak Installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:4
+msgid "Install flatpak defined in .flatpakref"
+msgstr ""
+
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:11
+#: data/dk.yumex.Yumex.desktop.in.in:10
+msgid "Software Installer"
+msgstr "Installatore"
 
 #: data/dk.yumex.Yumex.desktop.in.in:4
 msgid "Install, update and remove applications"
 msgstr "Installare, aggiornare e rimuovere le applicazioni"
-
-#: data/dk.yumex.Yumex.desktop.in.in:10
-#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:11
-msgid "Software Installer"
-msgstr "Installatore di Software"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:8
 msgid "Graphical package manager"
@@ -667,92 +724,104 @@ msgid "Browse Installed flatpaks"
 msgstr "Sfoglia i flatpak Installati"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:24
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:71
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:86
 msgid "Install, remove and update flatpaks"
 msgstr "Installa, rimuovi e aggiorna i flatpak"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:41
-msgid "Yum Extender 5.0.0 add many fixes and small improvments"
+msgid "Yum Extender 5.0.2 add many fixes and improvments"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:43
-msgid "Support for update info with dnf5"
+msgid "Added support for notifications on updates"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:44
+msgid "Improved configuration of yumex-updater-systray in yumex ui"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:49
+msgid "Yum Extender 5.0.1 add many fixes and small improvments"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
+msgid "Add yumex-updater-systray systray application there checks for updates"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:56
+msgid "Yum Extender 5.0.0 add many fixes and small improvments"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:58
+msgid "Support for update info with dnf5"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:59
 msgid "new improved flatpak installer"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:45
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
 msgid "cleanup unused flatpaks"
-msgstr ""
+msgstr "Pulisci Flatpak inutilizzati"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:46
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:55
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:63
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:61
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:78
 msgid "lot of code fixes and optimization"
 msgstr "molte correzioni e ottimizzazioni del codice"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:66
 msgid "Yum Extender 4.9.4 add many fixes and small improvments"
 msgstr "Yum Extender 4.9.4 aggiunge molte correzioni e piccoli miglioramenti"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:68
 msgid "Support for importing gpg keys from repositories"
 msgstr "Supporto per l'importazione di chiavi gpg dai repository"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:54
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:69
 msgid "fix installing and updating flatpaks at system location"
 msgstr ""
 "corregge l'installazione e l'aggiornamento di flatpak nel percorso di "
 "sistema"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:75
 msgid "Yum Extender 4.9.3 improve the flatpak installer"
 msgstr "Yum Extender 4.9.3 migliora l'installatore flatpak"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:62
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:77
 msgid "flatpak install with search and select available results"
 msgstr "installa flatpak con ricerca e selezione dei risultati disponibili"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:68
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:83
 msgid "Yum Extender 4.9.2 adds support for flatpaks"
 msgstr "Yum Extender 4.9.2 aggiunge il supporto per i flatpak"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:85
 msgid "Browse installed flatpaks"
-msgstr "Sfoglia i flatpak Installati"
+msgstr "Sfoglia Flatpak installati"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:76
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:91
 msgid "Yum Extender 4.9.1 is a total rewrite using a modern toolchain"
 msgstr ""
 "Yum Extender 4.9.1 è una riscrittura totale che utilizza una moderna "
 "toolchain"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:78
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:93
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
-msgstr "Nuova interfaccia utente fresca e scalabile con Gtk4 e Libadwaita"
+msgstr "Nuova interfaccia utente scalabile in Gtk4 e Libadwaita"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:79
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:94
 msgid "Using dnf directly for readonly actions"
 msgstr "Utilizzo diretto di dnf per azioni di sola lettura"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:92
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:107
 msgid "yumex"
 msgstr "yumex"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:93
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:108
 msgid "yumex-dnf"
 msgstr "yumex-dnf"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:94
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:109
 msgid "Package Manager"
-msgstr "Gestore di Pacchetti"
-
-#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:3
-msgid "Yum Extender Flatpak Installer"
-msgstr ""
-
-#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:4
-msgid "Install flatpak defined in .flatpakref"
-msgstr ""
+msgstr "Gestore Pacchetti"
