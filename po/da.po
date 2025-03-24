@@ -1,212 +1,215 @@
 # Yum Extender (yumex) POT file
-# Copyright (C) 2023 Tim Lauridsen
+# Copyright (C) 2025 Tim Lauridsen
 # This file is distributed under the GNU GPLv3 license.
-# Tim Lauridsen, 2023.
-#
+# Tim Lauridsen, 2025.
+# 
 # Translators:
 # Tim Lauridsen <tla@rasmil.dk>, 2022
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 08:40+0200\n"
+"POT-Creation-Date: 2025-03-24 13:17+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
-"Language-Team: Danish (https://www.transifex.com/timlau/teams/16939/da/)\n"
+"Language-Team: Danish (https://app.transifex.com/timlau/teams/16939/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: yumex/ui/__init__.py:28
-#, python-brace-format
-msgid "Queued for deletion as a dependency {name}"
-msgstr "I kø, for sletning, som en afhængighed {name}"
-
-#: yumex/ui/__init__.py:30
-#, python-brace-format
-msgid "Queued for installation as a dependency {name}"
-msgstr "I kø, for installation, som en afhængighed {name}"
-
-#: yumex/ui/__init__.py:32
-#, python-brace-format
-msgid "Queued for updating as a dependency {name}"
-msgstr "I kø, for opdatering, som en afhængighed {name}"
-
-#: yumex/ui/__init__.py:36
-msgid "Queued for deletion"
-msgstr "I kø, for sletning"
-
-#: yumex/ui/__init__.py:38
-msgid "Queued for installation"
-msgstr "I kø, for installation"
-
-#: yumex/ui/__init__.py:40
-msgid "Queued for updating"
-msgstr "I kø, for opdatering"
-
-#: yumex/ui/flatpak_result.py:33 yumex/backend/flatpak/transaction.py:61
+#: yumex/backend/dnf5daemon/__init__.py:40
+#: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
 msgid "Installing"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:35
+#: yumex/backend/dnf5daemon/__init__.py:42
+msgid "Upgrading"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:44
+msgid "Downgrading"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:46
+msgid "Reinstalling"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:48
+msgid "Removing"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:50
+msgid "Replacing"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:204
+#: yumex/backend/dnf5daemon/__init__.py:224 yumex/backend/daemon.py:67
+#: yumex/ui/window.py:188
+msgid "Building Transaction"
+msgstr "Bygger Transaktion"
+
+#: yumex/backend/dnf5daemon/__init__.py:228
+#: yumex/backend/dnf5daemon/__init__.py:309 yumex/backend/daemon.py:74
+msgid "Applying Transaction"
+msgstr "Udfører Transaktion"
+
+#: yumex/backend/dnf5daemon/__init__.py:265 yumex/backend/daemon.py:80
+#: yumex/backend/daemon.py:82
+msgid "Download Packages"
+msgstr "Henter Pakker"
+
+#: yumex/backend/dnf5daemon/__init__.py:267
+msgid "Download Reposiory Information"
+msgstr ""
+
+#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
 msgid "Uninstalling"
 msgstr ""
 
-#: yumex/ui/flatpak_result.py:37 yumex/backend/flatpak/transaction.py:65
+#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:41
 msgid "Updating"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:65
-msgid "Packages for installation"
-msgstr "Pakker for installation"
-
-#: yumex/ui/transaction_result.py:67
-msgid "Packages for deletion"
-msgstr "Pakker for sletning"
-
-#: yumex/ui/transaction_result.py:69
-msgid "Packages for updating"
-msgstr "Pakker for opdatering"
-
-#: yumex/ui/package_info.py:24
-msgid "Bugfix"
-msgstr "Fejlrettelse"
-
-#: yumex/ui/package_info.py:25
-msgid "New Package"
-msgstr "Ny Pakke"
-
-#: yumex/ui/package_info.py:26
-msgid "Security"
-msgstr "Sikkerhed"
-
-#: yumex/ui/package_info.py:27
-msgid "Enhancement"
-msgstr "Udvildelse"
-
-#: yumex/ui/package_info.py:59
-msgid "no update information found"
-msgstr "Ingen information om opdateing"
-
-#: yumex/ui/flatpak_view.py:106
-#, python-brace-format
-msgid "{fp_id} is now installed"
+#: yumex/backend/flatpak/transaction.py:182
+msgid "flatpak transaction failed"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:117
-#, python-brace-format
-msgid "{selected[0].id} is now removed"
+#: yumex/backend/daemon.py:72 yumex/ui/window.py:203
+msgid "Running Transaction"
+msgstr "Kører Transaktion"
+
+#: yumex/backend/daemon.py:78
+msgid "Checking package signatures"
+msgstr "Checker pakke signatur"
+
+#: yumex/backend/daemon.py:112
+msgid "Downloading Packages"
+msgstr "Henter Pakker"
+
+#: yumex/backend/daemon.py:128
+msgid "Downloading Repository Metadata"
+msgstr ""
+
+#: yumex/backend/daemon.py:166
+msgid "Couldn't build transaction\n"
+msgstr "Kunne ikke bygge transaktionen\n"
+
+#: yumex/backend/daemon.py:170
+msgid "Exception in Dnf Backend\n"
+msgstr "Fejl hændelse i Dnf Backend\n"
+
+#: yumex/backend/daemon.py:190
+msgid "Exception in Dnf Backend : "
 msgstr ""
 
 #: yumex/ui/dialogs.py:15
 msgid "Quit"
 msgstr ""
 
-#: yumex/ui/package_view.py:96
+#: yumex/ui/dialogs.py:34
+msgid "Install GPG Key"
+msgstr ""
+
+#: yumex/ui/dialogs.py:42
+msgid "Yes"
+msgstr ""
+
+#: yumex/ui/dialogs.py:44
+msgid "No"
+msgstr ""
+
+#: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33
+msgid "Bugfix"
+msgstr "Fejlrettelse"
+
+#: yumex/ui/package_info.py:27 yumex/ui/package_info.py:34
+msgid "New Package"
+msgstr "Ny Pakke"
+
+#: yumex/ui/package_info.py:28 yumex/ui/package_info.py:35
+msgid "Security"
+msgstr "Sikkerhed"
+
+#: yumex/ui/package_info.py:29 yumex/ui/package_info.py:36
+msgid "Enhancement"
+msgstr "Udvildelse"
+
+#: yumex/ui/package_info.py:68
+msgid "no update information found"
+msgstr "Ingen information om opdateing"
+
+#: yumex/ui/package_info.py:99
+msgid "Undefined"
+msgstr ""
+
+#: yumex/ui/__init__.py:38
+msgid "Queued for deletion"
+msgstr "I kø, for sletning"
+
+#: yumex/ui/__init__.py:40
+msgid "Queued for installation"
+msgstr "I kø, for installation"
+
+#: yumex/ui/__init__.py:42
+msgid "Queued for updating"
+msgstr "I kø, for opdatering"
+
+#: yumex/ui/transaction_result.py:64
+msgid "Packages for installation"
+msgstr "Pakker for installation"
+
+#: yumex/ui/transaction_result.py:66
+msgid "Packages for deletion"
+msgstr "Pakker for sletning"
+
+#: yumex/ui/transaction_result.py:68 yumex/ui/transaction_result.py:70
+msgid "Packages for updating"
+msgstr "Pakker for opdatering"
+
+#: yumex/ui/flatpak_view.py:91
+msgid "flatpaks were updated"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:98
+msgid "Unused flatpaks were removed"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:110 yumex/ui/window.py:298
+msgid "Updating Yumex Updater"
+msgstr ""
+
+#: yumex/ui/package_view.py:101
 msgid "Loading Packages"
 msgstr "Indlæser pakker"
 
-#: yumex/ui/package_view.py:97
+#: yumex/ui/package_view.py:102
 msgid "This make take a little while"
 msgstr "Dette kan tage et øjeblik"
 
-#: yumex/ui/window.py:169 yumex/backend/daemon.py:73
-msgid "Building Transaction"
-msgstr "Bygger Transaktion"
-
-#: yumex/ui/window.py:183 yumex/backend/daemon.py:78
-msgid "Running Transaction"
-msgstr "Kører Transaktion"
-
-#: yumex/ui/window.py:201
+#: yumex/ui/window.py:242
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:264
+#: yumex/ui/window.py:301
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/backend/dnf/dnf4.py:121
-#, python-brace-format
-msgid "Downloading repository information for {name}"
-msgstr "indlæser kilde information for {name}"
-
-#: yumex/backend/daemon.py:80
-msgid "Applying Transaction"
-msgstr "Udfører Transaktion"
-
-#: yumex/backend/daemon.py:84
-msgid "Checking package signatures"
-msgstr "Checker pakke signatur"
-
-#: yumex/backend/daemon.py:86 yumex/backend/daemon.py:88
-msgid "Download Packages"
-msgstr "Henter Pakker"
-
-#: yumex/backend/daemon.py:98
-#, python-brace-format
-msgid "Erasing : {pkg_name}"
-msgstr "Sletter : {pkg_name}"
-
-#: yumex/backend/daemon.py:100
-#, python-brace-format
-msgid "Installing : {pkg_name}"
-msgstr "Installerer : {pkg_name}"
-
-#: yumex/backend/daemon.py:102
-#, python-brace-format
-msgid "Updating : {pkg_name}"
-msgstr "Opdaterer : {pkg_name}"
-
-#: yumex/backend/daemon.py:106
-#, python-brace-format
-msgid "Verifying : {pkg_name}"
-msgstr "Verifisere : {pkg_name}"
-
-#: yumex/backend/daemon.py:108
-#, python-brace-format
-msgid "Running scriptlets : {pkg_name}"
-msgstr "Kører scriptlets : {pkg_name}"
-
-#: yumex/backend/daemon.py:118
-msgid "Downloading Packages"
-msgstr "Henter Pakker"
-
-#: yumex/backend/daemon.py:124
-#, python-brace-format
-msgid "Downloading : {name}"
-msgstr "Henter : {name}"
-
-#: yumex/backend/daemon.py:134
-msgid "Downloading Repository Metadata"
-msgstr ""
-
-#: yumex/backend/daemon.py:174
-msgid "Couldn't build transaction\n"
-msgstr "Kunne ikke bygge transaktionen\n"
-
-#: yumex/backend/daemon.py:178
-msgid "Exception in Dnf Backend\n"
-msgstr "Fejl hændelse i Dnf Backend\n"
-
-#: yumex/backend/daemon.py:200
-msgid "Exception in Dnf Backend : "
-msgstr ""
-
-#: yumex/main.py:165
+#: yumex/main.py:175
 msgid ""
 "\n"
-"<ul>\n"
-"<li>Browse installed flatpaks</li>\n"
-"<li>Install, remove and update flatpaks</li>\n"
-"</ul>\n"
+"        <ul>\n"
+"          <li>Added background update checker</li>\n"
+"          <li>Sending Notifications on available updates</li>\n"
+"          <li>Show system tray icon on supported systems (gnome need appindicator extension)</li>\n"
+"          <li>lot of code fixes and optimization</li>\n"
+"        </ul>\n"
 msgstr ""
 
-#: yumex/main.py:173
+#: yumex/main.py:185
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
@@ -214,41 +217,97 @@ msgstr ""
 "\n"
 "Yum Extender er et pakke håndterings værktøj til at installere, opdatere og slette pakker\n"
 
-#: data/ui/queue_row.blp:17
-msgid "Added as a dependency"
-msgstr "Tilføjet som afhængighed"
+#: yumex/main.py:195
+msgid "Special thanks to"
+msgstr ""
 
-#: data/ui/queue_row.blp:35
-msgid "Remove item from queue"
-msgstr "Slet element fra køen"
+#: yumex/yumex_updater_systray:75
+msgid "Updates are available"
+msgstr ""
 
-#: data/ui/package_info.blp:21
-msgid "Advisory ID"
-msgstr "Adviserings ID"
-
-#: data/ui/package_info.blp:29
-msgid "Advisory Type"
-msgstr "Adviseringstype"
-
-#: data/ui/package_info.blp:37
-msgid "Advisory Issued"
-msgstr "Adviserings udstedelse"
-
-#: data/ui/package_info.blp:52
-msgid "Bugzilla References"
-msgstr "Bugzilla Referancer"
-
-#: data/ui/flatpak_row.blp:35
+#: data/ui/flatpak_row.blp:36
 msgid "Update is available"
 msgstr ""
 
-#: data/ui/flatpak_row.blp:41
+#: data/ui/flatpak_row.blp:42
 msgid "Uninstall flatpak"
 msgstr ""
 
-#: data/ui/package_view.blp:18 data/ui/package_settings.blp:93
+#: data/ui/package_info.blp:20
+msgid "Advisory ID"
+msgstr "Adviserings ID"
+
+#: data/ui/package_info.blp:28
+msgid "Advisory Type"
+msgstr "Adviseringstype"
+
+#: data/ui/package_info.blp:36
+msgid "Advisory Issued"
+msgstr "Adviserings udstedelse"
+
+#: data/ui/package_info.blp:51
+msgid "Bugzilla References"
+msgstr "Bugzilla Referancer"
+
+#: data/ui/package_settings.blp:9
+msgid "Package filter"
+msgstr "Pakke filtre"
+
+#: data/ui/package_settings.blp:14
+msgid "Installed"
+msgstr "Instalerede"
+
+#: data/ui/package_settings.blp:26
+msgid "Updates"
+msgstr "Opdateringer"
+
+#: data/ui/package_settings.blp:37
+msgid "All"
+msgstr "Alle"
+
+#: data/ui/package_settings.blp:49 data/ui/window.blp:36
+msgid "Search"
+msgstr "Søg"
+
+#: data/ui/package_settings.blp:62
+msgid "View Settings"
+msgstr "Oversigts indstilliger"
+
+#: data/ui/package_settings.blp:73
+msgid "Select what attribute to sort by"
+msgstr "Vælg sorterings attribut"
+
+#: data/ui/package_settings.blp:84
+msgid "Select what package information to show"
+msgstr "Vælg pakke informations type"
+
+#: data/ui/package_settings.blp:93 data/ui/package_view.blp:18
 msgid "Name"
 msgstr "Navn"
+
+#: data/ui/package_settings.blp:94
+msgid "Arch"
+msgstr "Ark."
+
+#: data/ui/package_settings.blp:95 data/ui/package_view.blp:36
+msgid "Size"
+msgstr "Størrelse"
+
+#: data/ui/package_settings.blp:96
+msgid "Repo"
+msgstr "Kilder"
+
+#: data/ui/package_settings.blp:102
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: data/ui/package_settings.blp:103
+msgid "Filelist"
+msgstr "Filliste"
+
+#: data/ui/package_settings.blp:104
+msgid "Update Info"
+msgstr "Opdaterings info."
 
 #: data/ui/package_view.blp:24
 msgid "Version"
@@ -258,15 +317,11 @@ msgstr ""
 msgid "Arch."
 msgstr "Ark."
 
-#: data/ui/package_view.blp:36 data/ui/package_settings.blp:95
-msgid "Size"
-msgstr "Størrelse"
-
 #: data/ui/package_view.blp:42
 msgid "Summary"
 msgstr ""
 
-#: data/ui/package_view.blp:48 data/ui/preferences.blp:27
+#: data/ui/package_view.blp:48 data/ui/preferences.blp:90
 msgid "Repository"
 msgstr "Kilder"
 
@@ -278,132 +333,30 @@ msgstr "Vælg alle"
 msgid "Deselect All"
 msgstr "Fravælg alle"
 
-#: data/ui/flatpak_result.blp:16
-msgid "Flatpak Transaction Result"
-msgstr ""
+#: data/ui/queue_row.blp:17
+msgid "Added as a dependency"
+msgstr "Tilføjet som afhængighed"
 
-#: data/ui/flatpak_result.blp:20 data/ui/transaction_result.blp:20
-#: data/ui/flatpak_installer.blp:21
-msgid "Cancel"
-msgstr "Afbryd"
-
-#: data/ui/flatpak_result.blp:32 data/ui/transaction_result.blp:32
-#: data/ui/flatpak_installer.blp:37
-msgid "Confirm"
-msgstr "Bekræft"
+#: data/ui/queue_row.blp:35
+msgid "Remove item from queue"
+msgstr "Slet element fra køen"
 
 #: data/ui/transaction_result.blp:16
 msgid "Transaction Result"
 msgstr "Rasultat af transaktionen"
 
-#: data/ui/window.blp:6 data/dk.yumex.Yumex.desktop.in.in:3
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
-msgid "Yum Extender"
-msgstr "Yum Extender"
+#: data/ui/transaction_result.blp:20 data/ui/flatpak_result.blp:20
+#: data/ui/flatpak_search.blp:23
+msgid "Cancel"
+msgstr "Afbryd"
 
-#: data/ui/window.blp:33
-msgid "Select Package filters"
-msgstr "Vælg pakke filter"
+#: data/ui/transaction_result.blp:32 data/ui/flatpak_result.blp:32
+msgid "Confirm"
+msgstr "Bekræft"
 
-#: data/ui/window.blp:39 data/ui/package_settings.blp:49
-msgid "Search"
-msgstr "Søg"
-
-#: data/ui/window.blp:55
-msgid "Main Menu"
-msgstr "Hovedmenu"
-
-#: data/ui/window.blp:63
-msgid "Apply"
-msgstr "Udfør"
-
-#: data/ui/window.blp:66
-msgid "Apply Package Actions"
-msgstr "Udfør pakke handlinger"
-
-#: data/ui/window.blp:82
-msgid "Package Name"
-msgstr "Pakkenavn"
-
-#: data/ui/window.blp:93
-msgid "Packages"
-msgstr "Pakker"
-
-#: data/ui/window.blp:140
-msgid "Flatpaks"
+#: data/ui/flatpak_result.blp:16
+msgid "Flatpak Transaction Result"
 msgstr ""
-
-#: data/ui/window.blp:160
-msgid "Update All Flatpaks (Apps & Runtimes)"
-msgstr ""
-
-#: data/ui/window.blp:165
-msgid "install new flatpak"
-msgstr ""
-
-#: data/ui/window.blp:170
-msgid "uninstall selected flatpak"
-msgstr ""
-
-#: data/ui/window.blp:181
-msgid "Groups"
-msgstr "Grupper"
-
-#: data/ui/window.blp:191
-msgid "Queue"
-msgstr "Kø"
-
-#: data/ui/window.blp:212
-msgid "Remove all from queue"
-msgstr "Slet alt fra køen"
-
-#: data/ui/window.blp:235
-msgid "_Preferences"
-msgstr "Egenskaber"
-
-#: data/ui/window.blp:239
-msgid "Keyboard Shortcuts"
-msgstr "Tastatur Genveje"
-
-#: data/ui/window.blp:243
-msgid "_About Yum Extender"
-msgstr "Om Yum Extender"
-
-#: data/ui/flatpak_installer.blp:17
-msgid "Install Flatpak"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:69
-msgid "Selected Flatpak (Ctrl+G/Shift+Ctrl+G to toggle)"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:83
-msgid "Remote"
-msgstr ""
-
-#: data/ui/flatpak_installer.blp:87
-msgid "Install location"
-msgstr ""
-
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
-msgid "Preferences"
-msgstr "Indstillinger"
-
-#: data/ui/preferences.blp:10
-msgid "Settings"
-msgstr "Indstillinger"
-
-#: data/ui/preferences.blp:13
-msgid "Flatpak Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:30
-msgid "Repository Settings"
-msgstr "Kilde Indstillinger"
-
-#: data/ui/preferences.blp:31
-msgid "The available and enabled repositories"
-msgstr "De tilgængelige og aktive kilder"
 
 #: data/ui/shortcuts.blp:8
 msgid "General"
@@ -412,6 +365,10 @@ msgstr "Generelle"
 #: data/ui/shortcuts.blp:11
 msgid "Keyboard shortcuts"
 msgstr "Tastatur genveje"
+
+#: data/ui/shortcuts.blp:15 data/ui/preferences.blp:5
+msgid "Preferences"
+msgstr "Indstillinger"
 
 #: data/ui/shortcuts.blp:19
 msgid "Apply Actions/Confirm"
@@ -474,80 +431,174 @@ msgid "Flatpak View"
 msgstr ""
 
 #: data/ui/shortcuts.blp:84
-msgid "Install new flatpak"
+msgid "Search for flatpaks to install"
 msgstr ""
 
 #: data/ui/shortcuts.blp:88
 msgid "Remove selected flatpak"
 msgstr ""
 
-#: data/ui/shortcuts.blp:93
-msgid "Flatpak Installer"
+#: data/ui/preferences.blp:10
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: data/ui/preferences.blp:13
+msgid "Flatpak Settings"
 msgstr ""
 
-#: data/ui/shortcuts.blp:95
-msgid "Next Result"
+#: data/ui/preferences.blp:15
+msgid "Default Location"
 msgstr ""
 
-#: data/ui/shortcuts.blp:100
-msgid "Previous Result"
+#: data/ui/preferences.blp:20
+msgid "Default Remote"
 msgstr ""
 
-#: data/ui/package_settings.blp:9
-msgid "Package filter"
-msgstr "Pakke filtre"
+#: data/ui/preferences.blp:25
+msgid "Metadata Settings"
+msgstr ""
 
-#: data/ui/package_settings.blp:14
-msgid "Installed"
-msgstr "Instalerede"
+#: data/ui/preferences.blp:27
+msgid "Min. Refresh interval (minutes)"
+msgstr ""
 
-#: data/ui/package_settings.blp:26
-msgid "Updates"
-msgstr "Opdateringer"
+#: data/ui/preferences.blp:39
+msgid "Updater Settings"
+msgstr ""
 
-#: data/ui/package_settings.blp:37
-msgid "All"
-msgstr "Alle"
+#: data/ui/preferences.blp:41
+msgid "Custom System Updater (path)"
+msgstr ""
 
-#: data/ui/package_settings.blp:62
-msgid "View Settings"
-msgstr "Oversigts indstilliger"
+#: data/ui/preferences.blp:55
+msgid "Check updates interval (minutes)"
+msgstr ""
 
-#: data/ui/package_settings.blp:73
-msgid "Select what attribute to sort by"
-msgstr "Vælg sorterings attribut"
+#: data/ui/preferences.blp:66
+msgid "Show systray icon on updates"
+msgstr ""
 
-#: data/ui/package_settings.blp:84
-msgid "Select what package information to show"
-msgstr "Vælg pakke informations type"
+#: data/ui/preferences.blp:76
+msgid "Send Notification on updates"
+msgstr ""
 
-#: data/ui/package_settings.blp:94
-msgid "Arch"
-msgstr "Ark."
+#: data/ui/preferences.blp:93
+msgid "Repository Settings"
+msgstr "Kilde Indstillinger"
 
-#: data/ui/package_settings.blp:96
-msgid "Repo"
-msgstr "Kilder"
+#: data/ui/preferences.blp:94
+msgid "The available and enabled repositories"
+msgstr "De tilgængelige og aktive kilder"
 
-#: data/ui/package_settings.blp:102
-msgid "Description"
-msgstr "Beskrivelse"
+#: data/ui/flatpak_search.blp:18
+msgid "Search Flatpaks"
+msgstr ""
 
-#: data/ui/package_settings.blp:103
-msgid "Filelist"
-msgstr "Filliste"
+#: data/ui/flatpak_search.blp:43
+msgid "Install"
+msgstr ""
 
-#: data/ui/package_settings.blp:104
-msgid "Update Info"
-msgstr "Opdaterings info."
+#: data/ui/flatpak_search.blp:91
+msgid "Install location"
+msgstr ""
 
-#: data/dk.yumex.Yumex.desktop.in.in:4
+#: data/ui/flatpak_search.blp:113
+msgid "Active Remotes: "
+msgstr ""
+
+#: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
+msgid "Yum Extender"
+msgstr "Yum Extender"
+
+#: data/ui/window.blp:29
+msgid "Select Package filters"
+msgstr "Vælg pakke filter"
+
+#: data/ui/window.blp:56
+msgid "Main Menu"
+msgstr "Hovedmenu"
+
+#: data/ui/window.blp:68
+msgid "Apply"
+msgstr "Udfør"
+
+#: data/ui/window.blp:72
+msgid "Apply Package Actions"
+msgstr "Udfør pakke handlinger"
+
+#: data/ui/window.blp:89
+msgid "Package Name"
+msgstr "Pakkenavn"
+
+#: data/ui/window.blp:99
+msgid "Packages"
+msgstr "Pakker"
+
+#: data/ui/window.blp:146
+msgid "Flatpaks"
+msgstr ""
+
+#: data/ui/window.blp:170
+msgid "Update All Flatpaks (Apps & Runtimes)"
+msgstr ""
+
+#: data/ui/window.blp:176
+msgid "search for new flatpak to install"
+msgstr ""
+
+#: data/ui/window.blp:182
+msgid "uninstall selected flatpak"
+msgstr ""
+
+#: data/ui/window.blp:188
+msgid "Remove unused flatpaks (runtimes etc.)"
+msgstr ""
+
+#: data/ui/window.blp:200
+msgid "show/hide runtimes"
+msgstr ""
+
+#: data/ui/window.blp:210
+msgid "Groups"
+msgstr "Grupper"
+
+#: data/ui/window.blp:221
+msgid "Queue"
+msgstr "Kø"
+
+#: data/ui/window.blp:247
+msgid "Remove all from queue"
+msgstr "Slet alt fra køen"
+
+#: data/ui/window.blp:264
+msgid "_Preferences"
+msgstr "Egenskaber"
+
+#: data/ui/window.blp:269
+msgid "Keyboard Shortcuts"
+msgstr "Tastatur Genveje"
+
+#: data/ui/window.blp:274
+msgid "_About Yum Extender"
+msgstr "Om Yum Extender"
+
+#: data/dk.yumex.Yumex.desktop.in.in:3
 msgid "Install, update and remove applications"
 msgstr "Installer, opdater og slet applikationer"
 
 #: data/dk.yumex.Yumex.desktop.in.in:10
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
 msgid "Software Installer"
 msgstr "Software Installer"
+
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
+msgid "Yum Extender Flatpak Installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:3
+msgid "Install flatpak defined in .flatpakref"
+msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:8
 msgid "Graphical package manager"
@@ -596,50 +647,104 @@ msgid "Browse Installed flatpaks"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:24
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:52
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:90
 msgid "Install, remove and update flatpaks"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:41
-msgid "Yum Extender 4.9.3 improve the flatpak installer"
+msgid "Yum Extender 5.0.3 add many fixes and improvments"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:43
-msgid "flatpak install with search and select available results"
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:45
+msgid "Yum Extender 5.0.2 add many fixes and improvments"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:44
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:47
+msgid "Added support for notifications on updates"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:48
+msgid "Improved configuration of yumex-updater-systray in yumex ui"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:53
+msgid "Yum Extender 5.0.1 add many fixes and small improvments"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:55
+msgid "Add yumex-updater-systray systray application there checks for updates"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
+msgid "Yum Extender 5.0.0 add many fixes and small improvments"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:62
+msgid "Support for update info with dnf5"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:63
+msgid "new improved flatpak installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:64
+msgid "cleanup unused flatpaks"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:65
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:74
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:82
 msgid "lot of code fixes and optimization"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:49
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:70
+msgid "Yum Extender 4.9.4 add many fixes and small improvments"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:72
+msgid "Support for importing gpg keys from repositories"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:73
+msgid "fix installing and updating flatpaks at system location"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:79
+msgid "Yum Extender 4.9.3 improve the flatpak installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:81
+msgid "flatpak install with search and select available results"
+msgstr ""
+
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:87
 msgid "Yum Extender 4.9.2 adds support for flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:51
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:89
 msgid "Browse installed flatpaks"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:57
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:95
 msgid "Yum Extender 4.9.1 is a total rewrite using a modern toolchain"
 msgstr ""
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:59
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:97
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
 msgstr "Ny frisk skalerbar bruger grænseflade ved brug af Gtk4 og Libadwaita"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:60
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:98
 msgid "Using dnf directly for readonly actions"
 msgstr "Bruger dnf direkte til handling som ikke ændre på systemmet."
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:73
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:111
 msgid "yumex"
 msgstr "yumex"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:74
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:112
 msgid "yumex-dnf"
 msgstr "yumex-dnf"
 
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:75
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:113
 msgid "Package Manager"
 msgstr "Pakke håndterings værktøj"
