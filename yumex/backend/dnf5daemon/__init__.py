@@ -143,7 +143,7 @@ class YumexRootBackend:
             arch = pkg["arch"]
             evr = pkg["evr"]
             repo = pkg["repo_id"]
-            if "package_size" in pkg:   
+            if "package_size" in pkg:
                 size = pkg["package_size"]
             elif "install_size" in pkg:
                 size = pkg["install_size"]
@@ -246,10 +246,19 @@ class YumexRootBackend:
     def on_transaction_action_stop(self, session, package_id, total):
         logger.debug(f"Signal : transaction_action_stop: total: {total} id: {package_id}")
 
-    def on_download_add_new(self, session, package_id, name, size):
-        pkg = DownloadPackage(package_id, name, size)
+    def on_download_add_new(self, session, *args):
+        if len(args) == 3:
+            download_id, pkg_name, total_to_download = args
+        else:
+            logger.debug(f"Signal: download_add_new unexpected args: {args}")
+            return
+        logger.debug(
+            f"Signal : download_add_new: download_id: {download_id}"
+            f" total_to_download: {total_to_download}"
+            f" pkg_name: {pkg_name}"
+        )
+        pkg = DownloadPackage(download_id, pkg_name, total_to_download)
         self.download_queue.add(pkg)
-        logger.debug(f"Signal : download_add_new: name: {name} size: {size} id: {package_id}")
         if len(self.download_queue) == 1:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
@@ -258,11 +267,19 @@ class YumexRootBackend:
                     self.progress.set_title(_("Download Reposiory Information"))
                 case DownloadType.UNKNOWN:
                     logger.debug(f"unknown download type : {pkg.id}")
-        self.progress.set_subtitle(_(f"Downloading : {name}"))
+        self.progress.set_subtitle(_(f"Downloading : {pkg_name}"))
 
-    def on_download_progress(self, session, package_id, to_download, downloaded):
-        pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
-        logger.debug(f"Signal : download_progress: {pkg.name} ({downloaded}/{to_download})")
+    def on_download_progress(self, session, *args):
+        if len(args) == 3:
+            download_id, total_to_download, downloaded = args
+        else:
+            logger.debug(f"Signal: download_progress: unexpected args: {args}")
+            return
+        logger.debug(
+            f"Signal : download_progress: download_id: {download_id}"
+            f" downloaded: {downloaded} total_to_download: {total_to_download}"
+        )
+        pkg: DownloadPackage = self.download_queue.get(download_id)  # type: ignore
         self.progress.set_subtitle(_(f"Downloading : {pkg.name}"))
         match pkg.package_type:
             case DownloadType.PACKAGE:
@@ -270,16 +287,21 @@ class YumexRootBackend:
             case DownloadType.REPO:
                 if to_download > 0:
                     pkg.downloaded = downloaded
-                    pkg.to_download = to_download
+                    pkg.to_download = total_to_download
             case DownloadType.UNKNOWN:
                 logger.debug(f"unknown download type : {pkg.id}")
         fraction = self.download_queue.fraction
         self.progress.set_progress(fraction)
 
-    def on_download_end(self, session, package_id, rc, msg):
-        pkg: DownloadPackage = self.download_queue.get(package_id)  # type: ignore
-        logger.debug(f"Signal : download_end: {pkg.name} rc: {rc} msg: {msg}")
-        if rc == 0:
+    def on_download_end(self, session, *args):
+        if len(args) == 3:
+            download_id, status, msg = args
+        else:
+            logger.debug(f"Signal: download_end: unexpected args: {args}")
+            return
+        logger.debug(f"Signal : download_end: download_id: {download_id} status: {status} msg: {msg}")
+        pkg: DownloadPackage = self.download_queue.get(download_id)  # type: ignore
+        if status == 0:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
                     pkg.downloaded = pkg.to_download
