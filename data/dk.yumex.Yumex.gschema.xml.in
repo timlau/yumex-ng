@@ -77,5 +77,9 @@
 			<default>true</default>
 			<summary>Send notification on updates</summary>
 		</key>
+		<key name="upd-use-dark-icon" type="b">
+			<default>true</default>
+			<summary>Use dark theme system tray icon.</summary>
+		</key>
 	</schema>
 </schemalist>
