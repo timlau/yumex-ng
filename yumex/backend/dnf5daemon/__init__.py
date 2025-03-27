@@ -209,14 +209,9 @@ class YumexRootBackend:
         client.session.download_progress.connect(self.on_download_progress)
         client.session.download_end.connect(self.on_download_end)
         client.session.repo_key_import_request.connect(self.on_repo_key_import_request)
-        # FIXME:need dnf5 5.1.13 for the signals to be available in introspection
-        # we need to bump the requement to dnf5 3.1.13 and remove the try/except block.
-        try:
-            client.session.transaction_action_start.connect(self.on_transaction_action_start)
-            client.session.transaction_action_progress.connect(self.on_transaction_action_progress)
-            client.session.transaction_action_end.connect(self.on_transaction_action_stop)
-        except AttributeError:
-            logger.debug("dnf5 5.1.13 or higher required for transaction signals")
+        client.session.transaction_action_start.connect(self.on_transaction_action_start)
+        client.session.transaction_action_progress.connect(self.on_transaction_action_progress)
+        client.session.transaction_action_end.connect(self.on_transaction_action_stop)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
