@@ -5,8 +5,7 @@ from typing import Iterable, Self
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.presenter import YumexPresenter
-from yumex.ui.progress import YumexProgress
+from yumex.backend.interface import Presenter, Progress
 from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 
 from .client import Dnf5DbusClient, gv_list
@@ -140,13 +139,13 @@ class DownloadQueue:
 class YumexRootBackend:
     def __init__(self, presenter) -> None:
         super().__init__()
-        self.presenter: YumexPresenter = presenter
+        self.presenter: Presenter = presenter
         self.last_transaction = None
         self.download_queue = DownloadQueue()
         self.client = None
 
     @property
-    def progress(self) -> YumexProgress:
+    def progress(self) -> Progress:
         return self.presenter.progress
 
     def __enter__(self) -> Self:
@@ -383,7 +382,7 @@ class YumexRootBackend:
     # Helpers (PackageBackend)
 
     @property
-    def package_attr():
+    def package_attr(self):
         return [
             "name",
             "evr",
