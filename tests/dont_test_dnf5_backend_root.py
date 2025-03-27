@@ -15,7 +15,7 @@ to excute the test
 import pytest
 
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.dnf5daemon import YumexRootBackend
+from yumex.backend.dnf5daemon import YumexRootBackend, create_package
 from yumex.utils.enums import PackageFilter, PackageState, SearchField
 
 from .mock import mock_presenter
@@ -32,6 +32,32 @@ def backend(presenter):
     backend = YumexRootBackend(presenter=presenter)
     yield backend
     del backend
+
+
+@pytest.fixture()
+def package():
+    return {
+        "arch": "x86_64",
+        "evr": "2.4.2-3.fc42",
+        "install_size": 257602,
+        "is_installed": True,
+        "name": "Box2D",
+        "repo_id": "@System",
+        "summary": "A 2D Physics Engine for Games",
+    }
+
+
+@pytest.fixture()
+def package_epoch():
+    return {
+        "arch": "x86_64",
+        "evr": "4:2.4.2-3.fc42",
+        "install_size": 257602,
+        "is_installed": False,
+        "name": "Box2D",
+        "repo_id": "@System",
+        "summary": "A 2D Physics Engine for Games",
+    }
 
 
 def test_setup(backend):
@@ -74,6 +100,34 @@ def test_available(backend: YumexRootBackend):
     print(pkg)
     expected_attr = backend.package_attr
     assert sorted(expected_attr) == sorted(pkg.keys())
+
+
+def test_create_package(package):
+    ypkg = create_package(package)
+    assert isinstance(ypkg, YumexPackage)
+    assert ypkg.epoch == 0
+    assert ypkg.name == "Box2D"
+    assert ypkg.version == "2.4.2"
+    assert ypkg.release == "3.fc42"
+    assert ypkg.arch == "x86_64"
+    assert ypkg.description == "A 2D Physics Engine for Games"
+    assert ypkg.repo == "@System"
+    assert ypkg.state == PackageState.INSTALLED
+    assert ypkg.size == 257602
+
+
+def test_create_package_epoch(package_epoch):
+    ypkg = create_package(package_epoch)
+    assert isinstance(ypkg, YumexPackage)
+    assert ypkg.epoch == "4"
+    assert ypkg.name == "Box2D"
+    assert ypkg.version == "2.4.2"
+    assert ypkg.release == "3.fc42"
+    assert ypkg.arch == "x86_64"
+    assert ypkg.description == "A 2D Physics Engine for Games"
+    assert ypkg.repo == "@System"
+    assert ypkg.state == PackageState.AVAILABLE
+    assert ypkg.size == 257602
 
 
 @pytest.mark.skip()

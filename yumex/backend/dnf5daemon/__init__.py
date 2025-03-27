@@ -17,15 +17,16 @@ def create_package(pkg) -> YumexPackage:
     """Generate a YumexPackage from a dnf5daemon list package"""
     evr = pkg["evr"]
     if ":" in evr:
-        vr = evr.split(":")[1]
+        e, vr = evr.split(":")
     else:
         vr = evr
+        e = 0
     v, r = vr.split("-")
-    state = PackageState.INSTALLED if pkg["is_install"] else PackageState.AVAILABLE
+    state = PackageState.INSTALLED if pkg["is_installed"] else PackageState.AVAILABLE
     return YumexPackage(
         name=pkg["name"],
         arch=pkg["arch"],
-        epoch=pkg["epoch"],
+        epoch=e,
         release=r,
         version=v,
         repo=pkg["repo_id"],
