@@ -14,6 +14,28 @@ from .client import Dnf5DbusClient, gv_list
 logger = logging.getLogger(__name__)
 
 
+def create_package(pkg) -> YumexPackage:
+    """Generate a YumexPackage from a dnf5daemon list package"""
+    evr = pkg["evr"]
+    if ":" in evr:
+        vr = evr.split(":")[1]
+    else:
+        vr = evr
+    v, r = vr.split("-")
+    state = PackageState.INSTALLED if pkg["is_install"] else PackageState.AVAILABLE
+    return YumexPackage(
+        name=pkg["name"],
+        arch=pkg["arch"],
+        epoch=pkg["epoch"],
+        release=r,
+        version=v,
+        repo=pkg["repo_id"],
+        description=pkg["summary"],
+        size=pkg["install_size"],
+        state=state,
+    )
+
+
 # defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
 class Action(IntEnum):
     INSTALL = 1
@@ -337,7 +359,18 @@ class YumexRootBackend:
 
     # Implement PackageBackend
 
-    def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]: ...
+    def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
+        match pkg_filter:
+            case PackageFilter.AVAILABLE:
+                return self._get_yumex_packages(self.available)
+            case PackageFilter.INSTALLED:
+                return self._get_yumex_packages(self.installed)
+            case PackageFilter.UPDATES:
+                packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
+                # return self.get_packages_with_lowest_priority(packages)
+                return packages
+            case other:
+                raise ValueError(f"Unknown package filter: {other}")
 
     def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]: ...
 
@@ -346,3 +379,56 @@ class YumexRootBackend:
     def get_repositories(self) -> list[str]: ...
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]: ...
+
+    # Helpers (PackageBackend)
+
+    @property
+    def package_attr():
+        return [
+            "name",
+            "evr",
+            "arch",
+            "repo_id",
+            "summary",
+            "install_size",
+            "is_installed",
+        ]
+
+    @property
+    def installed(self) -> list[dict[str, any]]:
+        with Dnf5DbusClient() as client:
+            return client.package_list(
+                "*",
+                package_attrs=self.package_attr,
+                scope="installed",
+            )
+
+    @property
+    def available(self) -> list[dict[str, any]]:
+        with Dnf5DbusClient() as client:
+            return client.package_list(
+                "*",
+                package_attrs=self.package_attr,
+                scope="available",
+            )
+
+    @property
+    def updates(self) -> list[dict[str, any]]:
+        with Dnf5DbusClient() as client:
+            return client.package_list(
+                "*",
+                package_attrs=self.package_attr,
+                scope="upgrades",
+            )
+
+    def _get_yumex_packages(self, pkgs: list[dict[str, any]], state=PackageState.AVAILABLE) -> list[YumexPackage]:
+        nevra_dict = {}
+        for pkg in pkgs:
+            ypkg: YumexPackage = create_package(pkg)
+            if state == PackageState.UPDATE:
+                ypkg.set_state(PackageState.UPDATE)
+            if ypkg.nevra not in nevra_dict:
+                nevra_dict[ypkg.nevra] = ypkg
+            else:
+                logger.debug(f"Skipping duplicate : {ypkg}")
+        return list(nevra_dict.values())
