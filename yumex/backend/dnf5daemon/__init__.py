@@ -285,7 +285,7 @@ class YumexRootBackend:
             case DownloadType.PACKAGE:
                 pkg.downloaded = downloaded
             case DownloadType.REPO:
-                if to_download > 0:
+                if total_to_download > 0:
                     pkg.downloaded = downloaded
                     pkg.to_download = total_to_download
             case DownloadType.UNKNOWN:
