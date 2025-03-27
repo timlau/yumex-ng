@@ -354,6 +354,18 @@ class YumexRootBackend:
 
     # Implement PackageBackend
 
+    @property
+    def package_attr(self) -> list[str]:
+        return [
+            "name",
+            "evr",
+            "arch",
+            "repo_id",
+            "summary",
+            "install_size",
+            "is_installed",
+        ]
+
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         match pkg_filter:
             case PackageFilter.AVAILABLE:
@@ -367,7 +379,32 @@ class YumexRootBackend:
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
-    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]: ...
+    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]:
+        kw_args = {
+            "package_attrs": self.package_attr,
+            "scope": "all",
+        }
+        if "*" not in txt:
+            txt = f"*{txt}*"
+        match field:
+            case SearchField.NAME:
+                ...
+            case SearchField.ARCH:
+                ...
+            case SearchField.REPO:
+                ...
+            case SearchField.SUMMARY:
+                ...
+            case other:
+                msg = f"Search field : [{other}] not supported in dnf5 backend"
+                logger.debug(msg)
+                raise ValueError(msg)
+        with Dnf5DbusClient() as client:
+            result = client.package_list(txt, **kw_args)
+        if result:
+            return self._get_yumex_packages(result)
+        else:
+            return []
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None: ...
 
@@ -376,18 +413,6 @@ class YumexRootBackend:
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]: ...
 
     # Helpers (PackageBackend)
-
-    @property
-    def package_attr(self):
-        return [
-            "name",
-            "evr",
-            "arch",
-            "repo_id",
-            "summary",
-            "install_size",
-            "is_installed",
-        ]
 
     @property
     def installed(self) -> list[dict[str, any]]:

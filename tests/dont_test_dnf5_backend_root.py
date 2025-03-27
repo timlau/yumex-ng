@@ -181,14 +181,16 @@ def test_get_packages_illegal(backend):
         _ = backend.get_packages("notfound")
 
 
-@pytest.mark.skip()
 # will fail if 0xFFFF package is not available in repos
 def test_search_name(backend):
     """test search by name"""
-    pkgs = backend.search("FFFF")
+    pkgs = backend.search("FFFF", SearchField.NAME, 0)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
+    print()
+    print(len(pkgs))
     pkg = pkgs[0]
+    print(pkg)
     assert isinstance(pkg, YumexPackage)
     assert pkg.name == "0xFFFF"
 

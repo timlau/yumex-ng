@@ -77,6 +77,7 @@ class Dnf5DbusClient:
         **kwargs can contain other options like package_attrs, repo or scope
 
         """
+        # print(args, kwargs)
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         options = {}
         options["patterns"] = get_variant(list[str], args)  # gv_list(args)
