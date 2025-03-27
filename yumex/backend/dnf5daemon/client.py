@@ -69,3 +69,37 @@ class Dnf5DbusClient:
 
     def confirm_key(self, *args):
         return self.session.confirm_key(*args)
+
+    def package_list(self, *args, **kwargs) -> list[list[str]]:
+        """call the org.rpm.dnf.v0.rpm.Repo list method
+
+        *args is package patterns to match
+        **kwargs can contain other options like package_attrs, repo or scope
+
+        """
+        package_attrs = kwargs.pop("package_attrs", ["nevra"])
+        options = {}
+        options["patterns"] = get_variant(list[str], args)  # gv_list(args)
+        options["package_attrs"] = get_variant(list[str], package_attrs)
+        options["with_src"] = get_variant(bool, False)
+        options["icase"] = get_variant(bool, True)
+        options["latest-limit"] = get_variant(int, 1)
+        if "repo" in kwargs:
+            options["repo"] = get_variant(list[str], kwargs.pop("repo"))
+        # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
+        if "scope" in kwargs:
+            options["scope"] = get_variant(str, kwargs.pop("scope"))
+        # get and async partial function
+        get_list = self._async_method("list")
+        result = get_list(options)
+        # format of result is a json like format with GLib.Variant
+        # [{
+        #   "id": GLib.Variant(),
+        #   "nevra": GLib.Variant("s", nevra),
+        #   "repo": GLib.Variant("s", repo),
+        #   },
+        #   {....},
+        # ]
+
+        # return as native types.
+        return get_native(result)
