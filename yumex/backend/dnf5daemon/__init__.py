@@ -410,11 +410,15 @@ class YumexRootBackend:
     @property
     def updates(self) -> list[dict[str, any]]:
         with Dnf5DbusClient() as client:
-            return client.package_list(
+            updates = client.package_list(
                 "*",
                 package_attrs=self.package_attr,
                 scope="upgrades",
             )
+        if updates:
+            return updates
+        else:
+            return []
 
     def _get_yumex_packages(self, pkgs: list[dict[str, any]], state=PackageState.AVAILABLE) -> list[YumexPackage]:
         nevra_dict = {}

@@ -80,11 +80,11 @@ def test_installed(backend: YumexRootBackend):
 def test_updates(backend: YumexRootBackend):
     updates = backend.updates
     print(f"\nUpdates : {updates}")
-    assert isinstance(updates, list) or updates is None
+    assert isinstance(updates, list)
     if updates:
         pkg = updates[0]
         pkg.pop("id")
-        print(f"installed packages : {len(updates)}")
+        print(f"Number of updates : {len(updates)}")
         print(pkg)
         expected_attr = backend.package_attr
         assert sorted(expected_attr) == sorted(pkg.keys())
@@ -141,34 +141,34 @@ def test_get_repositorie(backend):
     assert isinstance(repo_enabled, bool)
 
 
-@pytest.mark.skip()
 def test_get_packages_installed(backend):
     """test get_packages for installed packages"""
     pkgs = backend.get_packages(PackageFilter.INSTALLED)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
+    print(f"\n# of packages : {len(pkgs)}")
     pkg = pkgs[0]
     assert isinstance(pkg, YumexPackage)
     assert pkg.state == PackageState.INSTALLED
 
 
-@pytest.mark.skip()
 def test_get_packages_available(backend):
     """test get_packages for availabe packages"""
     pkgs = backend.get_packages(PackageFilter.AVAILABLE)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
+    print(f"\n# of packages : {len(pkgs)}")
     pkg = pkgs[0]
     assert isinstance(pkg, YumexPackage)
     assert pkg.state == PackageState.AVAILABLE
 
 
-@pytest.mark.skip()
 def test_get_packages_updates(backend):
     """test get_packages for upgradable"""
     pkgs = backend.get_packages(PackageFilter.UPDATES)
     assert isinstance(pkgs, list)
     if len(pkgs) > 0:
+        print(f"\n# of packages : {len(pkgs)}")
         pkg = pkgs[0]
         assert isinstance(pkg, YumexPackage)
         assert pkg.state == PackageState.UPDATE
