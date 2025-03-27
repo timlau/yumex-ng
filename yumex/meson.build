@@ -80,7 +80,6 @@ PY_INSTALLDIR.install_sources(yumex_backend_flatpak_modules, subdir: 'yumex/back
 
 yumex_backend_dnf_modules = [
     'backend/dnf/__init__.py',
-    'backend/dnf/dnf4.py',
     'backend/dnf/dnf5.py',
     'backend/dnf/factory.py',
 ]
@@ -97,7 +96,6 @@ PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
 yumex_service_modules = [
     'service/__init__.py',
-    'service/dnf4.py',
     'service/dnf5.py',
     'service/notification.py',
     'service/data.py',

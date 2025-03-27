@@ -1,6 +1,5 @@
 
 APPNAME = yumex
-APPNAME_DNF5 = yumex-dnf5
 DATADIR = /usr/share
 PYTHON = python3
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
@@ -13,9 +12,7 @@ DIST=${shell rpm --eval "%{dist}"}
 GIT_MASTER=main
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
-COPR_REL_DNF4 = -r fedora-40-x86_64 -r fedora-40-aarch64
 COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64 -r fedora-42-x86_64 -r fedora-42-aarch64
-COPR_REL_DNF5_SUBPKG = -r fedora-40-x86_64 -r fedora-40-aarch64 
 
 all:
 	@echo "Nothing to do, use a specific target"
@@ -43,51 +40,12 @@ release:
 	@git push --tags origin
 	@git push origin
 	@$(MAKE) copr-release-dnf5
-	@$(MAKE) copr-release-yumex-dnf5
-	@$(MAKE) copr-release-dnf4
 
 # build local rpms with dnf5 backend and start a copr build
 copr-release-dnf5:
 	@$(MAKE) archive
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
-
-# build local rpms with dnf4 backend and start a copr build 
-copr-release-dnf4:
-	@$(MAKE) release-dnf4
-	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
-
-# build local rpms for yumex-dnf5 and start a copr build
-copr-release-yumex-dnf5:
-	@$(MAKE) release-yumex-dnf5
-	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-$(VERSION)*.src.rpm
-
-
-release-yumex-dnf5:
-	@$(MAKE) test-checkout
-	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -> ${APPNAME_DNF5}.spec
-	@git add ${APPNAME_DNF5}.spec
-	@git rm yumex.spec
-	@git commit -a -m "bumped ${APPNAME_DNF5} to $(VERSION)"
-	# Make archive
-	@rm -rf ${APPNAME_DNF5}-${VERSION}.tar.gz
-	@git archive --format=tar --prefix=$(APPNAME_DNF5)-$(VERSION)/ HEAD | gzip -9v >${APPNAME_DNF5}-$(VERSION).tar.gz
-	# Build RPMS
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME_DNF5}-${VERSION}.tar.gz
-	@ rm -d ${APPNAME_DNF5}.spec
-	@$(MAKE) test-cleanup
-
-release-dnf4:
-	@$(MAKE) test-checkout
-	@cat yumex.spec | sed -e '3 s/DNF5/DNF4/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
-	@git add ${APPNAME}.spec
-	@git commit -a -m "bumped ${APPNAME} to $(VERSION)"
-	# Make archive
-	@rm -rf ${APPNAME}-${VERSION}.tar.gz
-	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
-	# Build RPMS
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${VERSION}.tar.gz
-	@$(MAKE) test-cleanup
 
 # cleanup the test branch used to create the test release
 test-checkout:
@@ -108,19 +66,6 @@ show-vars:
 	@echo ${NEW_VER}-${NEW_REL}
 	@echo ${GIT_BRANCH}
 
-# make a test release and build rpms
-test-release-dnf4:
-	@$(MAKE) test-checkout
-	# +1 Minor version and add 0.1-gitYYYYMMDD release
-	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e '3 s/DNF5/DNF4/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
-	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
-	# Make archive
-	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
-	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
-	# Build RPMS
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME}-${NEW_VER}.tar.gz
-	@$(MAKE) test-cleanup
-
 #make a test release with the dnf5 backend
 test-release-dnf5:
 	@$(MAKE) test-checkout
@@ -132,22 +77,6 @@ test-release-dnf5:
 	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
 	# Build RPMS
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME}-${NEW_VER}.tar.gz
-	@$(MAKE) test-cleanup
-
-#make a test release with the dnf5 backend
-test-release-yumex-dnf5:
-	@$(MAKE) test-checkout
-	# +1 Minor version and add 0.1-gitYYYYMMDD release
-	@cat yumex.spec | sed -e "6 s/%{app_name}/%{app_name}-dnf5/" -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME_DNF5}.spec
-	@git add ${APPNAME_DNF5}.spec
-	@git rm yumex.spec
-	@git commit -a -m "bumped ${APPNAME_DNF5} version ${NEW_VER}-${NEW_REL}"
-	# Make archive
-	@rm -rf ${APPNAME_DNF5}-${NEW_VER}.tar.gz
-	@git archive --format=tar --prefix=$(APPNAME_DNF5)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME_DNF5}-$(NEW_VER).tar.gz
-	# Build RPMS
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME_DNF5}-${NEW_VER}.tar.gz
-	@ rm -d ${APPNAME_DNF5}.spec
 	@$(MAKE) test-cleanup
 
 test-reinstall:
@@ -165,30 +94,17 @@ test-install:
 	@$(MAKE) test-release-dnf5
 	@-sudo dnf5 install build/RPMS/noarch/*.rpm
 
-
-
 # build release rpms
 rpm:
 	@$(MAKE) archive
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
-# make a test-releases and build it in fedora copr
-test-copr-dnf4:
-	@$(MAKE) test-release-dnf4
-	copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF4) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
-
 test-copr-dnf5:
 	@$(MAKE) test-release-dnf5
 	copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
 
-test-copr-yumex-dnf5:
-	@$(MAKE) test-release-yumex-dnf5
-	copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5_SUBPKG) $(BUILDDIR)/SRPMS/${APPNAME_DNF5}-${NEW_VER}-${NEW_REL}*.src.rpm
-
 all-test-copr:
-	@$(MAKE) test-copr-dnf4
 	@$(MAKE) test-copr-dnf5
-	@$(MAKE) test-copr-yumex-dnf5
 
 # Make a local build and run it
 localbuild:
@@ -207,16 +123,7 @@ inst-build-tools:
 inst-deps:
 	@-sudo dnf5 builddep yumex.spec -y
 	@-sudo dnf5 install python3-dasbus  -y
-
-
-inst-deps-dnf4:
-	@$(MAKE) inst-deps
-	@-sudo dnf5 install python3-dnfdaemon python3-dnf -y
-
-inst-deps-dnf5:
-	@$(MAKE) inst-deps
 	@-sudo dnf5 install python3-libdnf5 dnf5daemon-server -y
-
 
 # generate the POTFILES from available source files with translations
 # POTFILES is source for what fies is used to generate the .POT file.

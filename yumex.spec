@@ -1,11 +1,10 @@
 %global app_id dk.yumex.Yumex
 %global app_build release
-%global dnf_backend DNF5
 %global app_name yumex
 
 Name:     %{app_name}
 Version:  5.0.3
-Release:  1%{?dist}
+Release:  2%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -35,19 +34,12 @@ Requires: appstream >= 1.0.2
 
 Recommends: %{name}-updater-systray
 
-# dnf4 requirements
-%if "%{dnf_backend}" == "DNF4"
-Requires: python3-dnfdaemon
-Requires: python3-dnf
-%endif
 
 # dnf5 requirements
-%if "%{dnf_backend}" == "DNF5"
-Requires: python3-libdnf5
+Requires: python3-libdnf5 <= 5.2
 Requires: dnf5daemon-server
 Provides: yumex-dnf5 = %{version}-%{release}
 Obsoletes: yumex-dnf5 < %{version}-%{release}
-%endif
 
 Obsoletes: yumex-dnf <= 4.5.1
 
@@ -82,7 +74,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %build
-%meson --buildtype=%{app_build} -Ddnf_backend=%{dnf_backend}
+%meson --buildtype=%{app_build} 
 %meson_build
 
 %install
@@ -153,6 +145,9 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+* Thu Mar 27 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.0.3-2
+- remove support for dnf4
+
 * Thu Nov 7 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.3-1
 - the 5.0.3 release
 

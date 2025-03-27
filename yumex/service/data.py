@@ -27,13 +27,8 @@ from dataclasses import dataclass
 
 from gi.repository import AppIndicator3, Flatpak, Gio, Gtk  # type: ignore
 
-from yumex.constants import APP_ID, BACKEND
-
-if BACKEND == "DNF5":
-    from yumex.service.dnf5 import check_dnf_updates
-else:
-    from yumex.service.dnf4 import check_dnf_updates
-
+from yumex.constants import APP_ID
+from yumex.service.dnf5 import check_dnf_updates
 
 logger = logging.getLogger("yumex_updater")
 

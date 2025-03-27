@@ -9,9 +9,7 @@
     "workbench.colorCustomizations": {
         "titleBar.activeBackground": "#553955" // Change this color!
     },
-    "python.testing.pytestArgs": [
-        "tests"
-    ],
+    "python.testing.pytestArgs": ["tests"],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "files.autoSave": "afterDelay",
@@ -19,5 +17,5 @@
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true
-    },
+    }
 }

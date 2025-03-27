@@ -1,13 +1,13 @@
 import logging
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum, auto
-from typing import Self
+from typing import Iterable, Self
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.ui.progress import YumexProgress
-from yumex.utils.enums import PackageState
+from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 
 from .client import Dnf5DbusClient, gv_list
 
@@ -307,7 +307,7 @@ class YumexRootBackend:
             case DownloadType.PACKAGE:
                 pkg.downloaded = downloaded
             case DownloadType.REPO:
-                if to_download > 0:
+                if total_to_download > 0:
                     pkg.downloaded = downloaded
                     pkg.to_download = total_to_download
             case DownloadType.UNKNOWN:
