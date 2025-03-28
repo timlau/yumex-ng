@@ -78,6 +78,11 @@ class Dnf5DbusClient:
     def confirm_key(self, *args):
         return self.session_repo.confirm_key(*args)
 
+    def repo_list(self):
+        get_list = self._async_method("list", proxy=self.session_repo)
+        repos = get_list({"repo_attrs": get_variant(list[str], ["name", "enabled"])})
+        return get_native(repos)
+
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
 

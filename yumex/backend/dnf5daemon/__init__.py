@@ -409,7 +409,10 @@ class YumexRootBackend:
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None: ...
 
-    def get_repositories(self) -> list[str]: ...
+    def get_repositories(self) -> list[str]:
+        with Dnf5DbusClient() as client:
+            repos = client.repo_list()
+            return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]: ...
 

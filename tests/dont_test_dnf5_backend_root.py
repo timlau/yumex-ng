@@ -130,8 +130,7 @@ def test_create_package_epoch(package_epoch):
     assert ypkg.size == 257602
 
 
-@pytest.mark.skip()
-def test_get_repositorie(backend):
+def test_get_repositories(backend):
     """test the get_repositories method"""
     repos = list(backend.get_repositories())
     assert len(repos) > 0
