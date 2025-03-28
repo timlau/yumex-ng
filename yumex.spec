@@ -36,7 +36,7 @@ Recommends: %{name}-updater-systray
 
 
 # dnf5 requirements
-Requires: python3-libdnf5 <= 5.2
+Requires: python3-libdnf5 >= 5.2.12
 Requires: dnf5daemon-server
 Provides: yumex-dnf5 = %{version}-%{release}
 Obsoletes: yumex-dnf5 < %{version}-%{release}
