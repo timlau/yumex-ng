@@ -5,6 +5,7 @@ from typing import Self
 from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
 from dasbus.typing import Variant, get_native, get_variant  # noqa: F401
+from dasbus.unix import GLibClientUnix
 
 from yumex.utils.dbus import AsyncDbusCaller
 
@@ -32,7 +33,7 @@ class Dnf5DbusClient:
 
     def __init__(self) -> None:
         # setup the dnf5daemon dbus proxy
-        self.proxy = DNFDBUS.get_proxy()
+        self.proxy = DNFDBUS.get_proxy(client=GLibClientUnix)
         self.async_dbus = AsyncDbusCaller()
 
     def __enter__(self) -> Self:
@@ -77,19 +78,23 @@ class Dnf5DbusClient:
         **kwargs can contain other options like package_attrs, repo or scope
 
         """
-        # print(args, kwargs)
+        print()
+        print(args, kwargs)
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         options = {}
         options["patterns"] = get_variant(list[str], args)  # gv_list(args)
         options["package_attrs"] = get_variant(list[str], package_attrs)
         options["with_src"] = get_variant(bool, False)
+        options["with_nevra"] = get_variant(bool, kwargs.pop("with_nevra", True))
+        options["with_provides"] = get_variant(bool, kwargs.pop("with_provides", False))
+        options["with_filenames"] = get_variant(bool, kwargs.pop("with_filenames", False))
+        options["with_binaries"] = get_variant(bool, kwargs.pop("with_binaries", False))
         options["icase"] = get_variant(bool, True)
         options["latest-limit"] = get_variant(int, 1)
+        options["scope"] = get_variant(str, kwargs.pop("scope", "all"))
         if "repo" in kwargs:
             options["repo"] = get_variant(list[str], kwargs.pop("repo"))
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
-        if "scope" in kwargs:
-            options["scope"] = get_variant(str, kwargs.pop("scope"))
         # get and async partial function
         get_list = self._async_method("list")
         result = get_list(options)
