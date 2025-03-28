@@ -197,7 +197,7 @@ def test_search_name(backend):
 # will fail if the fedora repo is not available in repos
 def test_search_repo(backend):
     """test search by repo"""
-    pkgs = backend.search("updates", SearchField.REPO)
+    pkgs = backend.search("updates-testing", SearchField.REPO)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -205,7 +205,7 @@ def test_search_repo(backend):
     print(len(pkgs))
     print(pkg)
     assert isinstance(pkg, YumexPackage)
-    assert pkg.repo == "updates"
+    assert pkg.repo == "updates-testing"
 
 
 # will fail if Yum Extender is not installed or available in the repos
