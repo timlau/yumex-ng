@@ -379,20 +379,21 @@ class YumexRootBackend:
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
-    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]:
+    def search(self, txt: str, field: SearchField, limit: int = 0) -> list[YumexPackage]:
         kw_args = {
             "package_attrs": self.package_attr,
             "scope": "all",
         }
-        if "*" not in txt:
-            txt = f"*{txt}*"
         match field:
             case SearchField.NAME:
-                ...
+                if "*" not in txt:
+                    txt = f"*{txt}*"
             case SearchField.ARCH:
-                ...
+                kw_args["arch"] = [txt]
+                txt = "*"
             case SearchField.REPO:
-                ...
+                kw_args["repo"] = [txt]
+                txt = "*"
             case SearchField.SUMMARY:
                 ...
             case other:

@@ -174,7 +174,6 @@ def test_get_packages_updates(backend):
         assert pkg.state == PackageState.UPDATE
 
 
-@pytest.mark.skip()
 def test_get_packages_illegal(backend):
     """test get_packages with illegal package filter"""
     with pytest.raises(ValueError):
@@ -184,27 +183,29 @@ def test_get_packages_illegal(backend):
 # will fail if 0xFFFF package is not available in repos
 def test_search_name(backend):
     """test search by name"""
-    pkgs = backend.search("FFFF", SearchField.NAME, 0)
+    pkgs = backend.search("FFFF", SearchField.NAME)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
+    pkg = pkgs[0]
     print()
     print(len(pkgs))
-    pkg = pkgs[0]
     print(pkg)
     assert isinstance(pkg, YumexPackage)
     assert pkg.name == "0xFFFF"
 
 
 # will fail if the fedora repo is not available in repos
-@pytest.mark.skip()
 def test_search_repo(backend):
     """test search by repo"""
-    pkgs = backend.search("fedora", field=SearchField.REPO)
+    pkgs = backend.search("updates", SearchField.REPO)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
+    print()
+    print(len(pkgs))
+    print(pkg)
     assert isinstance(pkg, YumexPackage)
-    assert pkg.repo == "fedora"
+    assert pkg.repo == "updates"
 
 
 # will fail if Yum Extender is not installed or available in the repos
@@ -219,21 +220,20 @@ def test_search_desc(backend):
     assert "Yum Extender" in pkg.description
 
 
-@pytest.mark.skip()
+@pytest.mark.xfail
 def test_search_arch(backend):
     """test search by arch"""
-    pkgs = backend.search("noarch", field=SearchField.ARCH)
+    pkgs = backend.search("i386", SearchField.ARCH)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
     assert isinstance(pkg, YumexPackage)
-    assert pkg.arch == "noarch"
+    assert pkg.arch == "i386"
 
 
-@pytest.mark.skip()
 def test_search_notfound(backend):
     """test search by name not found"""
-    pkgs = backend.search("XXXNOTFOUNDXXX", field=SearchField.NAME)
+    pkgs = backend.search("XXXNOTFOUNDXXX", SearchField.NAME)
     assert isinstance(pkgs, list)
     assert len(pkgs) == 0
 
