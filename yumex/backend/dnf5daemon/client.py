@@ -41,7 +41,13 @@ class Dnf5DbusClient:
         # get a session path for the dnf5daemon
         self.session_path = self.proxy.open_session({})
         # setup a proxy for the session object path
-        self.session = DNFDBUS.get_proxy(self.session_path)
+        # self.session = DNFDBUS.get_proxy(self.session_path)
+        self.session_repo = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.rpm.Repo")
+        self.session_rpm = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.rpm.Rpm")
+        self.session_goal = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.Goal")
+        self.session_base = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.Base")
+        self.session_group = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.comps.Group")
+        self.session_advisory = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.Advisory")
         logger.debug(f"Open Dnf5Daemon session: {self.session_path}")
         return self
 
@@ -53,23 +59,23 @@ class Dnf5DbusClient:
             logger.critical("", exc_info=(exc_type, exc_value, exc_traceback))
         # close dnf5 session
 
-    def _async_method(self, method: str) -> partial:
+    def _async_method(self, method: str, proxy) -> partial:
         """create a patial func to make an async call to a given
         dbus method name
         """
-        return partial(self.async_dbus.call, getattr(self.session, method))
+        return partial(self.async_dbus.call, getattr(proxy, method))
 
     def resolve(self, *args):
-        resolve = self._async_method("resolve")
+        resolve = self._async_method("resolve", proxy=self.session_goal)
         return resolve(*args)
 
     def do_transaction(self):
-        do_transaction = self._async_method("do_transaction")
+        do_transaction = self._async_method("do_transaction", proxy=self.session_goal)
         options = {"comment": get_variant(str, "Yum Extender Transaction")}
         return do_transaction(options)
 
     def confirm_key(self, *args):
-        return self.session.confirm_key(*args)
+        return self.session_repo.confirm_key(*args)
 
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
@@ -78,8 +84,7 @@ class Dnf5DbusClient:
         **kwargs can contain other options like package_attrs, repo or scope
 
         """
-        print()
-        print(args, kwargs)
+        print(f"\n --> args: {args} kwargs: {kwargs}")
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         options = {}
         options["patterns"] = get_variant(list[str], args)  # gv_list(args)
@@ -96,7 +101,9 @@ class Dnf5DbusClient:
             options["repo"] = get_variant(list[str], kwargs.pop("repo"))
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
         # get and async partial function
-        get_list = self._async_method("list")
+        print(f" --> options: {options} ")
+        package_attrs = kwargs.pop("package_attrs", ["nevra"])
+        get_list = self._async_method("list", proxy=self.session_rpm)
         result = get_list(options)
         # format of result is a json like format with GLib.Variant
         # [{

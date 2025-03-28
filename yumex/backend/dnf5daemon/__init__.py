@@ -192,11 +192,11 @@ class YumexRootBackend:
                     logger.debug(f"adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
         if to_remove:
-            client.session.remove(gv_list(to_remove), {})
+            client.session_rpm.remove(gv_list(to_remove), {})
         if to_install:
-            client.session.install(gv_list(to_install), {})
+            client.session_rpm.install(gv_list(to_install), {})
         if to_update:
-            client.session.upgrade(gv_list(to_update), {})
+            client.session_rpm.upgrade(gv_list(to_update), {})
         res = client.resolve({})
         if res:
             content, rc = res
@@ -205,13 +205,13 @@ class YumexRootBackend:
         return content, rc
 
     def connect_signals(self, client):
-        client.session.download_add_new.connect(self.on_download_add_new)
-        client.session.download_progress.connect(self.on_download_progress)
-        client.session.download_end.connect(self.on_download_end)
-        client.session.repo_key_import_request.connect(self.on_repo_key_import_request)
-        client.session.transaction_action_start.connect(self.on_transaction_action_start)
-        client.session.transaction_action_progress.connect(self.on_transaction_action_progress)
-        client.session.transaction_action_end.connect(self.on_transaction_action_stop)
+        client.session_base.download_add_new.connect(self.on_download_add_new)
+        client.session_base.download_progress.connect(self.on_download_progress)
+        client.session_base.download_end.connect(self.on_download_end)
+        client.session_base.repo_key_import_request.connect(self.on_repo_key_import_request)
+        client.session_rpm.transaction_action_start.connect(self.on_transaction_action_start)
+        client.session_rpm.transaction_action_progress.connect(self.on_transaction_action_progress)
+        client.session_rpm.transaction_action_stop.connect(self.on_transaction_action_stop)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
@@ -223,7 +223,7 @@ class YumexRootBackend:
             logger.debug("building transaction")
             content, rc = self._build_transations(pkgs, client)
             logger.debug(f"build transaction: rc =  {rc}")
-            errors = client.session.get_transaction_problems_string()
+            errors = client.session_goal.get_transaction_problems_string()
             for error in errors:
                 logger.debug(f"build transaction: error =  {error}")
             self.progress.hide()
