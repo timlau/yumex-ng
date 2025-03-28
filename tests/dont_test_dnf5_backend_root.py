@@ -16,9 +16,12 @@ import pytest
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import YumexRootBackend, create_package
+from yumex.utils import setup_logging
 from yumex.utils.enums import PackageFilter, PackageState, SearchField
 
 from .mock import mock_presenter
+
+setup_logging(debug=True)
 
 
 @pytest.fixture
@@ -219,15 +222,16 @@ def test_search_desc(backend):
     assert "Yum Extender" in pkg.description
 
 
-@pytest.mark.xfail
 def test_search_arch(backend):
     """test search by arch"""
-    pkgs = backend.search("i386", SearchField.ARCH)
+    pkgs = backend.search("noarch", SearchField.ARCH)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
+    print()
+    print(f"Number of packages : {len(pkgs)}")
     pkg = pkgs[0]
     assert isinstance(pkg, YumexPackage)
-    assert pkg.arch == "i386"
+    assert pkg.arch == "noarch"
 
 
 def test_search_notfound(backend):
@@ -237,7 +241,6 @@ def test_search_notfound(backend):
     assert len(pkgs) == 0
 
 
-@pytest.mark.skip()
 def test_search_illegal_field(backend):
     """test search by illegal search field"""
     with pytest.raises(ValueError):

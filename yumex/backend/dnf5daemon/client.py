@@ -106,6 +106,8 @@ class Dnf5DbusClient:
         options["scope"] = get_variant(str, kwargs.pop("scope", "all"))
         if "repo" in kwargs:
             options["repo"] = get_variant(list[str], kwargs.pop("repo"))
+        if "arch" in kwargs:
+            options["arch"] = get_variant(list[str], kwargs.pop("arch"))
         # get and async partial function
         logger.debug(f" --> options: {options} ")
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
