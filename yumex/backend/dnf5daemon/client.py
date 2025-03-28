@@ -42,12 +42,13 @@ class Dnf5DbusClient:
         self.session_path = self.proxy.open_session({})
         # setup a proxy for the session object path
         # self.session = DNFDBUS.get_proxy(self.session_path)
-        self.session_repo = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.rpm.Repo")
-        self.session_rpm = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.rpm.Rpm")
-        self.session_goal = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.Goal")
-        self.session_base = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.Base")
-        self.session_group = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.comps.Group")
-        self.session_advisory = DNFDBUS.get_proxy(self.session_path, interface_name="org.rpm.dnf.v0.Advisory")
+        dnf_interface = ".".join(DNFDBUS_NAMESPACE)
+        self.session_repo = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.rpm.Repo")
+        self.session_rpm = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.rpm.Rpm")
+        self.session_goal = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.Goal")
+        self.session_base = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.Base")
+        self.session_group = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.comps.Group")
+        self.session_advisory = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.Advisory")
         logger.debug(f"Open Dnf5Daemon session: {self.session_path}")
         return self
 
@@ -84,7 +85,7 @@ class Dnf5DbusClient:
         **kwargs can contain other options like package_attrs, repo or scope
 
         """
-        print(f"\n --> args: {args} kwargs: {kwargs}")
+        logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         options = {}
         options["patterns"] = get_variant(list[str], args)  # gv_list(args)
@@ -96,23 +97,14 @@ class Dnf5DbusClient:
         options["with_binaries"] = get_variant(bool, kwargs.pop("with_binaries", False))
         options["icase"] = get_variant(bool, True)
         options["latest-limit"] = get_variant(int, 1)
+        # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
         options["scope"] = get_variant(str, kwargs.pop("scope", "all"))
         if "repo" in kwargs:
             options["repo"] = get_variant(list[str], kwargs.pop("repo"))
-        # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
         # get and async partial function
-        print(f" --> options: {options} ")
+        logger.debug(f" --> options: {options} ")
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         get_list = self._async_method("list", proxy=self.session_rpm)
         result = get_list(options)
-        # format of result is a json like format with GLib.Variant
-        # [{
-        #   "id": GLib.Variant(),
-        #   "nevra": GLib.Variant("s", nevra),
-        #   "repo": GLib.Variant("s", repo),
-        #   },
-        #   {....},
-        # ]
-
         # return as native types.
         return get_native(result)
