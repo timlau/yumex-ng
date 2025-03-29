@@ -348,4 +348,3 @@ def test_package_depsolve(backend):
     assert ypkg.is_dep
 
 
-# TODO: Add tests for def reset_backend(self) -> None:
