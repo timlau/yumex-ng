@@ -407,7 +407,46 @@ class YumexRootBackend:
         else:
             return []
 
-    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None: ...
+    def _get_package_attribute(self, pkg: YumexPackage, attribute: str):
+        with Dnf5DbusClient() as client:
+            result = client.package_list(
+                pkg.nevra,
+                package_attrs=["nevra", attribute],
+                scope="all",
+            )
+            if result:
+                return result[0][attribute]
+        return None
+
+    def _get_description(self, pkg: YumexPackage):
+        desc = self._get_package_attribute(pkg, "description")
+        if desc:
+            return desc
+        return ""
+
+    def _get_files(self, pkg: YumexPackage):
+        files = self._get_package_attribute(pkg, "files")
+        if files:
+            return "\n".join(files)
+        return ""
+
+    def _get_update_info(self, pkg: YumexPackage):
+        with Dnf5DbusClient() as client:
+            result = client.advisory_list(pkg.nevra)
+            if result:
+                return result[0]
+        return None
+
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
+        match attr:
+            case InfoType.DESCRIPTION:
+                return self._get_description(pkg)
+            case InfoType.FILES:
+                return self._get_files(pkg)
+            case InfoType.UPDATE_INFO:
+                return self._get_update_info(pkg)
+            case other:
+                raise ValueError(f"Unknown package info: {other}")
 
     def get_repositories(self) -> list[str]:
         with Dnf5DbusClient() as client:

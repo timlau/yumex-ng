@@ -17,7 +17,7 @@ import pytest
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import YumexRootBackend, create_package
 from yumex.utils import setup_logging
-from yumex.utils.enums import PackageFilter, PackageState, SearchField
+from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 
 from .mock import mock_presenter
 
@@ -61,6 +61,21 @@ def package_epoch():
         "repo_id": "@System",
         "summary": "A 2D Physics Engine for Games",
     }
+
+
+@pytest.fixture()
+def yumex_package() -> YumexPackage:
+    return create_package(
+        {
+            "arch": "x86_64",
+            "evr": "2.4.2-3.fc42",
+            "install_size": 257602,
+            "is_installed": False,
+            "name": "NOTFOUND",
+            "repo_id": "@System",
+            "summary": "This package don't exist",
+        }
+    )
 
 
 def test_setup(backend):
@@ -199,7 +214,7 @@ def test_search_name(backend):
 # will fail if the fedora repo is not available in repos
 def test_search_repo(backend):
     """test search by repo"""
-    pkgs = backend.search("updates-testing", SearchField.REPO)
+    pkgs = backend.search("fedora", SearchField.REPO)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -207,7 +222,7 @@ def test_search_repo(backend):
     print(len(pkgs))
     print(pkg)
     assert isinstance(pkg, YumexPackage)
-    assert pkg.repo == "updates-testing"
+    assert pkg.repo == "fedora"
 
 
 @pytest.mark.xfail
@@ -246,6 +261,72 @@ def test_search_illegal_field(backend):
     """test search by illegal search field"""
     with pytest.raises(ValueError):
         _ = backend.search("ffff", field="illegal")
+
+
+def test_package_info_desc(backend):
+    pkgs = backend.search("FFFF", SearchField.NAME)
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    desc = backend.get_package_info(pkg, InfoType.DESCRIPTION)
+    print()
+    print(desc)
+    assert isinstance(desc, str)
+    assert len(desc) > 0
+    assert "The 'Open Free Fiasco Firmware Flasher'" in desc
+
+
+def test_package_info_desc_notfound(backend, yumex_package):
+    desc = backend.get_package_info(yumex_package, InfoType.DESCRIPTION)
+    assert isinstance(desc, str)
+    assert len(desc) == 0
+
+
+def test_package_info_files(backend):
+    pkgs = backend.search("FFFF", SearchField.NAME)
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    desc = backend.get_package_info(pkg, InfoType.FILES)
+    print()
+    print(desc)
+    assert isinstance(desc, str)
+    assert len(desc) > 0
+    assert "/usr/bin/0xFFFF" in desc
+
+
+def test_package_info_files_0ad(backend):
+    pkgs = backend.search("0ad", SearchField.NAME)
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    desc = backend.get_package_info(pkg, InfoType.FILES)
+    print()
+    print(desc)
+    assert isinstance(desc, str)
+    assert len(desc) > 0
+    assert "/usr/bin/pyrogenesis" in desc
+
+
+def test_package_info_files_notfound(backend, yumex_package):
+    desc = backend.get_package_info(yumex_package, InfoType.FILES)
+    assert isinstance(desc, str)
+    assert len(desc) == 0
+
+
+# Advisory info is not working yet
+@pytest.mark.xfail
+def test_package_info_update(backend):
+    pkgs = backend.search("dnf5", SearchField.NAME)
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    upd_info = backend.get_package_info(pkg, InfoType.UPDATE_INFO)
+    print()
+    print(upd_info)
+    assert isinstance(upd_info, str)
+    assert len(upd_info) > 0
+    assert "The 'Open Free Fiasco Firmware Flasher'" in upd_info
 
 
 # TODO: Add tests for def reset_backend(self) -> None:

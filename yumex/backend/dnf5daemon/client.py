@@ -115,3 +115,28 @@ class Dnf5DbusClient:
         result = get_list(options)
         # return as native types.
         return get_native(result)
+
+    def advisory_list(self, *args, **kwargs):
+        logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
+        advisory_attrs = kwargs.pop(
+            "advisor_attrs",
+            [
+                "advisoryid",
+                "name",
+                "title",
+                "type",
+                "severity",
+                "status",
+                "vendor",
+                "description",
+            ],
+        )
+        options = {}
+        options["advisory_attrs"] = get_variant(list[str], advisory_attrs)
+        options["contains_pkgs"] = get_variant(list[str], args)
+        options["availability"] = get_variant(str, "all")
+        # options[""] = get_variant(list[str], [])
+        logger.debug(f" --> options: {options} ")
+        get_list = self._async_method("list", proxy=self.session_advisory)
+        result = get_list(options)
+        return get_native(result)
