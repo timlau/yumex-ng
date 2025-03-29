@@ -12,9 +12,12 @@ to excute the test
 
 """
 
+from dataclasses import fields
+
 import pytest
 
 from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf.dnf5 import UpdateInfo
 from yumex.backend.dnf5daemon import YumexRootBackend, create_package
 from yumex.utils import setup_logging
 from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
@@ -315,20 +318,21 @@ def test_package_info_files_notfound(backend, yumex_package):
 
 
 # Advisory info is not working yet
-@pytest.mark.xfail
 def test_package_info_update(backend):
     pkgs = backend.search("dnf5", SearchField.NAME)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
-    upd_info = backend.get_package_info(pkg, InfoType.UPDATE_INFO)
+    upd_infos = backend.get_package_info(pkg, InfoType.UPDATE_INFO)
     print()
-    print(upd_info)
-    assert isinstance(upd_info, str)
-    assert len(upd_info) > 0
-    assert "The 'Open Free Fiasco Firmware Flasher'" in upd_info
+    print(upd_infos)
+    assert isinstance(upd_infos, list)
+    assert len(upd_infos) > 0
+    # the elemeent sould match the fields in the UpdateInfo structure
+    names = fields(UpdateInfo)
+    for name in names:
+        assert name.name in upd_infos[0]
 
 
 # TODO: Add tests for def reset_backend(self) -> None:
-# TODO: Add tests for def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
 # TODO: Add tests for def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:

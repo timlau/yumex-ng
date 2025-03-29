@@ -1,5 +1,6 @@
+import datetime
 import logging
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from enum import Enum, IntEnum, auto
 from typing import Iterable, Self
 
@@ -11,6 +12,18 @@ from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 from .client import Dnf5DbusClient, gv_list
 
 logger = logging.getLogger(__name__)
+
+ADVISOR_ATTRS = [
+    "advisoryid",
+    "name",
+    "title",
+    "type",
+    "severity",
+    "status",
+    "description",
+    "buildtime",
+    "references",
+]
 
 
 def create_package(pkg) -> YumexPackage:
@@ -90,6 +103,20 @@ class DownloadPackage:
                 return DownloadType.PACKAGE
             case _:
                 return DownloadType.UNKNOWN
+
+
+@dataclass
+class UpdateInfo:
+    id: str
+    title: str
+    description: str
+    type: str
+    updated: str
+    references: list
+
+    def as_dict(self):
+        """return dataclass as a dict"""
+        return asdict(self)
 
 
 @dataclass
@@ -431,11 +458,25 @@ class YumexRootBackend:
         return ""
 
     def _get_update_info(self, pkg: YumexPackage):
+        info_list = []
         with Dnf5DbusClient() as client:
-            result = client.advisory_list(pkg.nevra)
+            result = client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
             if result:
-                return result[0]
-        return None
+                for res in result:
+                    timestamp = datetime.datetime.fromtimestamp(res["buildtime"])
+                    updated = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+                    info_list.append(
+                        UpdateInfo(
+                            id=res["advisoryid"],
+                            title=res["name"],
+                            description=res["description"],
+                            type=res["severity"],
+                            updated=updated,
+                            references=res["references"],
+                        ).as_dict()
+                    )
+                return info_list
+        return []
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         match attr:

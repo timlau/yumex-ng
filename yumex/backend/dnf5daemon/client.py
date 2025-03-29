@@ -118,19 +118,7 @@ class Dnf5DbusClient:
 
     def advisory_list(self, *args, **kwargs):
         logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
-        advisory_attrs = kwargs.pop(
-            "advisor_attrs",
-            [
-                "advisoryid",
-                "name",
-                "title",
-                "type",
-                "severity",
-                "status",
-                "vendor",
-                "description",
-            ],
-        )
+        advisory_attrs = kwargs.pop("advisor_attrs")
         options = {}
         options["advisory_attrs"] = get_variant(list[str], advisory_attrs)
         options["contains_pkgs"] = get_variant(list[str], args)

@@ -110,7 +110,7 @@ class YumexPackageInfo(Gtk.Box):
         if not refs:
             return self.references.set_visible(False)
         for ref in refs:
-            num, bug_id, bug_desc, bug_link = ref
+            bug_id, bug_typ, bug_desc, bug_link = ref
             txt = f'<a href="{bug_link}">{bug_id}</a> - {bug_desc}'
             row = Adw.ActionRow()
             row.set_title(txt)

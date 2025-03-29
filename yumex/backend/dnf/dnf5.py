@@ -22,7 +22,7 @@ from typing import Iterable, List
 import libdnf5.base as dnf
 from libdnf5.advisory import Advisory, AdvisoryQuery, AdvisoryReference
 from libdnf5.common import QueryCmp_ICONTAINS, QueryCmp_IGLOB, QueryCmp_NEQ, QueryCmp_NOT_IGLOB
-from libdnf5.repo import Repo, RepoCache, RepoQuery  # noqa : F401
+from libdnf5.repo import RepoCache, RepoQuery  # noqa : F401
 from libdnf5.rpm import Package, PackageQuery  # noqa: F401
 
 from yumex.backend.dnf import YumexPackage, reload_metadata_expired, update_metadata_timestamp
@@ -69,7 +69,7 @@ class UpdateInfo:
         refs: list[AdvisoryReference] = list(advisory.get_references())
         ref_list = []
         for ref in refs:
-            ref_list.append((ref.get_type(), ref.get_id(), ref.get_title(), ref.get_url()))
+            ref_list.append((ref.get_id(), ref.get_type(), ref.get_title(), ref.get_url()))
         return cls(
             id=advisory.get_name(),
             title=advisory.get_title(),
