@@ -494,7 +494,24 @@ class YumexRootBackend:
             repos = client.repo_list()
             return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
 
-    def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]: ...
+    def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
+        dep_pkgs = []
+        with Dnf5DbusClient() as client:
+            res, rc = self._build_transations(pkgs, client)
+            print(rc)
+            for elem in res:
+                _, action, typ, _, pkg_dict = elem
+                # print(pkg_dict)
+                pkg_dict["summary"] = ""  # need for create package, not need for depsolve
+                if action == "Install":
+                    pkg_dict["is_installed"] = False
+                else:
+                    pkg_dict["is_installed"] = True
+                ypkg = create_package(pkg_dict)
+                ypkg.is_dep = True if typ == "Dependency" else False
+                dep_pkgs.append(ypkg)
+                # print(action, typ, ypkg)
+        return dep_pkgs
 
     # Helpers (PackageBackend)
 

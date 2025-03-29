@@ -334,5 +334,18 @@ def test_package_info_update(backend):
         assert name.name in upd_infos[0]
 
 
+def test_package_depsolve(backend):
+    pkgs = backend.search("0ad", SearchField.NAME)
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    ypkgs = backend.depsolve([pkg])
+    assert isinstance(ypkgs, list)
+    assert len(ypkgs) > 0
+    ypkg = ypkgs[-1]
+    print(ypkg)
+    assert isinstance(ypkg, YumexPackage)
+    assert ypkg.is_dep
+
+
 # TODO: Add tests for def reset_backend(self) -> None:
-# TODO: Add tests for def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
