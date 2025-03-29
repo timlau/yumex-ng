@@ -290,12 +290,12 @@ def test_package_info_files(backend):
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
-    desc = backend.get_package_info(pkg, InfoType.FILES)
+    files = backend.get_package_info(pkg, InfoType.FILES)
     print()
-    print(desc)
-    assert isinstance(desc, str)
-    assert len(desc) > 0
-    assert "/usr/bin/0xFFFF" in desc
+    print(files)
+    assert isinstance(files, list)
+    assert len(files) > 0
+    assert "/usr/bin/0xFFFF" in files
 
 
 def test_package_info_files_0ad(backend):
@@ -303,18 +303,18 @@ def test_package_info_files_0ad(backend):
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
-    desc = backend.get_package_info(pkg, InfoType.FILES)
+    files = backend.get_package_info(pkg, InfoType.FILES)
     print()
-    print(desc)
-    assert isinstance(desc, str)
-    assert len(desc) > 0
-    assert "/usr/bin/pyrogenesis" in desc
+    print(files)
+    assert isinstance(files, list)
+    assert len(files) > 0
+    assert "/usr/bin/pyrogenesis" in files
 
 
 def test_package_info_files_notfound(backend, yumex_package):
-    desc = backend.get_package_info(yumex_package, InfoType.FILES)
-    assert isinstance(desc, str)
-    assert len(desc) == 0
+    files = backend.get_package_info(yumex_package, InfoType.FILES)
+    assert isinstance(files, list)
+    assert len(files) == 0
 
 
 # Advisory info is not working yet
@@ -346,5 +346,3 @@ def test_package_depsolve(backend):
     print(ypkg)
     assert isinstance(ypkg, YumexPackage)
     assert ypkg.is_dep
-
-

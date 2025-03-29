@@ -90,7 +90,7 @@ class Dnf5DbusClient:
         **kwargs can contain other options like package_attrs, repo or scope
 
         """
-        logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
+        # logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         options = {}
         options["patterns"] = get_variant(list[str], args)  # gv_list(args)
@@ -109,7 +109,7 @@ class Dnf5DbusClient:
         if "arch" in kwargs:
             options["arch"] = get_variant(list[str], kwargs.pop("arch"))
         # get and async partial function
-        logger.debug(f" --> options: {options} ")
+        # logger.debug(f" --> options: {options} ")
         package_attrs = kwargs.pop("package_attrs", ["nevra"])
         get_list = self._async_method("list", proxy=self.session_rpm)
         result = get_list(options)
@@ -117,14 +117,14 @@ class Dnf5DbusClient:
         return get_native(result)
 
     def advisory_list(self, *args, **kwargs):
-        logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
+        # logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
         advisory_attrs = kwargs.pop("advisor_attrs")
         options = {}
         options["advisory_attrs"] = get_variant(list[str], advisory_attrs)
         options["contains_pkgs"] = get_variant(list[str], args)
         options["availability"] = get_variant(str, "all")
         # options[""] = get_variant(list[str], [])
-        logger.debug(f" --> options: {options} ")
+        # logger.debug(f" --> options: {options} ")
         get_list = self._async_method("list", proxy=self.session_advisory)
         result = get_list(options)
         return get_native(result)

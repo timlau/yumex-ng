@@ -65,9 +65,10 @@ class YumexPresenter:
 
     @property
     def package_backend(self) -> PackageBackend:
-        if not self._backend:
-            self._backend: PackageBackend = self.dnf_backend_factory.get_backend()
-        return self._backend
+        # if not self._backend:
+        #     self._backend: PackageBackend = self.dnf_backend_factory.get_backend()
+        # return self._backend
+        return self.package_root_backend
 
     @property
     def package_root_backend(self) -> PackageBackend:
@@ -92,8 +93,8 @@ class YumexPresenter:
         return self._win.progress
 
     def reset_backend(self) -> None:
-        del self._backend
-        self._backend = None
+        del self._root_backend
+        self._root_backend = None
 
     def reset_flatpak_backend(self) -> None:
         del self._fp_backend

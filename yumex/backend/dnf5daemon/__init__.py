@@ -454,8 +454,8 @@ class YumexRootBackend:
     def _get_files(self, pkg: YumexPackage):
         files = self._get_package_attribute(pkg, "files")
         if files:
-            return "\n".join(files)
-        return ""
+            return files
+        return []
 
     def _get_update_info(self, pkg: YumexPackage):
         info_list = []
@@ -478,7 +478,7 @@ class YumexRootBackend:
                 return info_list
         return []
 
-    def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
+    def get_package_info(self, pkg: YumexPackage, attr: InfoType):
         match attr:
             case InfoType.DESCRIPTION:
                 return self._get_description(pkg)
@@ -508,9 +508,10 @@ class YumexRootBackend:
                 else:
                     pkg_dict["is_installed"] = True
                 ypkg = create_package(pkg_dict)
-                ypkg.is_dep = True if typ == "Dependency" else False
-                dep_pkgs.append(ypkg)
-                # print(action, typ, ypkg)
+                if typ == "Dependency":
+                    ypkg.is_dep = True
+                    dep_pkgs.append(ypkg)
+                    logger.debug(f"Adding {ypkg} as dependency")
         return dep_pkgs
 
     # Helpers (PackageBackend)
