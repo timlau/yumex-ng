@@ -61,6 +61,7 @@ class Dnf5DbusClient:
             dbus_interface=IFACE_SESSION_MANAGER,
         )
         self.async_dbus = AsyncCaller()
+        self._connected = False
 
     def __enter__(self) -> Self:
         """context manager enter, return current object"""
@@ -76,36 +77,40 @@ class Dnf5DbusClient:
         # close dnf5 session
 
     def open_session(self):
-        self.session = self.iface_session.open_session({})
-        logger.debug(f"open session: {self.session}")
-        self.session_repo = dbus.Interface(
-            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_REPO,
-        )
-        self.session_rpm = dbus.Interface(
-            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_RPM,
-        )
-        self.session_goal = dbus.Interface(
-            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_GOAL,
-        )
-        self.session_base = dbus.Interface(
-            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_BASE,
-        )
-        self.session_advisory = dbus.Interface(
-            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_ADVISORY,
-        )
-        self.session_group = dbus.Interface(
-            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_GROUP,
-        )
+        if not self._connected:
+            self.session = self.iface_session.open_session({})
+            logger.debug(f"open session: {self.session}")
+            self._connected = True
+            self.session_repo = dbus.Interface(
+                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                dbus_interface=IFACE_REPO,
+            )
+            self.session_rpm = dbus.Interface(
+                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                dbus_interface=IFACE_RPM,
+            )
+            self.session_goal = dbus.Interface(
+                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                dbus_interface=IFACE_GOAL,
+            )
+            self.session_base = dbus.Interface(
+                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                dbus_interface=IFACE_BASE,
+            )
+            self.session_advisory = dbus.Interface(
+                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                dbus_interface=IFACE_ADVISORY,
+            )
+            self.session_group = dbus.Interface(
+                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                dbus_interface=IFACE_GROUP,
+            )
 
     def close_session(self):
-        logger.debug(f"close session: {self.session}")
-        self.iface_session.close_session(self.session)
+        if self._connected:
+            logger.debug(f"close session: {self.session}")
+            self.iface_session.close_session(self.session)
+            self._connected = False
 
     def _async_method(self, method: str, proxy=None) -> partial:
         """create a patial func to make an async call to a given
