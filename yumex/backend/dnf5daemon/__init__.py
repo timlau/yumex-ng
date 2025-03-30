@@ -4,12 +4,14 @@ from dataclasses import asdict, dataclass, field
 from enum import Enum, IntEnum, auto
 from typing import Iterable, Self
 
+import dbus
+
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter, Progress
 from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 
-from .client import Dnf5DbusClient, gv_list
+from .client import Dnf5DbusClient
 
 logger = logging.getLogger(__name__)
 
@@ -219,26 +221,35 @@ class YumexRootBackend:
                     logger.debug(f"adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
         if to_remove:
-            client.session_rpm.remove(gv_list(to_remove), {})
+            client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
         if to_install:
-            client.session_rpm.install(gv_list(to_install), {})
+            client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
+
         if to_update:
-            client.session_rpm.upgrade(gv_list(to_update), {})
-        res = client.resolve({})
+            client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
+
+        res, err = client.resolve()
         if res:
-            content, rc = res
-        else:  # Something went very wrong
-            content, rc = [], 2
-        return content, rc
+            result, rc = res
+        else:
+            result, rc = ([], 2)
+        return result, rc
 
     def connect_signals(self, client):
-        client.session_base.download_add_new.connect(self.on_download_add_new)
-        client.session_base.download_progress.connect(self.on_download_progress)
-        client.session_base.download_end.connect(self.on_download_end)
-        client.session_base.repo_key_import_request.connect(self.on_repo_key_import_request)
-        client.session_rpm.transaction_action_start.connect(self.on_transaction_action_start)
-        client.session_rpm.transaction_action_progress.connect(self.on_transaction_action_progress)
-        client.session_rpm.transaction_action_stop.connect(self.on_transaction_action_stop)
+        client.session_base.connect_to_signal("download_add_new", self.on_download_add_new)
+        client.session_base.connect_to_signal("download_add_progress", self.on_download_progress)
+        client.session_base.connect_to_signal("download_add_end", self.on_download_end)
+        # client.session_base.download_add_new.connect(self.on_download_add_new)
+        # client.session_base.download_progress.connect(self.on_download_progress)
+        # client.session_base.download_end.connect(self.on_download_end)
+        client.session_base.connect_to_signal("repo_key_import_request", self.on_repo_key_import_request)
+        # client.session_base.repo_key_import_request.connect(self.on_repo_key_import_request)
+        client.session_rpm.connect_to_signal("transaction_action_start", self.on_transaction_action_start)
+        client.session_rpm.connect_to_signal("transaction_action_progress", self.on_transaction_action_progress)
+        client.session_rpm.connect_to_signal("transaction_action_stop", self.on_transaction_action_stop)
+        # client.session_rpm.transaction_action_start.connect(self.on_transaction_action_start)
+        # client.session_rpm.transaction_action_progress.connect(self.on_transaction_action_progress)
+        # client.session_rpm.transaction_action_stop.connect(self.on_transaction_action_stop)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
@@ -498,17 +509,15 @@ class YumexRootBackend:
         dep_pkgs = []
         with Dnf5DbusClient() as client:
             res, rc = self._build_transations(pkgs, client)
-            print(rc)
             for elem in res:
                 _, action, typ, _, pkg_dict = elem
-                # print(pkg_dict)
                 pkg_dict["summary"] = ""  # need for create package, not need for depsolve
                 if action == "Install":
                     pkg_dict["is_installed"] = False
                 else:
                     pkg_dict["is_installed"] = True
                 ypkg = create_package(pkg_dict)
-                if typ == "Dependency":
+                if typ != "User":
                     ypkg.is_dep = True
                     dep_pkgs.append(ypkg)
                     logger.debug(f"Adding {ypkg} as dependency")

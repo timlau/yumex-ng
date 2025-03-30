@@ -1,66 +1,113 @@
-from functools import partial
-from logging import getLogger
-from typing import Self
-
-from dasbus.connection import SystemMessageBus
-from dasbus.identifier import DBusServiceIdentifier
-from dasbus.typing import Variant, get_native, get_variant  # noqa: F401
-from dasbus.unix import GLibClientUnix
-
-from yumex.utils.dbus import AsyncDbusCaller
-
 # from gi.repository import GLib  # type: ignore
+import logging
+from functools import partial
+from typing import Any, Self
+
+import dbus
+from dbus.mainloop.glib import DBusGMainLoop
+from gi.repository import GLib
+
+DBusGMainLoop(set_as_default=True)
+
+DNFDAEMON_BUS_NAME = "org.rpm.dnf.v0"
+DNFDAEMON_OBJECT_PATH = "/" + DNFDAEMON_BUS_NAME.replace(".", "/")
+
+IFACE_SESSION_MANAGER = "{}.SessionManager".format(DNFDAEMON_BUS_NAME)
+IFACE_REPO = "{}.rpm.Repo".format(DNFDAEMON_BUS_NAME)
+IFACE_RPM = "{}.rpm.Rpm".format(DNFDAEMON_BUS_NAME)
+IFACE_GOAL = "{}.Goal".format(DNFDAEMON_BUS_NAME)
+IFACE_BASE = "{}.Base".format(DNFDAEMON_BUS_NAME)
+IFACE_GROUP = "{}.comps.Group".format(DNFDAEMON_BUS_NAME)
+IFACE_ADVISORY = "{}.Advisory".format(DNFDAEMON_BUS_NAME)
+
+logger = logging.getLogger(__name__)
 
 
-# Constants
-SYSTEM_BUS = SystemMessageBus()
-DNFDBUS_NAMESPACE = ("org", "rpm", "dnf", "v0")
-DNFDBUS = DBusServiceIdentifier(namespace=DNFDBUS_NAMESPACE, message_bus=SYSTEM_BUS)
+# async call handler class
+class AsyncCaller:
+    def __init__(self) -> None:
+        self.res = None
+        self.err = None
+        self.loop = None
 
-logger = getLogger(__name__)
+    def error_handler(self, e) -> None:
+        self.err = e
+        self.loop.quit()
 
+    def reply_handler(self, *args) -> None:
+        if len(args) > 1:
+            self.res = (value for value in args)
+        else:
+            self.res = args[0]
+        self.loop.quit()
 
-def gv_list(var: list[str]) -> Variant:
-    """convert list of strings to a Variant of type (as)"""
-    return get_variant(list[str], var)
+    def call(self, mth, *args, **kwargs) -> None | Any:
+        self.loop = GLib.MainLoop()
+        mth(
+            *args,
+            **kwargs,
+            reply_handler=self.reply_handler,
+            error_handler=self.error_handler,
+        )
+        self.loop.run()
+        return self.res, self.err
 
 
 class Dnf5DbusClient:
-    """context manager for calling the dnf5daemon dbus API
-
-    https://dnf5.readthedocs.io/en/latest/dnf_daemon/dnf5daemon_dbus_api.8.html#interfaces
-    """
-
-    def __init__(self) -> None:
-        # setup the dnf5daemon dbus proxy
-        self.proxy = DNFDBUS.get_proxy(client=GLibClientUnix)
-        self.async_dbus = AsyncDbusCaller()
+    def __init__(self):
+        self.bus = dbus.SystemBus()
+        self.iface_session = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
+            dbus_interface=IFACE_SESSION_MANAGER,
+        )
+        self.async_dbus = AsyncCaller()
 
     def __enter__(self) -> Self:
         """context manager enter, return current object"""
         # get a session path for the dnf5daemon
-        self.session_path = self.proxy.open_session({})
-        # setup a proxy for the session object path
-        # self.session = DNFDBUS.get_proxy(self.session_path)
-        dnf_interface = ".".join(DNFDBUS_NAMESPACE)
-        self.session_repo = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.rpm.Repo")
-        self.session_rpm = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.rpm.Rpm")
-        self.session_goal = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.Goal")
-        self.session_base = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.Base")
-        self.session_group = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.comps.Group")
-        self.session_advisory = DNFDBUS.get_proxy(self.session_path, interface_name=f"{dnf_interface}.Advisory")
-        logger.debug(f"Open Dnf5Daemon session: {self.session_path}")
+        self.open_session()
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
         """context manager exit"""
-        self.proxy.close_session(self.session_path)
-        logger.debug(f"Close Dnf5Daemon session: {self.session_path}")
+        self.close_session()
         if exc_type:
             logger.critical("", exc_info=(exc_type, exc_value, exc_traceback))
         # close dnf5 session
 
-    def _async_method(self, method: str, proxy) -> partial:
+    def open_session(self):
+        self.session = self.iface_session.open_session({})
+        logger.debug(f"open session: {self.session}")
+        self.session_repo = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_REPO,
+        )
+        self.session_rpm = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_RPM,
+        )
+        self.session_goal = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_GOAL,
+        )
+        self.session_base = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_BASE,
+        )
+        self.session_advisory = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_ADVISORY,
+        )
+        self.session_group = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_GROUP,
+        )
+
+    def close_session(self):
+        logger.debug(f"close session: {self.session}")
+        self.iface_session.close_session(self.session)
+
+    def _async_method(self, method: str, proxy=None) -> partial:
         """create a patial func to make an async call to a given
         dbus method name
         """
@@ -68,20 +115,28 @@ class Dnf5DbusClient:
 
     def resolve(self, *args):
         resolve = self._async_method("resolve", proxy=self.session_goal)
-        return resolve(*args)
+        res, err = resolve(dbus.Array())
+        if err:
+            logger.error(err)
+        return res, err
 
     def do_transaction(self):
         do_transaction = self._async_method("do_transaction", proxy=self.session_goal)
-        options = {"comment": get_variant(str, "Yum Extender Transaction")}
-        return do_transaction(options)
+        options = {"comment": "Yum Extender Transaction"}
+        res, err = do_transaction(options)
+        if err:
+            logger.error(err)
+        return res
 
     def confirm_key(self, *args):
-        return self.session_repo.confirm_key(*args)
+        return self.session_repo.confirm_key(args)
 
     def repo_list(self):
         get_list = self._async_method("list", proxy=self.session_repo)
-        repos = get_list({"repo_attrs": get_variant(list[str], ["name", "enabled"])})
-        return get_native(repos)
+        res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled"])})
+        if err:
+            logger.error(err)
+        return res
 
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
@@ -91,40 +146,40 @@ class Dnf5DbusClient:
 
         """
         # logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
-        package_attrs = kwargs.pop("package_attrs", ["nevra"])
         options = {}
-        options["patterns"] = get_variant(list[str], args)  # gv_list(args)
-        options["package_attrs"] = get_variant(list[str], package_attrs)
-        options["with_src"] = get_variant(bool, False)
-        options["with_nevra"] = get_variant(bool, kwargs.pop("with_nevra", True))
-        options["with_provides"] = get_variant(bool, kwargs.pop("with_provides", False))
-        options["with_filenames"] = get_variant(bool, kwargs.pop("with_filenames", False))
-        options["with_binaries"] = get_variant(bool, kwargs.pop("with_binaries", False))
-        options["icase"] = get_variant(bool, True)
-        options["latest-limit"] = get_variant(int, 1)
+        options["patterns"] = dbus.Array(args)
+        options["package_attrs"] = dbus.Array(kwargs.pop("package_attrs", ["nevra"]))
+        options["with_src"] = False
+        # options["with_nevra"] = kwargs.pop("with_nevra", True)
+        # options["with_provides"] = kwargs.pop("with_provides", False)
+        # options["with_filenames"] = kwargs.pop("with_filenames", False)
+        # options["with_binaries"] = kwargs.pop("with_binaries", False)
+        options["icase"] = True
+        options["latest-limit"] = 1
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
-        options["scope"] = get_variant(str, kwargs.pop("scope", "all"))
+        options["scope"] = kwargs.pop("scope", "all")
         if "repo" in kwargs:
-            options["repo"] = get_variant(list[str], kwargs.pop("repo"))
+            options["repo"] = kwargs.pop("repo")
         if "arch" in kwargs:
-            options["arch"] = get_variant(list[str], kwargs.pop("arch"))
+            options["arch"] = kwargs.pop("arch")
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
-        package_attrs = kwargs.pop("package_attrs", ["nevra"])
         get_list = self._async_method("list", proxy=self.session_rpm)
-        result = get_list(options)
+        res, err = get_list(options)
+        # print(res, err)
         # return as native types.
-        return get_native(result)
+        if err:
+            logger.error(err)
+        return res
 
     def advisory_list(self, *args, **kwargs):
         # logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
-        advisory_attrs = kwargs.pop("advisor_attrs")
         options = {}
-        options["advisory_attrs"] = get_variant(list[str], advisory_attrs)
-        options["contains_pkgs"] = get_variant(list[str], args)
-        options["availability"] = get_variant(str, "all")
+        options["advisory_attrs"] = dbus.Array(kwargs.pop("advisor_attrs"))
+        options["contains_pkgs"] = dbus.Array(args)
+        options["availability"] = "all"
         # options[""] = get_variant(list[str], [])
         # logger.debug(f" --> options: {options} ")
         get_list = self._async_method("list", proxy=self.session_advisory)
-        result = get_list(options)
-        return get_native(result)
+        res, err = get_list(options)
+        return res
