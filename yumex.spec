@@ -3,8 +3,8 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.0.3
-Release:  2%{?dist}
+Version:  5.1.0
+Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -26,9 +26,9 @@ BuildRequires: pkgconfig(pygobject-3.0)
 BuildRequires: systemd-rpm-macros
 
 Requires: python3-gobject
-Requires: libadwaita
+Requires: libadwaita >= 1.6
 Requires: gtk4
-Requires: python3-dasbus
+Requires: python3-dbus
 Requires: flatpak-libs > 1.15.0
 Requires: appstream >= 1.0.2
 
@@ -36,8 +36,7 @@ Recommends: %{name}-updater-systray
 
 
 # dnf5 requirements
-Requires: python3-libdnf5 >= 5.2.12
-Requires: dnf5daemon-server
+Requires: dnf5daemon-server >= 5.2.12
 Provides: yumex-dnf5 = %{version}-%{release}
 Obsoletes: yumex-dnf5 < %{version}-%{release}
 
@@ -145,6 +144,10 @@ done
 %systemd_user_preun yumex-updater-systray.service
 
 %changelog
+* Thu Mar 31 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.1.0-1
+- the 5.1.0 release
+- cleanup requirement for only using dnf5daemon for everything
+
 * Thu Mar 27 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.0.3-2
 - remove support for dnf4
 
