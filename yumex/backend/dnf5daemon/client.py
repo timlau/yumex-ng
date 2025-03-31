@@ -262,14 +262,14 @@ class Dnf5DbusClient:
         return res, err
 
     def advisory_list(self, *args, **kwargs):
-        print(f"\n --> args: {args} kwargs: {kwargs}")
+        # print(f"\n --> args: {args} kwargs: {kwargs}")
         options = dbus.Dictionary({})
         options["advisory_attrs"] = dbus.Array(kwargs.pop("advisor_attrs"))
         options["contains_pkgs"] = dbus.Array(args)
         options["availability"] = "all"
         # options[""] = get_variant(list[str], [])
-        print(f" --> options: {options} ")
-        print(self.session_advisory)
+        # print(f" --> options: {options} ")
+        # print(self.session_advisory)
         get_list = self._async_method("list", proxy=self.session_advisory)
         res, err = get_list(options)
         return res, err
