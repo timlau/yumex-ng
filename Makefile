@@ -39,10 +39,10 @@ release:
 	@git tag -f -m "Added ${APPNAME}-${VERSION} release tag" ${APPNAME}-${VERSION}
 	@git push --tags origin
 	@git push origin
-	@$(MAKE) copr-release-dnf5
+	@$(MAKE) copr-release
 
 # build local rpms with dnf5 backend and start a copr build
-copr-release-dnf5:
+copr-release:
 	@$(MAKE) archive
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
@@ -67,7 +67,7 @@ show-vars:
 	@echo ${GIT_BRANCH}
 
 #make a test release with the dnf5 backend
-test-release-dnf5:
+test-release:
 	@$(MAKE) test-checkout
 	# +1 Minor version and add 0.1-gitYYYYMMDD release
 	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
@@ -81,17 +81,17 @@ test-release-dnf5:
 
 test-reinstall:
 	@$(MAKE) clean
-	@$(MAKE) test-release-dnf5
+	@$(MAKE) test-release
 	@-sudo dnf5 reinstall  build/RPMS/noarch/*.rpm
 
 test-update:
 	@$(MAKE) clean
-	@$(MAKE) test-release-dnf5
+	@$(MAKE) test-release
 	@-sudo dnf5 update build/RPMS/noarch/*.rpm
 
 test-install:
 	@$(MAKE) clean
-	@$(MAKE) test-release-dnf5
+	@$(MAKE) test-release
 	@-sudo dnf5 install build/RPMS/noarch/*.rpm
 
 # build release rpms
@@ -99,12 +99,9 @@ rpm:
 	@$(MAKE) archive
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
-test-copr-dnf5:
-	@$(MAKE) test-release-dnf5
+test-copr:
+	@$(MAKE) test-release
 	copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
-
-all-test-copr:
-	@$(MAKE) test-copr-dnf5
 
 # Make a local build and run it
 localbuild:
