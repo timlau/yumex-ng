@@ -1,6 +1,7 @@
 [tool.ruff]
 line-length = 120
 indent-width = 4
+builtins = ["_"]
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
@@ -17,7 +18,7 @@ line-ending = "auto"
 
 [tool.ruff.lint]
 select = ["E", "F"]
-ignore = ["F821", "E402"]
+#ignore = ["F821", "E402"]
 
 [tool.pyright]
 typeCheckingMode = "off"
