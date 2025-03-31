@@ -19,7 +19,7 @@ from typing import Iterable
 
 from yumex.backend.cache import YumexPackageCache
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.dnf.factory import DnfBackendFactory
+from yumex.backend.dnf5daemon import YumexRootBackend
 from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.backend.interface import (
     BackendFactory,
@@ -27,10 +27,8 @@ from yumex.backend.interface import (
     PackageCache,
     Progress,
 )
-from yumex.constants import BACKEND
 from yumex.utils.enums import (
     InfoType,
-    PackageBackendType,
     PackageFilter,
     Page,
     SearchField,
@@ -56,12 +54,6 @@ class YumexPresenter:
         self._root_backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
-        if factory is None:
-            self.dnf_backend_factory: BackendFactory = DnfBackendFactory(
-                PackageBackendType(BACKEND.lower()), presenter=self
-            )
-        else:
-            self.dnf_backend_factory = factory
 
     @property
     def package_backend(self) -> PackageBackend:
@@ -73,7 +65,7 @@ class YumexPresenter:
     @property
     def package_root_backend(self) -> PackageBackend:
         if not self._root_backend:
-            self._root_backend: PackageBackend = self.dnf_backend_factory.get_root_backend()
+            self._root_backend: PackageBackend = YumexRootBackend(self)
         return self._root_backend
 
     @property

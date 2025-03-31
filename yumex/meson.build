@@ -80,8 +80,6 @@ PY_INSTALLDIR.install_sources(yumex_backend_flatpak_modules, subdir: 'yumex/back
 
 yumex_backend_dnf_modules = [
     'backend/dnf/__init__.py',
-    'backend/dnf/dnf5.py',
-    'backend/dnf/factory.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_dnf_modules, subdir: 'yumex/backend/dnf')
 
