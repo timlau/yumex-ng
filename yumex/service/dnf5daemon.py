@@ -102,6 +102,7 @@ def check_dnf_updates(refresh: bool = False) -> list:
     }
     iface_rpm = dbus.Interface(bus.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
     pkgs = iface_rpm.list(options)
+    iface_session.close_session(session)
     return pkgs
 
 
