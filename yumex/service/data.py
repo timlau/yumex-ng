@@ -13,22 +13,21 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-import gi
-
-gi.require_version("Gtk", "3.0")
-gi.require_version("AppIndicator3", "0.1")
-gi.require_version("Flatpak", "1.0")
-
-
 import logging
 import os
 import subprocess
 from dataclasses import dataclass
 
-from gi.repository import AppIndicator3, Flatpak, Gio, Gtk  # type: ignore
+import gi
 
 from yumex.constants import APP_ID
-from yumex.service.dnf5 import check_dnf_updates
+from yumex.service.dnf5daemon import check_dnf_updates
+
+gi.require_version("Gtk", "3.0")
+gi.require_version("AppIndicator3", "0.1")
+gi.require_version("Flatpak", "1.0")
+
+from gi.repository import AppIndicator3, Flatpak, Gio, Gtk  # type: ignore  # noqa: E402
 
 logger = logging.getLogger("yumex_updater")
 

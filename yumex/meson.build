@@ -94,7 +94,7 @@ PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
 yumex_service_modules = [
     'service/__init__.py',
-    'service/dnf5.py',
+    'service/dnf5daemon.py',
     'service/notification.py',
     'service/data.py',
 ]
