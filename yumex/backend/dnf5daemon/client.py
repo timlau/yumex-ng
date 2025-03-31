@@ -1,7 +1,7 @@
 # from gi.repository import GLib  # type: ignore
 import logging
 from functools import partial
-from typing import Any, Self
+from typing import Any
 
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
@@ -31,6 +31,7 @@ class AsyncCaller:
         self.loop = None
 
     def error_handler(self, e) -> None:
+        print("Error", e)
         self.err = e
         self.loop.quit()
 
@@ -38,11 +39,14 @@ class AsyncCaller:
         if len(args) > 1:
             self.res = (value for value in args)
         else:
-            self.res = args[0]
+            if args:
+                self.res = args[0]
         self.loop.quit()
 
     def call(self, mth, *args, **kwargs) -> None | Any:
         self.loop = GLib.MainLoop()
+        self.res = None
+        self.err = None
         mth(
             *args,
             **kwargs,
@@ -62,19 +66,6 @@ class Dnf5DbusClient:
         )
         self.async_dbus = AsyncCaller()
         self._connected = False
-
-    def __enter__(self) -> Self:
-        """context manager enter, return current object"""
-        # get a session path for the dnf5daemon
-        self.open_session()
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
-        """context manager exit"""
-        self.close_session()
-        if exc_type:
-            logger.critical("", exc_info=(exc_type, exc_value, exc_traceback))
-        # close dnf5 session
 
     def open_session(self):
         if not self._connected:
@@ -178,13 +169,14 @@ class Dnf5DbusClient:
         return res
 
     def advisory_list(self, *args, **kwargs):
-        # logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
-        options = {}
+        print(f"\n --> args: {args} kwargs: {kwargs}")
+        options = dbus.Dictionary({})
         options["advisory_attrs"] = dbus.Array(kwargs.pop("advisor_attrs"))
         options["contains_pkgs"] = dbus.Array(args)
         options["availability"] = "all"
         # options[""] = get_variant(list[str], [])
-        # logger.debug(f" --> options: {options} ")
+        print(f" --> options: {options} ")
+        print(self.session_advisory)
         get_list = self._async_method("list", proxy=self.session_advisory)
         res, err = get_list(options)
         return res

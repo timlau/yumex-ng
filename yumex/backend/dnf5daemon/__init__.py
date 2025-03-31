@@ -172,7 +172,12 @@ class YumexRootBackend:
         self.presenter: Presenter = presenter
         self.last_transaction = None
         self.download_queue = DownloadQueue()
-        self.client = None
+        self.client = Dnf5DbusClient()
+        self.client.open_session()
+        self.connect_signals()
+
+    def close(self):
+        self.client.close_session()
 
     @property
     def progress(self) -> Progress:
@@ -205,7 +210,7 @@ class YumexRootBackend:
             result_dict[action].append(((nevra, repo), size))
         return result_dict
 
-    def _build_transations(self, pkgs: list[YumexPackage], client):
+    def _build_transations(self, pkgs: list[YumexPackage]):
         to_install = []
         to_update = []
         to_remove = []
@@ -221,74 +226,68 @@ class YumexRootBackend:
                     logger.debug(f"adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
         if to_remove:
-            client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
+            self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
         if to_install:
-            client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
+            self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
 
         if to_update:
-            client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
+            self.client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
 
-        res, err = client.resolve()
+        res, err = self.client.resolve()
         if res:
             result, rc = res
         else:
             result, rc = ([], 2)
         return result, rc
 
-    def connect_signals(self, client):
-        client.session_base.connect_to_signal("download_add_new", self.on_download_add_new)
-        client.session_base.connect_to_signal("download_add_progress", self.on_download_progress)
-        client.session_base.connect_to_signal("download_add_end", self.on_download_end)
+    def connect_signals(self):
+        self.client.session_base.connect_to_signal("download_add_new", self.on_download_add_new)
+        self.client.session_base.connect_to_signal("download_add_progress", self.on_download_progress)
+        self.client.session_base.connect_to_signal("download_add_end", self.on_download_end)
         # client.session_base.download_add_new.connect(self.on_download_add_new)
         # client.session_base.download_progress.connect(self.on_download_progress)
         # client.session_base.download_end.connect(self.on_download_end)
-        client.session_base.connect_to_signal("repo_key_import_request", self.on_repo_key_import_request)
+        self.client.session_base.connect_to_signal("repo_key_import_request", self.on_repo_key_import_request)
         # client.session_base.repo_key_import_request.connect(self.on_repo_key_import_request)
-        client.session_rpm.connect_to_signal("transaction_action_start", self.on_transaction_action_start)
-        client.session_rpm.connect_to_signal("transaction_action_progress", self.on_transaction_action_progress)
-        client.session_rpm.connect_to_signal("transaction_action_stop", self.on_transaction_action_stop)
+        self.client.session_rpm.connect_to_signal("transaction_action_start", self.on_transaction_action_start)
+        self.client.session_rpm.connect_to_signal("transaction_action_progress", self.on_transaction_action_progress)
+        self.client.session_rpm.connect_to_signal("transaction_action_stop", self.on_transaction_action_stop)
         # client.session_rpm.transaction_action_start.connect(self.on_transaction_action_start)
         # client.session_rpm.transaction_action_progress.connect(self.on_transaction_action_progress)
         # client.session_rpm.transaction_action_stop.connect(self.on_transaction_action_stop)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
-        with Dnf5DbusClient() as client:
-            self.client = client
-            self.progress.show()
-            self.progress.set_title(_("Building Transaction"))
-            self.connect_signals(client)
-            logger.debug("building transaction")
-            content, rc = self._build_transations(pkgs, client)
-            logger.debug(f"build transaction: rc =  {rc}")
-            errors = client.session_goal.get_transaction_problems_string()
-            for error in errors:
-                logger.debug(f"build transaction: error =  {error}")
-            self.progress.hide()
-            if rc == 0 or rc == 1:
-                return TransactionResult(True, data=self.build_result(content))
-            else:
-                error_msgs = "\n".join(errors)
-                return TransactionResult(False, error=error_msgs)
+        self.progress.show()
+        self.progress.set_title(_("Building Transaction"))
+        logger.debug("building transaction")
+        content, rc = self._build_transations(pkgs)
+        logger.debug(f"build transaction: rc =  {rc}")
+        errors = self.client.session_goal.get_transaction_problems_string()
+        for error in errors:
+            logger.debug(f"build transaction: error =  {error}")
+        self.progress.hide()
+        if rc == 0 or rc == 1:
+            return TransactionResult(True, data=self.build_result(content))
+        else:
+            error_msgs = "\n".join(errors)
+            return TransactionResult(False, error=error_msgs)
 
     def run_transaction(self) -> TransactionResult:
         self.download_queue.clear()
-        with Dnf5DbusClient() as client:
-            self.client = client
-            self.progress.show()
-            self.progress.set_title(_("Building Transaction"))
-            self.connect_signals(client)
-            logger.debug("building transaction")
-            self._build_transations(self.last_transaction, client)  # type: ignore
-            self.progress.set_title(_("Applying Transaction"))
-            logger.debug("running transaction")
-            res = client.do_transaction()
-            logger.debug(f"transaction rc: {res}")
-            self.progress.hide()
-            if res:
-                return TransactionResult(False, error=res)
-            else:
-                return TransactionResult(True, data=None)  # type: ignore
+        self.progress.show()
+        self.progress.set_title(_("Building Transaction"))
+        logger.debug("building transaction")
+        self._build_transations(self.last_transaction)  # type: ignore
+        self.progress.set_title(_("Applying Transaction"))
+        logger.debug("running transaction")
+        res = self.client.do_transaction()
+        logger.debug(f"transaction rc: {res}")
+        self.progress.hide()
+        if res:
+            return TransactionResult(False, error=res)
+        else:
+            return TransactionResult(True, data=None)  # type: ignore
 
     def on_transaction_action_start(self, session, package_id, action, total):
         logger.debug(f"Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
@@ -438,22 +437,20 @@ class YumexRootBackend:
                 msg = f"Search field : [{other}] not supported in dnf5 backend"
                 logger.debug(msg)
                 raise ValueError(msg)
-        with Dnf5DbusClient() as client:
-            result = client.package_list(txt, **kw_args)
+        result = self.client.package_list(txt, **kw_args)
         if result:
             return self._get_yumex_packages(result)
         else:
             return []
 
     def _get_package_attribute(self, pkg: YumexPackage, attribute: str):
-        with Dnf5DbusClient() as client:
-            result = client.package_list(
-                pkg.nevra,
-                package_attrs=["nevra", attribute],
-                scope="all",
-            )
-            if result:
-                return result[0][attribute]
+        result = self.client.package_list(
+            pkg.nevra,
+            package_attrs=["nevra", attribute],
+            scope="all",
+        )
+        if result:
+            return result[0][attribute]
         return None
 
     def _get_description(self, pkg: YumexPackage):
@@ -470,23 +467,23 @@ class YumexRootBackend:
 
     def _get_update_info(self, pkg: YumexPackage):
         info_list = []
-        with Dnf5DbusClient() as client:
-            result = client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
-            if result:
-                for res in result:
-                    timestamp = datetime.datetime.fromtimestamp(res["buildtime"])
-                    updated = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-                    info_list.append(
-                        UpdateInfo(
-                            id=res["advisoryid"],
-                            title=res["name"],
-                            description=res["description"],
-                            type=res["severity"],
-                            updated=updated,
-                            references=res["references"],
-                        ).as_dict()
-                    )
-                return info_list
+        result = self.client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
+        if result:
+            for res in result:
+                print(res)
+                timestamp = datetime.datetime.fromtimestamp(res["buildtime"])
+                updated = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+                info_list.append(
+                    UpdateInfo(
+                        id=res["advisoryid"],
+                        title=res["name"],
+                        description=res["description"],
+                        type=res["severity"],
+                        updated=updated,
+                        references=res["references"],
+                    ).as_dict()
+                )
+            return info_list
         return []
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType):
@@ -501,56 +498,51 @@ class YumexRootBackend:
                 raise ValueError(f"Unknown package info: {other}")
 
     def get_repositories(self) -> list[str]:
-        with Dnf5DbusClient() as client:
-            repos = client.repo_list()
-            return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
+        repos = self.client.repo_list()
+        return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         dep_pkgs = []
-        with Dnf5DbusClient() as client:
-            res, rc = self._build_transations(pkgs, client)
-            for elem in res:
-                _, action, typ, _, pkg_dict = elem
-                pkg_dict["summary"] = ""  # need for create package, not need for depsolve
-                if action == "Install":
-                    pkg_dict["is_installed"] = False
-                else:
-                    pkg_dict["is_installed"] = True
-                ypkg = create_package(pkg_dict)
-                if typ != "User":
-                    ypkg.is_dep = True
-                    dep_pkgs.append(ypkg)
-                    logger.debug(f"Adding {ypkg} as dependency")
+        res, rc = self._build_transations(pkgs)
+        for elem in res:
+            _, action, typ, _, pkg_dict = elem
+            pkg_dict["summary"] = ""  # need for create package, not need for depsolve
+            if action == "Install":
+                pkg_dict["is_installed"] = False
+            else:
+                pkg_dict["is_installed"] = True
+            ypkg = create_package(pkg_dict)
+            if typ != "User":
+                ypkg.is_dep = True
+                dep_pkgs.append(ypkg)
+                logger.debug(f"Adding {ypkg} as dependency")
         return dep_pkgs
 
     # Helpers (PackageBackend)
 
     @property
     def installed(self) -> list[dict[str, any]]:
-        with Dnf5DbusClient() as client:
-            return client.package_list(
-                "*",
-                package_attrs=self.package_attr,
-                scope="installed",
-            )
+        return self.client.package_list(
+            "*",
+            package_attrs=self.package_attr,
+            scope="installed",
+        )
 
     @property
     def available(self) -> list[dict[str, any]]:
-        with Dnf5DbusClient() as client:
-            return client.package_list(
-                "*",
-                package_attrs=self.package_attr,
-                scope="available",
-            )
+        return self.client.package_list(
+            "*",
+            package_attrs=self.package_attr,
+            scope="available",
+        )
 
     @property
     def updates(self) -> list[dict[str, any]]:
-        with Dnf5DbusClient() as client:
-            updates = client.package_list(
-                "*",
-                package_attrs=self.package_attr,
-                scope="upgrades",
-            )
+        updates = self.client.package_list(
+            "*",
+            package_attrs=self.package_attr,
+            scope="upgrades",
+        )
         if updates:
             return updates
         else:

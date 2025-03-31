@@ -37,6 +37,7 @@ def presenter():
 def backend(presenter):
     backend = YumexRootBackend(presenter=presenter)
     yield backend
+    backend.close()
     del backend
 
 

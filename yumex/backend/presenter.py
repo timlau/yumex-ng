@@ -93,6 +93,7 @@ class YumexPresenter:
         return self._win.progress
 
     def reset_backend(self) -> None:
+        self._root_backend.close()
         del self._root_backend
         self._root_backend = None
 
