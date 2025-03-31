@@ -13,28 +13,20 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+import logging
 
 from gi.repository import Adw, Gtk  # type: ignore
 
-from yumex.constants import BACKEND, ROOTDIR
+from yumex.constants import ROOTDIR
 from yumex.utils.enums import InfoType
 
-if BACKEND == "DNF4":
-    import hawkey
-
-    ADVISORY_TYPES = {
-        hawkey.ADVISORY_BUGFIX: _("Bugfix"),
-        hawkey.ADVISORY_UNKNOWN: _("New Package"),
-        hawkey.ADVISORY_SECURITY: _("Security"),
-        hawkey.ADVISORY_ENHANCEMENT: _("Enhancement"),
-    }
-else:
-    ADVISORY_TYPES = {
-        "bugfix": _("Bugfix"),
-        "newpackage": _("New Package"),
-        "security": _("Security"),
-        "enhancement": _("Enhancement"),
-    }
+logger = logging.getLogger(__name__)
+ADVISORY_TYPES = {
+    "bugfix": _("Bugfix"),
+    "newpackage": _("New Package"),
+    "security": _("Security"),
+    "enhancement": _("Enhancement"),
+}
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/package_info.ui")
