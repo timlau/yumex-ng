@@ -88,7 +88,7 @@ yumex_utils_modules = [
     'utils/enums.py',
     'utils/storage.py',
     'utils/types.py',
-    'utils/dbus.py',
+    'utils/updater.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
