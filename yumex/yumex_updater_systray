@@ -1,22 +1,19 @@
 #!/usr/bin/python3
-import gi
 
-gi.require_version("GLib", "2.0")
-
+import gettext
+import locale
 import logging
 import threading
 import time
-import locale
-import gettext
-from gi.repository import GLib  # type: ignore
 
-from dasbus.server.interface import dbus_interface
-from dasbus.connection import SessionMessageBus
-from dasbus.loop import EventLoop
+import dbus
+import dbus.mainloop.glib
+import dbus.service
+from gi.repository import GLib
 
 from yumex.constants import BACKEND, LOCALEDIR
-from yumex.service.notification import Notification, Action
 from yumex.service.data import Config, Indicator, Updates, open_yumex
+from yumex.service.notification import Action, Notification
 
 gettext.install("yumex", LOCALEDIR)
 locale.bindtextdomain("yumex", LOCALEDIR)
@@ -30,11 +27,12 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
+UPDATER_BUS_NAME = "dk.yumex.UpdateService"
+UPDATER_OBJECT_PATH = "/" + UPDATER_BUS_NAME.replace(".", "/")
 
-@dbus_interface("dk.yumex.UpdateService")
-class UpdateService(object):
-    """Dbus service for refreshing updates"""
 
+class UpdateService(dbus.service.Object):
+    @dbus.service.method(dbus_interface=UPDATER_BUS_NAME, in_signature="b", out_signature="")
     def RefreshUpdates(self, refresh: bool) -> None:
         logger.debug(f"DBUS: RefreshUpdates {refresh}")
         GLib.idle_add(refresh_updates, refresh)
@@ -106,16 +104,16 @@ else:
 
 
 def main():
-    # Setup DBus Service
-    bus = SessionMessageBus()
-    bus.publish_object("/dk/yumex/UpdateService", UpdateService())
-    bus.register_service("dk.yumex.UpdateService")
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+    session_bus = dbus.SessionBus()
+    _ = dbus.service.BusName(UPDATER_BUS_NAME, session_bus)
+    _ = UpdateService(session_bus, UPDATER_OBJECT_PATH)
 
     # Setup scheduled update check
     update_thread = threading.Thread(target=check_updates, daemon=True)
     update_thread.start()
-    # setup & run eventloop
-    loop = EventLoop()
+    loop = GLib.MainLoop()
     loop.run()
 
 
