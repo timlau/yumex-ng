@@ -31,7 +31,7 @@ class AsyncCaller:
         self.loop = None
 
     def error_handler(self, e) -> None:
-        print("Error", e)
+        logger.error(e)
         self.err = e
         self.loop.quit()
 
@@ -112,17 +112,13 @@ class Dnf5DbusClient:
     def resolve(self, *args):
         resolve = self._async_method("resolve", proxy=self.session_goal)
         res, err = resolve(dbus.Array())
-        if err:
-            logger.error(err)
         return res, err
 
     def do_transaction(self):
         do_transaction = self._async_method("do_transaction", proxy=self.session_goal)
         options = {"comment": "Yum Extender Transaction"}
         res, err = do_transaction(options)
-        if err:
-            logger.error(err)
-        return res
+        return res, err
 
     def confirm_key(self, *args):
         return self.session_repo.confirm_key(args)
@@ -130,9 +126,7 @@ class Dnf5DbusClient:
     def repo_list(self):
         get_list = self._async_method("list", proxy=self.session_repo)
         res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled"])})
-        if err:
-            logger.error(err)
-        return res
+        return res, err
 
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
@@ -165,8 +159,8 @@ class Dnf5DbusClient:
         # print(res, err)
         # return as native types.
         if err:
-            logger.error(err)
-        return res
+            return [], err
+        return res, err
 
     def advisory_list(self, *args, **kwargs):
         print(f"\n --> args: {args} kwargs: {kwargs}")
@@ -179,4 +173,4 @@ class Dnf5DbusClient:
         print(self.session_advisory)
         get_list = self._async_method("list", proxy=self.session_advisory)
         res, err = get_list(options)
-        return res
+        return res, err

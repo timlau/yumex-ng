@@ -281,8 +281,8 @@ class YumexRootBackend:
         self._build_transations(self.last_transaction)  # type: ignore
         self.progress.set_title(_("Applying Transaction"))
         logger.debug("running transaction")
-        res = self.client.do_transaction()
-        logger.debug(f"transaction rc: {res}")
+        res, err = self.client.do_transaction()
+        logger.debug(f"transaction rc: {res} error: {err}")
         self.progress.hide()
         if res:
             return TransactionResult(False, error=res)
@@ -437,14 +437,14 @@ class YumexRootBackend:
                 msg = f"Search field : [{other}] not supported in dnf5 backend"
                 logger.debug(msg)
                 raise ValueError(msg)
-        result = self.client.package_list(txt, **kw_args)
+        result, error = self.client.package_list(txt, **kw_args)
         if result:
             return self._get_yumex_packages(result)
         else:
             return []
 
     def _get_package_attribute(self, pkg: YumexPackage, attribute: str):
-        result = self.client.package_list(
+        result, error = self.client.package_list(
             pkg.nevra,
             package_attrs=["nevra", attribute],
             scope="all",
@@ -467,7 +467,7 @@ class YumexRootBackend:
 
     def _get_update_info(self, pkg: YumexPackage):
         info_list = []
-        result = self.client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
+        result, error = self.client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
         if result:
             for res in result:
                 print(res)
@@ -498,8 +498,11 @@ class YumexRootBackend:
                 raise ValueError(f"Unknown package info: {other}")
 
     def get_repositories(self) -> list[str]:
-        repos = self.client.repo_list()
-        return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
+        repos, error = self.client.repo_list()
+        if error:
+            self.presenter.show_message(error)
+        else:
+            return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         dep_pkgs = []
@@ -522,23 +525,25 @@ class YumexRootBackend:
 
     @property
     def installed(self) -> list[dict[str, any]]:
-        return self.client.package_list(
+        result, error = self.client.package_list(
             "*",
             package_attrs=self.package_attr,
             scope="installed",
         )
+        return result
 
     @property
     def available(self) -> list[dict[str, any]]:
-        return self.client.package_list(
+        result, error = self.client.package_list(
             "*",
             package_attrs=self.package_attr,
             scope="available",
         )
+        return result
 
     @property
     def updates(self) -> list[dict[str, any]]:
-        updates = self.client.package_list(
+        updates, error = self.client.package_list(
             "*",
             package_attrs=self.package_attr,
             scope="upgrades",
