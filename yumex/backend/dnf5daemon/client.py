@@ -1,5 +1,7 @@
-# from gi.repository import GLib  # type: ignore
+import json
 import logging
+import os
+import select
 from functools import partial
 from typing import Any
 
@@ -127,6 +129,103 @@ class Dnf5DbusClient:
         get_list = self._async_method("list", proxy=self.session_repo)
         res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled"])})
         return res, err
+
+    def _list_fd(self, options):
+        """Generator function that yields packages as they arrive from the server."""
+
+        # create a pipe and pass the write end to the server
+        pipe_r, pipe_w = os.pipe()
+        # transfer id serves as an identifier of the pipe transfer for a signal emitted
+        # after server finish. This example does not use it.
+        transfer_id = self.session_rpm.list_fd(options, pipe_w)
+        logger.debug(f"list_fd: transfer_id : {transfer_id}")
+        # close the write end - otherwise poll cannot detect the end of transmission
+        os.close(pipe_w)
+
+        # decoder that will be used to parse incomming data
+        parser = json.JSONDecoder()
+
+        # prepare for polling
+        poller = select.poll()
+        poller.register(pipe_r, select.POLLIN)
+        # wait for data 10 secs at most
+        timeout = 10000
+        # 64k is a typical size of a pipe
+        buffer_size = 65536
+
+        # remaining string to parse (can contain unfinished json from previous run)
+        to_parse = ""
+        # remaining raw data (i.e. data before UTF decoding)
+        raw_data = b""
+        while True:
+            # wait for data
+            polled_event = poller.poll(timeout)
+            if not polled_event:
+                print("Timeout reached.")
+                break
+
+            # we know there is only one fd registered in poller
+            descriptor, event = polled_event[0]
+            # read a chunk of data
+            buffer = os.read(descriptor, buffer_size)
+            if not buffer:
+                # end of file
+                break
+
+            raw_data += buffer
+            try:
+                to_parse += raw_data.decode()
+                # decode successful, clear remaining raw data
+                raw_data = b""
+            except UnicodeDecodeError:
+                # Buffer size split data in the middle of multibyte UTF character.
+                # Need to read another chunk of data.
+                continue
+
+            # parse JSON objects from the string
+            while to_parse:
+                try:
+                    # skip all chars till begin of next JSON objects (new lines mostly)
+                    json_obj_start = to_parse.find("{")
+                    if json_obj_start < 0:
+                        break
+                    obj, end = parser.raw_decode(to_parse[json_obj_start:])
+                    yield obj
+                    to_parse = to_parse[(json_obj_start + end) :]
+                except json.decoder.JSONDecodeError:
+                    # this is just example which assumes that every decode error
+                    # means the data are incomplete (buffer size split the json
+                    # object in the middle). So the handler does not do anything
+                    # just break the parsing cycle and continue polling.
+                    break
+
+    def package_list_fd(self, *args, **kwargs) -> list[list[str]]:
+        """call the org.rpm.dnf.v0.rpm.Repo list method
+
+        *args is package patterns to match
+        **kwargs can contain other options like package_attrs, repo or scope
+
+        """
+        # logger.debug(f"\n --> args: {args} kwargs: {kwargs}")
+        options = {}
+        options["patterns"] = dbus.Array(args)
+        options["package_attrs"] = dbus.Array(kwargs.pop("package_attrs", ["nevra"]))
+        options["with_src"] = False
+        # options["with_nevra"] = kwargs.pop("with_nevra", True)
+        # options["with_provides"] = kwargs.pop("with_provides", False)
+        # options["with_filenames"] = kwargs.pop("with_filenames", False)
+        # options["with_binaries"] = kwargs.pop("with_binaries", False)
+        options["icase"] = True
+        options["latest-limit"] = 1
+        # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
+        options["scope"] = kwargs.pop("scope", "all")
+        if "repo" in kwargs:
+            options["repo"] = kwargs.pop("repo")
+        if "arch" in kwargs:
+            options["arch"] = kwargs.pop("arch")
+        # get and async partial function
+        # logger.debug(f" --> options: {options} ")
+        return list(self._list_fd(options))
 
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method

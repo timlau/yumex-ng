@@ -17,8 +17,7 @@ from dataclasses import fields
 import pytest
 
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.dnf.dnf5 import UpdateInfo
-from yumex.backend.dnf5daemon import YumexRootBackend, create_package
+from yumex.backend.dnf5daemon import UpdateInfo, YumexRootBackend, create_package
 from yumex.utils import setup_logging
 from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 

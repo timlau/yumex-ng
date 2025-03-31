@@ -437,14 +437,14 @@ class YumexRootBackend:
                 msg = f"Search field : [{other}] not supported in dnf5 backend"
                 logger.debug(msg)
                 raise ValueError(msg)
-        result, error = self.client.package_list(txt, **kw_args)
+        result = self.client.package_list_fd(txt, **kw_args)
         if result:
             return self._get_yumex_packages(result)
         else:
             return []
 
     def _get_package_attribute(self, pkg: YumexPackage, attribute: str):
-        result, error = self.client.package_list(
+        result = self.client.package_list_fd(
             pkg.nevra,
             package_attrs=["nevra", attribute],
             scope="all",
@@ -525,7 +525,7 @@ class YumexRootBackend:
 
     @property
     def installed(self) -> list[dict[str, any]]:
-        result, error = self.client.package_list(
+        result = self.client.package_list_fd(
             "*",
             package_attrs=self.package_attr,
             scope="installed",
@@ -534,7 +534,7 @@ class YumexRootBackend:
 
     @property
     def available(self) -> list[dict[str, any]]:
-        result, error = self.client.package_list(
+        result = self.client.package_list_fd(
             "*",
             package_attrs=self.package_attr,
             scope="available",
@@ -543,7 +543,7 @@ class YumexRootBackend:
 
     @property
     def updates(self) -> list[dict[str, any]]:
-        updates, error = self.client.package_list(
+        updates = self.client.package_list_fd(
             "*",
             package_attrs=self.package_attr,
             scope="upgrades",
