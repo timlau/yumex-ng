@@ -244,17 +244,10 @@ class YumexRootBackend:
         self.client.session_base.connect_to_signal("download_add_new", self.on_download_add_new)
         self.client.session_base.connect_to_signal("download_add_progress", self.on_download_progress)
         self.client.session_base.connect_to_signal("download_add_end", self.on_download_end)
-        # client.session_base.download_add_new.connect(self.on_download_add_new)
-        # client.session_base.download_progress.connect(self.on_download_progress)
-        # client.session_base.download_end.connect(self.on_download_end)
         self.client.session_base.connect_to_signal("repo_key_import_request", self.on_repo_key_import_request)
-        # client.session_base.repo_key_import_request.connect(self.on_repo_key_import_request)
         self.client.session_rpm.connect_to_signal("transaction_action_start", self.on_transaction_action_start)
         self.client.session_rpm.connect_to_signal("transaction_action_progress", self.on_transaction_action_progress)
         self.client.session_rpm.connect_to_signal("transaction_action_stop", self.on_transaction_action_stop)
-        # client.session_rpm.transaction_action_start.connect(self.on_transaction_action_start)
-        # client.session_rpm.transaction_action_progress.connect(self.on_transaction_action_progress)
-        # client.session_rpm.transaction_action_stop.connect(self.on_transaction_action_stop)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
@@ -470,13 +463,13 @@ class YumexRootBackend:
         result, error = self.client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
         if result:
             for res in result:
-                print(res)
+                # print(res)
                 timestamp = datetime.datetime.fromtimestamp(res["buildtime"])
                 updated = timestamp.strftime("%Y-%m-%d %H:%M:%S")
                 info_list.append(
                     UpdateInfo(
-                        id=res["advisoryid"],
-                        title=res["name"],
+                        id=res["name"],
+                        title=res["title"],
                         description=res["description"],
                         type=res["severity"],
                         updated=updated,
@@ -561,6 +554,6 @@ class YumexRootBackend:
                 ypkg.set_state(PackageState.UPDATE)
             if ypkg.nevra not in nevra_dict:
                 nevra_dict[ypkg.nevra] = ypkg
-            else:
-                logger.debug(f"Skipping duplicate : {ypkg}")
+            # else:
+            #     logger.debug(f"Skipping duplicate : {ypkg}")
         return list(nevra_dict.values())
