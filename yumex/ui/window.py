@@ -33,7 +33,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import BUILD_TYPE, RunAsync
-from yumex.utils.dbus import sync_updates
+from yumex.utils.updater import sync_updates
 from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField, SortType
 
 logger = logging.getLogger(__name__)
