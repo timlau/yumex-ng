@@ -107,8 +107,8 @@ def main():
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
     session_bus = dbus.SessionBus()
-    _ = dbus.service.BusName(UPDATER_BUS_NAME, session_bus)
-    _ = UpdateService(session_bus, UPDATER_OBJECT_PATH)
+    name = dbus.service.BusName(UPDATER_BUS_NAME, session_bus)  # noqa: F841
+    obj = UpdateService(session_bus, UPDATER_OBJECT_PATH)  # noqa: F841
 
     # Setup scheduled update check
     update_thread = threading.Thread(target=check_updates, daemon=True)
