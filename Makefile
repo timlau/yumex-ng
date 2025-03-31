@@ -119,8 +119,8 @@ inst-build-tools:
 # install packages needed running and building
 inst-deps:
 	@-sudo dnf5 builddep yumex.spec -y
-	@-sudo dnf5 install python3-dasbus  -y
-	@-sudo dnf5 install python3-libdnf5 dnf5daemon-server -y
+	@-sudo dnf5 install python3-dbus  -y
+	@-sudo dnf5 install dnf5daemon-server -y
 
 # generate the POTFILES from available source files with translations
 # POTFILES is source for what fies is used to generate the .POT file.
