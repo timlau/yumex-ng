@@ -413,8 +413,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "flatpak_remove":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.remove()
-            case "flatpak_install":
-                self.flatpak_view.install()
             case "flatpak_search":
                 self.flatpak_view.search()
             case "flatpak_update":

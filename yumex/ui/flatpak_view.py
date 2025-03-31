@@ -134,32 +134,6 @@ class YumexFlatpakView(Gtk.ListView):
                 else:
                     self.presenter.show_message(f"{fp_id} is not found on {remote}")
 
-    def install(self, *args) -> None:
-        """install a new flatpak"""
-
-        self.presenter.select_page(Page.FLATPAKS)
-        flatpak_installer = YumexFlatpakInstaller(self.presenter)
-        flatpak_installer.set_transient_for(self.presenter.get_main_window())
-        remotes = Gtk.StringList.new()
-        for remote in self.backend.get_remotes(location=FlatpakLocation.USER):
-            remotes.append(remote)
-        flatpak_installer.remote.set_model(remotes)
-        flatpak_installer.show()
-        fp_id = flatpak_installer.current_id.get_title()
-        if fp_id:
-            remote = flatpak_installer.remote.get_selected_item().get_string()
-            location = flatpak_installer.location.get_selected_item().get_string()
-            ref = self.backend.find_ref(remote, fp_id, location)
-            logger.debug(f"FlatPakView.install : remote: {remote} location: {location} ref: {ref}")
-            if ref:
-                if flatpak_installer.confirm:
-                    if self.do_transaction(self.backend.do_install, ref, remote, location):
-                        self.presenter.show_message(_(f"{fp_id} is now installed"), timeout=2)
-                        self.refresh_updater()
-
-            else:
-                self.presenter.show_message(f"{fp_id} is not found on {remote}")
-
     def remove(self, pkg=None) -> None:
         """remove an flatpak"""
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
