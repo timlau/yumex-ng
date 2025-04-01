@@ -190,10 +190,11 @@ class YumexRootBackend:
         pass
 
     def build_result(self, content: list) -> dict:
-        print(content)
         result_dict = {}
-        for _, action, _, _, pkg in content:
+        for i, (typ, action, _, _, pkg) in enumerate(content):
             action = action.lower()
+            if action.strip() == "":
+                action = typ.lower()
             if action not in result_dict:
                 result_dict[action] = []
             name = pkg["name"]

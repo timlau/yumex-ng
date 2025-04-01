@@ -68,6 +68,8 @@ class YumexTransactionResult(Adw.Window):
                 return _("Packages for updating")
             case "upgrade":
                 return _("Packages for updating")
+            case "skipped":
+                return _("Skipped Packages")
             case _:
                 return action
 
