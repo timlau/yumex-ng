@@ -152,13 +152,11 @@ class YumexApplication(Adw.Application):
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
     def on_about(self, *_args) -> None:
-        # FIXME: libadwaita 1.5 uses Adw.AboutDialog, Adw.AboutWindow will be deprecated in 1.6
-        #  about = Adw.AboutDialog(
-        about = Adw.AboutWindow(
+        about = Adw.AboutDialog(
             application_name="Yum Extender",
             application_icon=APP_ID,
             developer_name="Tim Lauridsen",
-            website="https://yumex.dk",
+            website="https://github.com/timlau",
             support_url="",
             issue_url="https://github.com/timlau/yumex-ng/issues",
             developers=["Tim Lauridsen", "Thomas Crider (GloriousEggroll)"],
@@ -166,16 +164,15 @@ class YumexApplication(Adw.Application):
             designers=[],
             documenters=[],
             translator_credits="",
-            copyright="© 2024 Tim Lauridsen",
+            copyright="© 2025 Tim Lauridsen",
             license_type=Gtk.License.GPL_3_0,
             version=f"{VERSION} ({BACKEND})",
             release_notes_version=VERSION,
             release_notes=_(
                 """
         <ul>
-          <li>Added background update checker</li>
-          <li>Sending Notifications on available updates</li>
-          <li>Show system tray icon on supported systems (gnome need appindicator extension)</li>
+          <li>Backend resign to use Dnf5Daemon for all actions</li>
+          <li>DNF4 is no longer supported</li>
           <li>lot of code fixes and optimization</li>
         </ul>
 """
@@ -195,11 +192,7 @@ Yum Extender is a Package management to install, update and remove packages
             ["Thomas Crider https://github.com/GloriousEggroll"],
         )
 
-        # about.set_presentation_mode(Adw.DialogPresentationMode.ADW_DIALOG_FLOATING)
-
-        # FIXME: for libadwaita 1.5 (Adw.AboutDialog) about.present(self.win)
-        about.present()
-        about.set_transient_for(self.win)  # FIXME: not needed for libadwaita 1.5
+        about.present(self.win)
 
     def on_preferences(self, *_args) -> None:
         prefs = YumexPreferences(self.win.presenter)
