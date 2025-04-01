@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 13:17+0100\n"
+"POT-Creation-Date: 2025-04-01 13:11+0200\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2022\n"
 "Language-Team: Danish (https://app.transifex.com/timlau/teams/16939/da/)\n"
@@ -21,49 +21,9 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: yumex/backend/dnf5daemon/__init__.py:40
-#: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
+#: yumex/backend/flatpak/transaction.py:66
+#: yumex/backend/dnf5daemon/__init__.py:77 yumex/ui/flatpak_result.py:37
 msgid "Installing"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:42
-msgid "Upgrading"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:44
-msgid "Downgrading"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:46
-msgid "Reinstalling"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:48
-msgid "Removing"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:50
-msgid "Replacing"
-msgstr ""
-
-#: yumex/backend/dnf5daemon/__init__.py:204
-#: yumex/backend/dnf5daemon/__init__.py:224 yumex/backend/daemon.py:67
-#: yumex/ui/window.py:188
-msgid "Building Transaction"
-msgstr "Bygger Transaktion"
-
-#: yumex/backend/dnf5daemon/__init__.py:228
-#: yumex/backend/dnf5daemon/__init__.py:309 yumex/backend/daemon.py:74
-msgid "Applying Transaction"
-msgstr "Udfører Transaktion"
-
-#: yumex/backend/dnf5daemon/__init__.py:265 yumex/backend/daemon.py:80
-#: yumex/backend/daemon.py:82
-msgid "Download Packages"
-msgstr "Henter Pakker"
-
-#: yumex/backend/dnf5daemon/__init__.py:267
-msgid "Download Reposiory Information"
 msgstr ""
 
 #: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
@@ -78,33 +38,55 @@ msgstr ""
 msgid "flatpak transaction failed"
 msgstr ""
 
-#: yumex/backend/daemon.py:72 yumex/ui/window.py:203
-msgid "Running Transaction"
-msgstr "Kører Transaktion"
+#: yumex/backend/dnf5daemon/__init__.py:79
+msgid "Upgrading"
+msgstr ""
 
-#: yumex/backend/daemon.py:78
-msgid "Checking package signatures"
-msgstr "Checker pakke signatur"
+#: yumex/backend/dnf5daemon/__init__.py:81
+msgid "Downgrading"
+msgstr ""
 
-#: yumex/backend/daemon.py:112
-msgid "Downloading Packages"
+#: yumex/backend/dnf5daemon/__init__.py:83
+msgid "Reinstalling"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:85
+msgid "Removing"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:87
+msgid "Replacing"
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:256
+#: yumex/backend/dnf5daemon/__init__.py:273 yumex/ui/window.py:189
+msgid "Building Transaction"
+msgstr "Bygger Transaktion"
+
+#: yumex/backend/dnf5daemon/__init__.py:276
+#: yumex/backend/dnf5daemon/__init__.py:357
+msgid "Applying Transaction"
+msgstr "Udfører Transaktion"
+
+#: yumex/backend/dnf5daemon/__init__.py:313
+msgid "Download Packages"
 msgstr "Henter Pakker"
 
-#: yumex/backend/daemon.py:128
-msgid "Downloading Repository Metadata"
+#: yumex/backend/dnf5daemon/__init__.py:315
+msgid "Download Reposiory Information"
 msgstr ""
 
-#: yumex/backend/daemon.py:166
-msgid "Couldn't build transaction\n"
-msgstr "Kunne ikke bygge transaktionen\n"
+#: yumex/ui/__init__.py:38
+msgid "Queued for deletion"
+msgstr "I kø, for sletning"
 
-#: yumex/backend/daemon.py:170
-msgid "Exception in Dnf Backend\n"
-msgstr "Fejl hændelse i Dnf Backend\n"
+#: yumex/ui/__init__.py:40
+msgid "Queued for installation"
+msgstr "I kø, for installation"
 
-#: yumex/backend/daemon.py:190
-msgid "Exception in Dnf Backend : "
-msgstr ""
+#: yumex/ui/__init__.py:42
+msgid "Queued for updating"
+msgstr "I kø, for opdatering"
 
 #: yumex/ui/dialogs.py:15
 msgid "Quit"
@@ -122,41 +104,13 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: yumex/ui/package_info.py:26 yumex/ui/package_info.py:33
-msgid "Bugfix"
-msgstr "Fejlrettelse"
+#: yumex/ui/package_view.py:101
+msgid "Loading Packages"
+msgstr "Indlæser pakker"
 
-#: yumex/ui/package_info.py:27 yumex/ui/package_info.py:34
-msgid "New Package"
-msgstr "Ny Pakke"
-
-#: yumex/ui/package_info.py:28 yumex/ui/package_info.py:35
-msgid "Security"
-msgstr "Sikkerhed"
-
-#: yumex/ui/package_info.py:29 yumex/ui/package_info.py:36
-msgid "Enhancement"
-msgstr "Udvildelse"
-
-#: yumex/ui/package_info.py:68
-msgid "no update information found"
-msgstr "Ingen information om opdateing"
-
-#: yumex/ui/package_info.py:99
-msgid "Undefined"
-msgstr ""
-
-#: yumex/ui/__init__.py:38
-msgid "Queued for deletion"
-msgstr "I kø, for sletning"
-
-#: yumex/ui/__init__.py:40
-msgid "Queued for installation"
-msgstr "I kø, for installation"
-
-#: yumex/ui/__init__.py:42
-msgid "Queued for updating"
-msgstr "I kø, for opdatering"
+#: yumex/ui/package_view.py:102
+msgid "This make take a little while"
+msgstr "Dette kan tage et øjeblik"
 
 #: yumex/ui/transaction_result.py:64
 msgid "Packages for installation"
@@ -178,38 +132,57 @@ msgstr ""
 msgid "Unused flatpaks were removed"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:110 yumex/ui/window.py:298
+#: yumex/ui/flatpak_view.py:110 yumex/ui/window.py:299
 msgid "Updating Yumex Updater"
 msgstr ""
 
-#: yumex/ui/package_view.py:101
-msgid "Loading Packages"
-msgstr "Indlæser pakker"
+#: yumex/ui/package_info.py:25
+msgid "Bugfix"
+msgstr "Fejlrettelse"
 
-#: yumex/ui/package_view.py:102
-msgid "This make take a little while"
-msgstr "Dette kan tage et øjeblik"
+#: yumex/ui/package_info.py:26
+msgid "New Package"
+msgstr "Ny Pakke"
 
-#: yumex/ui/window.py:242
+#: yumex/ui/package_info.py:27
+msgid "Security"
+msgstr "Sikkerhed"
+
+#: yumex/ui/package_info.py:28
+msgid "Enhancement"
+msgstr "Udvildelse"
+
+#: yumex/ui/package_info.py:60
+msgid "no update information found"
+msgstr "Ingen information om opdateing"
+
+#: yumex/ui/package_info.py:91
+msgid "Undefined"
+msgstr ""
+
+#: yumex/ui/window.py:204
+msgid "Running Transaction"
+msgstr "Kører Transaktion"
+
+#: yumex/ui/window.py:243
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:301
+#: yumex/ui/window.py:302
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/main.py:175
+#: yumex/main.py:172
 msgid ""
 "\n"
 "        <ul>\n"
-"          <li>Added background update checker</li>\n"
-"          <li>Sending Notifications on available updates</li>\n"
-"          <li>Show system tray icon on supported systems (gnome need appindicator extension)</li>\n"
+"          <li>Backend resign to use Dnf5Daemon for all actions</li>\n"
+"          <li>DNF4 is no longer supported</li>\n"
 "          <li>lot of code fixes and optimization</li>\n"
 "        </ul>\n"
 msgstr ""
 
-#: yumex/main.py:185
+#: yumex/main.py:181
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
@@ -217,21 +190,45 @@ msgstr ""
 "\n"
 "Yum Extender er et pakke håndterings værktøj til at installere, opdatere og slette pakker\n"
 
-#: yumex/main.py:195
+#: yumex/main.py:191
 msgid "Special thanks to"
 msgstr ""
 
-#: yumex/yumex_updater_systray:75
+#: yumex/yumex_updater_systray:73
 msgid "Updates are available"
 msgstr ""
 
-#: data/ui/flatpak_row.blp:36
-msgid "Update is available"
+#: data/ui/package_view.blp:18 data/ui/package_settings.blp:93
+msgid "Name"
+msgstr "Navn"
+
+#: data/ui/package_view.blp:24
+msgid "Version"
 msgstr ""
 
-#: data/ui/flatpak_row.blp:42
-msgid "Uninstall flatpak"
+#: data/ui/package_view.blp:30
+msgid "Arch."
+msgstr "Ark."
+
+#: data/ui/package_view.blp:36 data/ui/package_settings.blp:95
+msgid "Size"
+msgstr "Størrelse"
+
+#: data/ui/package_view.blp:42
+msgid "Summary"
 msgstr ""
+
+#: data/ui/package_view.blp:48 data/ui/preferences.blp:90
+msgid "Repository"
+msgstr "Kilder"
+
+#: data/ui/package_view.blp:100 data/ui/shortcuts.blp:51
+msgid "Select All"
+msgstr "Vælg alle"
+
+#: data/ui/package_view.blp:101 data/ui/shortcuts.blp:55
+msgid "Deselect All"
+msgstr "Fravælg alle"
 
 #: data/ui/package_info.blp:20
 msgid "Advisory ID"
@@ -281,17 +278,9 @@ msgstr "Vælg sorterings attribut"
 msgid "Select what package information to show"
 msgstr "Vælg pakke informations type"
 
-#: data/ui/package_settings.blp:93 data/ui/package_view.blp:18
-msgid "Name"
-msgstr "Navn"
-
 #: data/ui/package_settings.blp:94
 msgid "Arch"
 msgstr "Ark."
-
-#: data/ui/package_settings.blp:95 data/ui/package_view.blp:36
-msgid "Size"
-msgstr "Størrelse"
 
 #: data/ui/package_settings.blp:96
 msgid "Repo"
@@ -308,30 +297,6 @@ msgstr "Filliste"
 #: data/ui/package_settings.blp:104
 msgid "Update Info"
 msgstr "Opdaterings info."
-
-#: data/ui/package_view.blp:24
-msgid "Version"
-msgstr ""
-
-#: data/ui/package_view.blp:30
-msgid "Arch."
-msgstr "Ark."
-
-#: data/ui/package_view.blp:42
-msgid "Summary"
-msgstr ""
-
-#: data/ui/package_view.blp:48 data/ui/preferences.blp:90
-msgid "Repository"
-msgstr "Kilder"
-
-#: data/ui/package_view.blp:100 data/ui/shortcuts.blp:51
-msgid "Select All"
-msgstr "Vælg alle"
-
-#: data/ui/package_view.blp:101 data/ui/shortcuts.blp:55
-msgid "Deselect All"
-msgstr "Fravælg alle"
 
 #: data/ui/queue_row.blp:17
 msgid "Added as a dependency"
@@ -354,9 +319,89 @@ msgstr "Afbryd"
 msgid "Confirm"
 msgstr "Bekræft"
 
+#: data/ui/flatpak_row.blp:36
+msgid "Update is available"
+msgstr ""
+
+#: data/ui/flatpak_row.blp:42
+msgid "Uninstall flatpak"
+msgstr ""
+
 #: data/ui/flatpak_result.blp:16
 msgid "Flatpak Transaction Result"
 msgstr ""
+
+#: data/ui/flatpak_search.blp:18
+msgid "Search Flatpaks"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:43
+msgid "Install"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:91
+msgid "Install location"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:113
+msgid "Active Remotes: "
+msgstr ""
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
+msgid "Preferences"
+msgstr "Indstillinger"
+
+#: data/ui/preferences.blp:10
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: data/ui/preferences.blp:13
+msgid "Flatpak Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:15
+msgid "Default Location"
+msgstr ""
+
+#: data/ui/preferences.blp:20
+msgid "Default Remote"
+msgstr ""
+
+#: data/ui/preferences.blp:25
+msgid "Metadata Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:27
+msgid "Min. Refresh interval (minutes)"
+msgstr ""
+
+#: data/ui/preferences.blp:39
+msgid "Updater Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:41
+msgid "Custom System Updater (path)"
+msgstr ""
+
+#: data/ui/preferences.blp:55
+msgid "Check updates interval (minutes)"
+msgstr ""
+
+#: data/ui/preferences.blp:66
+msgid "Show systray icon on updates"
+msgstr ""
+
+#: data/ui/preferences.blp:76
+msgid "Send Notification on updates"
+msgstr ""
+
+#: data/ui/preferences.blp:93
+msgid "Repository Settings"
+msgstr "Kilde Indstillinger"
+
+#: data/ui/preferences.blp:94
+msgid "The available and enabled repositories"
+msgstr "De tilgængelige og aktive kilder"
 
 #: data/ui/shortcuts.blp:8
 msgid "General"
@@ -365,10 +410,6 @@ msgstr "Generelle"
 #: data/ui/shortcuts.blp:11
 msgid "Keyboard shortcuts"
 msgstr "Tastatur genveje"
-
-#: data/ui/shortcuts.blp:15 data/ui/preferences.blp:5
-msgid "Preferences"
-msgstr "Indstillinger"
 
 #: data/ui/shortcuts.blp:19
 msgid "Apply Actions/Confirm"
@@ -436,74 +477,6 @@ msgstr ""
 
 #: data/ui/shortcuts.blp:88
 msgid "Remove selected flatpak"
-msgstr ""
-
-#: data/ui/preferences.blp:10
-msgid "Settings"
-msgstr "Indstillinger"
-
-#: data/ui/preferences.blp:13
-msgid "Flatpak Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:15
-msgid "Default Location"
-msgstr ""
-
-#: data/ui/preferences.blp:20
-msgid "Default Remote"
-msgstr ""
-
-#: data/ui/preferences.blp:25
-msgid "Metadata Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:27
-msgid "Min. Refresh interval (minutes)"
-msgstr ""
-
-#: data/ui/preferences.blp:39
-msgid "Updater Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:41
-msgid "Custom System Updater (path)"
-msgstr ""
-
-#: data/ui/preferences.blp:55
-msgid "Check updates interval (minutes)"
-msgstr ""
-
-#: data/ui/preferences.blp:66
-msgid "Show systray icon on updates"
-msgstr ""
-
-#: data/ui/preferences.blp:76
-msgid "Send Notification on updates"
-msgstr ""
-
-#: data/ui/preferences.blp:93
-msgid "Repository Settings"
-msgstr "Kilde Indstillinger"
-
-#: data/ui/preferences.blp:94
-msgid "The available and enabled repositories"
-msgstr "De tilgængelige og aktive kilder"
-
-#: data/ui/flatpak_search.blp:18
-msgid "Search Flatpaks"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:43
-msgid "Install"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:91
-msgid "Install location"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:113
-msgid "Active Remotes: "
 msgstr ""
 
 #: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
