@@ -1,52 +1,66 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexTransactionResult : Adw.Window {
+template $YumexTransactionResult: Adw.Window {
     default-width: 700;
     default-height: 700;
     modal: true;
 
-    Gtk.Box main_content{
+    Gtk.Box main_content {
         orientation: vertical;
+
         Adw.HeaderBar titlebar {
-          centering-policy: strict;
-          show-end-title-buttons: false;
+            centering-policy: strict;
+            show-end-title-buttons: false;
+
             [title]
             Gtk.Label {
                 label: _("Transaction Result");
             }
+
             [start]
-            Gtk.Button cancel{
+            Gtk.Button cancel {
                 label: _("Cancel");
-                clicked=> $on_cancel_clicked();
+                clicked => $on_cancel_clicked();
+
                 ShortcutController {
-                  scope: managed;
-                  Shortcut {
-                    trigger: "Escape";
-                    action: "activate";
-                  }
+                    scope: managed;
+
+                    Shortcut {
+                        trigger: "Escape";
+                        action: "activate";
+                    }
                 }
             }
+
             [end]
             Gtk.Button confirm {
                 label: _("Confirm");
-                styles ["destructive-action"]
-                clicked=> $on_confirm_clicked();
+
+                styles [
+                    "destructive-action",
+                ]
+
+                clicked => $on_confirm_clicked();
+
                 ShortcutController {
-                  scope: managed;
-                  Shortcut {
-                    trigger: "<Ctrl>Return";
-                    action: "activate";
-                  }
+                    scope: managed;
+
+                    Shortcut {
+                        trigger: "<Ctrl>Return";
+                        action: "activate";
+                    }
                 }
             }
         }
+
         Gtk.Box {
             orientation: vertical;
             margin-start: 20;
             margin-end: 20;
             margin-top: 20;
             margin-bottom: 20;
+
             Gtk.Frame {
                 Gtk.ScrolledWindow {
                     Gtk.ListView result_view {
@@ -60,19 +74,29 @@ template $YumexTransactionResult : Adw.Window {
                         model: selection;
                         factory: result_factory;
                         single-click-activate: false;
-                        styles ["data-list"]
+
+                        styles [
+                            "data-list",
+                        ]
                     }
+                }
+            }
+
+            Adw.PreferencesGroup prob_grp {
+                margin-top: 20;
+                visible: false;
+
+                Adw.ActionRow problems {
+                    title: "Problems";
                 }
             }
         }
     }
 }
 
-Gtk.NoSelection selection {
-
-}
+Gtk.NoSelection selection {}
 
 Gtk.SignalListItemFactory result_factory {
-    setup=> $on_setup();
-    bind=> $on_bind();
+    setup => $on_setup();
+    bind => $on_bind();
 }

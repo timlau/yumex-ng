@@ -27,5 +27,6 @@ class TransactionResult:
     completed: bool
     data: dict = field(default_factory=dict)
     error: str = ""
+    problems: list = field(default_factory=list)
     key_install: bool = False
     key_values: tuple = None

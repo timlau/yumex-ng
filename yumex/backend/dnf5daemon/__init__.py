@@ -263,8 +263,10 @@ class YumexRootBackend:
         for error in errors:
             logger.debug(f"build transaction: error =  {error}")
         self.progress.hide()
-        if rc == 0 or rc == 1:
+        if rc == 0:
             return TransactionResult(True, data=self.build_result(content))
+        if rc == 1:
+            return TransactionResult(True, data=self.build_result(content), problems=errors)
         else:
             error_msgs = "\n".join(errors)
             return TransactionResult(False, error=error_msgs)

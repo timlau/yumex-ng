@@ -26,6 +26,8 @@ class YumexTransactionResult(Adw.Window):
     result_view = Gtk.Template.Child()
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
+    prob_grp = Gtk.Template.Child()
+    problems = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -38,6 +40,10 @@ class YumexTransactionResult(Adw.Window):
     def show(self):
         self.present()
         self._loop.run()
+
+    def set_problems(self, prob: list):
+        self.problems.set_title("\n".join(prob))
+        self.prob_grp.set_visible(True)
 
     def show_result(self, result_dict):
         self.populate(result_dict)
