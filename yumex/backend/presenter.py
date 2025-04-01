@@ -104,7 +104,7 @@ class YumexPresenter:
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         return self.package_backend.get_package_info(pkg, attr)
 
-    def get_repositories(self) -> list[tuple]:
+    def get_repositories(self) -> list[(str, str, bool, int)]:  # id, name, enabled, priority
         return self.package_backend.get_repositories()
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:

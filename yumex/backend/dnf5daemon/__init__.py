@@ -190,6 +190,7 @@ class YumexRootBackend:
         pass
 
     def build_result(self, content: list) -> dict:
+        print(content)
         result_dict = {}
         for _, action, _, _, pkg in content:
             action = action.lower()
@@ -496,7 +497,7 @@ class YumexRootBackend:
         if error:
             self.presenter.show_message(error)
         else:
-            return [(repo["id"], repo["name"], repo["enabled"]) for repo in repos]
+            return [(repo["id"], repo["name"], repo["enabled"], repo["priority"]) for repo in repos]
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         dep_pkgs = []

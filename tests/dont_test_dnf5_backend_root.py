@@ -155,9 +155,10 @@ def test_get_repositories(backend):
     """test the get_repositories method"""
     repos = list(backend.get_repositories())
     assert len(repos) > 0
-    repo_id, repo_name, repo_enabled = repos[0]
+    repo_id, repo_name, repo_enabled, priority = repos[0]
     assert isinstance(repo_id, str) and repo_id != ""
-    assert isinstance(repo_name, str) and repo_id != ""
+    assert isinstance(repo_name, str) and repo_name != ""
+    assert isinstance(priority, int)
     assert repo_enabled in (True, False)
 
 
