@@ -77,33 +77,32 @@ logger = logging.getLogger(__name__)
 
 
 def check_dnf_updates(refresh: bool = False) -> list:
-    bus = dbus.SystemBus()
+    try:
+        bus = dbus.SystemBus()
 
-    # open a new session with dnf5daemon-server
-    iface_session = dbus.Interface(
-        bus.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
-        dbus_interface=IFACE_SESSION_MANAGER,
-    )
-    session = iface_session.open_session(dbus.Dictionary({}, signature=dbus.Signature("sv")))
+        # open a new session with dnf5daemon-server
+        iface_session = dbus.Interface(
+            bus.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
+            dbus_interface=IFACE_SESSION_MANAGER,
+        )
+        session = iface_session.open_session(dbus.Dictionary({}, signature=dbus.Signature("sv")))
 
-    options = {
-        # retrieve all package attributes
-        "package_attrs": [
-            "repo_id",
-            "full_nevra",
-        ],
-        # take all packages into account (other supported scopes are installed, available,
-        # upgrades, upgradable)
-        "scope": "upgrades",
-        # get only packages with name starting with "a"
-        "patterns": ["*"],
-        # return only the latest version for each name.arch
-        "latest-limit": 1,
-    }
-    iface_rpm = dbus.Interface(bus.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
-    pkgs = iface_rpm.list(options)
-    iface_session.close_session(session)
-    return pkgs
+        options = {
+            "package_attrs": [
+                "repo_id",
+                "full_nevra",
+            ],
+            "scope": "upgrades",
+            "patterns": ["*"],
+            "latest-limit": 1,
+        }
+        iface_rpm = dbus.Interface(bus.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
+        pkgs = iface_rpm.list(options)
+        iface_session.close_session(session)
+        return pkgs
+    except dbus.DBusException as e:
+        logger.error(e)
+        return []
 
 
 if __name__ == "__main__":
