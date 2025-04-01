@@ -278,8 +278,8 @@ class YumexRootBackend:
         res, err = self.client.do_transaction()
         logger.debug(f"transaction rc: {res} error: {err}")
         self.progress.hide()
-        if res:
-            return TransactionResult(False, error=res)
+        if err:
+            return TransactionResult(False, error=err)
         else:
             return TransactionResult(True, data=None)  # type: ignore
 
