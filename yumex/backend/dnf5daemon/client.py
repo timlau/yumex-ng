@@ -273,3 +273,8 @@ class Dnf5DbusClient:
         get_list = self._async_method("list", proxy=self.session_advisory)
         res, err = get_list(options)
         return res, err
+
+    def clean(self, metadata_type):
+        result = self.session_base.clean(metadata_type)
+        print(result)
+        return result

@@ -346,3 +346,11 @@ def test_package_depsolve(backend):
     print(ypkg)
     assert isinstance(ypkg, YumexPackage)
     assert ypkg.is_dep
+
+
+# Require root access, so will ask for polkit auth
+@pytest.mark.skip
+def test_clean(backend: YumexRootBackend):
+    client = backend.client
+    result = client.clean("expire-cache")
+    assert result[0]
