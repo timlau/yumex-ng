@@ -230,7 +230,6 @@ def test_search_repo(backend):
 
 @pytest.mark.xfail
 # FIXME: dnf5daemon don't have any way to search in description
-# will fail if Yum Extender is not installed or available in the repos
 def test_search_desc(backend):
     """test search by summary"""
     pkgs = backend.search("Yum Extender", field=SearchField.SUMMARY)
