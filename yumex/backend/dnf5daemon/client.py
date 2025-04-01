@@ -276,5 +276,5 @@ class Dnf5DbusClient:
 
     def clean(self, metadata_type):
         result = self.session_base.clean(metadata_type)
-        print(result)
+        logger.debug(f"clean : {result}")
         return result

@@ -61,7 +61,7 @@ template $YumexMainWindow: Adw.ApplicationWindow {
         [end]
         Button apply_button {
           styles [
-            "suggested-action"
+            "suggested-action",
           ]
 
           Adw.ButtonContent {
@@ -118,7 +118,7 @@ template $YumexMainWindow: Adw.ApplicationWindow {
 
                     Gtk.ScrolledWindow content_packages {
                       styles [
-                        "package_list"
+                        "package_list",
                       ]
 
                       hexpand: true;
@@ -190,7 +190,7 @@ template $YumexMainWindow: Adw.ApplicationWindow {
 
                     Gtk.Separator {
                       styles [
-                        "spacer"
+                        "spacer",
                       ]
                     }
 
@@ -263,6 +263,11 @@ menu main-menu {
     item {
       label: _("_Preferences");
       action: "app.preferences";
+    }
+
+    item {
+      label: _("Reload DNF cache");
+      action: "app.expire-cache";
     }
 
     item {

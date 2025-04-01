@@ -75,6 +75,7 @@ class YumexApplication(Adw.Application):
 
         # create app actions
         self.create_action("about", self.on_about)
+        self.create_action("expire-cache", self.win.on_actions)
         self.create_action("preferences", self.on_preferences, ["<Ctrl>comma"])
 
         # windows related actions

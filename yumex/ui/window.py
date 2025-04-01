@@ -33,8 +33,8 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import BUILD_TYPE, RunAsync
-from yumex.utils.updater import sync_updates
 from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField, SortType
+from yumex.utils.updater import sync_updates
 
 logger = logging.getLogger(__name__)
 
@@ -300,12 +300,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 sync_updates()
                 self.progress.hide()
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
+
             # reset everything
-            self.package_view.reset()
-            self.search_bar.set_search_mode(False)
-            self.package_settings.unselect_all()
-            self.select_page(Page.PACKAGES)
-            self.load_packages(PackageFilter.INSTALLED)
+            self.reset_all()
+
+    def reset_all(self):
+        # reset everything
+        self.package_view.reset()
+        self.search_bar.set_search_mode(False)
+        self.package_settings.unselect_all()
+        self.select_page(Page.PACKAGES)
+        self.load_packages(PackageFilter.INSTALLED)
 
     def do_search(self, text, field=None):
         # remove selection in package filter (sidebar)
@@ -453,6 +458,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "toggle_selection":
                 if self.active_page == Page.PACKAGES:
                     self.package_view.toggle_selected()
+            case "expire-cache":
+                logger.debug("expire-cache")
+                res, msg = self.presenter.package_backend.client.clean("expire-cache")
+                if res:
+                    self.reset_all()
             case other:
                 logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")
