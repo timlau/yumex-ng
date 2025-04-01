@@ -214,6 +214,7 @@ class YumexRootBackend:
         to_install = []
         to_update = []
         to_remove = []
+        self.client.session_goal.reset()
         for pkg in pkgs:
             match pkg.state:
                 case PackageState.AVAILABLE:
@@ -242,8 +243,8 @@ class YumexRootBackend:
 
     def connect_signals(self):
         self.client.session_base.connect_to_signal("download_add_new", self.on_download_add_new)
-        self.client.session_base.connect_to_signal("download_add_progress", self.on_download_progress)
-        self.client.session_base.connect_to_signal("download_add_end", self.on_download_end)
+        self.client.session_base.connect_to_signal("download_progress", self.on_download_progress)
+        self.client.session_base.connect_to_signal("download_end", self.on_download_end)
         self.client.session_base.connect_to_signal("repo_key_import_request", self.on_repo_key_import_request)
         self.client.session_rpm.connect_to_signal("transaction_action_start", self.on_transaction_action_start)
         self.client.session_rpm.connect_to_signal("transaction_action_progress", self.on_transaction_action_progress)
