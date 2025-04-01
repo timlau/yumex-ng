@@ -109,7 +109,7 @@ class Dnf5DbusClient:
         """create a patial func to make an async call to a given
         dbus method name
         """
-        return partial(self.async_dbus.call, getattr(proxy, method))
+        return partial(self.async_dbus.call, getattr(proxy, method), timeout=1000 * 60 * 20)
 
     def resolve(self, *args):
         resolve = self._async_method("resolve", proxy=self.session_goal)
