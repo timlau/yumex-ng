@@ -15,6 +15,7 @@
 
 """Backend for searching in flatpak AppStream Metadata"""
 
+import logging
 from enum import IntEnum
 from pathlib import Path
 
@@ -22,7 +23,6 @@ import gi
 
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
-import logging
 
 from gi.repository import AppStream, Flatpak, Gio  # type: ignore # noqa: E402
 
@@ -49,6 +49,10 @@ class AppStreamPackage:
     @property
     def id(self) -> str:
         return self.component.get_id()
+
+    @property
+    def flatpak_id(self) -> str:
+        return self.flatpak_bundle.split("/")[1]
 
     @property
     def name(self) -> str:
