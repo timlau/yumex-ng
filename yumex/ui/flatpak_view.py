@@ -119,7 +119,7 @@ class YumexFlatpakView(Gtk.ListView):
         selected = flatpak_search.selection.get_selected_item()
         if selected:
             pkg: AppStreamPackage = flatpak_search.selection.get_selected_item().pkg
-            fp_id = pkg.id
+            fp_id = pkg.flatpak_id
             if fp_id:
                 remote = pkg.repo_name
                 location = flatpak_search.location.get_selected_item().get_string()
