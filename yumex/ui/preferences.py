@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/preferences.ui")
-class YumexPreferences(Adw.PreferencesWindow):
+class YumexPreferences(Adw.PreferencesDialog):
     __gtype_name__ = "YumexPreferences"
 
     fp_remote: Adw.ComboRow = Gtk.Template.Child()

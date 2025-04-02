@@ -1,44 +1,54 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexPreferences: Adw.PreferencesWindow {
+template $YumexPreferences: Adw.PreferencesDialog {
   title: _("Preferences");
-  default-height: 700;
-  default-width: 600;
-  modal: true;
-  Adw.PreferencesPage  main {
+  content-height: 700;
+  content-width: 600;
+
+  Adw.PreferencesPage main {
     title: _("Settings");
     icon-name: "preferences-system-symbolic";
+
     Adw.PreferencesGroup flatpak {
       title: _("Flatpak Settings");
+
       Adw.ComboRow fp_location {
         title: _("Default Location");
         model: fp_locations;
-        notify::selected=> $on_location_selected();
+        notify::selected => $on_location_selected();
       }
+
       Adw.ComboRow fp_remote {
         title: _("Default Remote");
         model: fp_remotes;
       }
     }
+
     Adw.PreferencesGroup metadata {
       title: _("Metadata Settings");
+
       Adw.ActionRow md_periode_row {
         title: _("Min. Refresh interval (minutes)");
+
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
           valign: center;
+
           Gtk.Entry md_period {
             text: "";
           }
-      }
+        }
       }
     }
+
     Adw.PreferencesGroup updater {
       title: _("Updater Settings");
+
       Adw.ActionRow {
         title: _("Custom System Updater (path)");
+
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
@@ -46,68 +56,73 @@ template $YumexPreferences: Adw.PreferencesWindow {
           halign: fill;
 
           Gtk.Entry upd_custom {
-
             text: "";
           }
         }
       }
+
       Adw.ActionRow {
         title: _("Check updates interval (minutes)");
+
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
           valign: center;
+
           Gtk.Entry upd_interval {
             text: "60";
           }
         }
       }
+
       Adw.ActionRow {
         title: _("Show systray icon on updates");
+
         Gtk.Box {
           orientation: horizontal;
           vexpand: false;
           valign: center;
-          Gtk.Switch upd_show {
-          }
+
+          Gtk.Switch upd_show {}
         }
       }
+
       Adw.ActionRow {
         title: _("Send Notification on updates");
+
         Gtk.Box {
-        orientation: horizontal;
-        vexpand: false;
-        valign: center;
-          Gtk.Switch upd_notification {
-          }
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+
+          Gtk.Switch upd_notification {}
         }
       }
     }
-
-
   }
-  Adw.PreferencesPage  repo {
+
+  Adw.PreferencesPage repo {
     title: _("Repository");
     icon-name: "server-pick-symbolic";
+
     Adw.PreferencesGroup repo_group {
       title: _("Repository Settings");
       description: _("The available and enabled repositories");
       // Just boilerplate rows, will be added automatic later
     }
   }
-
 }
 
 Gtk.StringList fp_locations {
-    strings [
-        "user",
-        "system"
-    ]
+  strings [
+    "user",
+    "system",
+  ]
 }
 
 Gtk.StringList fp_remotes {
-    strings [
-        "flathub",
-        "fedora"
-    ]
+  strings [
+    "flathub",
+    "fedora",
+  ]
 }
