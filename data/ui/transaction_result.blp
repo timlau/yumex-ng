@@ -1,102 +1,102 @@
 using Gtk 4.0;
 using Adw 1;
-
+// TODO: Change to using AdwDialog
 template $YumexTransactionResult: Adw.Window {
-    default-width: 700;
-    default-height: 700;
-    modal: true;
+  default-width: 700;
+  default-height: 700;
+  modal: true;
 
-    Gtk.Box main_content {
-        orientation: vertical;
+  Gtk.Box main_content {
+    orientation: vertical;
 
-        Adw.HeaderBar titlebar {
-            centering-policy: strict;
-            show-end-title-buttons: false;
+    Adw.HeaderBar titlebar {
+      centering-policy: strict;
+      show-end-title-buttons: false;
 
-            [title]
-            Gtk.Label {
-                label: _("Transaction Result");
-            }
+      [title]
+      Gtk.Label {
+        label: _("Transaction Result");
+      }
 
-            [start]
-            Gtk.Button cancel {
-                label: _("Cancel");
-                clicked => $on_cancel_clicked();
+      [start]
+      Gtk.Button cancel {
+        label: _("Cancel");
+        clicked => $on_cancel_clicked();
 
-                ShortcutController {
-                    scope: managed;
+        ShortcutController {
+          scope: managed;
 
-                    Shortcut {
-                        trigger: "Escape";
-                        action: "activate";
-                    }
-                }
-            }
-
-            [end]
-            Gtk.Button confirm {
-                label: _("Confirm");
-
-                styles [
-                    "destructive-action",
-                ]
-
-                clicked => $on_confirm_clicked();
-
-                ShortcutController {
-                    scope: managed;
-
-                    Shortcut {
-                        trigger: "<Ctrl>Return";
-                        action: "activate";
-                    }
-                }
-            }
+          Shortcut {
+            trigger: "Escape";
+            action: "activate";
+          }
         }
+      }
 
-        Gtk.Box {
-            orientation: vertical;
-            margin-start: 20;
-            margin-end: 20;
-            margin-top: 20;
-            margin-bottom: 20;
+      [end]
+      Gtk.Button confirm {
+        label: _("Confirm");
 
-            Gtk.Frame {
-                Gtk.ScrolledWindow {
-                    Gtk.ListView result_view {
-                        margin-start: 10;
-                        margin-end: 10;
-                        margin-top: 10;
-                        margin-bottom: 10;
-                        name: "result_view";
-                        hexpand: true;
-                        vexpand: true;
-                        model: selection;
-                        factory: result_factory;
-                        single-click-activate: false;
+        styles [
+          "destructive-action",
+        ]
 
-                        styles [
-                            "data-list",
-                        ]
-                    }
-                }
-            }
+        clicked => $on_confirm_clicked();
 
-            Adw.PreferencesGroup prob_grp {
-                margin-top: 20;
-                visible: false;
+        ShortcutController {
+          scope: managed;
 
-                Adw.ActionRow problems {
-                    title: "Problems";
-                }
-            }
+          Shortcut {
+            trigger: "<Ctrl>Return";
+            action: "activate";
+          }
         }
+      }
     }
+
+    Gtk.Box {
+      orientation: vertical;
+      margin-start: 20;
+      margin-end: 20;
+      margin-top: 20;
+      margin-bottom: 20;
+
+      Gtk.Frame {
+        Gtk.ScrolledWindow {
+          Gtk.ListView result_view {
+            margin-start: 10;
+            margin-end: 10;
+            margin-top: 10;
+            margin-bottom: 10;
+            name: "result_view";
+            hexpand: true;
+            vexpand: true;
+            model: selection;
+            factory: result_factory;
+            single-click-activate: false;
+
+            styles [
+              "data-list",
+            ]
+          }
+        }
+      }
+
+      Adw.PreferencesGroup prob_grp {
+        margin-top: 20;
+        visible: false;
+
+        Adw.ActionRow problems {
+          title: "Problems";
+        }
+      }
+    }
+  }
 }
 
 Gtk.NoSelection selection {}
 
 Gtk.SignalListItemFactory result_factory {
-    setup => $on_setup();
-    bind => $on_bind();
+  setup => $on_setup();
+  bind => $on_bind();
 }

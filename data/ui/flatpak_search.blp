@@ -1,6 +1,6 @@
 using Gtk 4.0;
 using Adw 1;
-
+// TODO: Change to using AdwDialog
 template $YumexFlatpakSearch: Adw.Window {
   default-width: 1000;
   default-height: 800;
@@ -43,7 +43,7 @@ template $YumexFlatpakSearch: Adw.Window {
         label: _("Install");
 
         styles [
-          "destructive-action"
+          "destructive-action",
         ]
 
         clicked => $on_ok_clicked();
@@ -69,7 +69,7 @@ template $YumexFlatpakSearch: Adw.Window {
         selection-mode: none;
 
         styles [
-          "boxed-list"
+          "boxed-list",
         ]
 
         Gtk.ListBoxRow {
@@ -79,7 +79,7 @@ template $YumexFlatpakSearch: Adw.Window {
             search-changed => $on_search();
 
             styles [
-              "flatpak_search"
+              "flatpak_search",
             ]
           }
         }
@@ -103,7 +103,7 @@ template $YumexFlatpakSearch: Adw.Window {
         margin-end: 10;
 
         styles [
-          "accent"
+          "accent",
         ]
 
         Gtk.Label {
@@ -114,8 +114,7 @@ template $YumexFlatpakSearch: Adw.Window {
         }
 
         Gtk.Label remotes {
-          styles [
-          ]
+          styles []
 
           hexpand: true;
           halign: start;
@@ -145,7 +144,7 @@ template $YumexFlatpakSearch: Adw.Window {
 Gtk.StringList locations {
   strings [
     "user",
-    "system"
+    "system",
   ]
 }
 

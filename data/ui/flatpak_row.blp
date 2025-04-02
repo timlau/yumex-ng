@@ -1,48 +1,74 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexFlatpakRow : Adw.ActionRow {
-    [prefix]
-    Gtk.Image icon {
-        height-request: 72;
-        icon-size: large;
-        icon-name: "library-symbolic";
-        styles ["icon-dropshadow","flatpak_icon"]
+template $YumexFlatpakRow: Adw.ActionRow {
+  [prefix]
+  Gtk.Image icon {
+    height-request: 72;
+    icon-size: large;
+    icon-name: "library-symbolic";
+
+    styles [
+      "icon-dropshadow",
+      "flatpak_icon",
+    ]
+  }
+
+  [suffix]
+  Gtk.Box {
+    orientation: vertical;
+
+    Gtk.Box {
+      orientation: horizontal;
+      hexpand: false;
+      vexpand: false;
+      valign: start;
+
+      Gtk.Label user {
+        styles [
+          "tag",
+        ]
+      }
+
+      Gtk.Label origin {
+        styles [
+          "tag",
+          "origin",
+        ]
+      }
     }
 
-    [suffix]
     Gtk.Box {
-      orientation: vertical;
-      Gtk.Box {
-        orientation: horizontal;
-        hexpand: false;
-        vexpand: false;
-        valign: start;
-        Gtk.Label user {
-          styles ["tag"]
-        }
-        Gtk.Label origin {
-          styles ["tag","origin"]
-        }
+      orientation: horizontal;
+      hexpand: false;
+      vexpand: false;
+      halign: end;
+
+      Gtk.Button update {
+        visible: false;
+        icon-name: "emblem-synchronizing-symbolic";
+        tooltip-text: _("Update is available");
+
+        styles [
+          "success",
+          "flat",
+          "circular",
+        ]
+
+        clicked => $on_update_clicked();
       }
-      Gtk.Box {
-        orientation: horizontal;
-        hexpand: false;
-        vexpand: false;
-        halign: end;
-        Gtk.Button update {
-          visible: false;
-          icon-name: "emblem-synchronizing-symbolic";
-          tooltip-text: _("Update is available");
-          styles ["success","flat","circular"]
-          clicked=> $on_update_clicked();
-        }
-        Gtk.Button {
-          icon-name: "user-trash-symbolic" ;
-          tooltip-text: _("Uninstall flatpak");
-          clicked=> $on_delete_clicked();
-          styles ["flat","error","circular"]
-        }
+
+      Gtk.Button {
+        icon-name: "user-trash-symbolic";
+        tooltip-text: _("Uninstall flatpak");
+        clicked => $on_delete_clicked();
+
+        styles [
+          "flat",
+          "error",
+          "circular",
+        ]
       }
     }
+  }
 }

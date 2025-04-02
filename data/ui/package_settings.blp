@@ -1,107 +1,146 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexPackageSettings : Gtk.Box {
-    styles ["background"]
-    orientation: vertical;
-    width-request: 250;
-    Adw.PreferencesGroup package_filter {
-      title: _("Package filter");
-      hexpand: false;
-      margin-start: 20;
-      margin-end: 20;
-      Adw.ActionRow installed_row{
-        title: _("Installed");
-        // subtitle: _("This setting controls how to do somethine");
-        activatable-widget: filter_installed;
-        styles ["package-filter-row", "checkmark"]
-        [prefix]
-        Gtk.CheckButton filter_installed {
-          name: "installed";
-          group: filter_updates;
-          action-name: "app.filter_installed";
-        }
-      }
-      Adw.ActionRow {
-        title: _("Updates");
-        // subtitle: _("This setting controls how to do somethine");
-        activatable-widget: filter_updates;
-        styles ["package-filter-row", 'checkmark']
-        [prefix]
-        Gtk.CheckButton filter_updates {
-          name: "updates";
-          action-name: "app.filter_updates";
-        }
-      }
-      Adw.ActionRow {
-        title: _("All");
-        // subtitle: _("This setting controls how to do somethine");
-        activatable-widget: filter_available;
-        styles ["package-filter-row", "checkmark"]
-        [prefix]
-        Gtk.CheckButton filter_available {
-          name: "available";
-          group: filter_updates;
-          action-name: "app.filter_available";
-        }
-      }
-      Adw.ActionRow {
-        title: _("Search");
-        sensitive: false;
-        activatable-widget: filter_search;
-        styles ["package-filter-row", "checkmark"]
-        [prefix]
-        Gtk.CheckButton filter_search {
-          name: "available";
-          group: filter_updates;
-          action-name: "app.filter_search";
-        }
+template $YumexPackageSettings: Gtk.Box {
+  styles [
+    "background",
+  ]
+
+  orientation: vertical;
+  width-request: 250;
+
+  Adw.PreferencesGroup package_filter {
+    title: _("Package filter");
+    hexpand: false;
+    margin-start: 20;
+    margin-end: 20;
+
+    Adw.ActionRow installed_row {
+      title: _("Installed");
+      // subtitle: _("This setting controls how to do somethine");
+      activatable-widget: filter_installed;
+
+      styles [
+        "package-filter-row",
+        "checkmark",
+      ]
+
+      [prefix]
+      Gtk.CheckButton filter_installed {
+        name: "installed";
+        group: filter_updates;
+        action-name: "app.filter_installed";
       }
     }
-    Adw.PreferencesGroup {
-        title: _("View Settings");
-        hexpand: false;
-        margin-start: 20;
-        margin-end: 20;
-        Adw.ComboRow sort_by {
-            model: sort_attr;
-            styles ["sorting-row"]
-            notify::selected=> $on_sort_by_selected();
-            [prefix]
-            Gtk.Image  sort_icon {
-                icon-name: "view-sort-descending-rtl-symbolic";
-                tooltip-text: _("Select what attribute to sort by");
 
-            }
-       }
-       Adw.ComboRow info_type {
-            model: info_types;
-            styles ["sorting-row"]
-            notify::selected=> $on_info_type_selected();
-            [prefix]
-            Gtk.Image  show_icon {
-                icon-name: "diagnostics-symbolic";
-                tooltip-text: _("Select what package information to show");
+    Adw.ActionRow {
+      title: _("Updates");
+      // subtitle: _("This setting controls how to do somethine");
+      activatable-widget: filter_updates;
 
-            }
-       }
+      styles [
+        "package-filter-row",
+        'checkmark',
+      ]
+
+      [prefix]
+      Gtk.CheckButton filter_updates {
+        name: "updates";
+        action-name: "app.filter_updates";
+      }
     }
+
+    Adw.ActionRow {
+      title: _("All");
+      // subtitle: _("This setting controls how to do somethine");
+      activatable-widget: filter_available;
+
+      styles [
+        "package-filter-row",
+        "checkmark",
+      ]
+
+      [prefix]
+      Gtk.CheckButton filter_available {
+        name: "available";
+        group: filter_updates;
+        action-name: "app.filter_available";
+      }
+    }
+
+    Adw.ActionRow {
+      title: _("Search");
+      sensitive: false;
+      activatable-widget: filter_search;
+
+      styles [
+        "package-filter-row",
+        "checkmark",
+      ]
+
+      [prefix]
+      Gtk.CheckButton filter_search {
+        name: "available";
+        group: filter_updates;
+        action-name: "app.filter_search";
+      }
+    }
+  }
+
+  Adw.PreferencesGroup {
+    title: _("View Settings");
+    hexpand: false;
+    margin-start: 20;
+    margin-end: 20;
+
+    Adw.ComboRow sort_by {
+      model: sort_attr;
+
+      styles [
+        "sorting-row",
+      ]
+
+      notify::selected => $on_sort_by_selected();
+
+      [prefix]
+      Gtk.Image sort_icon {
+        icon-name: "view-sort-descending-rtl-symbolic";
+        tooltip-text: _("Select what attribute to sort by");
+      }
+    }
+
+    Adw.ComboRow info_type {
+      model: info_types;
+
+      styles [
+        "sorting-row",
+      ]
+
+      notify::selected => $on_info_type_selected();
+
+      [prefix]
+      Gtk.Image show_icon {
+        icon-name: "diagnostics-symbolic";
+        tooltip-text: _("Select what package information to show");
+      }
+    }
+  }
 }
 
-Gtk.StringList sort_attr{
-    strings [
-        _("Name"),
-        _("Arch"),
-        _("Size"),
-        _("Repo")
-    ]
+Gtk.StringList sort_attr {
+  strings [
+    _("Name"),
+    _("Arch"),
+    _("Size"),
+    _("Repo")
+    ,
+  ]
 }
 
-Gtk.StringList info_types{
-    strings [
-        _("Description"),
-        _("Filelist"),
-        _("Update Info"),
-    ]
+Gtk.StringList info_types {
+  strings [
+    _("Description"),
+    _("Filelist"),
+    _("Update Info"),
+  ]
 }
-

@@ -1,21 +1,21 @@
 using Gtk 4.0;
-using Adw 1;
 
-template $YumexQueueView : Gtk.ListView {
-    name: "queue_view";
-    hexpand: true;
-    vexpand: true;
-    model: selection;
-    factory: queue_factory;
-    single-click-activate: false;
-    styles ["data-list"]
+template $YumexQueueView: Gtk.ListView {
+  name: "queue_view";
+  hexpand: true;
+  vexpand: true;
+  model: selection;
+  factory: queue_factory;
+  single-click-activate: false;
+
+  styles [
+    "data-list",
+  ]
 }
 
-Gtk.NoSelection selection {
-
-}
+Gtk.NoSelection selection {}
 
 Gtk.SignalListItemFactory queue_factory {
-    setup=> $on_queue_setup();
-    bind=> $on_queue_bind();
+  setup => $on_queue_setup();
+  bind => $on_queue_bind();
 }

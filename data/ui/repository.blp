@@ -1,14 +1,13 @@
-
 using Gtk 4.0;
 using Adw 1;
 
 template $YumexRepository: Adw.ActionRow {
-    title: "repo.id";
-    subtitle: "repo.name";
-    activatable-widget: enabled;
-    Gtk.Switch enabled {
-      valign: center;
-      sensitive: false;
-    }
-}
+  title: "repo.id";
+  subtitle: "repo.name";
+  activatable-widget: enabled;
 
+  Gtk.Switch enabled {
+    valign: center;
+    sensitive: false;
+  }
+}
