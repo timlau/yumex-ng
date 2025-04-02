@@ -23,7 +23,7 @@ from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
-from yumex.ui.dialogs import GPGDialog
+from yumex.ui.dialogs import GPGDialog, error_dialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.package_info import YumexPackageInfo
@@ -287,7 +287,20 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        self.flatpak_view.search()
+        content = """orem ipsum dolor sit amet, consectetur adipiscing elit. Integer et tincidunt ipsum. Nulla
+        urna nulla, consequat efficitur maximus sed, cursus pellentesque lorem. Nam interdum erat eget massa
+        consectetur ornare. Integer cursus dictum erat, a pellentesque arcu sagittis et. Donec pharetra blandit
+        tortor et fringilla. Pellentesque iaculis odio eu enim dignissim, at blandit orci venenatis. Duis non
+        auctor ante. Suspendisse a aliquam eros. Praesent convallis pellentesque varius. Maecenas aliquam quis
+        dui a finibus. Suspendisse lobortis auctor lacus, sed fringilla odio cursus sed. Nullam tristique vel
+        felis sed luctus. Sed dignissim porta lectus et iaculis.
+
+        Etiam at nunc in augue convallis imperdiet sollicitudin nec tellus. In eu aliquet mi. Vestibulum eu magna
+        non leo ullamcorper tristique nec at lacus. Vestibulum ante ipsum primis in faucibus orci luctus et
+        ultrices posuere cubilia curae; Vivamus convallis diam molestie, rhoncus erat at, aliquet mauris. Nullam
+        id enim dapibus, fermentum sem eu, tempus libero. Duis auctor elementum sem ac pharetra. Nam malesuada
+        velit ut blandit sagittis. Nam sit amet tempor ex."""
+        error_dialog(self, "Title", content)
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""

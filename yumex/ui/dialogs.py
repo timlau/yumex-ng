@@ -7,16 +7,16 @@ def error_dialog(win: MainWindow, title: str, msg: str):
     def response(dialog, result, *args):
         raise SystemExit
 
-    dialog = Adw.MessageDialog.new(
-        win,
+    dialog = Adw.AlertDialog.new(
         title,
         msg,
     )
+    dialog.set_content_width(-1)
     dialog.add_response("quit", _("Quit"))
     dialog.set_default_response("quit")
     dialog.set_close_response("quit")
     dialog.connect("response", response)
-    dialog.present()
+    dialog.present(win)
 
 
 class GPGDialog(Adw.MessageDialog):
