@@ -137,8 +137,8 @@ class Dnf5DbusClient:
         pipe_r, pipe_w = os.pipe()
         # transfer id serves as an identifier of the pipe transfer for a signal emitted
         # after server finish. This example does not use it.
-        transfer_id = self.session_rpm.list_fd(options, pipe_w)
-        logger.debug(f"list_fd: transfer_id : {transfer_id}")
+        transfer_id = self.session_rpm.list_fd(options, pipe_w)  # noqa: F841
+        # logger.debug(f"list_fd: transfer_id : {transfer_id}")
         # close the write end - otherwise poll cannot detect the end of transmission
         os.close(pipe_w)
 
