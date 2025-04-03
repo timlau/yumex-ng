@@ -7,7 +7,7 @@ from typing import Any
 
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import GLib
+from gi.repository import GLib  # type: ignore
 
 DBusGMainLoop(set_as_default=True)
 
