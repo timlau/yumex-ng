@@ -22,7 +22,6 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import YumexRootBackend
 from yumex.backend.flatpak.backend import FlatpakBackend
 from yumex.backend.interface import (
-    BackendFactory,
     PackageBackend,
     PackageCache,
     Progress,
@@ -48,7 +47,7 @@ class YumexPresenter:
     Implements Presenter,PackageBackend,PackageCache protocols
     """
 
-    def __init__(self, win: MainWindow, factory: BackendFactory = None) -> None:
+    def __init__(self, win: MainWindow) -> None:
         self._win: MainWindow = win
         self._backend: PackageBackend = None
         self._root_backend: PackageBackend = None
