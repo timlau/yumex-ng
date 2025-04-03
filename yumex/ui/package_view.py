@@ -73,10 +73,10 @@ class YumexPackageView(Gtk.ColumnView):
     def reset(self):
         """Reset the view"""
         logger.debug("Reset Package View")
+        # self.presenter.reset_backend()
+        self.presenter.reset_cache()
         self.queue_view.reset()
         self.setup()
-        self.presenter.reset_backend()
-        self.presenter.reset_cache()
 
     def refresh(self):
         """refresh the view"""

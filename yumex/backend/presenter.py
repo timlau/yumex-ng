@@ -84,10 +84,11 @@ class YumexPresenter:
     def progress(self) -> Progress:
         return self._win.progress
 
-    def reset_backend(self) -> None:
+    def reset_backend(self, reopen=True) -> None:
         self._root_backend.close()
-        del self._root_backend
         self._root_backend = None
+        if reopen:
+            _ = self.package_backend  # make sure backend is created
 
     def reset_flatpak_backend(self) -> None:
         del self._fp_backend

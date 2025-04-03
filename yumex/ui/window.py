@@ -89,7 +89,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def save_window_props(self, *args):
         """Save windows and column information on windows close"""
-        self.presenter.reset_backend()
+        self.presenter.reset_backend(reopen=False)
         win_size = self.get_default_size()
 
         # Save windows size
@@ -296,6 +296,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             result = self._do_transaction(queued)
             logger.debug(f"Transaction execution ended : {result}")
             if result:  # transaction completed without issues\
+                self.presenter.reset_backend()
                 self.progress.show()
                 self.progress.set_title(_("Updating Yumex Updater"))
                 sync_updates()
