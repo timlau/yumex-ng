@@ -43,7 +43,7 @@ class ResultElem(GObject.GObject):
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_result.ui")
-class YumexFlatpakResult(Adw.Window):
+class YumexFlatpakResult(Adw.Dialog):
     __gtype_name__ = "YumexFlatpakResult"
 
     result_view = Gtk.Template.Child()
@@ -57,8 +57,8 @@ class YumexFlatpakResult(Adw.Window):
         self.store = Gio.ListStore.new(ResultElem)
         self.selection.set_model(self.store)
 
-    def show(self):
-        self.present()
+    def show(self, win):
+        self.present(win)
         self._loop.run()
 
     def populate(self, results: list[str, FlatpakAction, str]):
