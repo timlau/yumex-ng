@@ -19,7 +19,8 @@ def error_dialog(win: MainWindow, title: str, msg: str):
     dialog.present(win)
 
 
-class GPGDialog(Adw.MessageDialog):
+# TODO: Make a custom GPG Dialog, there is look better
+class GPGDialog(Adw.AlertDialog):
     def __init__(self, win: MainWindow, key_values: tuple):
         super().__init__()
         (
@@ -29,7 +30,9 @@ class GPGDialog(Adw.MessageDialog):
             keyurl,
             timestamp,
         ) = key_values
-        self.props.default_width = 800
+        self.win = win
+        self.set_content_width(800)
+        self.set_content_height(800)
         self.add_css_class("gpg_dialog")
         self.set_heading(_("Install GPG Key"))
         body = f"""
@@ -52,5 +55,5 @@ class GPGDialog(Adw.MessageDialog):
         self.close()
 
     def show(self):
-        self.present()
+        self.present(self.win)
         self._loop.run()
