@@ -101,9 +101,9 @@ class Dnf5DbusClient:
 
     def close_session(self):
         if self._connected:
-            logger.debug(f"close session: {self.session}")
             self.iface_session.close_session(self.session)
             self._connected = False
+            logger.debug(f"close session: {self.session}")
 
     def _async_method(self, method: str, proxy=None) -> partial:
         """create a patial func to make an async call to a given
