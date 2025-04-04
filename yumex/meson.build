@@ -88,6 +88,7 @@ yumex_utils_modules = [
     'utils/storage.py',
     'utils/types.py',
     'utils/updater.py',
+    'utils/exceptions.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_utils_modules, subdir: 'yumex/utils')
 
