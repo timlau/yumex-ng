@@ -194,11 +194,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if result.completed:
                 # get confirmation
                 transaction_result = YumexTransactionResult()
-                transaction_result.set_transient_for(self)
                 transaction_result.show_result(result.data)
                 if result.problems:
                     transaction_result.set_problems(result.problems)
-                transaction_result.show()
+                transaction_result.show(self)
                 if transaction_result.confirm:
                     # run the transaction
                     while True:

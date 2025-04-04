@@ -1,10 +1,9 @@
 using Gtk 4.0;
 using Adw 1;
-// TODO: Change to using AdwDialog
-template $YumexTransactionResult: Adw.Window {
-  default-width: 700;
-  default-height: 700;
-  modal: true;
+
+template $YumexTransactionResult: Adw.Dialog {
+  content-width: 700;
+  content-height: 700;
 
   Gtk.Box main_content {
     orientation: vertical;

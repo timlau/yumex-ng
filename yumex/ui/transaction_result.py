@@ -20,7 +20,7 @@ from yumex.utils import format_number
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/transaction_result.ui")
-class YumexTransactionResult(Adw.Window):
+class YumexTransactionResult(Adw.Dialog):
     __gtype_name__ = "YumexTransactionResult"
 
     result_view = Gtk.Template.Child()
@@ -37,8 +37,8 @@ class YumexTransactionResult(Adw.Window):
         model = Gtk.TreeListModel.new(self.store, False, True, self.add_tree_node)
         self.selection.set_model(model)
 
-    def show(self):
-        self.present()
+    def show(self, win):
+        self.present(win)
         self._loop.run()
 
     def set_problems(self, prob: list):
