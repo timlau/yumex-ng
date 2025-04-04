@@ -9,6 +9,8 @@ import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib  # type: ignore
 
+from yumex.utils.exceptions import YumexException
+
 DBusGMainLoop(set_as_default=True)
 
 DNFDAEMON_BUS_NAME = "org.rpm.dnf.v0"
@@ -225,7 +227,16 @@ class Dnf5DbusClient:
             options["arch"] = kwargs.pop("arch")
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
-        return list(self._list_fd(options))
+        try:
+            return list(self._list_fd(options))
+        except dbus.exceptions.DBusException as e:
+            raise YumexException(str(e))
+
+    def _test_exception(self):
+        try:
+            raise dbus.exceptions.DBusException("DBUSError : Something strange in the neighborhood")
+        except dbus.exceptions.DBusException as e:
+            raise YumexException(str(e))
 
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method

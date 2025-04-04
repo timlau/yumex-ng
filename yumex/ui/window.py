@@ -286,7 +286,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        pass
+        self.presenter.package_backend.client._test_exception()
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""

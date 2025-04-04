@@ -32,6 +32,7 @@ from yumex.ui.dialogs import error_dialog
 from yumex.ui.preferences import YumexPreferences
 from yumex.ui.window import YumexMainWindow
 from yumex.utils import setup_logging
+from yumex.utils.exceptions import YumexException
 
 logger = logging.getLogger(__name__)
 
@@ -216,7 +217,10 @@ Yum Extender is a Package management to install, update and remove packages
         tb_file.parent.mkdir(exist_ok=True)
         tb_file.write_text(msg)
         logger.debug(f"traceback written to {tb_file}")
-        error_dialog(self.win, title="Uncaught exception", msg=msg)
+        if exc_type == YumexException:
+            error_dialog(self.win, title=_("Critical Error"), msg=exc_value.msg)
+        else:
+            error_dialog(self.win, title="Uncaught exception", msg=msg)
 
 
 def main() -> int:
