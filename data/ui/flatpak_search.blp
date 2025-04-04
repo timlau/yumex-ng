@@ -1,10 +1,9 @@
 using Gtk 4.0;
 using Adw 1;
-// TODO: Change to using AdwDialog
-template $YumexFlatpakSearch: Adw.Window {
-  default-width: 1000;
-  default-height: 800;
-  modal: true;
+
+template $YumexFlatpakSearch: Adw.Dialog {
+  content-width: 1000;
+  content-height: 800;
 
   Gtk.Box {
     orientation: vertical;

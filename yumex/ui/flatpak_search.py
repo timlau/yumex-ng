@@ -38,7 +38,7 @@ class FoundElem(GObject.GObject):
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/flatpak_search.ui")
-class YumexFlatpakSearch(Adw.Window):
+class YumexFlatpakSearch(Adw.Dialog):
     __gtype_name__ = "YumexFlatpakSearch"
 
     search_id: Gtk.SearchEntry = Gtk.Template.Child()
@@ -64,8 +64,8 @@ class YumexFlatpakSearch(Adw.Window):
         self.setup_location()
         self.install.set_sensitive(False)
 
-    def show(self):
-        self.present()
+    def show(self, win):
+        self.present(win)
         self._loop.run()
 
     def setup_store(self):
