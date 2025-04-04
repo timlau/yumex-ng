@@ -187,42 +187,42 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
-        with self.presenter.package_root_backend as root_backend:
-            # build the transaction
-            result: TransactionResult = root_backend.build_transaction(queued)
-            self.progress.hide()
-            if result.completed:
-                # get confirmation
-                transaction_result = YumexTransactionResult()
-                transaction_result.show_result(result.data)
-                if result.problems:
-                    transaction_result.set_problems(result.problems)
-                transaction_result.show(self)
-                if transaction_result.confirm:
-                    # run the transaction
-                    while True:
-                        self.progress.show()
-                        self.progress.set_title(_("Running Transaction"))
-                        result: TransactionResult = root_backend.run_transaction()
-                        if result.completed:
-                            return True
-                        if result.key_install and result.key_values:  # Only on DNF4
-                            self.progress.hide()
-                            ok = self.confirm_gpg_import(result.key_values)
-                            if ok:
-                                logger.debug("Re-run transaction and import GPG keys")
-                                # tell the backend to import this gpg key in next run
-                                root_backend.do_gpg_import()
-                                # rebuild the transaction again, before re-run
-                                root_backend.build_transaction(queued)
-                                continue
-                            else:
-                                return True
+        backend = self.presenter.package_backend
+        # build the transaction
+        result: TransactionResult = backend.build_transaction(queued)
+        self.progress.hide()
+        if result.completed:
+            # get confirmation
+            transaction_result = YumexTransactionResult()
+            transaction_result.show_result(result.data)
+            if result.problems:
+                transaction_result.set_problems(result.problems)
+            transaction_result.show(self)
+            if transaction_result.confirm:
+                # run the transaction
+                while True:
+                    self.progress.show()
+                    self.progress.set_title(_("Running Transaction"))
+                    result: TransactionResult = backend.run_transaction()
+                    if result.completed:
+                        return True
+                    if result.key_install and result.key_values:  # Only on DNF4
+                        self.progress.hide()
+                        ok = self.confirm_gpg_import(result.key_values)
+                        if ok:
+                            logger.debug("Re-run transaction and import GPG keys")
+                            # tell the backend to import this gpg key in next run
+                            backend.do_gpg_import()
+                            # rebuild the transaction again, before re-run
+                            backend.build_transaction(queued)
+                            continue
                         else:
-                            break
-            if result.error:
-                self.show_message(result.error)
-            return False
+                            return True
+                    else:
+                        break
+        if result.error:
+            self.show_message(result.error)
+        return False
 
     def confirm_gpg_import(self, key_values):
         dialog = GPGDialog(self, key_values)
@@ -295,7 +295,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
             result = self._do_transaction(queued)
             logger.debug(f"Transaction execution ended : {result}")
             if result:  # transaction completed without issues\
-                self.presenter.reset_backend()
                 self.progress.show()
                 self.progress.set_title(_("Updating Yumex Updater"))
                 sync_updates()
@@ -307,6 +306,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def reset_all(self):
         # reset everything
+        self.presenter.reset_backend()
         self.package_view.reset()
         self.search_bar.set_search_mode(False)
         self.package_settings.unselect_all()
