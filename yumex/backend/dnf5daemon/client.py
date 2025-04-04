@@ -10,7 +10,6 @@ from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib  # type: ignore
 
 from yumex.utils import dbus_exception
-from yumex.utils.exceptions import YumexException
 
 DBusGMainLoop(set_as_default=True)
 
