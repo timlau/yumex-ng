@@ -26,4 +26,5 @@ exclude = ["**/builddir"]
 reportMissingImports = true
 reportUndefinedVariable = false
 reportMissingModuleSource = false
-stubPath = "/home/tim/.local/lib/python3.13/site-packages/gi-stubs"
+stubPath = "/home/tim/.local/lib/python3.13/site-packages/"
+# typeshedPath = "/home/tim/.local/lib/python3.13/site-packages/"
