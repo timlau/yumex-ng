@@ -176,6 +176,11 @@ class YumexRootBackend:
         self.client.open_session()
         self.connect_signals()
 
+    def reset(self):
+        self.client.close_session()
+        self.client.open_session()
+        logger.debug("Dnf5Demon dbus connection is reset...")
+
     def close(self):
         self.client.close_session()
 

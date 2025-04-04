@@ -89,7 +89,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def save_window_props(self, *args):
         """Save windows and column information on windows close"""
-        self.presenter.reset_backend(reopen=False)
+        self.presenter.package_backend.close()
         win_size = self.get_default_size()
 
         # Save windows size
