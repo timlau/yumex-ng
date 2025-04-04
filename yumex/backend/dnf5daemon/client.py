@@ -9,6 +9,7 @@ import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib  # type: ignore
 
+from yumex.utils import dbus_exception
 from yumex.utils.exceptions import YumexException
 
 DBusGMainLoop(set_as_default=True)
@@ -71,6 +72,7 @@ class Dnf5DbusClient:
         self.async_dbus = AsyncCaller()
         self._connected = False
 
+    @dbus_exception
     def open_session(self):
         if not self._connected:
             self.session = self.iface_session.open_session({})
@@ -101,11 +103,12 @@ class Dnf5DbusClient:
                 dbus_interface=IFACE_GROUP,
             )
 
+    @dbus_exception
     def close_session(self):
         if self._connected:
             self.iface_session.close_session(self.session)
-            self._connected = False
             logger.debug(f"close session: {self.session}")
+            self._connected = False
 
     def _async_method(self, method: str, proxy=None) -> partial:
         """create a patial func to make an async call to a given
@@ -124,6 +127,7 @@ class Dnf5DbusClient:
         res, err = do_transaction(options)
         return res, err
 
+    @dbus_exception
     def confirm_key(self, *args):
         return self.session_repo.confirm_key(args)
 
@@ -201,6 +205,7 @@ class Dnf5DbusClient:
                     # just break the parsing cycle and continue polling.
                     break
 
+    @dbus_exception
     def package_list_fd(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
 
@@ -227,16 +232,12 @@ class Dnf5DbusClient:
             options["arch"] = kwargs.pop("arch")
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
-        try:
-            return list(self._list_fd(options))
-        except dbus.exceptions.DBusException as e:
-            raise YumexException(str(e))
+        return list(self._list_fd(options))
 
+    @dbus_exception
     def _test_exception(self):
-        try:
-            raise dbus.exceptions.DBusException("DBUSError : Something strange in the neighborhood")
-        except dbus.exceptions.DBusException as e:
-            raise YumexException(str(e))
+        """Just for testing purpose"""
+        raise dbus.exceptions.DBusException("DBUSError : Something strange in the neighborhood")
 
     def package_list(self, *args, **kwargs) -> list[list[str]]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
@@ -285,6 +286,7 @@ class Dnf5DbusClient:
         res, err = get_list(options)
         return res, err
 
+    @dbus_exception
     def clean(self, metadata_type):
         result = self.session_base.clean(metadata_type)
         logger.debug(f"clean : {result}")

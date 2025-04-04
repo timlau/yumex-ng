@@ -20,6 +20,7 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import UpdateInfo, YumexRootBackend, create_package
 from yumex.utils import setup_logging
 from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
+from yumex.utils.exceptions import YumexException
 
 from .mock import mock_presenter
 
@@ -352,6 +353,18 @@ def test_package_depsolve(backend):
 # Require root access, so will ask for polkit auth
 @pytest.mark.skip
 def test_clean(backend: YumexRootBackend):
-    client = backend.client
-    result = client.clean("expire-cache")
+    result = backend.client.clean("expire-cache")
     assert result[0]
+
+
+def test_exception(backend: YumexRootBackend):
+    """Test the @yumex.utils.dbus_exception decorator does the right thing"""
+    with pytest.raises(YumexException):
+        backend.client._test_exception()
+
+
+def test_backend_reset(backend: YumexRootBackend):
+    """Test backend reset (session should change)"""
+    session = backend.client.session
+    backend.reset()
+    assert session != backend.client.session

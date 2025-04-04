@@ -23,9 +23,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+import dbus
 from gi.repository import GLib
 
 from yumex.constants import BUILD_TYPE
+from yumex.utils.exceptions import YumexException
 
 logger = logging.getLogger(__name__)
 
@@ -204,6 +206,24 @@ def timed(func):
         t_end = time.perf_counter()
         logger.debug(f"<< {name} took {t_end - t_start:.4f} sec")
         return rc
+
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
+
+
+def dbus_exception(func):
+    """
+    This decorator capture an dbus exception and raises a YumexException with the message
+    """
+
+    def new_func(*args, **kwargs):
+        try:
+            rc = func(*args, **kwargs)
+            return rc
+        except dbus.exceptions.DBusException as e:
+            raise YumexException(str(e))
 
     new_func.__name__ = func.__name__
     new_func.__doc__ = func.__doc__
