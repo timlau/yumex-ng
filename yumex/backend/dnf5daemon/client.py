@@ -74,6 +74,7 @@ class Dnf5DbusClient:
     @dbus_exception
     def open_session(self):
         if not self._connected:
+            logger.debug(f"DBUS: {self.iface_session.object_path}.open_session()")
             self.session = self.iface_session.open_session({})
             logger.debug(f"open session: {self.session}")
             self._connected = True
@@ -105,6 +106,7 @@ class Dnf5DbusClient:
     @dbus_exception
     def close_session(self):
         if self._connected:
+            logger.debug(f"DBUS: {self.iface_session.object_path}.close_session()")
             self.iface_session.close_session(self.session)
             logger.debug(f"close session: {self.session}")
             self._connected = False
@@ -116,11 +118,13 @@ class Dnf5DbusClient:
         return partial(self.async_dbus.call, getattr(proxy, method), timeout=1000 * 60 * 20)
 
     def resolve(self, *args):
+        logger.debug(f"DBUS: {self.session_goal.object_path}.resolve()")
         resolve = self._async_method("resolve", proxy=self.session_goal)
         res, err = resolve(dbus.Array())
         return res, err
 
     def do_transaction(self):
+        logger.debug(f"DBUS: {self.session_goal.object_path}.do_transaction()")
         do_transaction = self._async_method("do_transaction", proxy=self.session_goal)
         options = {"comment": "Yum Extender Transaction"}
         res, err = do_transaction(options)
@@ -131,6 +135,7 @@ class Dnf5DbusClient:
         return self.session_repo.confirm_key(args)
 
     def repo_list(self):
+        logger.debug(f"DBUS: {self.session_repo.object_path}.list()")
         get_list = self._async_method("list", proxy=self.session_repo)
         res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled", "priority"])})
         return res, err
@@ -231,6 +236,8 @@ class Dnf5DbusClient:
             options["arch"] = kwargs.pop("arch")
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
+
+        logger.debug(f"DBUS: {self.session_rpm.object_path}.list_fd()")
         return list(self._list_fd(options))
 
     @dbus_exception
@@ -264,6 +271,7 @@ class Dnf5DbusClient:
             options["arch"] = kwargs.pop("arch")
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
+        logger.debug(f"DBUS: {self.session_rpm.object_path}.list()")
         get_list = self._async_method("list", proxy=self.session_rpm)
         res, err = get_list(options)
         # print(res, err)
@@ -281,6 +289,7 @@ class Dnf5DbusClient:
         # options[""] = get_variant(list[str], [])
         # print(f" --> options: {options} ")
         # print(self.session_advisory)
+        logger.debug(f"DBUS: {self.session_advisory.object_path}.list()")
         get_list = self._async_method("list", proxy=self.session_advisory)
         res, err = get_list(options)
         return res, err

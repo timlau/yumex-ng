@@ -177,9 +177,11 @@ class YumexRootBackend:
         self.connect_signals()
 
     def reset(self):
-        self.client.close_session()
-        self.client.open_session()
-        self.connect_signals()
+        # self.client.close_session()
+        # self.client.open_session()
+        # self.connect_signals()
+        logger.debug(f"DBUS: {self.client.session_base.object_path}.reset()")
+        self.client.session_base.reset()
         logger.debug("Dnf5Demon dbus connection is reset...")
 
     def close(self):
@@ -235,11 +237,14 @@ class YumexRootBackend:
                     logger.debug(f"adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
         if to_remove:
+            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.remove()")
             self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
         if to_install:
+            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.install()")
             self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
 
         if to_update:
+            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.update()")
             self.client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
 
         res, err = self.client.resolve()
@@ -327,7 +332,7 @@ class YumexRootBackend:
     def on_transaction_action_progress(self, session, package_id, amount, total):
         logger.debug(f"Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}")
         if total > 0:
-            self.progress(amount / total)
+            self.progress.set_progress(amount / total)
 
     def on_transaction_action_stop(self, session, package_id, total):
         logger.debug(f"Signal : transaction_action_stop: total: {total} id: {package_id}")
