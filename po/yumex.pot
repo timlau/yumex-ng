@@ -105,7 +105,7 @@ msgid "Loading Packages"
 msgstr ""
 
 #: yumex/ui/package_view.py:102
-msgid "This make take a little while"
+msgid "This may take a little while"
 msgstr ""
 
 #: yumex/ui/transaction_result.py:64
