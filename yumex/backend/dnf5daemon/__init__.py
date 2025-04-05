@@ -253,10 +253,15 @@ class YumexRootBackend:
         self.client.session_base.connect_to_signal("download_add_new", self.on_download_add_new)
         self.client.session_base.connect_to_signal("download_progress", self.on_download_progress)
         self.client.session_base.connect_to_signal("download_end", self.on_download_end)
+        self.client.session_base.connect_to_signal("download_mirror_failure", self.on_download_mirror_failure)
         self.client.session_base.connect_to_signal("repo_key_import_request", self.on_repo_key_import_request)
         self.client.session_rpm.connect_to_signal("transaction_action_start", self.on_transaction_action_start)
         self.client.session_rpm.connect_to_signal("transaction_action_progress", self.on_transaction_action_progress)
         self.client.session_rpm.connect_to_signal("transaction_action_stop", self.on_transaction_action_stop)
+        self.client.session_rpm.connect_to_signal("transaction_before_begin", self.on_transaction_before_begin)
+        self.client.session_rpm.connect_to_signal("transaction_after_complete", self.on_transaction_after_complete)
+        self.client.session_rpm.connect_to_signal("transaction_script_start", self.on_transaction_script_start)
+        self.client.session_rpm.connect_to_signal("transaction_script_stop", self.on_transaction_script_stop)
 
     def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
         self.last_transaction = pkgs
@@ -283,26 +288,50 @@ class YumexRootBackend:
         self.progress.set_title(_("Building Transaction"))
         logger.debug("building transaction")
         self._build_transations(self.last_transaction)  # type: ignore
-        self.progress.set_title(_("Applying Transaction"))
+        # self.progress.set_title(_("Applying Transaction"))
         logger.debug("running transaction")
         res, err = self.client.do_transaction()
         logger.debug(f"transaction rc: {res} error: {err}")
-        self.progress.hide()
+        # self.progress.hide()
         if err:
             return TransactionResult(False, error=err)
         else:
             return TransactionResult(True, data=None)  # type: ignore
 
+    def on_download_mirror_failure(self, session, *args):
+        logger.debug(f"Signal : download_mirror_failure ({args})")
+
+    def on_transaction_before_begin(self, session, *args):
+        logger.debug(f"Signal : transaction_before_begin ({args})")
+        self.progress.set_title(_("Applying Transaction"))
+
+    def on_transaction_after_complete(self, session, *args):
+        logger.debug(f"Signal : transaction_after_complete ({args})")
+        self.progress.hide()
+
+    def on_transaction_script_start(self, session, pkg, *args):
+        logger.debug(f"Signal : transaction_script_start : {pkg} ({args})")
+        self.progress.set_subtitle(_("Running Scripts : ") + pkg)
+        self.progress.set_progress(0.0)
+
+    def on_transaction_script_stop(self, session, pkg, *args):
+        logger.debug(f"Signal : transaction_script_stop : {pkg} {args}")
+        self.progress.set_progress(1.0)
+
     def on_transaction_action_start(self, session, package_id, action, total):
         logger.debug(f"Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
         action_str = get_action(action)
         self.progress.set_subtitle(f" {action_str} {package_id}")
+        self.progress.set_progress(0.0)
 
     def on_transaction_action_progress(self, session, package_id, amount, total):
         logger.debug(f"Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}")
+        if total > 0:
+            self.progress(amount / total)
 
     def on_transaction_action_stop(self, session, package_id, total):
         logger.debug(f"Signal : transaction_action_stop: total: {total} id: {package_id}")
+        self.progress.set_progress(0.0)
 
     def on_download_add_new(self, session, *args):
         if len(args) == 3:
