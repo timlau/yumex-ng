@@ -10,6 +10,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib  # type: ignore
 
 from yumex.utils import dbus_exception
+from yumex.utils.exceptions import YumexException
 
 DBusGMainLoop(set_as_default=True)
 
@@ -76,39 +77,42 @@ class Dnf5DbusClient:
         if not self._connected:
             logger.debug(f"DBUS: {self.iface_session.object_path}.open_session()")
             self.session = self.iface_session.open_session({})
-            logger.debug(f"open session: {self.session}")
-            self._connected = True
-            self.session_repo = dbus.Interface(
-                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-                dbus_interface=IFACE_REPO,
-            )
-            self.session_rpm = dbus.Interface(
-                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-                dbus_interface=IFACE_RPM,
-            )
-            self.session_goal = dbus.Interface(
-                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-                dbus_interface=IFACE_GOAL,
-            )
-            self.session_base = dbus.Interface(
-                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-                dbus_interface=IFACE_BASE,
-            )
-            self.session_advisory = dbus.Interface(
-                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-                dbus_interface=IFACE_ADVISORY,
-            )
-            self.session_group = dbus.Interface(
-                self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
-                dbus_interface=IFACE_GROUP,
-            )
+            if self.session:
+                logger.debug(f"open session: {self.session}")
+                self._connected = True
+                self.session_repo = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_REPO,
+                )
+                self.session_rpm = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_RPM,
+                )
+                self.session_goal = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_GOAL,
+                )
+                self.session_base = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_BASE,
+                )
+                self.session_advisory = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_ADVISORY,
+                )
+                self.session_group = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_GROUP,
+                )
+            else:
+                raise YumexException("Couldn't open session to Dnf5Dbus")
 
     @dbus_exception
     def close_session(self):
         if self._connected:
             logger.debug(f"DBUS: {self.iface_session.object_path}.close_session()")
-            self.iface_session.close_session(self.session)
-            logger.debug(f"close session: {self.session}")
+            rc = self.iface_session.close_session(self.session)
+            logger.debug(f"close session: {self.session} ({rc})")
             self._connected = False
 
     def _async_method(self, method: str, proxy=None) -> partial:
@@ -238,7 +242,9 @@ class Dnf5DbusClient:
         # logger.debug(f" --> options: {options} ")
 
         logger.debug(f"DBUS: {self.session_rpm.object_path}.list_fd()")
-        return list(self._list_fd(options))
+        result = list(self._list_fd(options))
+        logger.debug(f"list_fd() returned : {len(result)} elements")
+        return result
 
     @dbus_exception
     def _test_exception(self):
