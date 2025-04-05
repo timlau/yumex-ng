@@ -2,10 +2,10 @@
 # Copyright (C) 2025 Tim Lauridsen
 # This file is distributed under the GNU GPLv3 license.
 # Tim Lauridsen, 2025.
-# 
+#
 # Translators:
 # Paco Len, 2024
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -109,7 +109,7 @@ msgid "Loading Packages"
 msgstr "Caricamento dei Pacchetti"
 
 #: yumex/ui/package_view.py:102
-msgid "This make take a little while"
+msgid "This may take a little while"
 msgstr "Questo richiede un po' di tempo"
 
 #: yumex/ui/transaction_result.py:64

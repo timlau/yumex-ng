@@ -98,7 +98,7 @@ class YumexPackageView(Gtk.ColumnView):
         logger.debug(f"Loading packages : {pkg_filter}")
 
         self.presenter.progress.set_title(_("Loading Packages"))
-        self.presenter.progress.set_subtitle(_("This make take a little while"))
+        self.presenter.progress.set_subtitle(_("This may take a little while"))
 
         self.presenter.progress.show()
         self.presenter.set_window_sesitivity(False)
