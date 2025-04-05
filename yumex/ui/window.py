@@ -301,8 +301,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.progress.hide()
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
 
-            # reset everything
-            self.reset_all()
+                # reset everything
+                self.reset_all()
 
     def reset_all(self):
         # reset everything
