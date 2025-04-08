@@ -414,7 +414,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.stack.set_visible_child_name(Page.QUEUE)
             case "apply_actions":
                 if self.active_page in [Page.PACKAGES, Page.QUEUE]:
-                    self.on_apply_actions_clicked()
+                    dialog = self.get_visible_dialog()
+                    if not dialog:
+                        self.on_apply_actions_clicked()
             case "flatpak_remove":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.remove()
