@@ -296,9 +296,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
             result = self._do_transaction(queued)
             logger.debug(f"Transaction execution ended : {result}")
             if result:  # transaction completed without issues\
-                self.progress.show()
-                self.progress.set_title(_("Updating Yumex Updater"))
-                self.progress.hide()
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
 
                 # reset everything
@@ -308,7 +305,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # reset everything
         self.presenter.reset_backend()
         self.package_view.reset()
-        self.search_bar.set_search_mode(False)
         self.package_settings.unselect_all()
         self.select_page(Page.PACKAGES)
         self.load_packages(PackageFilter.INSTALLED)
