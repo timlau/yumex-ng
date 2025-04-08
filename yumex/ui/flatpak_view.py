@@ -103,13 +103,6 @@ class YumexFlatpakView(Gtk.ListView):
 
         if self.do_transaction(self.backend.do_update, [pkg]):
             self.presenter.show_message(_(f"{pkg.id} is now updated"), timeout=2)
-            self.refresh_updater()
-
-    def refresh_updater(self):
-        self.presenter.progress.show()
-        self.presenter.progress.set_title(_("Updating Yumex Updater"))
-        sync_updates()
-        self.presenter.progress.hide()
 
     def search(self):
         self.presenter.select_page(Page.FLATPAKS)

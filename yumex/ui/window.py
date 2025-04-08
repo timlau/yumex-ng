@@ -77,7 +77,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self._last_filter: PackageFilter | None = None
 
         # save settings on windows close
-        self.connect("unrealize", self.save_window_props)
+        self.connect("unrealize", self.on_window_close)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.presenter = YumexPresenter(self)
@@ -87,7 +87,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def active_page(self) -> Page:
         return Page(self.stack.get_visible_child_name())
 
-    def save_window_props(self, *args):
+    def on_window_close(self, *args):
         """Save windows and column information on windows close"""
         self.presenter.package_backend.close()
         win_size = self.get_default_size()
@@ -104,6 +104,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings.set_boolean("window-maximized", self.is_maximized())
         self.settings.set_boolean("window-fullscreen", self.is_fullscreen())
         self.settings.set_int("pkg-paned-pos", self.package_paned.get_position())
+        sync_updates()
 
     def setup_gui(self):
         """Setup the gui"""
@@ -297,7 +298,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if result:  # transaction completed without issues\
                 self.progress.show()
                 self.progress.set_title(_("Updating Yumex Updater"))
-                sync_updates()
                 self.progress.hide()
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
 
