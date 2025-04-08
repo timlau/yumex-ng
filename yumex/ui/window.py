@@ -75,6 +75,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self._last_selected_pkg: YumexPackage = None
         self.info_type: InfoType = InfoType.DESCRIPTION
         self._last_filter: PackageFilter | None = None
+        self._resetting = False
 
         # save settings on windows close
         self.connect("unrealize", self.on_window_close)
@@ -303,11 +304,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def reset_all(self):
         # reset everything
+        self._resetting = True
         self.presenter.reset_backend()
         self.package_view.reset()
         self.package_settings.unselect_all()
         self.select_page(Page.PACKAGES)
         self.load_packages(PackageFilter.INSTALLED)
+        self._resetting = False
 
     def do_search(self, text, field=None):
         # remove selection in package filter (sidebar)
@@ -331,7 +334,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """handler for changes in the seach entry"""
         search_txt = widget.get_text()
         logger.debug(f"search changed : {search_txt}")
-        if search_txt == "":
+        if search_txt == "" and not self._resetting:
             self.reset_search()
         elif search_txt and search_txt[0] != ".":
             self.do_search(search_txt)
