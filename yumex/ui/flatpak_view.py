@@ -28,7 +28,6 @@ from yumex.constants import ROOTDIR
 from yumex.ui.flatpak_search import YumexFlatpakSearch
 from yumex.utils import RunJob
 from yumex.utils.enums import FlatpakLocation, FlatpakType, Page
-from yumex.utils.updater import sync_updates
 
 logger = logging.getLogger(__name__)
 
