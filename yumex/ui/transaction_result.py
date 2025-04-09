@@ -28,6 +28,8 @@ class YumexTransactionResult(Adw.Dialog):
     result_factory = Gtk.Template.Child()
     prob_grp = Gtk.Template.Child()
     problems = Gtk.Template.Child()
+    confirm_button = Gtk.Template.Child("confirm")
+    cancel_button = Gtk.Template.Child("cancel")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -49,6 +49,8 @@ class YumexFlatpakResult(Adw.Dialog):
     result_view = Gtk.Template.Child()
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
+    confirm_button = Gtk.Template.Child("confirm")
+    cancel_button = Gtk.Template.Child("cancel")
 
     def __init__(self):
         super().__init__()
