@@ -427,7 +427,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                         case "YumexFlatpakSearch":
                             dialog.install.activate()
                         case _:
-                            logger.debug(f"Dialog: {name} not handled")
+                            logger.debug(f"Dialog: {name} not handled (Ctrl-Enter)")
             case "flatpak_remove":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.remove()
