@@ -74,6 +74,8 @@ def refresh_updates(refresh: bool) -> None:
             body = noti_body
             NOTIFICATION.send(summary, body)
             NOTIFICATION.last_value = update_count
+            NOTIFICATION.last_pkgs = updates.sys_update_count
+            NOTIFICATION.last_flatpaks = updates.flatpak_user_count + updates.flatpak_sys_count
 
 
 def check_updates() -> None:

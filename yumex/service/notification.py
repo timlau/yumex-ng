@@ -35,6 +35,8 @@ class Notification:
         self.actions: dict[str, Action] = {action.id: action for action in actions}
         self.hints = hints
         self.last_value = 0
+        self.last_pkgs = 0
+        self.last_flatpaks = 0
         self.iface_notification = dbus.Interface(
             bus.get_object(NOTIFICATION_BUS_NAME, NOTIFICATION_OBJECT_PATH), dbus_interface=NOTIFICATION_BUS_NAME
         )
@@ -58,7 +60,7 @@ class Notification:
         logger.info(f"SIGNAL:ActionInvoked id: {id} action: {action_id}")
         if action_id in self.actions:
             action = self.actions[action_id]
-            action.callback(action_id)
+            action.callback(action_id, self.last_pkgs, self.last_flatpaks)
 
 
 loop = None
