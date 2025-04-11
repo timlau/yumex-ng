@@ -414,11 +414,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.stack.set_visible_child_name(Page.QUEUE)
             case "apply_actions":
                 dialog = self.get_visible_dialog()
+                logger.debug(f"Dialog: {dialog}")
                 if not dialog:
                     if self.active_page in [Page.PACKAGES, Page.QUEUE]:
                         self.on_apply_actions_clicked()
                 else:
                     name = dialog.get_name()
+                    logger.debug(f"Dialog: {name} is active")
                     match name:
                         case "YumexTransactionResult":
                             dialog.confirm_button.activate()
