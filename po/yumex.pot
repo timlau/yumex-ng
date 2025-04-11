@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 13:11+0200\n"
+"POT-Creation-Date: 2025-04-11 08:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,21 +54,25 @@ msgstr ""
 msgid "Replacing"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:256
-#: yumex/backend/dnf5daemon/__init__.py:273 yumex/ui/window.py:189
+#: yumex/backend/dnf5daemon/__init__.py:274
+#: yumex/backend/dnf5daemon/__init__.py:293 yumex/ui/window.py:191
 msgid "Building Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:276
-#: yumex/backend/dnf5daemon/__init__.py:357
+#: yumex/backend/dnf5daemon/__init__.py:311
+#: yumex/backend/dnf5daemon/__init__.py:401
 msgid "Applying Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:313
+#: yumex/backend/dnf5daemon/__init__.py:319
+msgid "Running Scripts : "
+msgstr ""
+
+#: yumex/backend/dnf5daemon/__init__.py:357
 msgid "Download Packages"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:315
+#: yumex/backend/dnf5daemon/__init__.py:359
 msgid "Download Reposiory Information"
 msgstr ""
 
@@ -82,54 +86,6 @@ msgstr ""
 
 #: yumex/ui/__init__.py:42
 msgid "Queued for updating"
-msgstr ""
-
-#: yumex/ui/dialogs.py:15
-msgid "Quit"
-msgstr ""
-
-#: yumex/ui/dialogs.py:34
-msgid "Install GPG Key"
-msgstr ""
-
-#: yumex/ui/dialogs.py:42
-msgid "Yes"
-msgstr ""
-
-#: yumex/ui/dialogs.py:44
-msgid "No"
-msgstr ""
-
-#: yumex/ui/package_view.py:101
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/package_view.py:102
-msgid "This may take a little while"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:64
-msgid "Packages for installation"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:66
-msgid "Packages for deletion"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:68 yumex/ui/transaction_result.py:70
-msgid "Packages for updating"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:91
-msgid "flatpaks were updated"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:98
-msgid "Unused flatpaks were removed"
-msgstr ""
-
-#: yumex/ui/flatpak_view.py:110 yumex/ui/window.py:299
-msgid "Updating Yumex Updater"
 msgstr ""
 
 #: yumex/ui/package_info.py:25
@@ -156,19 +112,67 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: yumex/ui/window.py:204
+#: yumex/ui/dialogs.py:15
+msgid "Quit"
+msgstr ""
+
+#: yumex/ui/dialogs.py:37
+msgid "Install GPG Key"
+msgstr ""
+
+#: yumex/ui/dialogs.py:45
+msgid "Yes"
+msgstr ""
+
+#: yumex/ui/dialogs.py:47
+msgid "No"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:90
+msgid "flatpaks were updated"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:96
+msgid "Unused flatpaks were removed"
+msgstr ""
+
+#: yumex/ui/package_view.py:100
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/package_view.py:101
+msgid "This may take a little while"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:72
+msgid "Packages for installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:74
+msgid "Packages for deletion"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:76 yumex/ui/transaction_result.py:78
+msgid "Packages for updating"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:80
+msgid "Skipped Packages"
+msgstr ""
+
+#: yumex/ui/window.py:207
 msgid "Running Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:243
+#: yumex/ui/window.py:245
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:302
+#: yumex/ui/window.py:300
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/main.py:172
+#: yumex/main.py:174
 msgid ""
 "\n"
 "        <ul>\n"
@@ -178,299 +182,22 @@ msgid ""
 "        </ul>\n"
 msgstr ""
 
-#: yumex/main.py:181
+#: yumex/main.py:183
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 
-#: yumex/main.py:191
+#: yumex/main.py:193
 msgid "Special thanks to"
+msgstr ""
+
+#: yumex/main.py:221
+msgid "Critical Error"
 msgstr ""
 
 #: yumex/yumex_updater_systray:73
 msgid "Updates are available"
-msgstr ""
-
-#: data/ui/package_view.blp:18 data/ui/package_settings.blp:93
-msgid "Name"
-msgstr ""
-
-#: data/ui/package_view.blp:24
-msgid "Version"
-msgstr ""
-
-#: data/ui/package_view.blp:30
-msgid "Arch."
-msgstr ""
-
-#: data/ui/package_view.blp:36 data/ui/package_settings.blp:95
-msgid "Size"
-msgstr ""
-
-#: data/ui/package_view.blp:42
-msgid "Summary"
-msgstr ""
-
-#: data/ui/package_view.blp:48 data/ui/preferences.blp:90
-msgid "Repository"
-msgstr ""
-
-#: data/ui/package_view.blp:100 data/ui/shortcuts.blp:51
-msgid "Select All"
-msgstr ""
-
-#: data/ui/package_view.blp:101 data/ui/shortcuts.blp:55
-msgid "Deselect All"
-msgstr ""
-
-#: data/ui/package_info.blp:20
-msgid "Advisory ID"
-msgstr ""
-
-#: data/ui/package_info.blp:28
-msgid "Advisory Type"
-msgstr ""
-
-#: data/ui/package_info.blp:36
-msgid "Advisory Issued"
-msgstr ""
-
-#: data/ui/package_info.blp:51
-msgid "Bugzilla References"
-msgstr ""
-
-#: data/ui/package_settings.blp:9
-msgid "Package filter"
-msgstr ""
-
-#: data/ui/package_settings.blp:14
-msgid "Installed"
-msgstr ""
-
-#: data/ui/package_settings.blp:26
-msgid "Updates"
-msgstr ""
-
-#: data/ui/package_settings.blp:37
-msgid "All"
-msgstr ""
-
-#: data/ui/package_settings.blp:49 data/ui/window.blp:36
-msgid "Search"
-msgstr ""
-
-#: data/ui/package_settings.blp:62
-msgid "View Settings"
-msgstr ""
-
-#: data/ui/package_settings.blp:73
-msgid "Select what attribute to sort by"
-msgstr ""
-
-#: data/ui/package_settings.blp:84
-msgid "Select what package information to show"
-msgstr ""
-
-#: data/ui/package_settings.blp:94
-msgid "Arch"
-msgstr ""
-
-#: data/ui/package_settings.blp:96
-msgid "Repo"
-msgstr ""
-
-#: data/ui/package_settings.blp:102
-msgid "Description"
-msgstr ""
-
-#: data/ui/package_settings.blp:103
-msgid "Filelist"
-msgstr ""
-
-#: data/ui/package_settings.blp:104
-msgid "Update Info"
-msgstr ""
-
-#: data/ui/queue_row.blp:17
-msgid "Added as a dependency"
-msgstr ""
-
-#: data/ui/queue_row.blp:35
-msgid "Remove item from queue"
-msgstr ""
-
-#: data/ui/transaction_result.blp:16
-msgid "Transaction Result"
-msgstr ""
-
-#: data/ui/transaction_result.blp:20 data/ui/flatpak_result.blp:20
-#: data/ui/flatpak_search.blp:23
-msgid "Cancel"
-msgstr ""
-
-#: data/ui/transaction_result.blp:32 data/ui/flatpak_result.blp:32
-msgid "Confirm"
-msgstr ""
-
-#: data/ui/flatpak_row.blp:36
-msgid "Update is available"
-msgstr ""
-
-#: data/ui/flatpak_row.blp:42
-msgid "Uninstall flatpak"
-msgstr ""
-
-#: data/ui/flatpak_result.blp:16
-msgid "Flatpak Transaction Result"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:18
-msgid "Search Flatpaks"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:43
-msgid "Install"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:91
-msgid "Install location"
-msgstr ""
-
-#: data/ui/flatpak_search.blp:113
-msgid "Active Remotes: "
-msgstr ""
-
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:15
-msgid "Preferences"
-msgstr ""
-
-#: data/ui/preferences.blp:10
-msgid "Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:13
-msgid "Flatpak Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:15
-msgid "Default Location"
-msgstr ""
-
-#: data/ui/preferences.blp:20
-msgid "Default Remote"
-msgstr ""
-
-#: data/ui/preferences.blp:25
-msgid "Metadata Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:27
-msgid "Min. Refresh interval (minutes)"
-msgstr ""
-
-#: data/ui/preferences.blp:39
-msgid "Updater Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:41
-msgid "Custom System Updater (path)"
-msgstr ""
-
-#: data/ui/preferences.blp:55
-msgid "Check updates interval (minutes)"
-msgstr ""
-
-#: data/ui/preferences.blp:66
-msgid "Show systray icon on updates"
-msgstr ""
-
-#: data/ui/preferences.blp:76
-msgid "Send Notification on updates"
-msgstr ""
-
-#: data/ui/preferences.blp:93
-msgid "Repository Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:94
-msgid "The available and enabled repositories"
-msgstr ""
-
-#: data/ui/shortcuts.blp:8
-msgid "General"
-msgstr ""
-
-#: data/ui/shortcuts.blp:11
-msgid "Keyboard shortcuts"
-msgstr ""
-
-#: data/ui/shortcuts.blp:19
-msgid "Apply Actions/Confirm"
-msgstr ""
-
-#: data/ui/shortcuts.blp:23
-msgid "Close Dialog/Cancel"
-msgstr ""
-
-#: data/ui/shortcuts.blp:28
-msgid "Select Packages"
-msgstr ""
-
-#: data/ui/shortcuts.blp:32
-msgid "Select Flatpaks"
-msgstr ""
-
-#: data/ui/shortcuts.blp:36
-msgid "Select Queue"
-msgstr ""
-
-#: data/ui/shortcuts.blp:41
-msgid "Package View"
-msgstr ""
-
-#: data/ui/shortcuts.blp:43
-msgid "Show/Hide Sidebar"
-msgstr ""
-
-#: data/ui/shortcuts.blp:47
-msgid "Toggled queued"
-msgstr ""
-
-#: data/ui/shortcuts.blp:60
-msgid "Package Filters"
-msgstr ""
-
-#: data/ui/shortcuts.blp:62
-msgid "Show Installed"
-msgstr ""
-
-#: data/ui/shortcuts.blp:66
-msgid "Show updates"
-msgstr ""
-
-#: data/ui/shortcuts.blp:70
-msgid "Show All"
-msgstr ""
-
-#: data/ui/shortcuts.blp:75
-msgid "Queue View"
-msgstr ""
-
-#: data/ui/shortcuts.blp:77
-msgid "Clear Queue"
-msgstr ""
-
-#: data/ui/shortcuts.blp:82
-msgid "Flatpak View"
-msgstr ""
-
-#: data/ui/shortcuts.blp:84
-msgid "Search for flatpaks to install"
-msgstr ""
-
-#: data/ui/shortcuts.blp:88
-msgid "Remove selected flatpak"
 msgstr ""
 
 #: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
@@ -480,6 +207,10 @@ msgstr ""
 
 #: data/ui/window.blp:29
 msgid "Select Package filters"
+msgstr ""
+
+#: data/ui/window.blp:36 data/ui/package_settings.blp:72
+msgid "Search"
 msgstr ""
 
 #: data/ui/window.blp:56
@@ -543,11 +274,292 @@ msgid "_Preferences"
 msgstr ""
 
 #: data/ui/window.blp:269
-msgid "Keyboard Shortcuts"
+msgid "Reload DNF cache"
 msgstr ""
 
 #: data/ui/window.blp:274
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: data/ui/window.blp:279
 msgid "_About Yum Extender"
+msgstr ""
+
+#: data/ui/flatpak_row.blp:50
+msgid "Update is available"
+msgstr ""
+
+#: data/ui/flatpak_row.blp:63
+msgid "Uninstall flatpak"
+msgstr ""
+
+#: data/ui/package_info.blp:24
+msgid "Advisory ID"
+msgstr ""
+
+#: data/ui/package_info.blp:37
+msgid "Advisory Type"
+msgstr ""
+
+#: data/ui/package_info.blp:50
+msgid "Advisory Issued"
+msgstr ""
+
+#: data/ui/package_info.blp:75
+msgid "Bugzilla References"
+msgstr ""
+
+#: data/ui/package_settings.blp:13
+msgid "Package filter"
+msgstr ""
+
+#: data/ui/package_settings.blp:19
+msgid "Installed"
+msgstr ""
+
+#: data/ui/package_settings.blp:37
+msgid "Updates"
+msgstr ""
+
+#: data/ui/package_settings.blp:54
+msgid "All"
+msgstr ""
+
+#: data/ui/package_settings.blp:91
+msgid "View Settings"
+msgstr ""
+
+#: data/ui/package_settings.blp:108
+msgid "Select what attribute to sort by"
+msgstr ""
+
+#: data/ui/package_settings.blp:124
+msgid "Select what package information to show"
+msgstr ""
+
+#: data/ui/package_settings.blp:132 data/ui/package_view.blp:21
+msgid "Name"
+msgstr ""
+
+#: data/ui/package_settings.blp:133
+msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:134 data/ui/package_view.blp:42
+msgid "Size"
+msgstr ""
+
+#: data/ui/package_settings.blp:135
+msgid "Repo"
+msgstr ""
+
+#: data/ui/package_settings.blp:142
+msgid "Description"
+msgstr ""
+
+#: data/ui/package_settings.blp:143
+msgid "Filelist"
+msgstr ""
+
+#: data/ui/package_settings.blp:144
+msgid "Update Info"
+msgstr ""
+
+#: data/ui/package_view.blp:28
+msgid "Version"
+msgstr ""
+
+#: data/ui/package_view.blp:35
+msgid "Arch."
+msgstr ""
+
+#: data/ui/package_view.blp:49
+msgid "Summary"
+msgstr ""
+
+#: data/ui/package_view.blp:56 data/ui/preferences.blp:105
+msgid "Repository"
+msgstr ""
+
+#: data/ui/package_view.blp:106 data/ui/shortcuts.blp:62
+msgid "Select All"
+msgstr ""
+
+#: data/ui/package_view.blp:107 data/ui/shortcuts.blp:67
+msgid "Deselect All"
+msgstr ""
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
+msgid "Preferences"
+msgstr ""
+
+#: data/ui/preferences.blp:10
+msgid "Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:14
+msgid "Flatpak Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:17
+msgid "Default Location"
+msgstr ""
+
+#: data/ui/preferences.blp:23
+msgid "Default Remote"
+msgstr ""
+
+#: data/ui/preferences.blp:29
+msgid "Metadata Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:32
+msgid "Min. Refresh interval (minutes)"
+msgstr ""
+
+#: data/ui/preferences.blp:47
+msgid "Updater Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:50
+msgid "Custom System Updater (path)"
+msgstr ""
+
+#: data/ui/preferences.blp:65
+msgid "Check updates interval (minutes)"
+msgstr ""
+
+#: data/ui/preferences.blp:79
+msgid "Show systray icon on updates"
+msgstr ""
+
+#: data/ui/preferences.blp:91
+msgid "Send Notification on updates"
+msgstr ""
+
+#: data/ui/preferences.blp:109
+msgid "Repository Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:110
+msgid "The available and enabled repositories"
+msgstr ""
+
+#: data/ui/queue_row.blp:21
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:47
+msgid "Remove item from queue"
+msgstr ""
+
+#: data/ui/shortcuts.blp:9
+msgid "General"
+msgstr ""
+
+#: data/ui/shortcuts.blp:12
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: data/ui/shortcuts.blp:22
+msgid "Apply Actions/Confirm"
+msgstr ""
+
+#: data/ui/shortcuts.blp:27
+msgid "Close Dialog/Cancel"
+msgstr ""
+
+#: data/ui/shortcuts.blp:33
+msgid "Select Packages"
+msgstr ""
+
+#: data/ui/shortcuts.blp:38
+msgid "Select Flatpaks"
+msgstr ""
+
+#: data/ui/shortcuts.blp:43
+msgid "Select Queue"
+msgstr ""
+
+#: data/ui/shortcuts.blp:49
+msgid "Package View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:52
+msgid "Show/Hide Sidebar"
+msgstr ""
+
+#: data/ui/shortcuts.blp:57
+msgid "Toggled queued"
+msgstr ""
+
+#: data/ui/shortcuts.blp:73
+msgid "Package Filters"
+msgstr ""
+
+#: data/ui/shortcuts.blp:76
+msgid "Show Installed"
+msgstr ""
+
+#: data/ui/shortcuts.blp:81
+msgid "Show updates"
+msgstr ""
+
+#: data/ui/shortcuts.blp:86
+msgid "Show All"
+msgstr ""
+
+#: data/ui/shortcuts.blp:92
+msgid "Queue View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:95
+msgid "Clear Queue"
+msgstr ""
+
+#: data/ui/shortcuts.blp:101
+msgid "Flatpak View"
+msgstr ""
+
+#: data/ui/shortcuts.blp:104
+msgid "Search for flatpaks to install"
+msgstr ""
+
+#: data/ui/shortcuts.blp:109
+msgid "Remove selected flatpak"
+msgstr ""
+
+#: data/ui/flatpak_result.blp:17
+msgid "Flatpak Transaction Result"
+msgstr ""
+
+#: data/ui/flatpak_result.blp:22 data/ui/flatpak_search.blp:22
+#: data/ui/transaction_result.blp:22
+msgid "Cancel"
+msgstr ""
+
+#: data/ui/flatpak_result.blp:28 data/ui/transaction_result.blp:28
+msgid "Confirm"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:17
+msgid "Search Flatpaks"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:28
+msgid "Install"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:67
+msgid "Install location"
+msgstr ""
+
+#: data/ui/flatpak_search.blp:89
+msgid "Active Remotes: "
+msgstr ""
+
+#: data/ui/transaction_result.blp:17
+msgid "Transaction Result"
 msgstr ""
 
 #: data/dk.yumex.Yumex.desktop.in.in:3
