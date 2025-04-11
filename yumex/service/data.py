@@ -32,7 +32,7 @@ from gi.repository import AppIndicator3, Flatpak, Gio, Gtk  # type: ignore  # no
 logger = logging.getLogger("yumex_updater")
 
 
-def open_yumex(action, pkgs, flatpaks):
+def open_yumex(action="", pkgs=0, flatpaks=0):
     """launch yumex"""
     logger.info(f"open_yumex action: {action} pkgs: {pkgs} flatpaks: {flatpaks}")
     env = os.environ.copy()
