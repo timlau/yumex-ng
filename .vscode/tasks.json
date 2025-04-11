@@ -17,16 +17,6 @@
                 "kind": "build",
                 "isDefault": true
             }
-        },
-        {
-            "label": "local build and run (DNF4)",
-            "type": "shell",
-            "command": "${workspaceFolder}/local.sh DNF4",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": false,
-            }
         }
     ]
 }
