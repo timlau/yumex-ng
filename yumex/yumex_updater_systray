@@ -64,6 +64,8 @@ def refresh_updates(refresh: bool) -> None:
     if CONFIG.show_icon:
         if update_count > 0:
             GLib.idle_add(INDICATOR.set_title, hover_text)
+            INDICATOR.last_flatpaks = updates.flatpak_user_count + updates.flatpak_sys_count
+            INDICATOR.last_pkgs = updates.sys_update_count
         else:
             INDICATOR.clear()
 

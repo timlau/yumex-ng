@@ -69,6 +69,8 @@ class Indicator:
         self._indicator = None
         self.custom_updater = custom_updater
         self.refresh_func = refresh_func
+        self.last_pkgs = 0
+        self.last_flatpaks = 0
 
     @property
     def indicator(self):
@@ -102,7 +104,7 @@ class Indicator:
 
     def on_clicked_pm(self, *args) -> None:
         """start yumex"""
-        open_yumex()
+        open_yumex("open-yumex", self.last_pkgs, self.last_flatpaks)
 
     def on_check_updates(self, *args) -> None:
         self.refresh_func(True)
