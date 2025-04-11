@@ -21,6 +21,15 @@ template $YumexFlatpakResult: Adw.Dialog {
       Gtk.Button cancel {
         label: _("Cancel");
         clicked => $on_cancel_clicked();
+
+        ShortcutController {
+          scope: managed;
+
+          Shortcut {
+            trigger: "Escape";
+            action: "activate";
+          }
+        }
       }
 
       [end]
@@ -32,6 +41,15 @@ template $YumexFlatpakResult: Adw.Dialog {
         ]
 
         clicked => $on_confirm_clicked();
+
+        ShortcutController {
+          scope: managed;
+
+          Shortcut {
+            trigger: "<Ctrl>Return";
+            action: "activate";
+          }
+        }
       }
     }
 
