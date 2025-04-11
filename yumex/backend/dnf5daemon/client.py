@@ -141,7 +141,7 @@ class Dnf5DbusClient:
     def repo_list(self):
         logger.debug(f"DBUS: {self.session_repo.object_path}.list()")
         get_list = self._async_method("list", proxy=self.session_repo)
-        res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled", "priority"])})
+        res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled", "priority"]), "enable_disable": "all"})
         return res, err
 
     def _list_fd(self, options):
