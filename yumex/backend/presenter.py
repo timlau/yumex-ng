@@ -50,22 +50,14 @@ class YumexPresenter:
     def __init__(self, win: MainWindow) -> None:
         self._win: MainWindow = win
         self._backend: PackageBackend = None
-        self._root_backend: PackageBackend = None
         self._cache: YumexPackageCache = None
         self._fp_backend: FlatpakBackend = None
 
     @property
     def package_backend(self) -> PackageBackend:
-        # if not self._backend:
-        #     self._backend: PackageBackend = self.dnf_backend_factory.get_backend()
-        # return self._backend
-        return self.package_root_backend
-
-    @property
-    def package_root_backend(self) -> PackageBackend:
-        if not self._root_backend:
-            self._root_backend: PackageBackend = YumexRootBackend(self)
-        return self._root_backend
+        if not self._backend:
+            self._backend: PackageBackend = YumexRootBackend(self)
+        return self._backend
 
     @property
     def package_cache(self) -> PackageCache:
@@ -84,7 +76,7 @@ class YumexPresenter:
         return self._win.progress
 
     def reset_backend(self) -> None:
-        self._root_backend.reset()
+        self._backend.reset()
 
     def reset_flatpak_backend(self) -> None:
         del self._fp_backend

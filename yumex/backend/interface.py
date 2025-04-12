@@ -87,9 +87,6 @@ class Presenter(Protocol):
     def package_backend(self) -> PackageBackend: ...
 
     @property
-    def package_root_backend(self) -> PackageBackend: ...
-
-    @property
     def package_cache(self) -> PackageCache: ...
 
     @property
