@@ -95,7 +95,7 @@ spinner {
 
 /* Change icon on package filter when selected */
 .checkmark check:checked {
-    -gtk-icon-source: -gtk-icontheme('emblem-ok-symbolic');
+    -gtk-icon-source: -gtk-icontheme('checkmark-symbolic');
     border-radius: 100%;
 }
 
