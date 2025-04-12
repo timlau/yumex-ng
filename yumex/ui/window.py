@@ -413,23 +413,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "page_three":
                 self.stack.set_visible_child_name(Page.QUEUE)
             case "apply_actions":
-                dialog = self.get_visible_dialog()
-                logger.debug(f"Dialog: {dialog}")
-                if not dialog:
-                    if self.active_page in [Page.PACKAGES, Page.QUEUE]:
-                        self.on_apply_actions_clicked()
-                else:
-                    name = dialog.get_name()
-                    logger.debug(f"Dialog: {name} is active")
-                    match name:
-                        case "YumexTransactionResult":
-                            dialog.confirm_button.activate()
-                        case "YumexFlatpakResult":
-                            dialog.confirm_button.activate()
-                        case "YumexFlatpakSearch":
-                            dialog.install.activate()
-                        case _:
-                            logger.debug(f"Dialog: {name} not handled (Ctrl-Enter)")
+                if self.active_page in [Page.PACKAGES, Page.QUEUE]:
+                    self.on_apply_actions_clicked()
             case "flatpak_remove":
                 if self.active_page == Page.FLATPAKS:
                     self.flatpak_view.remove()
