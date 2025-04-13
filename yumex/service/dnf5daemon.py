@@ -60,6 +60,7 @@ def get_packages_by_name(session, package_name: str) -> list:
             "latest-limit": 10,
             "with_src": False,
         }
+        logger.debug(f"Options: {options}")
         res = iface_rpm.list(options)
         if res is None:
             logger.error("No packages found")
