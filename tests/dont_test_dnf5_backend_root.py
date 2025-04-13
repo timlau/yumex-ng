@@ -363,8 +363,14 @@ def test_exception(backend: YumexRootBackend):
         backend.client._test_exception()
 
 
-def test_backend_reset(backend: YumexRootBackend):
-    """Test backend reset (session should change)"""
-    session = backend.client.session
-    backend.reset()
-    assert session != backend.client.session
+def test_get_packages_by_name(backend):
+    """test search by name"""
+    pkgs = backend.get_packages_by_name("yumex")
+    print()
+    print(f"\n# of packages : {len(pkgs)}")
+    print(pkgs)
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 1
+    pkg = pkgs[0]
+    assert isinstance(pkg, YumexPackage)
+    assert pkg.name == "yumex"

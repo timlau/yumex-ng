@@ -231,7 +231,7 @@ class Dnf5DbusClient:
         # options["with_filenames"] = kwargs.pop("with_filenames", False)
         # options["with_binaries"] = kwargs.pop("with_binaries", False)
         options["icase"] = True
-        options["latest-limit"] = 1
+        options["latest-limit"] = kwargs.pop("latest_limit", 1)
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
         options["scope"] = kwargs.pop("scope", "all")
         if "repo" in kwargs:
@@ -241,9 +241,9 @@ class Dnf5DbusClient:
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
 
-        logger.debug(f"DBUS: {self.session_rpm.object_path}.list_fd()")
+        # logger.debug(f"DBUS: {self.session_rpm.object_path}.list_fd()")
         result = list(self._list_fd(options))
-        logger.debug(f"list_fd() returned : {len(result)} elements")
+        logger.debug(f"list_fd({args}) returned : {len(result)} elements")
         return result
 
     @dbus_exception
@@ -268,7 +268,7 @@ class Dnf5DbusClient:
         # options["with_filenames"] = kwargs.pop("with_filenames", False)
         # options["with_binaries"] = kwargs.pop("with_binaries", False)
         options["icase"] = True
-        options["latest-limit"] = 1
+        options["latest-limit"] = kwargs.pop("latest_limit", 1)
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
         options["scope"] = kwargs.pop("scope", "all")
         if "repo" in kwargs:

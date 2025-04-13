@@ -66,6 +66,7 @@ PY_INSTALLDIR.install_sources(yumex_backend_modules, subdir: 'yumex/backend')
 yumex_backend_dnf5daemon_modules = [
     'backend/dnf5daemon/__init__.py',
     'backend/dnf5daemon/client.py',
+    'backend/dnf5daemon/filter.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_backend_dnf5daemon_modules, subdir: 'yumex/backend/dnf5daemon')
 

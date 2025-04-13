@@ -8,6 +8,7 @@ import dbus
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf5daemon.filter import FilterUpdates
 from yumex.backend.interface import Presenter, Progress
 from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
 
@@ -25,6 +26,16 @@ ADVISOR_ATTRS = [
     "description",
     "buildtime",
     "references",
+]
+
+PACKAGE_ATTRS = [
+    "name",
+    "evr",
+    "arch",
+    "repo_id",
+    "summary",
+    "install_size",
+    "is_installed",
 ]
 
 
@@ -175,6 +186,8 @@ class YumexRootBackend:
         self.client = Dnf5DbusClient()
         self.client.open_session()
         self.connect_signals()
+        repo_prioritiy = {id: priority for id, _, _, priority in self.get_repositories()}
+        self.filter_updates = FilterUpdates(repo_prioritiy, self.get_packages_by_name)
 
     def reset(self):
         # self.client.close_session()
@@ -431,15 +444,7 @@ class YumexRootBackend:
 
     @property
     def package_attr(self) -> list[str]:
-        return [
-            "name",
-            "evr",
-            "arch",
-            "repo_id",
-            "summary",
-            "install_size",
-            "is_installed",
-        ]
+        return PACKAGE_ATTRS
 
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]:
         match pkg_filter:
@@ -448,9 +453,8 @@ class YumexRootBackend:
             case PackageFilter.INSTALLED:
                 return self._get_yumex_packages(self.installed)
             case PackageFilter.UPDATES:
-                packages = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
-                # return self.get_packages_with_lowest_priority(packages)
-                return packages
+                updates = self._get_yumex_packages(self.updates, state=PackageState.UPDATE)
+                return self.filter_updates.get_updates(updates)
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
@@ -602,3 +606,13 @@ class YumexRootBackend:
             # else:
             #     logger.debug(f"Skipping duplicate : {ypkg}")
         return list(nevra_dict.values())
+
+    def get_packages_by_name(self, name: str) -> list[YumexPackage]:
+        """Get a list of packages by name"""
+        result = self.client.package_list_fd(
+            name,
+            package_attrs=self.package_attr,
+            scope="available",
+            latest_limit=10,
+        )
+        return self._get_yumex_packages(result)

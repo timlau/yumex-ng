@@ -1,6 +1,11 @@
 import logging
+from functools import partial
+from typing import Generator
 
 import dbus
+
+from yumex.backend.dnf5daemon import PACKAGE_ATTRS, create_package
+from yumex.backend.dnf5daemon.filter import FilterUpdates
 
 DNFDAEMON_BUS_NAME = "org.rpm.dnf.v0"
 DNFDAEMON_OBJECT_PATH = "/" + DNFDAEMON_BUS_NAME.replace(".", "/")
@@ -14,95 +19,101 @@ IFACE_GROUP = "{}.comps.Group".format(DNFDAEMON_BUS_NAME)
 IFACE_ADVISORY = "{}.Advisory".format(DNFDAEMON_BUS_NAME)
 
 logger = logging.getLogger(__name__)
+SYSTEM_BUS = dbus.SystemBus()
 
 
-# import logging
-# from pathlib import Path
-
-# import libdnf5 as dnf
-# from libdnf5.common import QueryCmp_NEQ
-# from libdnf5.repo import RepoCache, RepoQuery  # noqa: F401
-# from libdnf5.rpm import Package, PackageQuery  # noqa: F401
-
-# logger = logging.getLogger(__name__)
-
-
-# def get_repo_priority(base: dnf.base.Base, repo_name: str) -> int:
-#     repos_query = RepoQuery(base)
-#     for repo in repos_query:
-#         if repo.get_id() == repo_name:
-#             return repo.get_priority()
-#     return 99
-
-
-# def get_package_repos(base: dnf.base.Base, package_name: str) -> list[str]:
-#     repos = set()
-#     query = PackageQuery(base)
-#     query.filter_name([package_name])
-#     for pkg in query:
-#         repos.add(pkg.get_repo_id())
-#     return list(repos)
-
-
-# def get_prioritied_packages(updates: list[Package], base):
-#     """Get Prioritized version of updates"""
-#     latest_versions = {}
-#     for pkg in updates:
-#         repos = get_package_repos(base, pkg.get_name())
-#         repo_priorities = [get_repo_priority(base, repo) for repo in repos]
-#         lowest_priority = min(repo_priorities) if repo_priorities else 99
-#         pkg_repo_priority = get_repo_priority(base, pkg.get_repo_id())
-
-#         if pkg_repo_priority == lowest_priority:
-#             if pkg.get_name() in latest_versions:
-#                 if pkg.get_evr() > latest_versions[pkg.get_name()].get_evr():
-#                     latest_versions[pkg.get_name()] = pkg
-#             else:
-#                 latest_versions[pkg.get_name()] = pkg
-
-#     return list(latest_versions.values())
-
-
-# def expire_metadata(base: dnf.base.Base, cachedir):
-#     # get the repo cache dir
-#     cachedir = Path(cachedir)
-#     # interate through the repo cachedir
-#     for fn in cachedir.iterdir():
-#         if not fn.is_dir():
-#             continue
-#         # Setup a RepoCache at the current repo cachedir
-#         repo_cache = RepoCache(base, fn.as_posix())
-#         # expire the cache for the current repo
-#         repo_cache.write_attribute(RepoCache.ATTRIBUTE_EXPIRED)
-
-
-def check_dnf_updates(refresh: bool = False) -> list:
+def open_session() -> Generator[tuple[dbus.SystemBus, str], None, None]:
+    """Get a new session with dnf5daemon-server"""
     try:
-        bus = dbus.SystemBus()
-
-        # open a new session with dnf5daemon-server
         iface_session = dbus.Interface(
-            bus.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
+            SYSTEM_BUS.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
             dbus_interface=IFACE_SESSION_MANAGER,
         )
         session = iface_session.open_session(dbus.Dictionary({}, signature=dbus.Signature("sv")))
+        logger.debug(f"Open dnf5daemon session : {session}")
+        return session
+    except dbus.DBusException as e:
+        logger.error(e)
+        return None
 
-        options = {
-            "package_attrs": [
-                "repo_id",
-                "full_nevra",
-            ],
-            "scope": "upgrades",
-            "patterns": ["*"],
-            "latest-limit": 1,
-        }
-        iface_rpm = dbus.Interface(bus.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
-        pkgs = iface_rpm.list(options)
+
+def close_session(session):
+    try:
+        iface_session = dbus.Interface(
+            SYSTEM_BUS.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
+            dbus_interface=IFACE_SESSION_MANAGER,
+        )
         iface_session.close_session(session)
+        logger.debug(f"Close dnf5daemon session : {session}")
+    except dbus.DBusException as e:
+        logger.error(e)
+
+
+def get_packages_by_name(session, package_name: str) -> list:
+    """Get a list of packages by name"""
+    try:
+        iface_rpm = dbus.Interface(SYSTEM_BUS.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
+        options = {
+            "package_attrs": dbus.Array(PACKAGE_ATTRS),
+            "scope": "available",
+            "patterns": dbus.Array([package_name]),
+            "latest-limit": 10,
+            "with_src": False,
+        }
+        res = iface_rpm.list(options)
+        if res is None:
+            logger.error("No packages found")
+            return []
+        pkgs = get_yumex_packages(res)
         return pkgs
     except dbus.DBusException as e:
         logger.error(e)
         return []
+
+
+def get_repo_priorities(session) -> list:
+    """Get a list of repositories"""
+    try:
+        iface_repo = dbus.Interface(SYSTEM_BUS.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_REPO)
+        repos = iface_repo.list(
+            {
+                "repo_attrs": dbus.Array(["priority"]),
+                "enable_disable": "enabled",
+            }
+        )
+        repo_prioritiy = {str(repo["id"]): int(repo["priority"]) for repo in repos}
+        return repo_prioritiy
+    except dbus.DBusException as e:
+        logger.error(e)
+        return []
+
+
+def get_yumex_packages(pkgs: list) -> list:
+    """Convert a list of packages to YumexPackage objects"""
+    yumex_pkgs = [create_package(pkg) for pkg in pkgs]
+    return yumex_pkgs
+
+
+def check_dnf_updates(refresh: bool = False) -> list:
+    session = open_session()
+    try:
+        if session:
+            options = {
+                "package_attrs": dbus.Array(PACKAGE_ATTRS),
+                "scope": "upgrades",
+                "patterns": ["*"],
+                "latest-limit": 1,
+            }
+            iface_rpm = dbus.Interface(SYSTEM_BUS.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
+            pkgs = get_yumex_packages(iface_rpm.list(options))
+            repo_priorities = get_repo_priorities(session)
+            packages_by_name = partial(get_packages_by_name, session)
+            updates = FilterUpdates(repo_priorities, packages_by_name).get_updates(pkgs)
+            close_session(session)
+            return updates
+    except dbus.DBusException as e:
+        logger.error(e)
+    return []
 
 
 if __name__ == "__main__":
