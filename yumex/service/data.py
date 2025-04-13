@@ -21,7 +21,7 @@ from dataclasses import dataclass
 import gi
 
 from yumex.constants import APP_ID
-from yumex.service.dnf5daemon import check_dnf_updates
+from yumex.service.dnf5daemon import Dnf5UpdateChecker
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("AppIndicator3", "0.1")
@@ -139,7 +139,8 @@ class Updates:
 
     @classmethod
     def get_updates(cls, refresh):
-        sys_update_count = len(check_dnf_updates(refresh))
+        with Dnf5UpdateChecker() as checker:
+            sys_update_count = len(checker.check_updates(refresh))
         user_installation = Flatpak.Installation.new_user()
         flatpak_user_count = len(user_installation.list_installed_refs_for_update())
         del user_installation
