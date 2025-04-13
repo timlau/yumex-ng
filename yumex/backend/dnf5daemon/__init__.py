@@ -50,13 +50,13 @@ def create_package(pkg) -> YumexPackage:
     v, r = vr.split("-")
     state = PackageState.INSTALLED if pkg["is_installed"] else PackageState.AVAILABLE
     return YumexPackage(
-        name=pkg["name"],
-        arch=pkg["arch"],
+        name=str(pkg["name"]),
+        arch=str(pkg["arch"]),
         epoch=e,
         release=r,
         version=v,
-        repo=pkg["repo_id"],
-        description=pkg["summary"],
+        repo=str(pkg["repo_id"]),
+        description=str(pkg["summary"]),
         size=pkg["install_size"],
         state=state,
     )
