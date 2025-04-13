@@ -101,7 +101,7 @@ def check_dnf_updates(refresh: bool = False) -> list:
             options = {
                 "package_attrs": dbus.Array(PACKAGE_ATTRS),
                 "scope": "upgrades",
-                "patterns": ["*"],
+                "patterns": dbus.Array(["*"]),
                 "latest-limit": 1,
             }
             iface_rpm = dbus.Interface(SYSTEM_BUS.get_object(DNFDAEMON_BUS_NAME, session), dbus_interface=IFACE_RPM)
