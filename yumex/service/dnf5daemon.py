@@ -112,7 +112,12 @@ def check_dnf_updates(refresh: bool = False) -> list:
             updates = FilterUpdates(repo_priorities, packages_by_name).get_updates(pkgs)
             close_session(session)
             return updates
-    except dbus.DBusException as e:
+    except dbus.Exception as e:
+        logger.error(e)
+    try:
+        if session:
+            close_session(session)
+    except Exception as e:
         logger.error(e)
     return []
 
