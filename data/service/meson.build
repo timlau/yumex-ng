@@ -12,12 +12,12 @@ summary(
 
 # Install systemd service file
 install_data(
-    'yumex-updater-systray.service',
+    'yumex-updater.service',
     install_dir: userunitdir,
 )
 
 # Install systemd preset file
 install_data(
-    '50-yumex-updater-systray.preset',
+    '50-yumex-updater.preset',
     install_dir: userpresetdir,
 )

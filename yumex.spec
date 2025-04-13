@@ -32,7 +32,7 @@ Requires: python3-dbus
 Requires: flatpak-libs > 1.15.0
 Requires: appstream >= 1.0.2
 
-Recommends: %{name}-updater-systray
+Recommends: %{name}-updater
 
 
 # dnf5 requirements
@@ -47,22 +47,22 @@ Obsoletes: yumex-dnf <= 4.5.1
 %description
 Graphical package tool for maintain packages on the system
 
-%package -n %{name}-updater-systray
-Summary:  Yum Extender updater systray app
+%package -n %{name}-updater
+Summary:  Yum Extender updater app
 Requires: %{name} = %{version}-%{release}
 Requires: python3-gobject
 Requires: gtk3
-Requires: python3-dasbus
+Requires: python3-dbus
 Requires: flatpak-libs > 1.15.0
 Requires: libappindicator-gtk3
 
-%if "%{dnf_backend}" == "DNF5"
 Provides: yumex-dnf5-updater-systray = %{version}-%{release}
 Obsoletes: yumex-dnf5-updater-systray < %{version}-%{release}
-%endif
+Provides: yumex-updater-systray = %{version}-%{release}
+Obsoletes: yumex-updater-systray < %{version}-%{release}
 
-%description -n %{name}-updater-systray
-Systray application to check and show available updates
+%description -n %{name}-updater
+Service to check and notify about available updates
 
 
 %prep
@@ -73,7 +73,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %build
-%meson --buildtype=%{app_build} 
+%meson --buildtype=%{app_build}
 %meson_build
 
 %install
@@ -86,8 +86,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 update-desktop-database %{_datadir}/applications &> /dev/null || :
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-%post -n %{name}-updater-systray
-%systemd_user_post yumex-updater-systray.service
+%post -n %{name}-updater
+%systemd_user_post yumex-updater.service
 
 %postun
 if [ $1 -eq 0 ] ; then
@@ -107,18 +107,18 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
-%files -n %{name}-updater-systray
+%files -n %{name}-updater
 %{_userunitdir}/*.service
 %{_prefix}/lib/systemd/user-preset/*.preset
-%{_bindir}/yumex_updater_systray
+%{_bindir}/yumex_updater
 %{_datadir}/icons/hicolor/scalable/apps/yumex-system-software-update.svg
 
 %posttrans
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
-%posttrans -n %{name}-updater-systray
+%posttrans -n %{name}-updater
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
-%systemd_user_post yumex-updater-systray.service
+%systemd_user_post yumex-updater.service
 
 # Iterate over all user sessions
 for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
@@ -133,15 +133,15 @@ for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
     DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 
     # Apply the preset for the user session
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user preset yumex-updater-systray.service" || echo "Failed to apply preset for user $user"
+    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user preset yumex-updater.service" || echo "Failed to apply preset for user $user"
 
     # Reload the user daemon and restart the service
     su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user daemon-reload" || echo "Failed to perform daemon-reload for user $user"
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater-systray.service" || echo "Failed to restart service for user $user"
+    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater.service" || echo "Failed to restart service for user $user"
 done
 
-%preun -n %{name}-updater-systray
-%systemd_user_preun yumex-updater-systray.service
+%preun -n %{name}-updater
+%systemd_user_preun yumex-updater.service
 
 %changelog
 * Thu Mar 31 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.1.0-1

@@ -637,7 +637,7 @@ msgid "Added support for notifications on updates"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:48
-msgid "Improved configuration of yumex-updater-systray in yumex ui"
+msgid "Improved configuration of yumex-updater in yumex ui"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:53
@@ -645,7 +645,7 @@ msgid "Yum Extender 5.0.1 add many fixes and small improvments"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:55
-msgid "Add yumex-updater-systray systray application there checks for updates"
+msgid "Add yumex-updater systray application there checks for updates"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:60

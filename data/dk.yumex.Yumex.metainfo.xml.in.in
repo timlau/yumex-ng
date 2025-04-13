@@ -45,14 +45,14 @@
         <p>Yum Extender 5.0.2 add many fixes and improvments </p>
         <ul>
           <li>Added support for notifications on updates</li>
-          <li>Improved configuration of yumex-updater-systray in yumex ui</li>
+          <li>Improved configuration of yumex-updater in yumex ui</li>
         </ul>
       </description>
     </release>
     <release version="5.0.1" date="2024-06-27" type="devel"><description>
         <p>Yum Extender 5.0.1 add many fixes and small improvments </p>
         <ul>
-          <li>Add yumex-updater-systray systray application there checks for updates</li>
+          <li>Add yumex-updater systray application there checks for updates</li>
         </ul>
       </description>
     </release>

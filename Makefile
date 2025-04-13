@@ -157,13 +157,13 @@ run-test-report:
 
 
 run-updater:
-	@systemctl --user stop yumex-updater-systray.service
+	@systemctl --user stop yumex-updater.service
 	@$(MAKE) localbuild
 	@-./builddir/bin/yumex_updater_systray
 
 # dnf5 install python3-memray
 memray-updater:
-	@systemctl --user stop yumex-updater-systray.service
+	@systemctl --user stop yumex-updater.service
 	@$(MAKE) localbuild
 	@-mkdir -p profile
 	@-rm profile/output.bin
@@ -173,7 +173,7 @@ memray-updater:
 
 # dnf5 install python3-memray
 memray-updater-live:
-	@-systemctl --user stop yumex-updater-systray.service
+	@-systemctl --user stop yumex-updater.service
 	@$(MAKE) localbuild
 	@-mkdir -p profile
 	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
