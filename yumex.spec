@@ -111,7 +111,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 %{_userunitdir}/*.service
 %{_prefix}/lib/systemd/user-preset/*.preset
 %{_bindir}/yumex_updater
-%{_datadir}/icons/hicolor/scalable/apps/yumex-update-symbolic.svg
+%{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
 
 %posttrans
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :

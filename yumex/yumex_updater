@@ -99,7 +99,7 @@ def setup_notification():
 
 # Setup Global Constants
 CONFIG = Config.from_gsettings()
-INDICATOR = Indicator(custom_updater=CONFIG.custom_updater, refresh_func=refresh_updates)
+INDICATOR = Indicator(custom_updater=CONFIG.custom_updater, refresh_func=refresh_updates, dark_icon=CONFIG.dark_icon)
 
 if CONFIG.send_notification:
     NOTIFICATION: Notification = setup_notification()
