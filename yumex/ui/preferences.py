@@ -38,6 +38,7 @@ class YumexPreferences(Adw.PreferencesDialog):
     upd_interval = Gtk.Template.Child()
     upd_show = Gtk.Template.Child()
     upd_notification = Gtk.Template.Child()
+    upd_dark_icon = Gtk.Template.Child()
 
     def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
@@ -67,6 +68,8 @@ class YumexPreferences(Adw.PreferencesDialog):
         self.upd_show.set_state(self.settings.get_boolean("upd-show-icon"))
         self.upd_notification.set_active(self.settings.get_boolean("upd-notification"))
         self.upd_notification.set_state(self.settings.get_boolean("upd-notification"))
+        self.upd_dark_icon.set_active(self.settings.get_boolean("upd-dark-icon"))
+        self.upd_dark_icon.set_state(self.settings.get_boolean("upd-dark-icon"))
 
     def setup_metadata(self):
         period = self.settings.get_int("meta-load-periode")
@@ -116,6 +119,7 @@ class YumexPreferences(Adw.PreferencesDialog):
             pass
         self.settings.set_boolean("upd-show-icon", self.upd_show.get_state())
         self.settings.set_boolean("upd-notification", self.upd_notification.get_state())
+        self.settings.set_boolean("upd-dark-icon", self.upd_dark_icon.get_state())
         return location, remote
 
     def update_remote(self, current_location) -> str | None:

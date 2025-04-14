@@ -88,6 +88,19 @@ template $YumexPreferences: Adw.PreferencesDialog {
       }
 
       Adw.ActionRow {
+        title: _("Use dark systray icon");
+        visible: bind upd_show.active;
+
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+
+          Gtk.Switch upd_dark_icon {}
+        }
+      }
+
+      Adw.ActionRow {
         title: _("Send Notification on updates");
 
         Gtk.Box {
