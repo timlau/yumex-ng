@@ -86,8 +86,7 @@ class Indicator:
         try:
             indicator = AppIndicator3.Indicator.new(
                 "System Update Monitor",
-                "system-software-update",
-                # "/usr/share/icons/hicolor/scalable/apps/yumex-system-software-update.svg",
+                "/usr/share/icons/hicolor/scalable/apps/yumex-update-symbolic.svg",
                 AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
             )
             indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
