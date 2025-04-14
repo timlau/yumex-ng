@@ -118,9 +118,26 @@ template $YumexPreferences: Adw.PreferencesDialog {
     title: _("Repository");
     icon-name: "server-pick-symbolic";
 
-    Adw.PreferencesGroup repo_group {
+    Adw.PreferencesGroup repo_config {
       title: _("Repository Settings");
       description: _("The available and enabled repositories");
+      // Just boilerplate rows, will be added automatic later
+      Adw.ActionRow {
+        title: _("Show Source/Debug Repositories");
+
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+
+          Gtk.Switch repo_source_debuginfo {
+            state-set => $on_repo_source_debuginfo();
+          }
+        }
+      }
+    }
+
+    Adw.PreferencesGroup repo_group {
       // Just boilerplate rows, will be added automatic later
     }
   }
