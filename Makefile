@@ -159,7 +159,7 @@ run-test-report:
 run-updater:
 	@systemctl --user stop yumex-updater.service
 	@$(MAKE) localbuild
-	@-./builddir/bin/yumex_updater_systray
+	@-./builddir/bin/yumex_updater
 
 # dnf5 install python3-memray
 memray-updater:
