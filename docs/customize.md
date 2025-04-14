@@ -7,3 +7,6 @@ you can set the yumex-updater to switch to a dark icon.
 gsettings set dk.yumex.Yumex upd-dark-icon true
 systemctl --user restart yumex-updater
 ```
+
+![light](../data/gfx/light_panel.png)
+![dark](../data/gfx/dark_panel.png)
