@@ -148,9 +148,11 @@ transifex-get:
 # run unit tests
 run-tests:
 	pytest
-# Run dnf5deamon pytest
-run-tests-dnf5daemon:
-	pytest tests/dont_test_dnf5_backend_root.py -s -v
+
+# Run live envrionment pytest
+run-tests-live:
+	pytest tests/dont_test_*.py -s -v
+
 # run unit tests and generate html coverage report
 run-test-report:
 	pytest --cov --cov-report html
