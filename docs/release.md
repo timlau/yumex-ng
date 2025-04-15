@@ -1,27 +1,28 @@
 # Create a new release check list
 
-- update the code
-  - bump the version number in .\meson.build
-  - bump the version number in .\yumex.spec
-  - add changelog entry in .\yumex.spec
-  - add new release in data/dk.yumex.Yumex.metainfo.xml.in.in
-- build the release
-  - run `make release`
-    - this will do the following:
-      - commit the changes above to git
-      - make a git release tag
-      - push it to github
-      - make source archive
-      - build the src.rpm
-      - create a Fedora Copr build of the src.rpm
-      - build the yumex-dnf5 src.rpm
-      - create a Fedora Copr build of the yumex-dnf src.rpm
-- make a new github release
-  - https://github.com/timlau/yumex-ng/releases/new
-  - select the release tag
-  - add title and description
-  - add the source archive from ./build/SOURCES
-  - add the yumex-**version**.src.rpm from ./build/SRPMS
-  - add the yumex-dnf5-**version**.src.rpm from ./build/SRPMS
-  - set the pre-release checkmark
-  - publish the release
+-   update the code
+    -   bump the version number in .\meson.build
+    -   bump the version number in .\yumex.spec
+    -   add changelog entry in .\yumex.spec
+    -   add new release in data/dk.yumex.Yumex.metainfo.xml.in.in
+-   build the release
+    -   run `make rpm` to test tha rpm builds without issues
+    -   run `make release`
+        -   this will do the following:
+            -   commit the changes above to git
+            -   make a git release tag
+            -   push it to github
+            -   make source archive
+            -   build the src.rpm
+            -   create a Fedora Copr build of the src.rpm
+            -   build the yumex-dnf5 src.rpm
+            -   create a Fedora Copr build of the yumex-dnf src.rpm
+-   make a new github release
+    -   https://github.com/timlau/yumex-ng/releases/new
+    -   select the release tag
+    -   add title and description
+    -   add the source archive from ./build/SOURCES
+    -   add the yumex-**version**.src.rpm from ./build/SRPMS
+    -   add the yumex-dnf5-**version**.src.rpm from ./build/SRPMS
+    -   set the pre-release checkmark
+    -   publish the release
