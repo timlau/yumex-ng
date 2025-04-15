@@ -1,5 +1,8 @@
 # Create a new release check list
 
+-   run tests
+    -   run `make run-tests`
+    -   run `make tun-tests-live`
 -   update the code
     -   bump the version number in .\meson.build
     -   bump the version number in .\yumex.spec
