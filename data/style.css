@@ -151,3 +151,13 @@ spinner {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.problems label.subtitle {
+    font-family: monospace;
+    font-size: 1em;
+    color: @error_color;
+}
+
+.problems label {
+    font-size: 1.5em;
+}

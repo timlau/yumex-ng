@@ -49,12 +49,14 @@ class YumexTransactionResult(Adw.Dialog):
         self.prob_grp.set_visible(True)
 
     def show_result(self, result_dict):
+        self.set_follows_content_size(False)
         self.result_frame.set_visible(True)
         self.populate(result_dict)
 
     def show_errors(self, errors) -> None:
         self.result_frame.set_visible(False)
         self.confirm_button.set_visible(False)
+        self.set_follows_content_size(True)
         self.problems.set_title(_("Transaction Failed"))
         self.problems.set_subtitle(errors)
         self.prob_grp.set_visible(True)

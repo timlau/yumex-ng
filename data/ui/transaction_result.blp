@@ -5,9 +5,8 @@ template $YumexTransactionResult: Adw.Dialog {
   content-width: 700;
   content-height: 700;
 
-  Gtk.Box main_content {
-    orientation: vertical;
-
+  Adw.ToolbarView main_content {
+    [top]
     Adw.HeaderBar titlebar {
       centering-policy: strict;
       show-end-title-buttons: false;
@@ -87,6 +86,11 @@ template $YumexTransactionResult: Adw.Dialog {
 
         Adw.ActionRow problems {
           title: _("Problems in Transaction");
+          subtitle-selectable: true;
+
+          styles [
+            "problems",
+          ]
         }
       }
     }
