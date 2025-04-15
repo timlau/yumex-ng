@@ -3,7 +3,7 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.1.0
+Version:  5.2.0
 Release:  1%{?dist}
 Summary:  Yum Extender graphical package management tool
 
@@ -144,6 +144,10 @@ done
 %systemd_user_preun yumex-updater.service
 
 %changelog
+
+* Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
+- the 5.2.0 stable release
+
 * Thu Mar 31 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.1.0-1
 - the 5.1.0 release
 - cleanup requirement for only using dnf5daemon for everything
