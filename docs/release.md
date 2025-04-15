@@ -15,8 +15,6 @@
             -   make source archive
             -   build the src.rpm
             -   create a Fedora Copr build of the src.rpm
-            -   build the yumex-dnf5 src.rpm
-            -   create a Fedora Copr build of the yumex-dnf src.rpm
 -   make a new github release
     -   https://github.com/timlau/yumex-ng/releases/new
     -   select the release tag
@@ -24,5 +22,11 @@
     -   add the source archive from ./build/SOURCES
     -   add the yumex-**version**.src.rpm from ./build/SRPMS
     -   add the yumex-dnf5-**version**.src.rpm from ./build/SRPMS
-    -   set the pre-release checkmark
     -   publish the release
+-   create a stable branch (5.y.x) and publish it for future fix to the stable branch
+
+## Prepare for a next release development
+
+-   bump the version (secord digit MUST be uneven)
+    -   update the version number in .\meson.build
+    -   update the version number in .\yumex.spec
