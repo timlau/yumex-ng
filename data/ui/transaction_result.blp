@@ -60,7 +60,7 @@ template $YumexTransactionResult: Adw.Dialog {
       margin-top: 20;
       margin-bottom: 20;
 
-      Gtk.Frame {
+      Gtk.Frame result_frame {
         Gtk.ScrolledWindow {
           Gtk.ListView result_view {
             margin-start: 10;
@@ -86,7 +86,7 @@ template $YumexTransactionResult: Adw.Dialog {
         visible: false;
 
         Adw.ActionRow problems {
-          title: "Problems";
+          title: _("Problems in Transaction");
         }
       }
     }

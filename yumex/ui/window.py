@@ -222,7 +222,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     else:
                         break
         if result.error:
-            self.show_message(result.error)
+            transaction_result = YumexTransactionResult()
+            transaction_result.show_errors(result.error)
+            transaction_result.show(self)
+
+            # self.show_message(result.error)
         return False
 
     def confirm_gpg_import(self, key_values):

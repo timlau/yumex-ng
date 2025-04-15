@@ -23,11 +23,12 @@ from yumex.utils import format_number
 class YumexTransactionResult(Adw.Dialog):
     __gtype_name__ = "YumexTransactionResult"
 
+    result_frame = Gtk.Template.Child()
     result_view = Gtk.Template.Child()
     selection = Gtk.Template.Child()
     result_factory = Gtk.Template.Child()
     prob_grp = Gtk.Template.Child()
-    problems = Gtk.Template.Child()
+    problems: Adw.ActionRow = Gtk.Template.Child()
     confirm_button = Gtk.Template.Child("confirm")
     cancel_button = Gtk.Template.Child("cancel")
 
@@ -44,11 +45,19 @@ class YumexTransactionResult(Adw.Dialog):
         self._loop.run()
 
     def set_problems(self, prob: list):
-        self.problems.set_title("\n".join(prob))
+        self.problems.set_subtitle("\n".join(prob))
         self.prob_grp.set_visible(True)
 
     def show_result(self, result_dict):
+        self.result_frame.set_visible(True)
         self.populate(result_dict)
+
+    def show_errors(self, errors) -> None:
+        self.result_frame.set_visible(False)
+        self.confirm_button.set_visible(False)
+        self.problems.set_title(_("Transaction Failed"))
+        self.problems.set_subtitle(errors)
+        self.prob_grp.set_visible(True)
 
     def populate(self, result_dict):
         for key in result_dict:
