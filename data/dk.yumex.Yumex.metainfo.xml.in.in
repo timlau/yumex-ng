@@ -43,6 +43,7 @@
         <li>Use only dnf5daemon for all package actions</li>        
         </ul>
       </description>
+    </release>  
     <release version="5.0.3" date="2024-11-07" type="devel"><description>
         <p>Yum Extender 5.0.3 add many fixes and improvments </p>
       </description>
