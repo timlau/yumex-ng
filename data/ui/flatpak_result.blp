@@ -5,9 +5,8 @@ template $YumexFlatpakResult: Adw.Dialog {
   content-width: 900;
   content-height: 600;
 
-  Gtk.Box main_content {
-    orientation: vertical;
-
+  Adw.ToolbarView main_content {
+    [top]
     Adw.HeaderBar titlebar {
       centering-policy: strict;
       show-end-title-buttons: false;
