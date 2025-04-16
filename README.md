@@ -16,11 +16,11 @@ Follow news in [Announcements](https://github.com/timlau/yumex-ng/discussions/ca
 -   check out this repository
 -   install deps `make inst-deps`
 -   install build deps `make inst-build-tools`
--   `make test-inst` ( if yumex-dnf5 is not installed )
--   `make test-update` ( if yumex-dnf5 is installed on a previous date )
--   `make test-reinst` ( if yumex-dnf5 is installed on the same date )
+-   `make test-inst` ( if yumex is not installed )
+-   `make test-update` ( if yumex is installed on a previous date )
+-   `make test-reinst` ( if yumex is installed on the same date )
 
-## Packages for Fedora 40,41,42 & Rawhide (COPR)
+## Packages for Fedora 41,42 & Rawhide (COPR)
 
 **Stable**
 [yumex-ng](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng/)
