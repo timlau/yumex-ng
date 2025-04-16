@@ -161,3 +161,9 @@ spinner {
 .problems label {
     font-size: 1.5em;
 }
+
+.error_dialog label.body {
+    font-family: monospace;
+    font-size: 1.2em;
+    color: @error_color;
+}

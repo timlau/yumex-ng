@@ -11,11 +11,14 @@ def error_dialog(win: MainWindow, title: str, msg: str):
         title,
         msg,
     )
-    dialog.set_content_width(-1)
+    dialog.set_content_width(600)
+    dialog.set_content_height(500)
+    dialog.set_follows_content_size(False)
     dialog.add_response("quit", _("Quit"))
     dialog.set_default_response("quit")
     dialog.set_close_response("quit")
     dialog.connect("response", response)
+    dialog.add_css_class("error_dialog")
     dialog.present(win)
 
 
@@ -33,6 +36,8 @@ class GPGDialog(Adw.AlertDialog):
         self.win = win
         self.set_content_width(800)
         self.set_content_height(800)
+        self.set_follows_content_size(True)
+
         self.add_css_class("gpg_dialog")
         self.set_heading(_("Install GPG Key"))
         body = f"""
