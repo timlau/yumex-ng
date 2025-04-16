@@ -16,11 +16,11 @@
 
 import logging
 
-from gi.repository import GObject, Gtk
+from gi.repository import Gio, GObject, Gtk
 
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.interface import Presenter
-from yumex.constants import ROOTDIR
+from yumex.constants import APP_ID, ROOTDIR
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.dialogs import error_dialog
 from yumex.ui.queue_view import YumexQueueView
@@ -60,6 +60,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.queue_view = qview
         self.sort_attr = SortType.NAME
         self.batch_selection = False
+        self.settings = Gio.Settings(APP_ID)
         self.setup()
 
     def setup(self):
@@ -109,8 +110,8 @@ class YumexPackageView(Gtk.ColumnView):
         """search for packages and add them to store"""
         if len(txt) > 2:
             logger.debug(f"search packages field:{field} value: {txt}")
-            # TODO: have an option to set the limit of package versions to return (limit=2)
-            pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=2))
+            limit = self.settings.get_int("search-pkg-limit")
+            pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=limit))
             self.add_packages_to_store(pkgs)
 
     @timed

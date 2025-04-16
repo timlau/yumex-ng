@@ -81,5 +81,9 @@
 			<default>false</default>
 			<summary>Use a dark updaer icon</summary>
 		</key>
+		<key name="search-pkg-limit" type="i">
+			<default>1</default>
+			<summary>number of package versions to return in search</summary>
+		</key>
 	</schema>
 </schemalist>

@@ -43,6 +43,24 @@ template $YumexPreferences: Adw.PreferencesDialog {
       }
     }
 
+    Adw.PreferencesGroup search {
+      title: _("Search Settings");
+
+      Adw.ActionRow {
+        title: _("Package versions to return");
+
+        Gtk.Box {
+          orientation: horizontal;
+          vexpand: false;
+          valign: center;
+
+          Gtk.Entry search_pkg_limit {
+            text: "2";
+          }
+        }
+      }
+    }
+
     Adw.PreferencesGroup updater {
       title: _("Updater Settings");
 
