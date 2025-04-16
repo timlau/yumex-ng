@@ -89,6 +89,8 @@ class YumexTransactionResult(Adw.Dialog):
                 return _("Packages for updating")
             case "skipped":
                 return _("Skipped Packages")
+            case "downgrade":
+                return _("Packages for downgrading")
             case _:
                 return action
 

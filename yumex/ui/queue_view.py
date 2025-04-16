@@ -167,6 +167,9 @@ class YumexQueueRow(Gtk.Box):
             case PackageState.UPDATE:
                 self.icon.set_from_icon_name("emblem-synchronizing-symbolic")
                 self.icon.add_css_class("accent")
+            case PackageState.DOWNGRADE:
+                self.icon.set_from_icon_name("go-down-symbolic")
+                self.icon.add_css_class("warning")
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, button):

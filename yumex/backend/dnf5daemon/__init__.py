@@ -188,6 +188,15 @@ class YumexRootBackend:
         self.connect_signals()
         repo_prioritiy = {id: priority for id, _, _, priority in self.get_repositories()}
         self.filter_updates = FilterUpdates(repo_prioritiy, self.get_packages_by_name)
+        self._installed_evr = self.fetch_installed_evr()
+
+    def fetch_installed_evr(self) -> list[YumexPackage]:
+        """build dict of installed package name and evr"""
+        inst_dict = {}
+        for pkg in self.installed:
+            if pkg["name"] not in inst_dict:
+                inst_dict[pkg["name"]] = pkg["evr"]
+        return inst_dict
 
     def reset(self):
         # self.client.close_session()
@@ -196,6 +205,7 @@ class YumexRootBackend:
         logger.debug(f"DBUS: {self.client.session_base.object_path}.reset()")
         self.client.session_base.reset()
         logger.debug("Dnf5Demon is reset...")
+        self._installed_evr = self.fetch_installed_evr()
 
     def close(self):
         self.client.close_session()
@@ -237,6 +247,8 @@ class YumexRootBackend:
         to_install = []
         to_update = []
         to_remove = []
+        to_downgrade = []
+        allow_erasing = False
         self.client.session_goal.reset()
         for pkg in pkgs:
             match pkg.state:
@@ -249,6 +261,9 @@ class YumexRootBackend:
                 case PackageState.INSTALLED:
                     logger.debug(f"adding {pkg.nevra} for remove")
                     to_remove.append(pkg.nevra)
+                case PackageState.DOWNGRADE:
+                    logger.debug(f"adding {pkg.nevra} for downgrade")
+                    to_downgrade.append(pkg.nevra)
         if to_remove:
             logger.debug(f"DBUS: {self.client.session_rpm.object_path}.remove()")
             self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
@@ -260,7 +275,12 @@ class YumexRootBackend:
             logger.debug(f"DBUS: {self.client.session_rpm.object_path}.update()")
             self.client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
 
-        res, err = self.client.resolve()
+        if to_downgrade:
+            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.downgrade()")
+            self.client.session_rpm.downgrade(dbus.Array(to_downgrade), dbus.Dictionary({}))
+            allow_erasing = True
+
+        res, err = self.client.resolve(dbus.Dictionary({"allow_erasing": allow_erasing}))
         if res:
             result, rc = res
         else:
@@ -440,6 +460,14 @@ class YumexRootBackend:
             logger.debug("Denied RPM GPG key")
             self.client.confirm_key(key_id, False)
 
+    def check_for_downgrades(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
+        """check for downgrades"""
+        for pkg in pkgs:
+            if pkg.name in self._installed_evr:
+                if pkg.evr < self._installed_evr[pkg.name]:
+                    pkg.set_state(PackageState.DOWNGRADE)
+        return pkgs
+
     # Implement PackageBackend
 
     @property
@@ -458,10 +486,11 @@ class YumexRootBackend:
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
-    def search(self, txt: str, field: SearchField, limit: int = 0) -> list[YumexPackage]:
+    def search(self, txt: str, field: SearchField, limit: int = 1) -> list[YumexPackage]:
         kw_args = {
             "package_attrs": self.package_attr,
             "scope": "all",
+            "latest_limit": limit,
         }
         match field:
             case SearchField.NAME:
@@ -481,7 +510,8 @@ class YumexRootBackend:
                 raise ValueError(msg)
         result = self.client.package_list_fd(txt, **kw_args)
         if result:
-            return self._get_yumex_packages(result)
+            pkgs = self.check_for_downgrades(self._get_yumex_packages(result))
+            return pkgs
         else:
             return []
 
@@ -561,7 +591,7 @@ class YumexRootBackend:
                 ypkg.is_dep = True
                 dep_pkgs.append(ypkg)
                 logger.debug(f"Adding {ypkg} as dependency")
-        return dep_pkgs
+        return self.check_for_downgrades(dep_pkgs)
 
     # Helpers (PackageBackend)
 

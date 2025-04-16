@@ -109,7 +109,8 @@ class YumexPackageView(Gtk.ColumnView):
         """search for packages and add them to store"""
         if len(txt) > 2:
             logger.debug(f"search packages field:{field} value: {txt}")
-            pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=1))
+            # TODO: have an option to set the limit of package versions to return (limit=2)
+            pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=2))
             self.add_packages_to_store(pkgs)
 
     @timed
@@ -145,6 +146,8 @@ class YumexPackageView(Gtk.ColumnView):
                 current_styles.append("success")
             case PackageState.UPDATE:
                 current_styles.append("error")
+            case PackageState.DOWNGRADE:
+                current_styles.append("warning")
         widget.set_css_classes(current_styles)
 
     def select_all(self, state: bool):
