@@ -15,7 +15,7 @@
 
 import logging
 
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk  # type: ignore
+from gi.repository import Adw, Gio, GLib, GObject, Gtk  # type: ignore
 
 from yumex.constants import ROOTDIR
 from yumex.utils import format_number
