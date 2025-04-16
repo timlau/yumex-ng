@@ -13,10 +13,14 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from gi.repository import Adw, Gio, GLib, GObject, Gtk  # type: ignore
+import logging
+
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk  # type: ignore
 
 from yumex.constants import ROOTDIR
 from yumex.utils import format_number
+
+logger = logging.getLogger(__name__)
 
 
 @Gtk.Template(resource_path=f"{ROOTDIR}/ui/transaction_result.ui")
@@ -31,6 +35,7 @@ class YumexTransactionResult(Adw.Dialog):
     problems: Adw.ActionRow = Gtk.Template.Child()
     confirm_button = Gtk.Template.Child("confirm")
     cancel_button = Gtk.Template.Child("cancel")
+    copy_button = Gtk.Template.Child("copy")  # Add a reference to the new button
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -125,6 +130,13 @@ class YumexTransactionResult(Adw.Dialog):
             label.set_label(obj.title)
         else:
             label.set_label(obj.pkg)
+
+    @Gtk.Template.Callback()
+    def on_copy_clicked(self, button):
+        """Copy the subtitle of self.problems to the clipboard."""
+        subtitle = self.problems.get_subtitle()
+        clb = button.get_clipboard()
+        clb.set(subtitle)
 
 
 class ResultElem(GObject.GObject):

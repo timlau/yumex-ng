@@ -91,6 +91,23 @@ template $YumexTransactionResult: Adw.Dialog {
           styles [
             "problems",
           ]
+
+          Gtk.Box {
+            orientation: horizontal;
+            hexpand: false;
+            vexpand: false;
+            valign: start;
+
+            Gtk.Button copy {
+              icon-name: "edit-copy-symbolic";
+              tooltip-text: _("Copy to clipboard");
+              clicked => $on_copy_clicked();
+
+              styles [
+                "flat",
+              ]
+            }
+          }
         }
       }
     }
