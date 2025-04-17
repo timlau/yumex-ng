@@ -2,10 +2,10 @@ from yumex.ui.transaction_result import YumexTransactionResult
 
 
 def run_test(win):
-    test_transaction_result(win)
+    test_transaction_result_show_errors(win)
 
 
-def test_transaction_result(win):
+def test_transaction_result_show_errors(win):
     """Test the transaction result dialog."""
     result = YumexTransactionResult()
     msg = "Something is rotten in the state of Denmark\n" * 10
