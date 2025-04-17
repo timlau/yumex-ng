@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+import html
 import logging
 
 from gi.repository import Adw, Gio, GLib, GObject, Gtk  # type: ignore
@@ -59,6 +60,7 @@ class YumexTransactionResult(Adw.Dialog):
         self.populate(result_dict)
 
     def show_errors(self, errors) -> None:
+        errors = html.escape(errors)
         self.result_frame.set_visible(False)
         self.confirm_button.set_visible(False)
         self.set_follows_content_size(True)
