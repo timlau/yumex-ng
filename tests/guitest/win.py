@@ -12,7 +12,7 @@ class GuiTestWindow(Adw.ApplicationWindow):
 
     def __init__(self, application):
         super().__init__(application=application)
-        self.set_default_size(800, 600)
+        self.set_default_size(1000, 800)
         self.set_title("Testing GUI")
         main_content = Adw.ToolbarView()
         header = Adw.HeaderBar()
