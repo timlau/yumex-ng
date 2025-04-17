@@ -181,4 +181,6 @@ memray-updater-live:
 	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
 
 
+run-gui-test: localbuild
+	@python tests/guitest/main.py
 
