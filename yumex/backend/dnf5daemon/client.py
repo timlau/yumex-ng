@@ -227,9 +227,9 @@ class Dnf5DbusClient:
         options["package_attrs"] = dbus.Array(kwargs.pop("package_attrs", ["nevra"]))
         options["with_src"] = False
         # options["with_nevra"] = kwargs.pop("with_nevra", True)
-        # options["with_provides"] = kwargs.pop("with_provides", False)
-        # options["with_filenames"] = kwargs.pop("with_filenames", False)
-        # options["with_binaries"] = kwargs.pop("with_binaries", False)
+        options["with_provides"] = kwargs.pop("with_provides", False)
+        options["with_filenames"] = kwargs.pop("with_filenames", False)
+        options["with_binaries"] = kwargs.pop("with_binaries", False)
         options["icase"] = True
         options["latest-limit"] = kwargs.pop("latest_limit", 1)
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
