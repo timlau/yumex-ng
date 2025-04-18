@@ -39,7 +39,6 @@ class YumexPreferences(Adw.PreferencesDialog):
     upd_show = Gtk.Template.Child()
     upd_notification = Gtk.Template.Child()
     upd_dark_icon = Gtk.Template.Child()
-    search_pkg_limit = Gtk.Template.Child()
 
     def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
@@ -51,7 +50,6 @@ class YumexPreferences(Adw.PreferencesDialog):
         self.setup_flatpak()
         self.setup_metadata()
         self.setup_updater()
-        self.setup_search()
         self.updater.set_visible(True)
 
     def setup_repo(self, show_all=False):
@@ -82,10 +80,6 @@ class YumexPreferences(Adw.PreferencesDialog):
         self.upd_notification.set_state(self.settings.get_boolean("upd-notification"))
         self.upd_dark_icon.set_active(self.settings.get_boolean("upd-dark-icon"))
         self.upd_dark_icon.set_state(self.settings.get_boolean("upd-dark-icon"))
-
-    def setup_search(self):
-        search_limit = self.settings.get_int("search-pkg-limit")
-        self.search_pkg_limit.set_text(str(search_limit))
 
     def setup_metadata(self):
         period = self.settings.get_int("meta-load-periode")
@@ -136,8 +130,6 @@ class YumexPreferences(Adw.PreferencesDialog):
         self.settings.set_boolean("upd-show-icon", self.upd_show.get_state())
         self.settings.set_boolean("upd-notification", self.upd_notification.get_state())
         self.settings.set_boolean("upd-dark-icon", self.upd_dark_icon.get_state())
-        # Search Settings
-        self.settings.set_int("search-pkg-limit", int(self.search_pkg_limit.get_text()))
         return location, remote
 
     def update_remote(self, current_location) -> str | None:

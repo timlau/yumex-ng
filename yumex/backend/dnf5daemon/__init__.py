@@ -10,7 +10,7 @@ from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon.filter import FilterUpdates
 from yumex.backend.interface import Presenter, Progress
-from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
+from yumex.utils.enums import InfoType, PackageFilter, PackageState
 
 from .client import Dnf5DbusClient
 
@@ -486,28 +486,11 @@ class YumexRootBackend:
             case other:
                 raise ValueError(f"Unknown package filter: {other}")
 
-    def search(self, txt: str, field: SearchField, limit: int = 1) -> list[YumexPackage]:
-        kw_args = {
-            "package_attrs": self.package_attr,
-            "scope": "all",
-            "latest_limit": limit,
-        }
-        match field:
-            case SearchField.NAME:
-                if "*" not in txt:
-                    txt = f"*{txt}*"
-            case SearchField.ARCH:
-                kw_args["arch"] = [txt]
-                txt = "*"
-            case SearchField.REPO:
-                kw_args["repo"] = [txt]
-                txt = "*"
-            case SearchField.SUMMARY:
-                ...
-            case other:
-                msg = f"Search field : [{other}] not supported in dnf5 backend"
-                logger.debug(msg)
-                raise ValueError(msg)
+    def search(self, txt: str, options={}) -> list[YumexPackage]:
+        kw_args = options
+        kw_args["package_attrs"] = self.package_attr
+        if "*" not in txt:
+            txt = f"*{txt}*"
         result = self.client.package_list_fd(txt, **kw_args)
         if result:
             pkgs = self.check_for_downgrades(self._get_yumex_packages(result))

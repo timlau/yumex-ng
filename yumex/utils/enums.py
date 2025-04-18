@@ -67,13 +67,6 @@ class PackageAction(IntEnum):
     ERASE = 50
 
 
-class SearchField(StrEnum):
-    NAME = auto()
-    ARCH = auto()
-    REPO = auto()
-    SUMMARY = auto()
-
-
 class PackageFilter(StrEnum):
     INSTALLED = auto()
     UPDATES = auto()

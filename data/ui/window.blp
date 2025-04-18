@@ -81,13 +81,30 @@ template $YumexMainWindow: Adw.ApplicationWindow {
           search-mode-enabled: bind search_button.active bidirectional;
           key-capture-widget: template;
 
-          child: Gtk.SearchEntry search_entry {
-            max-width-chars: 40;
-            search-delay: 500;
-            search-changed => $on_search_changed();
-            activate => $on_search_activate();
-            placeholder-text: _("Package Name");
-          };
+          [child]
+          Box {
+            Gtk.SearchEntry search_entry {
+              max-width-chars: 40;
+              search-delay: 500;
+              search-changed => $on_search_changed();
+              activate => $on_search_activate();
+              placeholder-text: _("Package Name");
+            }
+
+            Gtk.Button search_setting {
+              icon-name: "preferences-system-symbolic";
+              clicked => $on_search_settings();
+
+              ShortcutController {
+                scope: managed;
+
+                Shortcut {
+                  trigger: "<Ctrl>O";
+                  action: "activate";
+                }
+              }
+            }
+          }
         }
 
         Adw.ViewStack view_stack {

@@ -17,7 +17,7 @@ from typing import Iterable, Protocol
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
-from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField
+from yumex.utils.enums import InfoType, PackageFilter, Page
 from yumex.utils.types import MainWindow
 
 
@@ -36,7 +36,7 @@ class PackageBackend(Protocol):
 
     def get_packages(self, pkg_filter: PackageFilter) -> list[YumexPackage]: ...
 
-    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]: ...
+    def search(self, txt: str, options: dict) -> list[YumexPackage]: ...
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None: ...
 
@@ -94,7 +94,7 @@ class Presenter(Protocol):
 
     def reset_flatpak_backend(self) -> None: ...
 
-    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]: ...
+    def search(self, txt: str, limit: int, options: dict) -> list[YumexPackage]: ...
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None: ...
 

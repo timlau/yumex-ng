@@ -30,7 +30,6 @@ from yumex.utils.enums import (
     InfoType,
     PackageFilter,
     Page,
-    SearchField,
 )
 from yumex.utils.types import MainWindow
 
@@ -87,8 +86,8 @@ class YumexPresenter:
         self._cache = None
 
     # PackageBackend implementation
-    def search(self, txt: str, field: SearchField, limit: int) -> list[YumexPackage]:
-        return self.package_backend.search(txt, field, limit)
+    def search(self, txt: str, options: dict) -> list[YumexPackage]:
+        return self.package_backend.search(txt, options=options)
 
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         return self.package_backend.get_package_info(pkg, attr)

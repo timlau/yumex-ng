@@ -25,12 +25,7 @@ from yumex.ui import get_package_selection_tooltip
 from yumex.ui.dialogs import error_dialog
 from yumex.ui.queue_view import YumexQueueView
 from yumex.utils import RunAsync, timed
-from yumex.utils.enums import (
-    PackageFilter,
-    PackageState,
-    SearchField,
-    SortType,
-)
+from yumex.utils.enums import PackageFilter, PackageState, SortType
 from yumex.utils.storage import PackageStorage
 
 logger = logging.getLogger(__name__)
@@ -106,12 +101,11 @@ class YumexPackageView(Gtk.ColumnView):
         RunAsync(self.presenter.get_packages_by_filter, set_completed, pkg_filter)
 
     # @timed
-    def search(self, txt, field=SearchField.NAME):
+    def search(self, txt, options={}):
         """search for packages and add them to store"""
         if len(txt) > 2:
-            logger.debug(f"search packages field:{field} value: {txt}")
-            limit = self.settings.get_int("search-pkg-limit")
-            pkgs = self.presenter.get_packages(self.presenter.search(txt, field=field, limit=limit))
+            logger.debug(f"search packages field: value: {txt}")
+            pkgs = self.presenter.get_packages(self.presenter.search(txt, options=options))
             self.add_packages_to_store(pkgs)
 
     @timed

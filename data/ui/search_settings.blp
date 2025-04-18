@@ -1,0 +1,79 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $YumexSearchSettings: Adw.PreferencesDialog {
+  title: _("Search Settings");
+  content-height: 700;
+  content-width: 600;
+
+  Adw.PreferencesPage main {
+    title: _("Settings");
+    icon-name: "preferences-system-symbolic";
+
+    Adw.PreferencesGroup search {
+      title: _("Seatch Settings");
+
+      Adw.SpinRow latest_limit {
+        title: _("Number of package versions");
+        value: 1.0;
+
+        adjustment: Gtk.Adjustment {
+          value: 1.0;
+          lower: 1.0;
+          upper: 5.0;
+          step-increment: 1.0;
+          page-increment: 1.0;
+          page-size: 1.0;
+        };
+      }
+
+      Adw.SwitchRow with_filenames {
+        title: _("Search in filesystem");
+        active: false;
+      }
+
+      Adw.SwitchRow with_provides {
+        title: _("Search in provides");
+        active: false;
+      }
+
+      Adw.SwitchRow with_binaries {
+        title: _("Search in binaries");
+        active: false;
+      }
+
+      Adw.ComboRow arch {
+        title: _("Filter on archs");
+        model: archs;
+        selected: 0;
+      }
+
+      Adw.ComboRow scope {
+        title: _("Search scope");
+        model: scopes;
+        selected: 0;
+      }
+    }
+  }
+}
+
+Gtk.StringList archs {
+  strings [
+    "all",
+    "noarch",
+    "x86_64",
+    "i686",
+    "aarch64",
+    "armv7l",
+  ]
+}
+
+Gtk.StringList scopes {
+  strings [
+    "all",
+    "installed",
+    "available",
+    "upgrades",
+    "upgradable",
+  ]
+}

@@ -14,7 +14,6 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 import logging
-import re
 from pathlib import Path
 
 from gi.repository import Adw, Gio, Gtk  # type: ignore
@@ -31,9 +30,10 @@ from yumex.ui.package_settings import YumexPackageSettings
 from yumex.ui.package_view import YumexPackageView
 from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
+from yumex.ui.search_settings import YumexSearchSettings
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import BUILD_TYPE, RunAsync
-from yumex.utils.enums import InfoType, PackageFilter, Page, SearchField, SortType
+from yumex.utils.enums import InfoType, PackageFilter, Page, SortType
 from yumex.utils.updater import sync_updates
 
 logger = logging.getLogger(__name__)
@@ -69,12 +69,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
         self.settings = Gio.Settings(APP_ID)
+        self.search_settings = YumexSearchSettings()
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
         self._last_selected_pkg: YumexPackage = None
         self.info_type: InfoType = InfoType.DESCRIPTION
         self._last_filter: PackageFilter | None = None
         self._resetting = False
+        self.search_bar.connect_entry(self.search_entry)
 
         # save settings on windows close
         self.connect("unrealize", self.on_window_close)
@@ -315,15 +317,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.load_packages(PackageFilter.INSTALLED)
         self._resetting = False
 
-    def do_search(self, text, field=None):
+    def do_search(self, text):
         # remove selection in package filter (sidebar)
         if not self._last_filter:
             self._last_filter = self.package_settings.current_pkg_filter
         self.package_settings.unselect_all()
-        if field:
-            self.package_view.search(text, field=field)
-        else:
-            self.package_view.search(text)
+        self.package_view.search(text, options=self.search_settings.options)
 
     def reset_search(self):
         # if self.package_settings.current_pkg_filter == PackageFilter.SEARCH:
@@ -339,37 +338,28 @@ class YumexMainWindow(Adw.ApplicationWindow):
         logger.debug(f"search changed : {search_txt}")
         if search_txt == "" and not self._resetting:
             self.reset_search()
-        elif search_txt and search_txt[0] != ".":
+        elif search_txt != "":
             self.do_search(search_txt)
         return True
 
     @Gtk.Template.Callback()
     def on_search_activate(self, widget):
         """handler for enter pressed in the seach entry"""
-        allowed_field_map = {
-            "name": SearchField.NAME,
-            "arch": SearchField.ARCH,
-            "repo": SearchField.REPO,
-            "desc": SearchField.SUMMARY,
-        }
         search_txt = widget.get_text()
         logger.debug(f"search activate : {search_txt}")
         if search_txt == "":
             self.reset_search()
-        elif search_txt[0] == ".":
-            # syntax: .<field>=<value>
-            cmds = re.compile(r"^\.(.*)=(.*)")
-            res = cmds.match(search_txt)
-            if len(res.groups()) == 2:
-                field, key = res.groups()
-                if field in allowed_field_map:
-                    field = allowed_field_map[field]
-                    self.package_settings.unselect_all()
-                    logger.debug(f"searching for : {key} in pkg.{field}")
-                    self.do_search(key, field=field)  # search by field
         else:
             self.do_search(search_txt)
         return True
+
+    @Gtk.Template.Callback()
+    def on_search_settings(self, widget):
+        print("search settings")
+        options = self.search_settings.show(self)
+        print(options)
+        self.search_entry.grab_focus()
+        self.on_search_activate(self.search_entry)
 
     def on_selectall_activate(self):
         """handler for select all on selection column right click menu"""
