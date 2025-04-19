@@ -73,10 +73,10 @@ class Dnf5DbusClient:
         self._connected = False
 
     @dbus_exception
-    def open_session(self):
+    def open_session(self, options={}):
         if not self._connected:
-            logger.debug(f"DBUS: {self.iface_session.object_path}.open_session()")
-            self.session = self.iface_session.open_session({})
+            logger.debug(f"DBUS: {self.iface_session.object_path}.open_session({options})")
+            self.session = self.iface_session.open_session(options)
             if self.session:
                 logger.debug(f"open session: {self.session}")
                 self._connected = True
@@ -305,3 +305,14 @@ class Dnf5DbusClient:
         result = self.session_base.clean(metadata_type)
         logger.debug(f"clean : {result}")
         return result
+
+    @dbus_exception
+    def system_upgrade(self, mode, releasever):
+        self.close_session()
+        self.open_session({"releasever": releasever})
+        options = dbus.Dictionary({"mode": mode})
+        logger.debug(f"DBUS: system-upgrade({mode})")
+        system_upgrade = self._async_method("system_upgrade", proxy=self.session_rpm)
+        res, err = system_upgrade(options)
+        logger.debug(f"system-upgrade({mode}) returned : {res, err}")
+        return res, err

@@ -1,0 +1,57 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $YumexAdvancedActions: Adw.Dialog {
+  title: _("Advanced Actions");
+  // content-height: 700;
+  content-width: 500;
+
+  Adw.ToolbarView main {
+    [top]
+    Adw.HeaderBar titlebar {
+      centering-policy: strict;
+      show-end-title-buttons: true;
+
+      [title]
+      Gtk.Label {
+        label: _("Advanced Actions");
+      }
+    }
+
+    Adw.PreferencesGroup actions {
+      margin-start: 30;
+      margin-end: 30;
+      margin-top: 20;
+      margin-bottom: 30;
+      separate-rows: true;
+
+      Adw.ButtonRow {
+        title: _("Refresh DNF Cache");
+        activated => $on_refresh_dnf_cache();
+        tooltip-text: _("Expire the DNF cache, so it will be refreshed from repositories.");
+
+        styles [
+          "suggested-action",
+        ]
+      }
+
+      Adw.ExpanderRow {
+        title: _("System Distro Sync");
+
+        Adw.EntryRow releasever {
+          title: _("Fedora release");
+        }
+
+        Adw.ButtonRow {
+          title: _("Run distro-sync");
+          activated => $on_distro_sync();
+          tooltip-text: _("Sync installed packages with versions available in repositories.");
+
+          styles [
+            "suggested-action",
+          ]
+        }
+      }
+    }
+  }
+}

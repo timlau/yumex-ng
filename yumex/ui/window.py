@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2024 Tim Lauridsen
+# Copyright (C) 2025 Tim Lauridsen
 
 import logging
 from pathlib import Path
@@ -22,6 +22,7 @@ from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
+from yumex.ui.advanced_actions import YumexAdvancedActions
 from yumex.ui.dialogs import GPGDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
@@ -70,6 +71,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.app = kwargs["application"]
         self.settings = Gio.Settings(APP_ID)
         self.search_settings = YumexSearchSettings()
+        self.advanced_actions = YumexAdvancedActions(self)
+        self.advanced_actions.connect("action", self.on_advanced_actions)
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
         self._last_selected_pkg: YumexPackage = None
@@ -186,13 +189,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Set the sesitivity of the package view"""
         self.main_view.set_sensitive(sensitive)
 
-    def _do_transaction(self, queued):
+    def _do_transaction(self, queued, system_upgrade=None, releasever=None):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         backend = self.presenter.package_backend
         # build the transaction
-        result: TransactionResult = backend.build_transaction(queued)
+        result: TransactionResult = backend.build_transaction(queued, system_upgrade, releasever)
         self.progress.hide()
         if result.completed:
             # get confirmation
@@ -451,14 +454,43 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "toggle_selection":
                 if self.active_page == Page.PACKAGES:
                     self.package_view.toggle_selected()
-            case "expire-cache":
-                logger.debug("expire-cache")
-                res, msg = self.presenter.package_backend.client.clean("expire-cache")
-                if res:
-                    self.reset_all()
+            case "adv-actions":
+                logger.debug("advanced actions")
+                action = self.advanced_actions.show(self)
             case other:
                 logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")
+
+    def on_advanced_actions(self, widget, action, parameter):
+        """handler for advanced actions"""
+        logger.debug(f"advanced action: {action} parameter: {parameter}")
+        match action:
+            case "refresh-cache":
+                self.on_action_expire_cache()
+            case "distro-sync":
+                self.on_action_distro_sync()
+            case _:
+                logger.debug(f"ERROR: action: {action} not defined")
+
+    def on_action_expire_cache(self):
+        def callback(*args):
+            res, error = args[0]
+            logger.debug(f"expire-cache: {res} : {error}")
+            if res:
+                self.reset_all()
+
+        RunAsync(self.presenter.package_backend.client.clean, callback, "expire-cache")
+
+    def on_action_distro_sync(self):
+        """handler for distro-sync action"""
+        logger.debug("Execute system distro-sync")
+        result = self._do_transaction([], system_upgrade="distrosync", releasever="41")
+        logger.debug(f"Transaction execution ended : {result}")
+        if result:  # transaction completed without issues\
+            self.show_message(_("Transaction completed succesfully"), timeout=3)
+
+            # reset everything
+            self.reset_all()
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""

@@ -243,42 +243,46 @@ class YumexRootBackend:
             result_dict[action].append(((nevra, repo), size))
         return result_dict
 
-    def _build_transations(self, pkgs: list[YumexPackage]):
+    def _build_transations(self, pkgs: list[YumexPackage], system_upgrade=None, releasever=None) -> tuple[list, int]:
         to_install = []
         to_update = []
         to_remove = []
         to_downgrade = []
         allow_erasing = False
         self.client.session_goal.reset()
-        for pkg in pkgs:
-            match pkg.state:
-                case PackageState.AVAILABLE:
-                    logger.debug(f"adding {pkg.nevra} for install")
-                    to_install.append(pkg.nevra)
-                case PackageState.UPDATE:
-                    logger.debug(f"adding {pkg.nevra} for update")
-                    to_update.append(pkg.nevra)
-                case PackageState.INSTALLED:
-                    logger.debug(f"adding {pkg.nevra} for remove")
-                    to_remove.append(pkg.nevra)
-                case PackageState.DOWNGRADE:
-                    logger.debug(f"adding {pkg.nevra} for downgrade")
-                    to_downgrade.append(pkg.nevra)
-        if to_remove:
-            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.remove()")
-            self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
-        if to_install:
-            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.install()")
-            self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
-
-        if to_update:
-            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.update()")
-            self.client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
-
-        if to_downgrade:
-            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.downgrade()")
-            self.client.session_rpm.downgrade(dbus.Array(to_downgrade), dbus.Dictionary({}))
+        if system_upgrade:
+            res, err = self.client.system_upgrade(system_upgrade, releasever)
             allow_erasing = True
+        else:
+            for pkg in pkgs:
+                match pkg.state:
+                    case PackageState.AVAILABLE:
+                        logger.debug(f"adding {pkg.nevra} for install")
+                        to_install.append(pkg.nevra)
+                    case PackageState.UPDATE:
+                        logger.debug(f"adding {pkg.nevra} for update")
+                        to_update.append(pkg.nevra)
+                    case PackageState.INSTALLED:
+                        logger.debug(f"adding {pkg.nevra} for remove")
+                        to_remove.append(pkg.nevra)
+                    case PackageState.DOWNGRADE:
+                        logger.debug(f"adding {pkg.nevra} for downgrade")
+                        to_downgrade.append(pkg.nevra)
+            if to_remove:
+                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.remove()")
+                self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
+            if to_install:
+                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.install()")
+                self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
+
+            if to_update:
+                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.update()")
+                self.client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
+
+            if to_downgrade:
+                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.downgrade()")
+                self.client.session_rpm.downgrade(dbus.Array(to_downgrade), dbus.Dictionary({}))
+                allow_erasing = True
 
         res, err = self.client.resolve(dbus.Dictionary({"allow_erasing": allow_erasing}))
         if res:
@@ -301,12 +305,12 @@ class YumexRootBackend:
         self.client.session_rpm.connect_to_signal("transaction_script_start", self.on_transaction_script_start)
         self.client.session_rpm.connect_to_signal("transaction_script_stop", self.on_transaction_script_stop)
 
-    def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult:
+    def build_transaction(self, pkgs: list[YumexPackage], system_upgrade, releasever) -> TransactionResult:
         self.last_transaction = pkgs
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         logger.debug("building transaction")
-        content, rc = self._build_transations(pkgs)
+        content, rc = self._build_transations(pkgs, system_upgrade, releasever)
         logger.debug(f"build transaction: rc =  {rc}")
         errors = self.client.session_goal.get_transaction_problems_string()
         for error in errors:

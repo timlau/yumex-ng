@@ -1,6 +1,7 @@
 blueprints = custom_target(
     'blueprints',
     input: files(
+        'advanced_actions.blp',
         'flatpak_result.blp',
         'flatpak_row.blp',
         'flatpak_search.blp',
