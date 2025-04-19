@@ -33,7 +33,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.search_settings import YumexSearchSettings
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import BUILD_TYPE, RunAsync
+from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release
 from yumex.utils.enums import InfoType, PackageFilter, Page, SortType
 from yumex.utils.updater import sync_updates
 
@@ -470,7 +470,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "distro-sync":
                 self.on_action_distro_sync(parameter)
             case "system-upgrade":
-                self.on_action_distro_sync(parameter)
+                self.on_action_system_upgrade(parameter)
             case _:
                 logger.debug(f"ERROR: action: {action} not defined")
 
@@ -486,7 +486,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_action_distro_sync(self, releasever):
         """handler for distro-sync action"""
-        logger.debug("Execute system distro-sync")
+        logger.debug(f"Execute system distro-sync ({releasever})")
+        current_release = get_distro_release()
+        if releasever <= current_release:
+            self.show_message(_("disto-sync target release must to larger than current release"))
+            return
         result = self._do_transaction([], system_upgrade="distrosync", releasever=releasever)
         logger.debug(f"Transaction execution ended : {result}")
         if result:  # transaction completed without issues\
@@ -499,7 +503,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_action_system_upgrade(self, releasever):
         """handler for distro-sync action"""
-        logger.debug("Execute system upgrade")
+        logger.debug(f"Execute system upgrade ({releasever})")
+        current_release = get_distro_release()
+        if releasever <= current_release:
+            self.show_message(_("system upgrade target release must to larger than current release"))
+            return
         result = self._do_transaction([], system_upgrade="upgrade", releasever=releasever)
         logger.debug(f"Transaction execution ended : {result}")
         if result:  # transaction completed without issues\

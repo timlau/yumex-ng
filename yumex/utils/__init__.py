@@ -11,10 +11,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2024 Tim Lauridsen
+# Copyright (C) 2025 Tim Lauridsen
 
 import logging
 import logging.handlers
+import re
 import sys
 import threading
 import time
@@ -30,6 +31,14 @@ from yumex.constants import BUILD_TYPE
 from yumex.utils.exceptions import YumexException
 
 logger = logging.getLogger(__name__)
+
+
+def get_distro_release():
+    find_rel = re.compile(r".*(\d\d).*")
+    rel_file = Path("/etc/redhat-release")
+    content = rel_file.read_text()
+    release = find_rel.findall(content)[0]
+    return release
 
 
 def setup_logging(debug=False):
