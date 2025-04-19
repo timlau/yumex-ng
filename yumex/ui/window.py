@@ -468,7 +468,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "refresh-cache":
                 self.on_action_expire_cache()
             case "distro-sync":
-                self.on_action_distro_sync()
+                self.on_action_distro_sync(parameter)
             case _:
                 logger.debug(f"ERROR: action: {action} not defined")
 
@@ -481,10 +481,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
         RunAsync(self.presenter.package_backend.client.clean, callback, "expire-cache")
 
-    def on_action_distro_sync(self):
+    def on_action_distro_sync(self, releasever):
         """handler for distro-sync action"""
         logger.debug("Execute system distro-sync")
-        result = self._do_transaction([], system_upgrade="distrosync", releasever="41")
+        result = self._do_transaction([], system_upgrade="distrosync", releasever=releasever)
         logger.debug(f"Transaction execution ended : {result}")
         if result:  # transaction completed without issues\
             self.show_message(_("Transaction completed succesfully"), timeout=3)
