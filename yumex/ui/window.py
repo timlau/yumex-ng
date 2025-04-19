@@ -209,7 +209,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 while True:
                     self.progress.show()
                     self.progress.set_title(_("Running Transaction"))
-                    result: TransactionResult = backend.run_transaction()
+                    result: TransactionResult = backend.run_transaction(system_upgrade, releasever)
                     if result.completed:
                         return True
                     if result.key_install and result.key_values:  # Only on DNF4
@@ -469,6 +469,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.on_action_expire_cache()
             case "distro-sync":
                 self.on_action_distro_sync(parameter)
+            case "system-upgrade":
+                self.on_action_distro_sync(parameter)
             case _:
                 logger.debug(f"ERROR: action: {action} not defined")
 
@@ -476,6 +478,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         def callback(*args):
             res, error = args[0]
             logger.debug(f"expire-cache: {res} : {error}")
+
             if res:
                 self.reset_all()
 
@@ -489,6 +492,21 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if result:  # transaction completed without issues\
             self.show_message(_("Transaction completed succesfully"), timeout=3)
 
+            # we have to reset the backend to current releasever
+            self.presenter.package_backend.client.reopen()
+            # reset everything
+            self.reset_all()
+
+    def on_action_system_upgrade(self, releasever):
+        """handler for distro-sync action"""
+        logger.debug("Execute system upgrade")
+        result = self._do_transaction([], system_upgrade="upgrade", releasever=releasever)
+        logger.debug(f"Transaction execution ended : {result}")
+        if result:  # transaction completed without issues\
+            self.show_message(_("Transaction completed succesfully"), timeout=3)
+
+            # we have to reset the backend to current releasever
+            self.presenter.package_backend.client.reopen()
             # reset everything
             self.reset_all()
 

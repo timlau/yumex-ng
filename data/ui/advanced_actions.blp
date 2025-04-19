@@ -36,7 +36,7 @@ template $YumexAdvancedActions: Adw.Dialog {
       }
 
       Adw.ExpanderRow {
-        title: _("System Distro Sync");
+        title: _("System Upgrade");
 
         Adw.EntryRow releasever {
           title: _("Fedora release");
@@ -46,6 +46,16 @@ template $YumexAdvancedActions: Adw.Dialog {
           title: _("Run distro-sync");
           activated => $on_distro_sync();
           tooltip-text: _("Sync installed packages with versions available in repositories.");
+
+          styles [
+            "suggested-action",
+          ]
+        }
+
+        Adw.ButtonRow {
+          title: _("Run System Upgrade");
+          activated => $on_system_upgrade();
+          tooltip-text: _("Upgrade system to next release (offline).");
 
           styles [
             "suggested-action",

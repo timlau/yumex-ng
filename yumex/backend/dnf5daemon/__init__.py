@@ -324,15 +324,18 @@ class YumexRootBackend:
             error_msgs = "\n".join(errors)
             return TransactionResult(False, error=error_msgs)
 
-    def run_transaction(self) -> TransactionResult:
+    def run_transaction(self, system_upgrade=None, releasever=None) -> TransactionResult:
         self.download_queue.clear()
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         logger.debug("building transaction")
-        self._build_transations(self.last_transaction)  # type: ignore
+        self._build_transations(self.last_transaction, system_upgrade, releasever)  # type: ignore
         # self.progress.set_title(_("Applying Transaction"))
         logger.debug("running transaction")
-        res, err = self.client.do_transaction()
+        if system_upgrade == "upgrade":
+            res, err = self.client.do_transaction({"offline": True})
+        else:
+            res, err = self.client.do_transaction()
         logger.debug(f"transaction rc: {res} error: {err}")
         # self.progress.hide()
         if err:

@@ -14,9 +14,6 @@
 # Copyright (C) 2025 Tim Lauridsen
 
 import logging
-import re
-from ast import Gt
-from platform import release
 
 from gi.repository import Adw, GObject, Gtk
 
@@ -36,13 +33,10 @@ class YumexAdvancedActions(Adw.Dialog):
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win = win
-        self.action = None
 
     def show(self, win):
         """Show the dialog."""
-        self.action = None
         self.present(win)
-        return self.action
 
     @GObject.Signal(flags=GObject.SignalFlags.RUN_LAST, arg_types=(str, str))
     def action(self, action, parameter):
@@ -52,14 +46,19 @@ class YumexAdvancedActions(Adw.Dialog):
     @Gtk.Template.Callback()
     def on_refresh_dnf_cache(self, button):
         """Refresh the DNF cache."""
-        self.action = "refresh-cache"
         self.close()
         self.emit("action", "refresh-cache", None)
 
     @Gtk.Template.Callback()
     def on_distro_sync(self, button):
         """Perform a distribution sync."""
-        self.action = "distro-sync"
         self.close()
         releasever = self.releasever.get_text()
         self.emit("action", "distro-sync", releasever)
+
+    @Gtk.Template.Callback()
+    def on_system_upgrade(self, button):
+        """Perform a system upgrade"""
+        self.close()
+        releasever = self.releasever.get_text()
+        self.emit("action", "system-upgrade", releasever)

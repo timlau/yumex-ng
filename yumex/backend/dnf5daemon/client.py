@@ -115,6 +115,14 @@ class Dnf5DbusClient:
             logger.debug(f"close session: {self.session} ({rc})")
             self._connected = False
 
+    def reopen_session(self, options=None):
+        """Close and reopen the session"""
+        self.close_session()
+        if options:
+            self.open_session(options)
+        else:
+            self.open_session()
+
     def _async_method(self, method: str, proxy=None) -> partial:
         """create a patial func to make an async call to a given
         dbus method name
@@ -127,10 +135,10 @@ class Dnf5DbusClient:
         res, err = resolve(dbus.Array())
         return res, err
 
-    def do_transaction(self):
+    def do_transaction(self, options={}):
         logger.debug(f"DBUS: {self.session_goal.object_path}.do_transaction()")
         do_transaction = self._async_method("do_transaction", proxy=self.session_goal)
-        options = {"comment": "Yum Extender Transaction"}
+        options["comment"] = "Yum Extender Transaction"
         res, err = do_transaction(options)
         return res, err
 
@@ -308,8 +316,7 @@ class Dnf5DbusClient:
 
     @dbus_exception
     def system_upgrade(self, mode, releasever):
-        self.close_session()
-        self.open_session({"releasever": releasever})
+        self.reopen_session({"releasever": releasever})
         options = dbus.Dictionary({"mode": mode})
         logger.debug(f"DBUS: system-upgrade({mode})")
         system_upgrade = self._async_method("system_upgrade", proxy=self.session_rpm)
