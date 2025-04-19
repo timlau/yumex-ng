@@ -152,15 +152,13 @@ spinner {
     margin-right: 10px;
 }
 
-.problems label.subtitle {
+.problems {
     font-family: monospace;
-    font-size: 1em;
+    font-size: 0.9em;
     color: @error_color;
+    padding: 1em;
 }
 
-.problems label {
-    font-size: 1.5em;
-}
 
 .error_dialog label.body {
     font-family: monospace;

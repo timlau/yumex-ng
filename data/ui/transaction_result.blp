@@ -84,19 +84,15 @@ template $YumexTransactionResult: Adw.Dialog {
         margin-top: 20;
         visible: false;
 
-        Adw.ActionRow problems {
+        Adw.ActionRow {
           title: _("Problems in Transaction");
           subtitle-selectable: true;
-
-          styles [
-            "problems",
-          ]
 
           Gtk.Box {
             orientation: horizontal;
             hexpand: false;
             vexpand: false;
-            valign: start;
+            valign: center;
 
             Gtk.Button copy {
               icon-name: "edit-copy-symbolic";
@@ -105,6 +101,29 @@ template $YumexTransactionResult: Adw.Dialog {
 
               styles [
                 "flat",
+              ]
+            }
+          }
+        }
+
+        Gtk.Frame {
+          margin-start: 10;
+          margin-end: 10;
+          margin-top: 10;
+          margin-bottom: 10;
+
+          Gtk.ScrolledWindow {
+            width-request: 800;
+            height-request: 600;
+            hscrollbar-policy: always;
+
+            Gtk.Label problems {
+              width-request: 1200;
+              margin-start: 10;
+              margin-end: 10;
+
+              styles [
+                "problems",
               ]
             }
           }
