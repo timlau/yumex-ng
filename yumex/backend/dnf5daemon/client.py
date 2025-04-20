@@ -351,6 +351,6 @@ class Dnf5DbusClient:
         """Reboot the system and install the offline update"""
         logger.debug(f"DBUS: {self.session_offline.object_path}.set_finish_action()")
         reboot = self._async_method("set_finish_action", proxy=self.session_offline)
-        res, err = reboot("reboot")
-        logger.debug(f"offline_reboot() returned : {list(res)}")
+        res, err = list(reboot("reboot"))
+        logger.debug(f"offline_reboot() returned : {res, err}")
         return res, err
