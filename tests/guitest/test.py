@@ -7,13 +7,13 @@ def run_test(win):
 
 
 def test_system_upgrade_dialog(win):
-    from yumex.ui.dialogs import SystemUpgradeDialog
+    from yumex.ui.dialogs import YesNoDialog
 
     """Test the system upgrade dialog."""
-    dialog = SystemUpgradeDialog(win)
+    dialog = YesNoDialog(win)
     dialog.show()
-    print(f"reboot : {dialog.reboot}")
-    assert dialog.reboot is True or dialog.reboot is False
+    print(f"reboot : {dialog.answer}")
+    assert dialog.answer is True or dialog.answer is False
 
 
 def test_transaction_result_show_errors(win):

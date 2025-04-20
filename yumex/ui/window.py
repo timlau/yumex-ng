@@ -23,7 +23,7 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
 from yumex.ui.advanced_actions import YumexAdvancedActions
-from yumex.ui.dialogs import GPGDialog, SystemUpgradeDialog
+from yumex.ui.dialogs import GPGDialog, YesNoDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.package_info import YumexPackageInfo
@@ -482,11 +482,19 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_action_reboot(self):
         """handler for reboot action"""
         logger.debug("Reboot system and install system upgrade")
-        dialog = SystemUpgradeDialog(self)
+        title = _("System Upgrade")
+        msg = _("Do you want to prepare the system upgrade for installation on next reboot ?")
+        dialog = YesNoDialog(self, msg, title)
         dialog.show()
-        if dialog.reboot:
+        if dialog.answer:
             logger.debug("System will be prepared offline transaction and rebooted")
-            self.presenter.reboot_and_install()
+            rc = self.presenter.reboot_and_install()
+            if rc:
+                msg = _("System upgrade prepared for installation on next reboot")
+                self.show_message(msg)
+            else:
+                msg = _("System upgrade prepare failed")
+                self.show_message(msg)
 
     def on_action_expire_cache(self):
         def callback(*args):

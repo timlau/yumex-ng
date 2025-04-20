@@ -64,18 +64,17 @@ class GPGDialog(Adw.AlertDialog):
         self._loop.run()
 
 
-class SystemUpgradeDialog(Adw.AlertDialog):
-    def __init__(self, win: MainWindow):
+class YesNoDialog(Adw.AlertDialog):
+    def __init__(self, win: MainWindow, text: str, title: str):
         super().__init__()
         self.win = win
-        self.reboot = False
+        self.answer = False
         self.set_content_width(800)
         self.set_content_height(800)
         self.set_follows_content_size(True)
 
-        self.set_heading(_("System Upgrade Prepared"))
-        body = _("Do you want to reboot and install the system upgrade ?")
-        self.set_body(body)
+        self.set_heading(title)
+        self.set_body(text)
         self._loop = GLib.MainLoop()
         self.add_response("yes", _("Yes"))
         self.set_response_appearance("yes", Adw.ResponseAppearance.DESTRUCTIVE)
@@ -85,7 +84,7 @@ class SystemUpgradeDialog(Adw.AlertDialog):
         self.connect("response", self.response)
 
     def response(self, dialog, result, *args):
-        self.reboot = result == "yes"
+        self.answer = result == "yes"
         self._loop.quit()
         self.close()
 
