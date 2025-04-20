@@ -228,6 +228,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     else:
                         break
         if result.error:
+            self.progress.hide()
             transaction_result = YumexTransactionResult()
             transaction_result.show_errors(result.error)
             transaction_result.show(self)
