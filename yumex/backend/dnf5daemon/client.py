@@ -352,5 +352,5 @@ class Dnf5DbusClient:
         logger.debug(f"DBUS: {self.session_offline.object_path}.set_finish_action()")
         reboot = self._async_method("set_finish_action", proxy=self.session_offline)
         res, err = reboot("reboot")
-        logger.debug(f"offline_reboot() returned : {res}")
+        logger.debug(f"offline_reboot() returned : {list(res)}")
         return res, err
