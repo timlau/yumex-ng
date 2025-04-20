@@ -320,13 +320,11 @@ class Dnf5DbusClient:
         return result
 
     @dbus_exception
-    def system_upgrade(self, mode, releasever):
-        self.reopen_session({"releasever": releasever})
-        options = dbus.Dictionary({"mode": mode})
-        logger.debug(f"DBUS: system-upgrade({mode})")
+    def system_upgrade(self, options):
+        logger.debug(f"DBUS: system-upgrade({options})")
         system_upgrade = self._async_method("system_upgrade", proxy=self.session_rpm)
         res, err = system_upgrade(options)
-        logger.debug(f"system-upgrade({mode}) returned : {res, err}")
+        logger.debug(f"system-upgrade returned : {res, err}")
         return res, err
 
     @dbus_exception

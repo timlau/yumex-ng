@@ -251,7 +251,7 @@ class YumexRootBackend:
         allow_erasing = False
         self.client.session_goal.reset()
         if system_upgrade:
-            res, err = self.client.system_upgrade(system_upgrade, releasever)
+            res, err = self.system_upgrade(system_upgrade, releasever)
             allow_erasing = True
         else:
             for pkg in pkgs:
@@ -664,3 +664,10 @@ class YumexRootBackend:
             return bool(result[0]), err
         else:
             return False, []
+
+    def system_upgrade(self, mode, releasever):
+        self.client.reopen_session({"releasever": releasever})
+        self.connect_signals()
+        options = dbus.Dictionary({"mode": mode, "releasever": releasever})
+        res, err = self.client.system_upgrade(options)
+        return res, err
