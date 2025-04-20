@@ -29,14 +29,32 @@ class YumexAdvancedActions(Adw.Dialog):
 
     """Advanced actions dialog."""
     releasever = Gtk.Template.Child()
+    cancel_upgrade = Gtk.Template.Child()
+    system_upgrade = Gtk.Template.Child()
+    has_offline = Gtk.Template.Child()
+    distro_sync = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
         self.win = win
+        self.presenter = win.presenter
 
     def show(self, win):
         """Show the dialog."""
         self.present(win)
+        # Set button sensitivity based on if there is an offline transaction
+        # has_transaction = False
+        has_transaction = self.presenter.has_offline_transaction()
+        if has_transaction:
+            self.has_offline.set_visible(True)
+            self.system_upgrade.set_sensitive(False)
+            self.distro_sync.set_sensitive(False)
+            self.releasever.set_sensitive(False)
+        else:
+            self.has_offline.set_visible(False)
+            self.system_upgrade.set_sensitive(True)
+            self.distro_sync.set_sensitive(True)
+            self.releasever.set_sensitive(True)
 
     @GObject.Signal(flags=GObject.SignalFlags.RUN_LAST, arg_types=(str, str))
     def action(self, action, parameter):
@@ -62,3 +80,16 @@ class YumexAdvancedActions(Adw.Dialog):
         self.close()
         releasever = self.releasever.get_text()
         self.emit("action", "system-upgrade", releasever)
+
+    @Gtk.Template.Callback()
+    def on_cancel_system_upgrade(self, button):
+        """Perform a system upgrade"""
+        self.close()
+        releasever = self.releasever.get_text()
+        self.emit("action", "cancel-system-upgrade", releasever)
+
+    @Gtk.Template.Callback()
+    def on_reboot(self, button):
+        """Perform a system upgrade"""
+        self.close()
+        self.emit("action", "reboot", "")

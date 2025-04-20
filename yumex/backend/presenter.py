@@ -98,6 +98,18 @@ class YumexPresenter:
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         return self.package_backend.depsolve(pkgs)
 
+    def has_offline_transaction(self) -> bool:
+        """Check if there is an offline transaction"""
+        return self.package_backend.has_offline_transaction()
+
+    def cancel_offline_transaction(self) -> bool:
+        """Cancel the offline transaction"""
+        return self.package_backend.cancel_offline_transaction()
+
+    def reboot_and_install(self) -> bool:
+        """Reboot and install the system upgrade"""
+        return self.package_backend.reboot_and_install()
+
     # PackageCache protocol implementation
     def get_packages_by_filter(self, pkgfilter: PackageFilter, reset=False) -> list[YumexPackage]:
         return self.package_cache.get_packages_by_filter(pkgfilter, reset)

@@ -23,7 +23,7 @@ from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
 from yumex.ui.advanced_actions import YumexAdvancedActions
-from yumex.ui.dialogs import GPGDialog
+from yumex.ui.dialogs import GPGDialog, SystemUpgradeDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.package_info import YumexPackageInfo
@@ -71,8 +71,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.app = kwargs["application"]
         self.settings = Gio.Settings(APP_ID)
         self.search_settings = YumexSearchSettings()
-        self.advanced_actions = YumexAdvancedActions(self)
-        self.advanced_actions.connect("action", self.on_advanced_actions)
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
         self._last_selected_pkg: YumexPackage = None
@@ -86,6 +84,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.presenter = YumexPresenter(self)
+        # Setup Advanced actions dialog
+        self.advanced_actions = YumexAdvancedActions(self)
+        self.advanced_actions.connect("action", self.on_advanced_actions)
         self.setup_gui()
 
     @property
@@ -471,8 +472,21 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.on_action_distro_sync(parameter)
             case "system-upgrade":
                 self.on_action_system_upgrade(parameter)
+            case "cancel-system-upgrade":
+                self.on_action_cancel_system_upgrade(parameter)
+            case "reboot":
+                self.on_action_reboot()
             case _:
                 logger.debug(f"ERROR: action: {action} not defined")
+
+    def on_action_reboot(self):
+        """handler for reboot action"""
+        logger.debug("Reboot system and install system upgrade")
+        dialog = SystemUpgradeDialog(self)
+        dialog.show()
+        if dialog.reboot:
+            logger.debug("System will be prepared offline transaction and rebooted")
+            self.presenter.reboot_and_install()
 
     def on_action_expire_cache(self):
         def callback(*args):
@@ -517,6 +531,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.presenter.package_backend.client.reopen()
             # reset everything
             self.reset_all()
+
+    def on_action_cancel_system_upgrade(self, releasever):
+        """handler for distro-sync action"""
+        logger.debug(f"cancel system upgrade ({releasever})")
+        res, errors = self.presenter.cancel_offline_transaction()
+        if res:
+            self.show_message(_("System upgrade cancelled"), timeout=5)
+        else:
+            logger.debug(f"cancel system upgrade failed: {errors}")
+            self.show_message(_("System upgrade cancel failed"), timeout=5)
+        print(f"offline transaction : {self.presenter.has_offline_transaction()}")
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""

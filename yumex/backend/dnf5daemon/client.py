@@ -24,6 +24,7 @@ IFACE_GOAL = "{}.Goal".format(DNFDAEMON_BUS_NAME)
 IFACE_BASE = "{}.Base".format(DNFDAEMON_BUS_NAME)
 IFACE_GROUP = "{}.comps.Group".format(DNFDAEMON_BUS_NAME)
 IFACE_ADVISORY = "{}.Advisory".format(DNFDAEMON_BUS_NAME)
+IFACE_OFFLINE = "{}.Offline".format(DNFDAEMON_BUS_NAME)
 
 logger = logging.getLogger(__name__)
 
@@ -103,6 +104,10 @@ class Dnf5DbusClient:
                 self.session_group = dbus.Interface(
                     self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
                     dbus_interface=IFACE_GROUP,
+                )
+                self.session_offline = dbus.Interface(
+                    self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+                    dbus_interface=IFACE_OFFLINE,
                 )
             else:
                 raise YumexException("Couldn't open session to Dnf5Dbus")
@@ -322,4 +327,31 @@ class Dnf5DbusClient:
         system_upgrade = self._async_method("system_upgrade", proxy=self.session_rpm)
         res, err = system_upgrade(options)
         logger.debug(f"system-upgrade({mode}) returned : {res, err}")
+        return res, err
+
+    @dbus_exception
+    def offline_get_status(self):
+        """Get the status of the offline update"""
+        logger.debug(f"DBUS: {self.session_offline.object_path}.get_status()")
+        res = self.session_offline.get_status()
+        logger.debug(f"offline_get_status() returned : {res}")
+        return res
+
+    @dbus_exception
+    def offline_cancel(self):
+        """Cancel the offline update"""
+        logger.debug(f"DBUS: {self.session_offline.object_path}.cancel()")
+        cancel = self._async_method("cancel", proxy=self.session_offline)
+        res, err = cancel()
+        logger.debug(f"offline_cancel() returned : {res}")
+        return res, err
+
+    @dbus_exception
+    def offline_reboot(self):
+        """Reboot the system and install the offline update"""
+        logger.debug(f"DBUS: {self.session_offline.object_path}.set_finish_action()")
+        reboot = self._async_method("set_finish_action", proxy=self.session_offline)
+        options = dbus.Dictionary({"action": "reboot"})
+        res, err = reboot(options)
+        logger.debug(f"offline_reboot() returned : {res}")
         return res, err

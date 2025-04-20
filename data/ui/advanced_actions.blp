@@ -38,11 +38,20 @@ template $YumexAdvancedActions: Adw.Dialog {
       Adw.ExpanderRow {
         title: _("System Upgrade");
 
+        Adw.ActionRow has_offline {
+          visible: false;
+          title: _("Offline Transaction is available");
+
+          styles [
+            "suggested-action",
+          ]
+        }
+
         Adw.EntryRow releasever {
           title: _("Fedora release");
         }
 
-        Adw.ButtonRow {
+        Adw.ButtonRow distro_sync {
           title: _("Run distro-sync");
           activated => $on_distro_sync();
           tooltip-text: _("Sync installed packages with versions available in repositories.");
@@ -52,10 +61,32 @@ template $YumexAdvancedActions: Adw.Dialog {
           ]
         }
 
-        Adw.ButtonRow {
+        Adw.ButtonRow system_upgrade {
           title: _("Run System Upgrade");
           activated => $on_system_upgrade();
           tooltip-text: _("Upgrade system to next release (offline).");
+
+          styles [
+            "suggested-action",
+          ]
+        }
+
+        Adw.ButtonRow cancel_upgrade {
+          title: _("Cancel System Upgrade");
+          sensitive: bind has_offline.visible;
+          activated => $on_cancel_system_upgrade();
+          tooltip-text: _("Cancel system upgrade.");
+
+          styles [
+            "suggested-action",
+          ]
+        }
+
+        Adw.ButtonRow reboot {
+          title: _("Reboot and install");
+          sensitive: bind has_offline.visible;
+          activated => $on_reboot();
+          tooltip-text: _("Reboot and install system upgrade.");
 
           styles [
             "suggested-action",

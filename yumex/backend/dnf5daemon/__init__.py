@@ -636,3 +636,31 @@ class YumexRootBackend:
             latest_limit=10,
         )
         return self._get_yumex_packages(result)
+
+    def has_offline_transaction(self) -> bool:
+        """Check if there is an offline transaction"""
+        result = self.client.offline_get_status()
+        if result:
+            return bool(result[0])
+        else:
+            return False
+
+    def cancel_offline_transaction(self) -> bool:
+        """Cancel the offline transaction"""
+        if not self.has_offline_transaction():
+            return False, ["No offline transaction found"]
+        result, err = self.client.offline_cancel()
+        if result:
+            return bool(result[0]), err
+        else:
+            return False, []
+
+    def reboot_and_install(self) -> bool:
+        """Reboot and install the system upgrade"""
+        if not self.has_offline_transaction():
+            return False, ["No offline transaction found"]
+        result, err = self.client.offline_reboot()
+        if result:
+            return bool(result[0]), err
+        else:
+            return False, []
