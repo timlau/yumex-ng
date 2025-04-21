@@ -672,6 +672,6 @@ class YumexRootBackend:
         self.reopen_session()
         return res, err
 
-    def reopen_session(self, options):
+    def reopen_session(self, options={}):
         self.client.reopen_session(options)
         self.connect_signals()
