@@ -84,7 +84,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 update-desktop-database %{_datadir}/applications &> /dev/null || :
-glib-compile-schemas /usr/share/glib-2.0/schemas/
+glib-compile-schemas /usr/share/glib-2.0/schemas/ &> /dev/null || :
 
 %post -n %{name}-updater
 %systemd_user_post yumex-updater.service
@@ -126,7 +126,7 @@ for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
     user=$(getent passwd $uid | cut -d: -f1)
 
     # Debug statement to verify user and UID
-    echo "Applying preset and restarting service for user $user with UID $uid"
+    # echo "Applying preset and restarting service for user $user with UID $uid"
 
     # Set environment variables for the user session
     XDG_RUNTIME_DIR="/run/user/$uid"
@@ -146,7 +146,7 @@ done
 %changelog
 
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.3.0-1
-- bump version to 5.3.0 
+- bump version to 5.3.0
 
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
 - the 5.2.0 stable release
