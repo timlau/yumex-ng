@@ -16,7 +16,7 @@
 from typing import Iterable, Protocol
 
 from yumex.backend import TransactionResult
-from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf import TransactionOptions, YumexPackage
 from yumex.utils.enums import InfoType, PackageFilter, Page
 from yumex.utils.types import MainWindow
 
@@ -44,9 +44,9 @@ class PackageBackend(Protocol):
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]: ...
 
-    def build_transaction(self, pkgs: list[YumexPackage]) -> TransactionResult: ...
+    def build_transaction(self, pkgs: list[YumexPackage], opts: TransactionOptions) -> TransactionResult: ...
 
-    def run_transaction(self) -> TransactionResult: ...
+    def run_transaction(self, opts: TransactionOptions) -> TransactionResult: ...
 
     def has_offline_transaction(self) -> bool: ...
 

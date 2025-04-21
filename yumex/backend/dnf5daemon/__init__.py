@@ -7,7 +7,7 @@ from typing import Iterable, Self
 import dbus
 
 from yumex.backend import TransactionResult
-from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf import TransactionOptions, YumexPackage
 from yumex.backend.dnf5daemon.filter import FilterUpdates
 from yumex.backend.interface import Presenter, Progress
 from yumex.utils.enums import InfoType, PackageFilter, PackageState
@@ -243,15 +243,15 @@ class YumexRootBackend:
             result_dict[action].append(((nevra, repo), size))
         return result_dict
 
-    def _build_transations(self, pkgs: list[YumexPackage], system_upgrade=None, releasever=None) -> tuple[list, int]:
+    def _build_transations(self, pkgs: list[YumexPackage], opts: TransactionOptions) -> tuple[list, int]:
         to_install = []
         to_update = []
         to_remove = []
         to_downgrade = []
         allow_erasing = False
         self.client.session_goal.reset()
-        if system_upgrade:
-            res, err = self.system_upgrade(system_upgrade, releasever)
+        if opts.system_upgrade:
+            res, err = self.system_upgrade(opts.system_upgrade, opts.releasever)
             allow_erasing = True
         else:
             for pkg in pkgs:
@@ -305,12 +305,12 @@ class YumexRootBackend:
         self.client.session_rpm.connect_to_signal("transaction_script_start", self.on_transaction_script_start)
         self.client.session_rpm.connect_to_signal("transaction_script_stop", self.on_transaction_script_stop)
 
-    def build_transaction(self, pkgs: list[YumexPackage], system_upgrade, releasever) -> TransactionResult:
+    def build_transaction(self, pkgs: list[YumexPackage], opts: TransactionOptions) -> TransactionResult:
         self.last_transaction = pkgs
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         logger.debug("building transaction")
-        content, rc = self._build_transations(pkgs, system_upgrade, releasever)
+        content, rc = self._build_transations(pkgs, opts)
         logger.debug(f"build transaction: rc =  {rc}")
         errors = self.client.session_goal.get_transaction_problems_string()
         for error in errors:
@@ -324,15 +324,15 @@ class YumexRootBackend:
             error_msgs = "\n".join(errors)
             return TransactionResult(False, error=error_msgs)
 
-    def run_transaction(self, system_upgrade=None, releasever=None) -> TransactionResult:
+    def run_transaction(self, opts: TransactionOptions) -> TransactionResult:
         self.download_queue.clear()
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         logger.debug("building transaction")
-        self._build_transations(self.last_transaction, system_upgrade, releasever)  # type: ignore
+        self._build_transations(self.last_transaction, opts)  # type: ignore
         # self.progress.set_title(_("Applying Transaction"))
         logger.debug("running transaction")
-        if system_upgrade == "upgrade":
+        if opts.offline:
             res, err = self.client.do_transaction({"offline": True})
         else:
             res, err = self.client.do_transaction()

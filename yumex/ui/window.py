@@ -19,7 +19,7 @@ from pathlib import Path
 from gi.repository import Adw, Gio, Gtk  # type: ignore
 
 from yumex.backend import TransactionResult
-from yumex.backend.dnf import YumexPackage
+from yumex.backend.dnf import TransactionOptions, YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
 from yumex.ui.advanced_actions import YumexAdvancedActions
@@ -190,13 +190,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Set the sesitivity of the package view"""
         self.main_view.set_sensitive(sensitive)
 
-    def _do_transaction(self, queued, system_upgrade=None, releasever=None):
+    def _do_transaction(self, queued, opts: TransactionOptions):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         backend = self.presenter.package_backend
         # build the transaction
-        result: TransactionResult = backend.build_transaction(queued, system_upgrade, releasever)
+        result: TransactionResult = backend.build_transaction(queued, opts)
         self.progress.hide()
         if result.completed:
             # get confirmation
@@ -205,12 +205,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if result.problems:
                 transaction_result.set_problems(result.problems)
             transaction_result.show(self)
+            if transaction_result.is_offline:
+                opts.offline = True
             if transaction_result.confirm:
                 # run the transaction
                 while True:
                     self.progress.show()
                     self.progress.set_title(_("Running Transaction"))
-                    result: TransactionResult = backend.run_transaction(system_upgrade, releasever)
+                    result: TransactionResult = backend.run_transaction(opts)
                     if result.completed:
                         return True
                     if result.key_install and result.key_values:  # Only on DNF4
@@ -221,7 +223,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                             # tell the backend to import this gpg key in next run
                             backend.do_gpg_import()
                             # rebuild the transaction again, before re-run
-                            backend.build_transaction(queued)
+                            backend.build_transaction(queued, opts)
                             continue
                         else:
                             return True
@@ -303,11 +305,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
         if queued := self.queue_view.get_queued():
             logger.debug(f"Execute the transaction on {len(queued)} packages")
-            result = self._do_transaction(queued)
+            opts = TransactionOptions()
+            result = self._do_transaction(queued, opts)
             logger.debug(f"Transaction execution ended : {result}")
             if result:  # transaction completed without issues\
                 self.show_message(_("Transaction completed succesfully"), timeout=3)
-
+                if opts.offline:
+                    self.on_action_reboot()
                 # reset everything
                 self.reset_all()
 
@@ -512,7 +516,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if releasever <= current_release:
             self.show_message(_("system upgrade target release must to larger than current release"))
             return
-        result = self._do_transaction([], system_upgrade="upgrade", releasever=releasever)
+        opts = TransactionOptions(system_upgrade="upgrade", releasever=releasever)
+        result = self._do_transaction([], opts)
         logger.debug(f"Transaction execution ended : {result}")
         # we have to reset the backend to current releasever
         self.presenter.package_backend.reopen_session()
