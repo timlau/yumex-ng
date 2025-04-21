@@ -536,7 +536,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # we have to reset the backend to current releasever
         self.presenter.package_backend.reopen_session()
         if result:  # transaction completed without issues\
-            self.show_message(_("Transaction completed succesfully"), timeout=3)
+            self.show_message(_("Offline Transaction completed succesfully"), timeout=3)
+            self.on_action_reboot()
             # reset everything
             self.reset_all()
 
