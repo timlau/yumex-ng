@@ -639,31 +639,22 @@ class YumexRootBackend:
 
     def has_offline_transaction(self) -> bool:
         """Check if there is an offline transaction"""
-        result = self.client.offline_get_status()
-        if result:
-            return bool(result[0])
-        else:
-            return False
+        pending, _ = self.client.offline_get_status()
+        return pending
 
     def cancel_offline_transaction(self) -> bool:
         """Cancel the offline transaction"""
         if not self.has_offline_transaction():
             return False, ["No offline transaction found"]
-        result, err = self.client.offline_cancel()
-        if result:
-            return bool(result[0]), err
-        else:
-            return False, []
+        success, err_mesg = self.client.offline_cancel()
+        return success, err_mesg
 
     def reboot_and_install(self) -> bool:
         """Reboot and install the system upgrade"""
         if not self.has_offline_transaction():
             return False, ["No offline transaction found"]
-        result, err = self.client.offline_reboot()
-        if result:
-            return bool(result[0]), err
-        else:
-            return False, []
+        success, err_mesg = self.client.offline_reboot()
+        return success, err_mesg
 
     def system_upgrade(self, mode, releasever):
         self.reopen_session({"releasever": releasever})

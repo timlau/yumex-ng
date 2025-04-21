@@ -43,7 +43,7 @@ class AsyncCaller:
 
     def reply_handler(self, *args) -> None:
         if len(args) > 1:
-            self.res = (value for value in args)
+            self.res = args
         else:
             if args:
                 self.res = args[0]
@@ -331,25 +331,24 @@ class Dnf5DbusClient:
     def offline_get_status(self):
         """Get the status of the offline update"""
         logger.debug(f"DBUS: {self.session_offline.object_path}.get_status()")
-        res = self.session_offline.get_status()
-        logger.debug(f"offline_get_status() returned : {res}")
-        return res
+        pending, status = self.session_offline.get_status()
+        logger.debug(f"offline_get_status() returned : pending : {pending} stautus :{status}")
+        return bool(pending), dict(status)
 
     @dbus_exception
     def offline_cancel(self):
         """Cancel the offline update"""
         logger.debug(f"DBUS: {self.session_offline.object_path}.cancel()")
         cancel = self._async_method("cancel", proxy=self.session_offline)
-        res, err = list(cancel())
-        logger.debug(f"offline_cancel() returned : {res}")
-        return res, err
+        success, err_msg = cancel()
+        logger.debug(f"offline_cancel() returned : success : {success} err_msg : {err_msg}")
+        return bool(success), str(err_msg)
 
     @dbus_exception
     def offline_reboot(self):
         """Reboot the system and install the offline update"""
         logger.debug(f"DBUS: {self.session_offline.object_path}.set_finish_action()")
         reboot = self._async_method("set_finish_action", proxy=self.session_offline)
-        res, err = list(reboot("reboot"))
-        res = list(res)
-        logger.debug(f"offline_reboot() returned : {res, err}")
-        return res, err
+        success, err_msg = reboot("reboot")
+        logger.debug(f"offline_reboot() returned : success : {success} err_msg : {err_msg}")
+        return bool(success), str(err_msg)
