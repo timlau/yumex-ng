@@ -646,7 +646,7 @@ class YumexRootBackend:
         """Cancel the offline transaction"""
         if not self.has_offline_transaction():
             return False, ["No offline transaction found"]
-        success, err_mesg = self.client.offline_cancel()
+        success, err_mesg = self.client.offline_clean()
         return success, err_mesg
 
     def reboot_and_install(self) -> bool:

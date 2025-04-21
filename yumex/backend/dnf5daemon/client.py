@@ -336,12 +336,12 @@ class Dnf5DbusClient:
         return bool(pending), dict(status)
 
     @dbus_exception
-    def offline_cancel(self):
+    def offline_clean(self):
         """Cancel the offline update"""
         logger.debug(f"DBUS: {self.session_offline.object_path}.cancel()")
-        cancel = self._async_method("cancel", proxy=self.session_offline)
-        success, err_msg = cancel()
-        logger.debug(f"offline_cancel() returned : success : {success} err_msg : {err_msg}")
+        clean = self._async_method("clean", proxy=self.session_offline)
+        success, err_msg = clean()
+        logger.debug(f"clean() returned : success : {success} err_msg : {err_msg}")
         return bool(success), str(err_msg)
 
     @dbus_exception
