@@ -669,7 +669,6 @@ class YumexRootBackend:
         self.reopen_session({"releasever": releasever})
         options = dbus.Dictionary({"mode": mode, "releasever": releasever})
         res, err = self.client.system_upgrade(options)
-        self.reopen_session()
         return res, err
 
     def reopen_session(self, options={}):

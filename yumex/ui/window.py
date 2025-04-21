@@ -533,6 +533,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             return
         result = self._do_transaction([], system_upgrade="upgrade", releasever=releasever)
         logger.debug(f"Transaction execution ended : {result}")
+        # we have to reset the backend to current releasever
+        self.presenter.package_backend.reopen_session()
         if result:  # transaction completed without issues\
             self.show_message(_("Transaction completed succesfully"), timeout=3)
             # reset everything
