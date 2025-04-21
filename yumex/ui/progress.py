@@ -34,10 +34,11 @@ class YumexProgress(Adw.Window):
         self.spinner.set_visible(True)
         self.present()
 
-    def hide(self):
+    def hide(self, clear: bool = True):
         self.close()
-        self.set_title("")
-        self.set_subtitle("")
+        if clear:
+            self.set_title("")
+            self.set_subtitle("")
 
     def set_title(self, title: str):
         self.title.set_label(title)

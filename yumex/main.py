@@ -76,7 +76,7 @@ class YumexApplication(Adw.Application):
 
         # create app actions
         self.create_action("about", self.on_about)
-        self.create_action("expire-cache", self.win.on_actions)
+        self.create_action("adv-actions", self.win.on_actions)
         self.create_action("preferences", self.on_preferences, ["<Ctrl>comma"])
 
         # windows related actions
@@ -217,6 +217,7 @@ Yum Extender is a Package management to install, update and remove packages
         tb_file.parent.mkdir(exist_ok=True)
         tb_file.write_text(msg)
         logger.debug(f"traceback written to {tb_file}")
+        self.win.progress.hide()
         if exc_type == YumexException:
             error_dialog(self.win, title=_("Critical Error"), msg=exc_value.msg)
         else:

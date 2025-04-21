@@ -1,0 +1,68 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $YumexAdvancedActions: Adw.Dialog {
+  title: _("Advanced Actions");
+  // content-height: 700;
+  content-width: 500;
+
+  Adw.ToolbarView main {
+    [top]
+    Adw.HeaderBar titlebar {
+      centering-policy: strict;
+      show-end-title-buttons: true;
+
+      [title]
+      Gtk.Label {
+        label: _("Advanced Actions");
+      }
+    }
+
+    Adw.PreferencesGroup actions {
+      margin-start: 30;
+      margin-end: 30;
+      margin-top: 20;
+      margin-bottom: 30;
+      separate-rows: true;
+
+      Adw.ButtonRow {
+        title: _("Refresh DNF Cache");
+        activated => $on_refresh_dnf_cache();
+        tooltip-text: _("Expire the DNF cache, so it will be refreshed from repositories.");
+      }
+
+      Adw.ExpanderRow system_upgrade {
+        title: _("System Upgrade");
+        expanded: true;
+
+        Adw.EntryRow releasever {
+          title: _("Fedora release");
+        }
+
+        Adw.ButtonRow run_upgrade {
+          title: _("Run System Upgrade");
+          activated => $on_system_upgrade();
+          tooltip-text: _("Upgrade system to next release (offline).");
+        }
+      }
+
+      Adw.ExpanderRow offline {
+        title: _("Offline Transaction  is available");
+        visible: false;
+        expanded: true;
+
+        Adw.ButtonRow cancel_upgrade {
+          title: _("Cancel Transaction");
+          activated => $on_cancel_system_upgrade();
+          tooltip-text: _("Cancel and clear offline transaction.");
+        }
+
+        Adw.ButtonRow reboot {
+          title: _("Apply on Reboot");
+          activated => $on_reboot();
+          tooltip-text: _("Prepare transaction for apply on next boot.");
+        }
+      }
+    }
+  }
+}

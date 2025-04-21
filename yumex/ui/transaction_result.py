@@ -60,6 +60,7 @@ class YumexTransactionResult(Adw.Dialog):
         self.populate(result_dict)
 
     def show_errors(self, errors) -> None:
+        errors = str(errors)
         errors = html.escape(errors)
         self.result_frame.set_visible(False)
         self.confirm_button.set_visible(False)

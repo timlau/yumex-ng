@@ -115,12 +115,13 @@ template $YumexTransactionResult: Adw.Dialog {
           Gtk.ScrolledWindow {
             width-request: 800;
             height-request: 600;
-            hscrollbar-policy: always;
 
             Gtk.Label problems {
-              width-request: 1200;
               margin-start: 10;
               margin-end: 10;
+              valign: start;
+              halign: start;
+              xalign: 0;
 
               styles [
                 "problems",

@@ -18,7 +18,8 @@ line-ending = "auto"
 
 [tool.ruff.lint]
 select = ["E", "F"]
-ignore = ["F821", "E402"]
+# ignore = ["F821", "E402"]
+
 
 [tool.pyright]
 typeCheckingMode = "off"

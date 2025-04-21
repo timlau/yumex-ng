@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright (C) 2024 Tim Lauridsen
+# Copyright (C) 2025 Tim Lauridsen
 
 import logging
 from pathlib import Path
@@ -22,7 +22,8 @@ from yumex.backend import TransactionResult
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
-from yumex.ui.dialogs import GPGDialog
+from yumex.ui.advanced_actions import YumexAdvancedActions
+from yumex.ui.dialogs import GPGDialog, YesNoDialog
 from yumex.ui.flatpak_result import YumexFlatpakResult
 from yumex.ui.flatpak_view import YumexFlatpakView
 from yumex.ui.package_info import YumexPackageInfo
@@ -32,7 +33,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.search_settings import YumexSearchSettings
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import BUILD_TYPE, RunAsync
+from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release
 from yumex.utils.enums import InfoType, PackageFilter, Page, SortType
 from yumex.utils.updater import sync_updates
 
@@ -83,6 +84,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.presenter = YumexPresenter(self)
+        # Setup Advanced actions dialog
+        self.advanced_actions = YumexAdvancedActions(self)
+        self.advanced_actions.connect("action", self.on_advanced_actions)
         self.setup_gui()
 
     @property
@@ -186,13 +190,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """Set the sesitivity of the package view"""
         self.main_view.set_sensitive(sensitive)
 
-    def _do_transaction(self, queued):
+    def _do_transaction(self, queued, system_upgrade=None, releasever=None):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
         backend = self.presenter.package_backend
         # build the transaction
-        result: TransactionResult = backend.build_transaction(queued)
+        result: TransactionResult = backend.build_transaction(queued, system_upgrade, releasever)
         self.progress.hide()
         if result.completed:
             # get confirmation
@@ -206,7 +210,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 while True:
                     self.progress.show()
                     self.progress.set_title(_("Running Transaction"))
-                    result: TransactionResult = backend.run_transaction()
+                    result: TransactionResult = backend.run_transaction(system_upgrade, releasever)
                     if result.completed:
                         return True
                     if result.key_install and result.key_values:  # Only on DNF4
@@ -224,6 +228,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     else:
                         break
         if result.error:
+            self.progress.hide()
             transaction_result = YumexTransactionResult()
             transaction_result.show_errors(result.error)
             transaction_result.show(self)
@@ -233,7 +238,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def confirm_gpg_import(self, key_values):
         dialog = GPGDialog(self, key_values)
-        dialog.set_transient_for(self)
         dialog.show()
         logger.debug(f"Install key: {dialog.install_key}")
         return dialog.install_key
@@ -451,14 +455,84 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "toggle_selection":
                 if self.active_page == Page.PACKAGES:
                     self.package_view.toggle_selected()
-            case "expire-cache":
-                logger.debug("expire-cache")
-                res, msg = self.presenter.package_backend.client.clean("expire-cache")
-                if res:
-                    self.reset_all()
+            case "adv-actions":
+                logger.debug("advanced actions")
+                action = self.advanced_actions.show(self)
             case other:
                 logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")
+
+    def on_advanced_actions(self, widget, action, parameter):
+        """handler for advanced actions"""
+        logger.debug(f"advanced action: {action} parameter: {parameter}")
+        match action:
+            case "refresh-cache":
+                self.on_action_expire_cache()
+            case "system-upgrade":
+                self.on_action_system_upgrade(parameter)
+            case "cancel-system-upgrade":
+                self.on_action_cancel_system_upgrade(parameter)
+            case "reboot":
+                self.on_action_reboot()
+            case _:
+                logger.debug(f"ERROR: action: {action} not defined")
+
+    def on_action_reboot(self):
+        """handler for reboot action"""
+        self.progress.hide()
+        logger.debug("Reboot system and install system upgrade")
+        title = _("System Upgrade")
+        msg = _("Do you want to prepare the system upgrade for installation on next reboot ?")
+        dialog = YesNoDialog(self, msg, title)
+        dialog.show()
+        if dialog.answer:
+            logger.debug("System will be prepared offline transaction and rebooted")
+            rc = self.presenter.reboot_and_install()
+            if rc:
+                msg = _("System upgrade prepared for installation on next reboot")
+                self.show_message(msg)
+            else:
+                msg = _("System upgrade prepare failed")
+                self.show_message(msg)
+
+    def on_action_expire_cache(self):
+        def callback(*args):
+            res, error = args[0]
+            logger.debug(f"expire-cache: {res} : {error}")
+
+            if res:
+                self.reset_all()
+
+        RunAsync(self.presenter.package_backend.client.clean, callback, "expire-cache")
+
+    def on_action_system_upgrade(self, releasever):
+        """handler for distro-sync action"""
+        logger.debug(f"Execute system upgrade ({releasever})")
+        current_release = get_distro_release()
+        if releasever <= current_release:
+            self.show_message(_("system upgrade target release must to larger than current release"))
+            return
+        result = self._do_transaction([], system_upgrade="upgrade", releasever=releasever)
+        logger.debug(f"Transaction execution ended : {result}")
+        # we have to reset the backend to current releasever
+        self.presenter.package_backend.reopen_session()
+        self.progress.hide
+        if result:  # transaction completed without issues\
+            self.show_message(_("Offline Transaction completed succesfully"), timeout=3)
+            self.on_action_reboot()
+            # reset everything
+            self.reset_all()
+
+    def on_action_cancel_system_upgrade(self, releasever):
+        """handler for distro-sync action"""
+        logger.debug(f"cancel system upgrade ({releasever})")
+        res, errors = self.presenter.cancel_offline_transaction()
+        if res:
+            self.show_message(_("System upgrade cancelled"), timeout=5)
+        else:
+            logger.debug(f"cancel system upgrade failed: {errors}")
+            self.show_message(_("System upgrade cancel failed"), timeout=5)
+        print(f"offline transaction : {self.presenter.has_offline_transaction()}")
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
