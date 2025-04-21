@@ -29,58 +29,38 @@ template $YumexAdvancedActions: Adw.Dialog {
         title: _("Refresh DNF Cache");
         activated => $on_refresh_dnf_cache();
         tooltip-text: _("Expire the DNF cache, so it will be refreshed from repositories.");
-
-        styles [
-          "suggested-action",
-        ]
       }
 
-      Adw.ExpanderRow {
+      Adw.ExpanderRow system_upgrade {
         title: _("System Upgrade");
-
-        Adw.ActionRow has_offline {
-          visible: false;
-          title: _("Offline Transaction is available");
-
-          styles [
-            "suggested-action",
-          ]
-        }
+        expanded: true;
 
         Adw.EntryRow releasever {
           title: _("Fedora release");
         }
 
-        Adw.ButtonRow system_upgrade {
+        Adw.ButtonRow run_upgrade {
           title: _("Run System Upgrade");
           activated => $on_system_upgrade();
           tooltip-text: _("Upgrade system to next release (offline).");
-
-          styles [
-            "suggested-action",
-          ]
         }
+      }
+
+      Adw.ExpanderRow offline {
+        title: _("Offline Transaction  is available");
+        visible: false;
+        expanded: true;
 
         Adw.ButtonRow cancel_upgrade {
-          title: _("Cancel System Upgrade");
-          sensitive: bind has_offline.visible;
+          title: _("Cancel Transaction");
           activated => $on_cancel_system_upgrade();
-          tooltip-text: _("Cancel and clear system upgrade.");
-
-          styles [
-            "suggested-action",
-          ]
+          tooltip-text: _("Cancel and clear offline transaction.");
         }
 
         Adw.ButtonRow reboot {
-          title: _("Reboot and install");
-          sensitive: bind has_offline.visible;
+          title: _("Apply on Reboot");
           activated => $on_reboot();
-          tooltip-text: _("Reboot and install system upgrade.");
-
-          styles [
-            "suggested-action",
-          ]
+          tooltip-text: _("Prepare transaction for apply on next boot.");
         }
       }
     }

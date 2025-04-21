@@ -148,8 +148,8 @@ class Dnf5DbusClient:
         return res, err
 
     @dbus_exception
-    def confirm_key(self, *args):
-        return self.session_repo.confirm_key(args)
+    def confirm_key(self, key_id: str, confirmed: bool):
+        return self.session_repo.confirm_key(key_id, confirmed)
 
     def repo_list(self):
         logger.debug(f"DBUS: {self.session_repo.object_path}.list()")

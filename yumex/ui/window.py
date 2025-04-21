@@ -238,7 +238,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def confirm_gpg_import(self, key_values):
         dialog = GPGDialog(self, key_values)
-        dialog.set_transient_for(self)
         dialog.show()
         logger.debug(f"Install key: {dialog.install_key}")
         return dialog.install_key
@@ -480,6 +479,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_action_reboot(self):
         """handler for reboot action"""
+        self.progress.hide()
         logger.debug("Reboot system and install system upgrade")
         title = _("System Upgrade")
         msg = _("Do you want to prepare the system upgrade for installation on next reboot ?")

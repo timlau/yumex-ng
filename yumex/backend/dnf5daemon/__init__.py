@@ -459,7 +459,9 @@ class YumexRootBackend:
         # <arg name="timestamp" type="x" />
         logger.debug(f"confirm gpg key import id: {key_id} user-id: {user_ids[0]}")
         key_values = (key_id, user_ids[0], key_fingerprint, key_url, timestamp)
+        self.presenter.progress.hide(clear=False)
         ok = self.presenter.confirm_gpg_import(key_values)
+        self.presenter.progress.show()
         if ok:
             logger.debug("Importing RPM GPG key")
             self.client.confirm_key(key_id, True)

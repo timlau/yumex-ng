@@ -31,7 +31,7 @@ class YumexAdvancedActions(Adw.Dialog):
     releasever = Gtk.Template.Child()
     cancel_upgrade = Gtk.Template.Child()
     system_upgrade = Gtk.Template.Child()
-    has_offline = Gtk.Template.Child()
+    offline = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -45,13 +45,11 @@ class YumexAdvancedActions(Adw.Dialog):
         # has_transaction = False
         has_transaction = self.presenter.has_offline_transaction()
         if has_transaction:
-            self.has_offline.set_visible(True)
-            self.system_upgrade.set_sensitive(False)
-            self.releasever.set_sensitive(False)
+            self.offline.set_visible(True)
+            self.system_upgrade.set_visible(False)
         else:
-            self.has_offline.set_visible(False)
-            self.system_upgrade.set_sensitive(True)
-            self.releasever.set_sensitive(True)
+            self.offline.set_visible(False)
+            self.system_upgrade.set_visible(True)
 
     @GObject.Signal(flags=GObject.SignalFlags.RUN_LAST, arg_types=(str, str))
     def action(self, action, parameter):
