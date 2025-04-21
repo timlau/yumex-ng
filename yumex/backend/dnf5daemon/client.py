@@ -340,7 +340,7 @@ class Dnf5DbusClient:
         """Cancel the offline update"""
         logger.debug(f"DBUS: {self.session_offline.object_path}.cancel()")
         cancel = self._async_method("cancel", proxy=self.session_offline)
-        res, err = cancel()
+        res, err = list(cancel())
         logger.debug(f"offline_cancel() returned : {res}")
         return res, err
 
