@@ -666,8 +666,12 @@ class YumexRootBackend:
             return False, []
 
     def system_upgrade(self, mode, releasever):
-        self.client.reopen_session({"releasever": releasever})
-        self.connect_signals()
+        self.reopen_session({"releasever": releasever})
         options = dbus.Dictionary({"mode": mode, "releasever": releasever})
         res, err = self.client.system_upgrade(options)
+        self.reopen_session()
         return res, err
+
+    def reopen_session(self, options):
+        self.client.reopen_session(options)
+        self.connect_signals()

@@ -535,9 +535,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         logger.debug(f"Transaction execution ended : {result}")
         if result:  # transaction completed without issues\
             self.show_message(_("Transaction completed succesfully"), timeout=3)
-
-            # we have to reset the backend to current releasever
-            self.presenter.package_backend.client.reopen()
             # reset everything
             self.reset_all()
 
