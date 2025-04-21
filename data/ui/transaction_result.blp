@@ -130,6 +130,11 @@ template $YumexTransactionResult: Adw.Dialog {
           }
         }
       }
+
+      Adw.SwitchRow offline {
+        title: _("Offline Transaction");
+        subtitle: _("This transaction will be performed offline during reboot");
+      }
     }
   }
 }

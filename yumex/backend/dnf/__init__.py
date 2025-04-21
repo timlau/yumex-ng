@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from gi.repository import Gio, GObject
@@ -133,6 +134,15 @@ class YumexPackage(GObject.GObject):
             repo,
         )
         return ",".join([str(elem) for elem in nevra_r])
+
+
+@dataclass
+class TransactionOptions:
+    """Transaction options for dnfdaemon"""
+
+    offline: bool = False
+    system_upgrade: str | None = None
+    releasever: str | None = None
 
 
 def reload_metadata_expired():

@@ -36,15 +36,21 @@ class YumexTransactionResult(Adw.Dialog):
     problems: Gtk.Label = Gtk.Template.Child()
     confirm_button = Gtk.Template.Child("confirm")
     cancel_button = Gtk.Template.Child("cancel")
-    copy_button = Gtk.Template.Child("copy")  # Add a reference to the new button
+    copy_button = Gtk.Template.Child("copy")
+    offline: Adw.SwitchRow = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._loop = GLib.MainLoop()
         self.confirm = False
+        self._offline = False
         self.store = Gio.ListStore.new(ResultElem)
         model = Gtk.TreeListModel.new(self.store, False, True, self.add_tree_node)
         self.selection.set_model(model)
+
+    @property
+    def is_offline(self):
+        return self._offline
 
     def show(self, win):
         self.present(win)
@@ -63,6 +69,7 @@ class YumexTransactionResult(Adw.Dialog):
         errors = str(errors)
         errors = html.escape(errors)
         self.result_frame.set_visible(False)
+        self.offline.set_visible(False)
         self.confirm_button.set_visible(False)
         self.set_follows_content_size(True)
         self.problems.set_text(errors)
@@ -105,6 +112,7 @@ class YumexTransactionResult(Adw.Dialog):
     def on_confirm_clicked(self, button):
         self._loop.quit()
         self.confirm = True
+        self._offline = self.offline.get_active()
         self.close()
 
     @Gtk.Template.Callback()
