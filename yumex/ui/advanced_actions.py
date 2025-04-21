@@ -32,7 +32,6 @@ class YumexAdvancedActions(Adw.Dialog):
     cancel_upgrade = Gtk.Template.Child()
     system_upgrade = Gtk.Template.Child()
     has_offline = Gtk.Template.Child()
-    distro_sync = Gtk.Template.Child()
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
@@ -48,12 +47,10 @@ class YumexAdvancedActions(Adw.Dialog):
         if has_transaction:
             self.has_offline.set_visible(True)
             self.system_upgrade.set_sensitive(False)
-            self.distro_sync.set_sensitive(False)
             self.releasever.set_sensitive(False)
         else:
             self.has_offline.set_visible(False)
             self.system_upgrade.set_sensitive(True)
-            self.distro_sync.set_sensitive(True)
             self.releasever.set_sensitive(True)
 
     @GObject.Signal(flags=GObject.SignalFlags.RUN_LAST, arg_types=(str, str))
@@ -66,13 +63,6 @@ class YumexAdvancedActions(Adw.Dialog):
         """Refresh the DNF cache."""
         self.close()
         self.emit("action", "refresh-cache", None)
-
-    @Gtk.Template.Callback()
-    def on_distro_sync(self, button):
-        """Perform a distribution sync."""
-        self.close()
-        releasever = self.releasever.get_text()
-        self.emit("action", "distro-sync", releasever)
 
     @Gtk.Template.Callback()
     def on_system_upgrade(self, button):

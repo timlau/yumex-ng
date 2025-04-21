@@ -469,8 +469,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         match action:
             case "refresh-cache":
                 self.on_action_expire_cache()
-            case "distro-sync":
-                self.on_action_distro_sync(parameter)
             case "system-upgrade":
                 self.on_action_system_upgrade(parameter)
             case "cancel-system-upgrade":
@@ -506,23 +504,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.reset_all()
 
         RunAsync(self.presenter.package_backend.client.clean, callback, "expire-cache")
-
-    def on_action_distro_sync(self, releasever):
-        """handler for distro-sync action"""
-        logger.debug(f"Execute system distro-sync ({releasever})")
-        current_release = get_distro_release()
-        if releasever <= current_release:
-            self.show_message(_("disto-sync target release must to larger than current release"))
-            return
-        result = self._do_transaction([], system_upgrade="distrosync", releasever=releasever)
-        logger.debug(f"Transaction execution ended : {result}")
-        if result:  # transaction completed without issues\
-            self.show_message(_("Transaction completed succesfully"), timeout=3)
-
-            # we have to reset the backend to current releasever
-            self.presenter.package_backend.client.reopen()
-            # reset everything
-            self.reset_all()
 
     def on_action_system_upgrade(self, releasever):
         """handler for distro-sync action"""

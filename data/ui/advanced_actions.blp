@@ -51,16 +51,6 @@ template $YumexAdvancedActions: Adw.Dialog {
           title: _("Fedora release");
         }
 
-        Adw.ButtonRow distro_sync {
-          title: _("Run distro-sync");
-          activated => $on_distro_sync();
-          tooltip-text: _("Sync installed packages with versions available in repositories.");
-
-          styles [
-            "suggested-action",
-          ]
-        }
-
         Adw.ButtonRow system_upgrade {
           title: _("Run System Upgrade");
           activated => $on_system_upgrade();
@@ -75,7 +65,7 @@ template $YumexAdvancedActions: Adw.Dialog {
           title: _("Cancel System Upgrade");
           sensitive: bind has_offline.visible;
           activated => $on_cancel_system_upgrade();
-          tooltip-text: _("Cancel system upgrade.");
+          tooltip-text: _("Cancel and clear system upgrade.");
 
           styles [
             "suggested-action",
