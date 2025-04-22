@@ -28,10 +28,10 @@ def test_get_repo_priorities(checker):
         assert isinstance(priority, int)
 
 
-def test_get_packages_by_name(checker):
+def test_get_packages_by_name(checker, pkg_yumex):
     """Test the get_packages_by_name function"""
-    package_name = "yumex"
-    packages = checker.get_packages_by_name(package_name)
+    assert isinstance(pkg_yumex, YumexPackage)
+    packages = checker.get_packages_by_name(pkg_yumex)
     assert isinstance(packages, list)
     assert len(packages) > 0
     print()
@@ -39,7 +39,7 @@ def test_get_packages_by_name(checker):
         for package in packages:
             print(package, package.repo)
             assert isinstance(package, YumexPackage)
-            assert package.name == package_name
+            assert package.name == pkg_yumex.name
 
 
 def test_check_dnf_updates(checker):

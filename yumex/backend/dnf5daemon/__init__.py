@@ -629,12 +629,13 @@ class YumexRootBackend:
             #     logger.debug(f"Skipping duplicate : {ypkg}")
         return list(nevra_dict.values())
 
-    def get_packages_by_name(self, name: str) -> list[YumexPackage]:
+    def get_packages_by_name(self, pkg: YumexPackage) -> list[YumexPackage]:
         """Get a list of packages by name"""
         result = self.client.package_list_fd(
-            name,
+            pkg.name,
             package_attrs=self.package_attr,
             scope="available",
+            arch=[pkg.arch],
             latest_limit=10,
         )
         return self._get_yumex_packages(result)

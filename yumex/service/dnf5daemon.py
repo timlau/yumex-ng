@@ -3,6 +3,7 @@ from typing import Generator
 
 import dbus
 
+from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import PACKAGE_ATTRS, create_package
 from yumex.backend.dnf5daemon.filter import FilterUpdates
 
@@ -75,15 +76,16 @@ class Dnf5UpdateChecker:
         except dbus.DBusException as e:
             logger.error(e)
 
-    def get_packages_by_name(self, package_name: str) -> list:
+    def get_packages_by_name(self, pkg: YumexPackage) -> list:
         """Get a list of packages by name"""
         try:
             options = {
                 "package_attrs": dbus.Array(PACKAGE_ATTRS),
                 "scope": "available",
-                "patterns": dbus.Array([package_name]),
+                "patterns": dbus.Array([pkg.name]),
                 "latest-limit": 10,
                 "with_src": False,
+                "arch": [pkg.arch],
             }
             res = self.iface_rpm.list(options)
             if res is None:

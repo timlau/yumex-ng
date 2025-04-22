@@ -56,6 +56,25 @@ def pkg_dict_upd():
 
 
 @pytest.fixture
+def pkg_dict_yumex():
+    return {
+        "name": "yumex",
+        "version": "5.3.1",
+        "arch": "noarch",
+        "release": "1.fc42",
+        "epoch": "",
+        "repo": "repo1",
+        "description": "desc",
+        "size": 1024,
+    }
+
+
+@pytest.fixture
+def pkg_yumex(pkg_dict_yumex) -> YumexPackage:
+    return YumexPackage(**pkg_dict_yumex)
+
+
+@pytest.fixture
 def pkg(pkg_dict) -> YumexPackage:
     return YumexPackage(**pkg_dict)
 
