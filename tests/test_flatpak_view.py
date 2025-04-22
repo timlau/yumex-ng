@@ -1,17 +1,18 @@
+from dataclasses import dataclass
+
 import gi
+import pytest
 
 from yumex.utils.enums import FlatpakLocation, Page
 
+from .mock import TemplateUIFromFile, mock_presenter
 
 gi.require_version("Flatpak", "1.0")
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from dataclasses import dataclass
-import pytest
-from .mock import mock_presenter, TemplateUIFromFile
 
-from gi.repository import Gtk
+from gi.repository import Gtk  # noqa: E402
 
 pytestmark = pytest.mark.guitest
 
