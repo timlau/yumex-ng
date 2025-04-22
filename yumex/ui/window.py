@@ -213,11 +213,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 # run the transaction
                 while True:
                     self.progress.show()
-                    self.progress.set_title(_("Running Transaction"))
+                    if opts.offline:
+                        self.progress.set_title(_("Building Offline Transaction"))
+                    else:
+                        self.progress.set_title(_("Running Transaction"))
                     result: TransactionResult = backend.run_transaction(opts)
                     if result.completed:
                         return True
-                    if result.key_install and result.key_values:  # Only on DNF4
+                    if result.key_install and result.key_values:
                         self.progress.hide()
                         ok = self.confirm_gpg_import(result.key_values)
                         if ok:

@@ -189,6 +189,7 @@ class YumexRootBackend:
         repo_prioritiy = {id: priority for id, _, _, priority in self.get_repositories()}
         self.filter_updates = FilterUpdates(repo_prioritiy, self.get_packages_by_name)
         self._installed_evr = self.fetch_installed_evr()
+        self._offline = False
 
     def fetch_installed_evr(self) -> list[YumexPackage]:
         """build dict of installed package name and evr"""
@@ -325,6 +326,7 @@ class YumexRootBackend:
             return TransactionResult(False, error=error_msgs)
 
     def run_transaction(self, opts: TransactionOptions) -> TransactionResult:
+        self._offline = opts.offline
         self.download_queue.clear()
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
@@ -348,7 +350,10 @@ class YumexRootBackend:
 
     def on_transaction_before_begin(self, session, *args):
         logger.debug(f"Signal : transaction_before_begin ({args})")
-        self.progress.set_title(_("Applying Transaction"))
+        if self._offline:
+            self.progress.set_title(_("Building Offline Transaction"))
+        else:
+            self.progress.set_title(_("Applying Transaction"))
 
     def on_transaction_after_complete(self, session, *args):
         logger.debug(f"Signal : transaction_after_complete ({args})")
@@ -438,7 +443,10 @@ class YumexRootBackend:
                 case DownloadType.PACKAGE:
                     pkg.downloaded = pkg.to_download
                     if self.download_queue.is_completed:
-                        self.progress.set_title(_("Applying Transaction"))
+                        if self._offline:
+                            self.progress.set_title(_("Building Offline Transaction"))
+                        else:
+                            self.progress.set_title(_("Applying Transaction"))
                 case DownloadType.REPO:
                     pkg.downloaded = 1
                     pkg.to_download = 1
