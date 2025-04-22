@@ -43,14 +43,17 @@ class YumexTransactionResult(Adw.Dialog):
         super().__init__(**kwargs)
         self._loop = GLib.MainLoop()
         self.confirm = False
-        self._offline = False
         self.store = Gio.ListStore.new(ResultElem)
         model = Gtk.TreeListModel.new(self.store, False, True, self.add_tree_node)
         self.selection.set_model(model)
 
     @property
     def is_offline(self):
-        return self._offline
+        return self.offline.get_active()
+
+    def set_offline(self, offline: bool):
+        self.offline.set_active(offline)
+        self.offline.set_sensitive(False)
 
     def show(self, win):
         self.present(win)
@@ -112,7 +115,6 @@ class YumexTransactionResult(Adw.Dialog):
     def on_confirm_clicked(self, button):
         self._loop.quit()
         self.confirm = True
-        self._offline = self.offline.get_active()
         self.close()
 
     @Gtk.Template.Callback()
