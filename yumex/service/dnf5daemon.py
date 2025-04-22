@@ -85,7 +85,7 @@ class Dnf5UpdateChecker:
                 "patterns": dbus.Array([pkg.name]),
                 "latest-limit": 10,
                 "with_src": False,
-                "arch": pkg.arch,
+                "arch": [pkg.arch],
             }
             res = self.iface_rpm.list(options)
             if res is None:

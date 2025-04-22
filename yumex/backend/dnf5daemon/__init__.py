@@ -635,7 +635,7 @@ class YumexRootBackend:
             pkg.name,
             package_attrs=self.package_attr,
             scope="available",
-            arch=pkg.arch,
+            arch=[pkg.arch],
             latest_limit=10,
         )
         return self._get_yumex_packages(result)
