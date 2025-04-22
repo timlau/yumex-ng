@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-15 13:31+0200\n"
+"POT-Creation-Date: 2025-04-22 10:10+0200\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>, 2025\n"
 "Language-Team: Catalan (https://app.transifex.com/timlau/teams/16939/ca/)\n"
@@ -58,25 +58,25 @@ msgstr "Se suprimeix"
 msgid "Replacing"
 msgstr "Es reemplaça"
 
-#: yumex/backend/dnf5daemon/__init__.py:287
-#: yumex/backend/dnf5daemon/__init__.py:306 yumex/ui/window.py:190
+#: yumex/backend/dnf5daemon/__init__.py:311
+#: yumex/backend/dnf5daemon/__init__.py:330 yumex/ui/window.py:196
 msgid "Building Transaction"
 msgstr "Es construeix la transacció"
 
-#: yumex/backend/dnf5daemon/__init__.py:324
-#: yumex/backend/dnf5daemon/__init__.py:414
+#: yumex/backend/dnf5daemon/__init__.py:351
+#: yumex/backend/dnf5daemon/__init__.py:441
 msgid "Applying Transaction"
 msgstr "S'aplica la transacció"
 
-#: yumex/backend/dnf5daemon/__init__.py:332
+#: yumex/backend/dnf5daemon/__init__.py:359
 msgid "Running Scripts : "
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:370
+#: yumex/backend/dnf5daemon/__init__.py:397
 msgid "Download Packages"
 msgstr "Baixada dels paquets"
 
-#: yumex/backend/dnf5daemon/__init__.py:372
+#: yumex/backend/dnf5daemon/__init__.py:399
 msgid "Download Reposiory Information"
 msgstr "Baixa la informació del repositori"
 
@@ -116,22 +116,6 @@ msgstr "no s'ha trobat informació de l'actualització"
 msgid "Undefined"
 msgstr "No definit"
 
-#: yumex/ui/dialogs.py:15
-msgid "Quit"
-msgstr "Surt"
-
-#: yumex/ui/dialogs.py:37
-msgid "Install GPG Key"
-msgstr "Instal·la la clau GPG"
-
-#: yumex/ui/dialogs.py:45
-msgid "Yes"
-msgstr "Sí"
-
-#: yumex/ui/dialogs.py:47
-msgid "No"
-msgstr "No"
-
 #: yumex/ui/flatpak_view.py:90
 msgid "flatpaks were updated"
 msgstr "S'han actualitzat els flatpaks."
@@ -140,41 +124,95 @@ msgstr "S'han actualitzat els flatpaks."
 msgid "Unused flatpaks were removed"
 msgstr "S'han suprimit els flatpaks no usats."
 
-#: yumex/ui/package_view.py:100
+#: yumex/ui/dialogs.py:17
+msgid "Quit"
+msgstr "Surt"
+
+#: yumex/ui/dialogs.py:42
+msgid "Install GPG Key"
+msgstr "Instal·la la clau GPG"
+
+#: yumex/ui/dialogs.py:50 yumex/ui/dialogs.py:79
+msgid "Yes"
+msgstr "Sí"
+
+#: yumex/ui/dialogs.py:52 yumex/ui/dialogs.py:81
+msgid "No"
+msgstr "No"
+
+#: yumex/ui/package_view.py:96
 msgid "Loading Packages"
 msgstr "Es carreguen els paquets"
 
-#: yumex/ui/package_view.py:101
+#: yumex/ui/package_view.py:97
 msgid "This may take a little while"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:72
+#: yumex/ui/transaction_result.py:100
 msgid "Packages for installation"
 msgstr "Paquets per a instal·lar"
 
-#: yumex/ui/transaction_result.py:74
+#: yumex/ui/transaction_result.py:102
 msgid "Packages for deletion"
 msgstr "Paquets per a suprimir"
 
-#: yumex/ui/transaction_result.py:76 yumex/ui/transaction_result.py:78
+#: yumex/ui/transaction_result.py:104 yumex/ui/transaction_result.py:106
 msgid "Packages for updating"
 msgstr "Paquets per a actualitzar"
 
-#: yumex/ui/transaction_result.py:80
+#: yumex/ui/transaction_result.py:108
 msgid "Skipped Packages"
 msgstr ""
 
-#: yumex/ui/window.py:206
+#: yumex/ui/transaction_result.py:110
+msgid "Packages for downgrading"
+msgstr ""
+
+#: yumex/ui/window.py:216
 msgid "Running Transaction"
 msgstr "S'executa la transacció"
 
-#: yumex/ui/window.py:244
+#: yumex/ui/window.py:258
 msgid "Running Flatpak Transaction"
 msgstr "Execució de la transacció de Flatpak"
 
-#: yumex/ui/window.py:299
+#: yumex/ui/window.py:314
 msgid "Transaction completed succesfully"
 msgstr "La transacció s'ha completat correctament."
+
+#: yumex/ui/window.py:489
+msgid "Offline transaction"
+msgstr ""
+
+#: yumex/ui/window.py:490
+msgid ""
+"Do you want to prepare the offline transaction to be applied on next reboot "
+"?"
+msgstr ""
+
+#: yumex/ui/window.py:496
+msgid "Offline trasaction prepared to be applied on next reboot"
+msgstr ""
+
+#: yumex/ui/window.py:499
+msgid "Offline transaction prepare failed"
+msgstr ""
+
+#: yumex/ui/window.py:517
+msgid "system upgrade target release must to larger than current release"
+msgstr ""
+
+#: yumex/ui/window.py:526
+msgid "Offline Transaction completed succesfully"
+msgstr ""
+
+#: yumex/ui/window.py:536
+msgid "Offline transaction cancelled"
+msgstr ""
+
+#: yumex/ui/window.py:539
+msgid "Offline transaction cancel failed"
+msgstr ""
 
 #: yumex/main.py:174
 msgid ""
@@ -198,7 +236,7 @@ msgstr ""
 msgid "Special thanks to"
 msgstr "Agraïments especials per a"
 
-#: yumex/main.py:221
+#: yumex/main.py:222
 msgid "Critical Error"
 msgstr ""
 
@@ -318,201 +356,89 @@ msgstr "Afegit com a dependència"
 msgid "Remove item from queue"
 msgstr "Suprimeix l'element de la cua"
 
-#: data/ui/shortcuts.blp:9
-msgid "General"
-msgstr "General"
-
-#: data/ui/shortcuts.blp:12
-msgid "Keyboard shortcuts"
-msgstr "Dreceres del teclat"
-
-#: data/ui/shortcuts.blp:17 data/ui/preferences.blp:5
-msgid "Preferences"
-msgstr "Preferències"
-
-#: data/ui/shortcuts.blp:22
-msgid "Apply Actions/Confirm"
-msgstr "Aplica les accions / Confirmació"
-
-#: data/ui/shortcuts.blp:27
-msgid "Close Dialog/Cancel"
-msgstr "Tanca el diàleg / Cancel·la"
-
-#: data/ui/shortcuts.blp:33
-msgid "Select Packages"
-msgstr "Seleccioneu paquets"
-
-#: data/ui/shortcuts.blp:38
-msgid "Select Flatpaks"
-msgstr "Seleccioneu Flatpaks"
-
-#: data/ui/shortcuts.blp:43
-msgid "Select Queue"
-msgstr "Seleccioneu la cua"
-
-#: data/ui/shortcuts.blp:49
-msgid "Package View"
-msgstr "Visualització dels paquets"
-
-#: data/ui/shortcuts.blp:52
-msgid "Show/Hide Sidebar"
-msgstr "Mostra / amaga la barra lateral"
-
-#: data/ui/shortcuts.blp:57
-msgid "Toggled queued"
-msgstr "Commuta elements de la cua"
-
-#: data/ui/shortcuts.blp:73
-msgid "Package Filters"
-msgstr "Filtres de paquets"
-
-#: data/ui/shortcuts.blp:76
-msgid "Show Installed"
-msgstr "Mostra els paquets instal·lats"
-
-#: data/ui/shortcuts.blp:81
-msgid "Show updates"
-msgstr "Mostra les actualitzacions"
-
-#: data/ui/shortcuts.blp:86
-msgid "Show All"
-msgstr "Mostra-ho tot"
-
-#: data/ui/shortcuts.blp:92
-msgid "Queue View"
-msgstr "Mostra la cua"
-
-#: data/ui/shortcuts.blp:95
-msgid "Clear Queue"
-msgstr "Buida la cua"
-
-#: data/ui/shortcuts.blp:101
-msgid "Flatpak View"
-msgstr "Visualització dels Flatpaks"
-
-#: data/ui/shortcuts.blp:104
-msgid "Search for flatpaks to install"
-msgstr "Cerca de flatpaks per instal·lar"
-
-#: data/ui/shortcuts.blp:109
-msgid "Remove selected flatpak"
-msgstr "Suprimeix el flatpak seleccionat"
-
-#: data/ui/flatpak_result.blp:17
+#: data/ui/flatpak_result.blp:16
 msgid "Flatpak Transaction Result"
 msgstr "Resultat de la transacció de Flatpak"
 
-#: data/ui/flatpak_result.blp:22 data/ui/flatpak_search.blp:22
-#: data/ui/transaction_result.blp:22
+#: data/ui/flatpak_result.blp:21 data/ui/flatpak_search.blp:21
+#: data/ui/transaction_result.blp:21
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: data/ui/flatpak_result.blp:37 data/ui/transaction_result.blp:37
+#: data/ui/flatpak_result.blp:36 data/ui/transaction_result.blp:36
 msgid "Confirm"
 msgstr "Confirmeu-ho"
 
-#: data/ui/flatpak_search.blp:17
+#: data/ui/flatpak_search.blp:16
 msgid "Search Flatpaks"
 msgstr "Cerca flatpaks"
 
-#: data/ui/flatpak_search.blp:42
+#: data/ui/flatpak_search.blp:41
 msgid "Install"
 msgstr "Instal·la"
 
-#: data/ui/flatpak_search.blp:90
+#: data/ui/flatpak_search.blp:89
 msgid "Install location"
 msgstr "Localització de la instal·lació"
 
-#: data/ui/flatpak_search.blp:112
+#: data/ui/flatpak_search.blp:111
 msgid "Active Remotes: "
 msgstr "Remots actius:"
 
-#: data/ui/transaction_result.blp:17
-msgid "Transaction Result"
-msgstr "Resultat de la transacció"
-
-#: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
-#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
-msgid "Yum Extender"
-msgstr "Yum Extender"
-
-#: data/ui/window.blp:29
-msgid "Select Package filters"
-msgstr "Seleccioneu els filtres de paquets"
-
-#: data/ui/window.blp:56
-msgid "Main Menu"
-msgstr "Menú principal"
-
-#: data/ui/window.blp:68
-msgid "Apply"
-msgstr "Aplica"
-
-#: data/ui/window.blp:72
-msgid "Apply Package Actions"
-msgstr "Aplica les accions del paquet"
-
-#: data/ui/window.blp:89
-msgid "Package Name"
-msgstr "Nom del paquet"
-
-#: data/ui/window.blp:99
-msgid "Packages"
-msgstr "Paquets"
-
-#: data/ui/window.blp:146
-msgid "Flatpaks"
-msgstr "Flatpaks"
-
-#: data/ui/window.blp:170
-msgid "Update All Flatpaks (Apps & Runtimes)"
-msgstr "Actualitza tots els Flatpaks (aplicacions i entorns d'execució)"
-
-#: data/ui/window.blp:176
-msgid "search for new flatpak to install"
-msgstr "Cerca flatpaks nous per instal·lar"
-
-#: data/ui/window.blp:182
-msgid "uninstall selected flatpak"
-msgstr "desinstal·la el flatpak seleccionat"
-
-#: data/ui/window.blp:188
-msgid "Remove unused flatpaks (runtimes etc.)"
-msgstr "Suprimeix els flatpacks no usats (entorns d'execució, etc.)"
-
-#: data/ui/window.blp:200
-msgid "show/hide runtimes"
-msgstr "mostra / amaga entorns d'execució"
-
-#: data/ui/window.blp:210
-msgid "Groups"
-msgstr "Grups"
-
-#: data/ui/window.blp:221
-msgid "Queue"
-msgstr "Cua"
-
-#: data/ui/window.blp:247
-msgid "Remove all from queue"
-msgstr "Suprimeix-ho tot de la cua"
-
-#: data/ui/window.blp:264
-msgid "_Preferences"
-msgstr "_Preferències"
-
-#: data/ui/window.blp:269
-msgid "Reload DNF cache"
+#: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
+#: data/ui/window.blp:286
+msgid "Advanced Actions"
 msgstr ""
 
-#: data/ui/window.blp:274
-msgid "Keyboard Shortcuts"
-msgstr "Dreceres del teclat"
+#: data/ui/advanced_actions.blp:29
+msgid "Refresh DNF Cache"
+msgstr ""
 
-#: data/ui/window.blp:279
-msgid "_About Yum Extender"
-msgstr "Quant al Yum Extender"
+#: data/ui/advanced_actions.blp:31
+msgid "Expire the DNF cache, so it will be refreshed from repositories."
+msgstr ""
 
-#: data/ui/preferences.blp:10
+#: data/ui/advanced_actions.blp:35
+msgid "System Upgrade"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:39
+msgid "Fedora release"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:43
+msgid "Run System Upgrade"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:45
+msgid "Upgrade system to next release (offline)."
+msgstr ""
+
+#: data/ui/advanced_actions.blp:50
+msgid "Offline Transaction  is available"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:55
+msgid "Cancel Transaction"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:57
+msgid "Cancel and clear offline transaction."
+msgstr ""
+
+#: data/ui/advanced_actions.blp:61
+msgid "Apply on Reboot"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:63
+msgid "Prepare transaction for apply on next boot."
+msgstr ""
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
+msgid "Preferences"
+msgstr "Preferències"
+
+#: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
 msgid "Settings"
 msgstr "Configuració"
 
@@ -571,6 +497,219 @@ msgstr "Els dipòsits disponibles i habilitats"
 #: data/ui/preferences.blp:126
 msgid "Show Source/Debug Repositories"
 msgstr ""
+
+#: data/ui/search_settings.blp:5
+msgid "Search Settings"
+msgstr ""
+
+#: data/ui/search_settings.blp:14
+msgid "Seatch Settings"
+msgstr ""
+
+#: data/ui/search_settings.blp:17
+msgid "Number of package versions"
+msgstr ""
+
+#: data/ui/search_settings.blp:31
+msgid "Search in filesystem"
+msgstr ""
+
+#: data/ui/search_settings.blp:36
+msgid "Search in provides"
+msgstr ""
+
+#: data/ui/search_settings.blp:41
+msgid "Search in binaries"
+msgstr ""
+
+#: data/ui/search_settings.blp:46
+msgid "Filter on archs"
+msgstr ""
+
+#: data/ui/search_settings.blp:52
+msgid "Search scope"
+msgstr ""
+
+#: data/ui/shortcuts.blp:9
+msgid "General"
+msgstr "General"
+
+#: data/ui/shortcuts.blp:12
+msgid "Keyboard shortcuts"
+msgstr "Dreceres del teclat"
+
+#: data/ui/shortcuts.blp:22
+msgid "Apply Actions/Confirm"
+msgstr "Aplica les accions / Confirmació"
+
+#: data/ui/shortcuts.blp:27
+msgid "Close Dialog/Cancel"
+msgstr "Tanca el diàleg / Cancel·la"
+
+#: data/ui/shortcuts.blp:33
+msgid "Select Packages"
+msgstr "Seleccioneu paquets"
+
+#: data/ui/shortcuts.blp:38
+msgid "Select Flatpaks"
+msgstr "Seleccioneu Flatpaks"
+
+#: data/ui/shortcuts.blp:43
+msgid "Select Queue"
+msgstr "Seleccioneu la cua"
+
+#: data/ui/shortcuts.blp:49
+msgid "Package View"
+msgstr "Visualització dels paquets"
+
+#: data/ui/shortcuts.blp:52
+msgid "Show/Hide Sidebar"
+msgstr "Mostra / amaga la barra lateral"
+
+#: data/ui/shortcuts.blp:57
+msgid "Toggled queued"
+msgstr "Commuta elements de la cua"
+
+#: data/ui/shortcuts.blp:72
+msgid "Toggle Searchbar"
+msgstr ""
+
+#: data/ui/shortcuts.blp:77
+msgid "Search Options"
+msgstr ""
+
+#: data/ui/shortcuts.blp:83
+msgid "Package Filters"
+msgstr "Filtres de paquets"
+
+#: data/ui/shortcuts.blp:86
+msgid "Show Installed"
+msgstr "Mostra els paquets instal·lats"
+
+#: data/ui/shortcuts.blp:91
+msgid "Show updates"
+msgstr "Mostra les actualitzacions"
+
+#: data/ui/shortcuts.blp:96
+msgid "Show All"
+msgstr "Mostra-ho tot"
+
+#: data/ui/shortcuts.blp:102
+msgid "Queue View"
+msgstr "Mostra la cua"
+
+#: data/ui/shortcuts.blp:105
+msgid "Clear Queue"
+msgstr "Buida la cua"
+
+#: data/ui/shortcuts.blp:111
+msgid "Flatpak View"
+msgstr "Visualització dels Flatpaks"
+
+#: data/ui/shortcuts.blp:114
+msgid "Search for flatpaks to install"
+msgstr "Cerca de flatpaks per instal·lar"
+
+#: data/ui/shortcuts.blp:119
+msgid "Remove selected flatpak"
+msgstr "Suprimeix el flatpak seleccionat"
+
+#: data/ui/transaction_result.blp:16
+msgid "Transaction Result"
+msgstr "Resultat de la transacció"
+
+#: data/ui/transaction_result.blp:88
+msgid "Problems in Transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:99
+msgid "Copy to clipboard"
+msgstr ""
+
+#: data/ui/transaction_result.blp:135
+msgid "Offline Transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:136
+msgid "This transaction will be performed offline during reboot"
+msgstr ""
+
+#: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
+#: data/dk.yumex.Yumex.metainfo.xml.in.in:7
+msgid "Yum Extender"
+msgstr "Yum Extender"
+
+#: data/ui/window.blp:29
+msgid "Select Package filters"
+msgstr "Seleccioneu els filtres de paquets"
+
+#: data/ui/window.blp:56
+msgid "Main Menu"
+msgstr "Menú principal"
+
+#: data/ui/window.blp:68
+msgid "Apply"
+msgstr "Aplica"
+
+#: data/ui/window.blp:72
+msgid "Apply Package Actions"
+msgstr "Aplica les accions del paquet"
+
+#: data/ui/window.blp:91
+msgid "Package Name"
+msgstr "Nom del paquet"
+
+#: data/ui/window.blp:116
+msgid "Packages"
+msgstr "Paquets"
+
+#: data/ui/window.blp:163
+msgid "Flatpaks"
+msgstr "Flatpaks"
+
+#: data/ui/window.blp:187
+msgid "Update All Flatpaks (Apps & Runtimes)"
+msgstr "Actualitza tots els Flatpaks (aplicacions i entorns d'execució)"
+
+#: data/ui/window.blp:193
+msgid "search for new flatpak to install"
+msgstr "Cerca flatpaks nous per instal·lar"
+
+#: data/ui/window.blp:199
+msgid "uninstall selected flatpak"
+msgstr "desinstal·la el flatpak seleccionat"
+
+#: data/ui/window.blp:205
+msgid "Remove unused flatpaks (runtimes etc.)"
+msgstr "Suprimeix els flatpacks no usats (entorns d'execució, etc.)"
+
+#: data/ui/window.blp:217
+msgid "show/hide runtimes"
+msgstr "mostra / amaga entorns d'execució"
+
+#: data/ui/window.blp:227
+msgid "Groups"
+msgstr "Grups"
+
+#: data/ui/window.blp:238
+msgid "Queue"
+msgstr "Cua"
+
+#: data/ui/window.blp:264
+msgid "Remove all from queue"
+msgstr "Suprimeix-ho tot de la cua"
+
+#: data/ui/window.blp:281
+msgid "_Preferences"
+msgstr "_Preferències"
+
+#: data/ui/window.blp:291
+msgid "Keyboard Shortcuts"
+msgstr "Dreceres del teclat"
+
+#: data/ui/window.blp:296
+msgid "_About Yum Extender"
+msgstr "Quant al Yum Extender"
 
 #: data/dk.yumex.Yumex.desktop.in.in:3
 msgid "Install, update and remove applications"
