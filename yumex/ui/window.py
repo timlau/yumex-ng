@@ -201,6 +201,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if result.completed:
             # get confirmation
             transaction_result = YumexTransactionResult()
+            if opts.offline:  # force offline transaction
+                transaction_result.set_offline(True)
             transaction_result.show_result(result.data)
             if result.problems:
                 transaction_result.set_problems(result.problems)
@@ -516,7 +518,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if releasever <= current_release:
             self.show_message(_("system upgrade target release must to larger than current release"))
             return
-        opts = TransactionOptions(system_upgrade="upgrade", releasever=releasever)
+        opts = TransactionOptions(system_upgrade="upgrade", releasever=releasever, offline=True)
         result = self._do_transaction([], opts)
         logger.debug(f"Transaction execution ended : {result}")
         # we have to reset the backend to current releasever
