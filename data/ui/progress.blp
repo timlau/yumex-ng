@@ -1,18 +1,15 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $YumexProgress: Adw.Window {
-  default-width: 700;
-  default-height: 150;
-  hide-on-close: true;
-  modal: true;
+template $YumexProgress: Adw.Dialog {
+  content-width: 700;
+  content-height: 150;
 
   styles [
     "progress_window",
   ]
 
-  Gtk.Box {
-    orientation: vertical;
+  Adw.ToolbarView main {
     margin-top: 20;
     margin-bottom: 20;
     margin-start: 20;

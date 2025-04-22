@@ -117,8 +117,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if BUILD_TYPE == "debug":
             self.add_css_class("devel")
 
-        self.progress = YumexProgress()
-        self.progress.set_transient_for(self)
+        self.progress = YumexProgress(self)
         self.setup_packages_and_queue()
         self.setup_flatpaks()
 
