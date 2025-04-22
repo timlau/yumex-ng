@@ -6,7 +6,8 @@
         {
             "label": "Run from local build",
             "type": "shell",
-            "command": "${workspaceFolder}/builddir/yumex/local-yumex"
+            "command": "${workspaceFolder}/builddir/yumex/local-yumex",
+            "problemMatcher": []
         },
         {
             "label": "local build and run",
