@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: ""
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
 **Describe the bug**
@@ -17,4 +16,5 @@ What version of yumex are you running ?
 What Distro are you running ?
 
 **Logs**
-Run `yumex -d` in a terminal to show debug logging, attach the output in a comment below
+Attach the maching `yumex_debug.log` log file from `~/.local/share/yumex` to the case
+(Logs from the lastest 6 runs of yumex is available, only attach the one with the issue.)
