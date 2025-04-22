@@ -365,9 +365,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_search_settings(self, widget):
-        print("search settings")
         options = self.search_settings.show(self)
-        print(options)
+        logger.debug(f"search settings : {options}")
         self.search_entry.grab_focus()
         self.on_search_activate(self.search_entry)
 
@@ -530,15 +529,14 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.reset_all()
 
     def on_action_cancel_system_upgrade(self, releasever):
-        """handler for distro-sync action"""
-        logger.debug(f"cancel system upgrade ({releasever})")
+        """handler for offline transaction cancel action"""
+        logger.debug(f"cancel offline transaction ({releasever})")
         res, errors = self.presenter.cancel_offline_transaction()
         if res:
-            self.show_message(_("System upgrade cancelled"), timeout=5)
+            self.show_message(_("Offline transaction cancelled"), timeout=5)
         else:
-            logger.debug(f"cancel system upgrade failed: {errors}")
-            self.show_message(_("System upgrade cancel failed"), timeout=5)
-        print(f"offline transaction : {self.presenter.has_offline_transaction()}")
+            logger.debug(f"cancel offline transaction failed: {errors}")
+            self.show_message(_("Offline transaction cancel failed"), timeout=5)
 
     def on_stack_changed(self, widget, position, n_items):
         """handler for stack page is changed"""
