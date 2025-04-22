@@ -141,7 +141,7 @@ transifex-update:
 
 # fetct .po files from transifex and commit to git
 transifex-get:
-	tx pull
+	tx pull -f
 	git add po/*
 	git commit -m "i18n: updated translations from transifex"
 
