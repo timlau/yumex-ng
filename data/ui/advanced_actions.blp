@@ -55,6 +55,10 @@ template $YumexAdvancedActions: Adw.Dialog {
           title: _("Cancel Transaction");
           activated => $on_cancel_system_upgrade();
           tooltip-text: _("Cancel and clear offline transaction.");
+
+          styles [
+            "destructive-action",
+          ]
         }
 
         Adw.ButtonRow reboot {
