@@ -19,7 +19,7 @@ import pytest
 from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import UpdateInfo, YumexRootBackend, create_package
 from yumex.utils import setup_logging
-from yumex.utils.enums import InfoType, PackageFilter, PackageState, SearchField
+from yumex.utils.enums import InfoType, PackageFilter, PackageState
 from yumex.utils.exceptions import YumexException
 
 from .mock import mock_presenter
@@ -205,7 +205,7 @@ def test_get_packages_illegal(backend):
 # will fail if 0xFFFF package is not available in repos
 def test_search_name(backend):
     """test search by name"""
-    pkgs = backend.search("FFFF", SearchField.NAME)
+    pkgs = backend.search("FFFF")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -219,7 +219,10 @@ def test_search_name(backend):
 # will fail if the fedora repo is not available in repos
 def test_search_repo(backend):
     """test search by repo"""
-    pkgs = backend.search("fedora", SearchField.REPO)
+    options = {
+        "repo": ["fedora"],
+    }
+    pkgs = backend.search("*", options)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -230,21 +233,12 @@ def test_search_repo(backend):
     assert pkg.repo == "fedora"
 
 
-@pytest.mark.xfail
-# FIXME: dnf5daemon don't have any way to search in description
-def test_search_desc(backend):
-    """test search by summary"""
-    pkgs = backend.search("Yum Extender", field=SearchField.SUMMARY)
-    assert isinstance(pkgs, list)
-    assert len(pkgs) > 0
-    pkg = pkgs[0]
-    assert isinstance(pkg, YumexPackage)
-    assert "Yum Extender" in pkg.description
-
-
 def test_search_arch(backend):
     """test search by arch"""
-    pkgs = backend.search("noarch", SearchField.ARCH)
+    options = {
+        "arch": ["noarch"],
+    }
+    pkgs = backend.search("noarch", options)
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     print()
@@ -256,19 +250,13 @@ def test_search_arch(backend):
 
 def test_search_notfound(backend):
     """test search by name not found"""
-    pkgs = backend.search("XXXNOTFOUNDXXX", SearchField.NAME)
+    pkgs = backend.search("XXXNOTFOUNDXXX")
     assert isinstance(pkgs, list)
     assert len(pkgs) == 0
 
 
-def test_search_illegal_field(backend):
-    """test search by illegal search field"""
-    with pytest.raises(ValueError):
-        _ = backend.search("ffff", field="illegal")
-
-
 def test_package_info_desc(backend):
-    pkgs = backend.search("FFFF", SearchField.NAME)
+    pkgs = backend.search("FFFF")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -280,14 +268,8 @@ def test_package_info_desc(backend):
     assert "The 'Open Free Fiasco Firmware Flasher'" in desc
 
 
-def test_package_info_desc_notfound(backend, yumex_package):
-    desc = backend.get_package_info(yumex_package, InfoType.DESCRIPTION)
-    assert isinstance(desc, str)
-    assert len(desc) == 0
-
-
 def test_package_info_files(backend):
-    pkgs = backend.search("FFFF", SearchField.NAME)
+    pkgs = backend.search("FFFF")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -300,7 +282,7 @@ def test_package_info_files(backend):
 
 
 def test_package_info_files_0ad(backend):
-    pkgs = backend.search("0ad", SearchField.NAME)
+    pkgs = backend.search("0ad")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -320,7 +302,7 @@ def test_package_info_files_notfound(backend, yumex_package):
 
 # Advisory info is not working yet
 def test_package_info_update(backend):
-    pkgs = backend.search("dnf5", SearchField.NAME)
+    pkgs = backend.search("dnf5")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -336,7 +318,7 @@ def test_package_info_update(backend):
 
 
 def test_package_depsolve(backend):
-    pkgs = backend.search("0ad", SearchField.NAME)
+    pkgs = backend.search("0ad")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
@@ -363,9 +345,9 @@ def test_exception(backend: YumexRootBackend):
         backend.client._test_exception()
 
 
-def test_get_packages_by_name(backend):
+def test_get_packages_by_name(backend, pkg_yumex):
     """test search by name"""
-    pkgs = backend.get_packages_by_name("yumex")
+    pkgs = backend.get_packages_by_name(pkg_yumex)
     print()
     print(f"\n# of packages : {len(pkgs)}")
     print(pkgs)

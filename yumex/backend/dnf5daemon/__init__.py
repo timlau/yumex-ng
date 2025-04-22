@@ -578,7 +578,8 @@ class YumexRootBackend:
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
         dep_pkgs = []
-        res, rc = self._build_transations(pkgs)
+        opts = TransactionOptions()
+        res, rc = self._build_transations(pkgs, opts)
         for elem in res:
             _, action, typ, _, pkg_dict = elem
             pkg_dict["summary"] = ""  # need for create package, not need for depsolve
