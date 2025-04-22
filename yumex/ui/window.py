@@ -486,19 +486,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_action_reboot(self):
         """handler for reboot action"""
         self.progress.hide()
-        logger.debug("Reboot system and install system upgrade")
-        title = _("System Upgrade")
-        msg = _("Do you want to prepare the system upgrade for installation on next reboot ?")
+        logger.debug("offline transaction on reboot prepare")
+        title = _("Offline transaction")
+        msg = _("Do you want to prepare the offline transaction to be applied on next reboot ?")
         dialog = YesNoDialog(self, msg, title)
         dialog.show()
         if dialog.answer:
-            logger.debug("System will be prepared offline transaction and rebooted")
             rc = self.presenter.reboot_and_install()
             if rc:
-                msg = _("System upgrade prepared for installation on next reboot")
+                msg = _("Offline trasaction prepared to be applied on next reboot")
                 self.show_message(msg)
             else:
-                msg = _("System upgrade prepare failed")
+                msg = _("Offline transaction prepare failed")
                 self.show_message(msg)
 
     def on_action_expire_cache(self):
