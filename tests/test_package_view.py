@@ -1,22 +1,24 @@
-from unittest.mock import MagicMock
 import sys
-import pytest
+from unittest.mock import MagicMock
+
 import gi
+import pytest
 
 from yumex.utils.enums import (
+    InfoType,
     PackageFilter,
     SearchField,
     SortType,
-    InfoType,
 )
-
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 from gi.repository import Gtk
-from .mock import TemplateUIFromFile, dummy_package
+
 import yumex.utils
+
+from .mock import TemplateUIFromFile, dummy_package
 
 
 def translate(text):

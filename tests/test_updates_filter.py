@@ -1,38 +1,39 @@
+from yumex.backend.dnf import YumexPackage
 from yumex.backend.dnf5daemon import create_package
 from yumex.backend.dnf5daemon.filter import FilterUpdates
 
 
-def get_packages_by_name(package_name: str) -> list:
+def get_packages_by_name(pkg: YumexPackage) -> list:
     # Mock function to simulate package retrieval
     ypgk1 = create_package(
         {
-            "arch": "x86_64",
+            "arch": pkg.arch,
             "evr": "1.0-1",
             "install_size": 257602,
             "is_installed": False,
-            "name": package_name,
+            "name": pkg.name,
             "repo_id": "base",
             "summary": "This package don't exist",
         }
     )
     ypgk2 = create_package(
         {
-            "arch": "x86_64",
+            "arch": pkg.arch,
             "evr": "1.1-1",
             "install_size": 257602,
             "is_installed": False,
-            "name": package_name,
+            "name": pkg.name,
             "repo_id": "updates",
             "summary": "This package don't exist",
         }
     )
     ypgk3 = create_package(
         {
-            "arch": "x86_64",
+            "arch": pkg.arch,
             "evr": "1.2-1",
             "install_size": 257602,
             "is_installed": False,
-            "name": package_name,
+            "name": pkg.name,
             "repo_id": "epel",
             "summary": "This package don't exist",
         }
@@ -52,25 +53,25 @@ def test_get_repo_priority():
     assert filter_updates._get_repo_priority("epel") == 3
 
 
-def test_get_package_repos():
+def test_get_package_repos(pkg):
     repo_priority = {
         "base": 1,
         "updates": 2,
         "epel": 3,
     }
     filter_updates = FilterUpdates(repo_priority, get_packages_by_name)
-    repos = filter_updates._get_package_repos("test-package")
+    repos = filter_updates._get_package_repos(pkg)
     assert set(repos) == {"base", "updates", "epel"}
 
 
-def test_filter_updates():
+def test_filter_updates(pkg):
     repo_priority = {
         "base": 1,
         "updates": 2,
         "epel": 3,
     }
     filter_updates = FilterUpdates(repo_priority, get_packages_by_name)
-    updates = get_packages_by_name("test-package")
+    updates = get_packages_by_name(pkg)
     filtered_updates = filter_updates._filter_updates(updates)
     assert len(filtered_updates) == 1
     assert filtered_updates[0].repo == "base"

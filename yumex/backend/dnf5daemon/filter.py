@@ -15,7 +15,7 @@ class FilterUpdates:
         """Filter updates based on the repository priority"""
         latest_versions = {}
         for pkg in updates:
-            repos = self._get_package_repos(pkg.name)
+            repos = self._get_package_repos(pkg)
             repo_priorities = [self.repo_prioritiy[repo] for repo in repos]
             lowest_priority = min(repo_priorities) if repo_priorities else 99
             pkg_repo_priority = self.repo_prioritiy[pkg.repo]
@@ -33,9 +33,9 @@ class FilterUpdates:
         """Get the priority of a repository"""
         return self.repo_prioritiy[repo_name]
 
-    def _get_package_repos(self, package_name: str) -> list[str]:
+    def _get_package_repos(self, pkg: YumexPackage) -> list[str]:
         repos = set()
-        pkgs = self.packages_by_name(package_name)
+        pkgs = self.packages_by_name(pkg)
         for pkg in pkgs:
             repos.add(pkg.repo)
         return list(repos)
