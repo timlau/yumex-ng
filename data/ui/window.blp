@@ -30,7 +30,6 @@ template $YumexMainWindow: Adw.ApplicationWindow {
           action-name: "app.sidebar";
         }
 
-        [start]
         ToggleButton search_button {
           icon-name: "system-search";
           tooltip-text: _("Search");
@@ -43,6 +42,12 @@ template $YumexMainWindow: Adw.ApplicationWindow {
               action: "activate";
             }
           }
+        }
+
+        Gtk.MenuButton package_action_button {
+          tooltip-text: _("Package Action Menu");
+          icon-name: "view-more-symbolic";
+          menu-model: package_menu;
         }
 
         [title]
@@ -134,11 +139,6 @@ template $YumexMainWindow: Adw.ApplicationWindow {
                     wide-handle: true;
 
                     Gtk.ScrolledWindow content_packages {
-                      GestureClick {
-                        button: 3;
-                        released => $on_right_click();
-                      }
-
                       styles [
                         "package_list",
                       ]
