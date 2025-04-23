@@ -174,6 +174,11 @@ class YumexPackageView(Gtk.ColumnView):
             pkg.queued = not pkg.queued
             self.refresh()
 
+    def on_action(self, action):
+        """Handle action from the action bar"""
+        pkg: YumexPackage = self.selection.get_selected_item()
+        logger.debug(f"on_action: {action} on {pkg}")
+
     # --------------------- signals --------------------------------
     @GObject.Signal(arg_types=(object,))
     def selection_changed(self, pkg: YumexPackage):

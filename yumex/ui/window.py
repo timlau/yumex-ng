@@ -16,7 +16,7 @@
 import logging
 from pathlib import Path
 
-from gi.repository import Adw, Gio, Gtk  # type: ignore
+from gi.repository import Adw, Gdk, Gio, Gtk  # type: ignore
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import TransactionOptions, YumexPackage
@@ -65,6 +65,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     queue_page = Gtk.Template.Child()
     flatpaks_page = Gtk.Template.Child()
     flatpak_update_all: Gtk.Button = Gtk.Template.Child()
+    package_menu = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -120,6 +121,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.progress = YumexProgress(self)
         self.setup_packages_and_queue()
         self.setup_flatpaks()
+        self.popover = Gtk.PopoverMenu()
+        self.popover.set_menu_model(self.package_menu)
+        self.popover.set_has_arrow(False)
+        self.popover.set_parent(self)
 
     def setup_flatpaks(self):
         self.flatpak_view = YumexFlatpakView(self.presenter)
@@ -366,6 +371,18 @@ class YumexMainWindow(Adw.ApplicationWindow):
         return True
 
     @Gtk.Template.Callback()
+    def on_right_click(self, _controller, _click_count, x, y):
+        """right click on a package"""
+        logger.debug(f"Right click on package: {x}, {y}")
+        rect = Gdk.Rectangle()
+        rect.x = x
+        rect.y = y
+        rect.width = 0
+        rect.height = 0
+        self.popover.set_pointing_to(rect)
+        self.popover.popup()
+
+    @Gtk.Template.Callback()
     def on_search_settings(self, widget):
         options = self.search_settings.show(self)
         logger.debug(f"search settings : {options}")
@@ -465,6 +482,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "adv-actions":
                 logger.debug("advanced actions")
                 action = self.advanced_actions.show(self)
+            case "downgrade" | "reinstall" | "distrosync":
+                self.package_view.on_action(action.get_name())
             case other:
                 logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")

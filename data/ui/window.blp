@@ -134,6 +134,11 @@ template $YumexMainWindow: Adw.ApplicationWindow {
                     wide-handle: true;
 
                     Gtk.ScrolledWindow content_packages {
+                      GestureClick {
+                        button: 3;
+                        released => $on_right_click();
+                      }
+
                       styles [
                         "package_list",
                       ]
@@ -295,6 +300,25 @@ menu main-menu {
     item {
       label: _("_About Yum Extender");
       action: "app.about";
+    }
+  }
+}
+
+menu package_menu {
+  section {
+    item {
+      label: _("_Downgrade");
+      action: "app.downgrade";
+    }
+
+    item {
+      label: _("_Reinstall");
+      action: "app.reinstall";
+    }
+
+    item {
+      label: _("_Distro Sync");
+      action: "app.distrosync";
     }
   }
 }
