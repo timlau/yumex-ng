@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-24 18:01+0200\n"
+"POT-Creation-Date: 2025-04-24 20:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,30 +42,30 @@ msgstr ""
 msgid "Replacing"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:315
-#: yumex/backend/dnf5daemon/__init__.py:335 yumex/ui/window.py:201
+#: yumex/backend/dnf5daemon/__init__.py:320
+#: yumex/backend/dnf5daemon/__init__.py:340 yumex/ui/window.py:219
 msgid "Building Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:357
-#: yumex/backend/dnf5daemon/__init__.py:451 yumex/ui/window.py:224
+#: yumex/backend/dnf5daemon/__init__.py:362
+#: yumex/backend/dnf5daemon/__init__.py:456 yumex/ui/window.py:242
 msgid "Building Offline Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:359
-#: yumex/backend/dnf5daemon/__init__.py:453
+#: yumex/backend/dnf5daemon/__init__.py:364
+#: yumex/backend/dnf5daemon/__init__.py:458
 msgid "Applying Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:368
+#: yumex/backend/dnf5daemon/__init__.py:373
 msgid "Running Scripts"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:406
+#: yumex/backend/dnf5daemon/__init__.py:411
 msgid "Download Packages"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:408
+#: yumex/backend/dnf5daemon/__init__.py:413
 msgid "Download Reposiory Information"
 msgstr ""
 
@@ -189,56 +189,56 @@ msgstr ""
 msgid "Packages for distribution synchronization"
 msgstr ""
 
-#: yumex/ui/window.py:215
-msgid "Nothing to do in this transaction"
-msgstr ""
-
-#: yumex/ui/window.py:226
-msgid "Running Transaction"
-msgstr ""
-
-#: yumex/ui/window.py:268
-msgid "Running Flatpak Transaction"
-msgstr ""
-
-#: yumex/ui/window.py:325
+#: yumex/ui/window.py:200 yumex/ui/window.py:343
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:503
+#: yumex/ui/window.py:233
+msgid "Nothing to do in this transaction"
+msgstr ""
+
+#: yumex/ui/window.py:244
+msgid "Running Transaction"
+msgstr ""
+
+#: yumex/ui/window.py:286
+msgid "Running Flatpak Transaction"
+msgstr ""
+
+#: yumex/ui/window.py:521
 msgid "Offline transaction"
 msgstr ""
 
-#: yumex/ui/window.py:504
+#: yumex/ui/window.py:522
 msgid ""
 "Do you want to prepare the offline transaction to be applied on next reboot ?"
 msgstr ""
 
-#: yumex/ui/window.py:510
+#: yumex/ui/window.py:528
 msgid "Offline trasaction prepared to be applied on next reboot"
 msgstr ""
 
-#: yumex/ui/window.py:513
+#: yumex/ui/window.py:531
 msgid "Offline transaction prepare failed"
 msgstr ""
 
-#: yumex/ui/window.py:531
+#: yumex/ui/window.py:549
 msgid "system upgrade target release must to larger than current release"
 msgstr ""
 
-#: yumex/ui/window.py:540
+#: yumex/ui/window.py:558
 msgid "Offline Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:550
+#: yumex/ui/window.py:568
 msgid "Offline transaction cancelled"
 msgstr ""
 
-#: yumex/ui/window.py:553
+#: yumex/ui/window.py:571
 msgid "Offline transaction cancel failed"
 msgstr ""
 
-#: yumex/main.py:177
+#: yumex/main.py:172
 msgid ""
 "\n"
 "        <ul>\n"
@@ -248,17 +248,17 @@ msgid ""
 "        </ul>\n"
 msgstr ""
 
-#: yumex/main.py:186
+#: yumex/main.py:181
 msgid ""
 "\n"
 "Yum Extender is a Package management to install, update and remove packages\n"
 msgstr ""
 
-#: yumex/main.py:196
+#: yumex/main.py:191
 msgid "Special thanks to"
 msgstr ""
 
-#: yumex/main.py:225
+#: yumex/main.py:220
 msgid "Critical Error"
 msgstr ""
 
@@ -759,6 +759,7 @@ msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
 #: data/dk.yumex.Yumex.desktop.in.in:10
+#: data/dk.yumex.Yumex-rpm.desktop.in.in:10
 msgid "Software Installer"
 msgstr ""
 
@@ -916,4 +917,12 @@ msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:120
 msgid "Package Manager"
+msgstr ""
+
+#: data/dk.yumex.Yumex-rpm.desktop.in.in:2
+msgid "Yum Extender RPM Installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex-rpm.desktop.in.in:3
+msgid "Install a .rpm file"
 msgstr ""
