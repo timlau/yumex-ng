@@ -1,7 +1,6 @@
 import datetime
 import logging
 from dataclasses import asdict, dataclass, field
-from enum import Enum, IntEnum, auto
 from typing import Iterable, Self
 
 import dbus
@@ -10,7 +9,15 @@ from yumex.backend import TransactionResult
 from yumex.backend.dnf import TransactionOptions, YumexPackage
 from yumex.backend.dnf5daemon.filter import FilterUpdates
 from yumex.backend.interface import Presenter, Progress
-from yumex.utils.enums import InfoType, PackageFilter, PackageState, PackageTodo
+from yumex.utils.enums import (
+    DownloadType,
+    InfoType,
+    PackageFilter,
+    PackageState,
+    PackageTodo,
+    ScriptType,
+    TransactionAction,
+)
 
 from .client import Dnf5DbusClient
 
@@ -62,39 +69,19 @@ def create_package(pkg) -> YumexPackage:
     )
 
 
-# defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
-class Action(IntEnum):
-    INSTALL = 1
-    UPGRADE = 2
-    DOWNGRADE = 3
-    REINSTALL = 4
-    REMOVE = 5
-    REPLACED = 6
-    REASON_CHANGE = 7
-    ENABLE = 8
-    DISABLE = 9
-    RESET = 10
-
-
-class DownloadType(Enum):
-    REPO = auto()
-    PACKAGE = auto()
-    UNKNOWN = auto()
-
-
-def get_action(action: Action) -> str:
+def get_action(action: TransactionAction) -> str:
     match action:
-        case Action.INSTALL:
+        case TransactionAction.INSTALL:
             return _("Installing")
-        case Action.UPGRADE:
+        case TransactionAction.UPGRADE:
             return _("Upgrading")
-        case Action.DOWNGRADE:
+        case TransactionAction.DOWNGRADE:
             return _("Downgrading")
-        case Action.REINSTALL:
+        case TransactionAction.REINSTALL:
             return _("Reinstalling")
-        case Action.REMOVE:
+        case TransactionAction.REMOVE:
             return _("Removing")
-        case Action.REPLACED:
+        case TransactionAction.REPLACED:
             return _("Replacing")
     return ""
 
@@ -375,9 +362,10 @@ class YumexRootBackend:
         logger.debug(f"Signal : transaction_after_complete ({args})")
         self.progress.hide()
 
-    def on_transaction_script_start(self, session, pkg, *args):
-        logger.debug(f"Signal : transaction_script_start : {pkg} ({args})")
-        self.progress.set_subtitle(_("Running Scripts : ") + pkg)
+    def on_transaction_script_start(self, session, pkg, typ, *args):
+        script_type = str(ScriptType(typ))
+        logger.debug(f"Signal : transaction_script_start : {pkg} ({script_type}) ({args})")
+        self.progress.set_subtitle(_("Running Scripts") + f"({script_type}) : {pkg}")
         self.progress.set_progress(0.0)
 
     def on_transaction_script_stop(self, session, pkg, *args):

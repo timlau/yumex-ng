@@ -13,12 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from enum import IntEnum, StrEnum, auto
-
-
-class PackageBackendType(StrEnum):
-    DNF4 = auto()
-    DNF5 = auto()
+from enum import Enum, IntEnum, StrEnum, auto
 
 
 class FlatpakAction(IntEnum):
@@ -77,6 +72,47 @@ class PackageAction(IntEnum):
     INSTALL = 30
     REINSTALL = 40
     ERASE = 50
+
+
+# definded in include/libdnf5/rpm/transaction_callbacks.hpp (dnf5)
+class ScriptType(IntEnum):
+    UNKNOWN = 0
+    PRE_INSTALL = 1  # "%pre"
+    POST_INSTALL = 2  # "%post"
+    PRE_UNINSTALL = 3  # "%preun"
+    POST_UNINSTALL = 4  # "%postun"
+    PRE_TRANSACTION = 5  # "%pretrans"
+    POST_TRANSACTION = 6  # "%posttrans"
+    TRIGGER_PRE_INSTALL = 7  # "%triggerprein"
+    TRIGGER_INSTALL = 8  # "%triggerin"
+    TRIGGER_UNINSTALL = 9  # "%triggerun"
+    TRIGGER_POST_UNINSTALL = 10  # "%triggerpostun"
+    SYSUSERS = 11  # sysusers.d integration
+    PREUN_TRANSACTION = 12  # "%preuntrans"
+    POSTUN_TRANSACTION = 13  # "%postuntrans"
+
+    def __str__(self):
+        return str(self.name).title().replace("_", "")
+
+
+# defined in include/libdnf5/transaction/transaction_item_action.hpp in dnf5 code
+class TransactionAction(IntEnum):
+    INSTALL = 1
+    UPGRADE = 2
+    DOWNGRADE = 3
+    REINSTALL = 4
+    REMOVE = 5
+    REPLACED = 6
+    REASON_CHANGE = 7
+    ENABLE = 8
+    DISABLE = 9
+    RESET = 10
+
+
+class DownloadType(Enum):
+    REPO = auto()
+    PACKAGE = auto()
+    UNKNOWN = auto()
 
 
 class PackageFilter(StrEnum):
