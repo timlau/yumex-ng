@@ -306,8 +306,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.package_settings.on_package_filter_activated(button)
 
     def on_package_selection_changed(self, widget, pkg: YumexPackage):
-        logger.debug(f"Window: package selection changed : {pkg}")
-        self.set_pkg_info(pkg)
+        if pkg:
+            logger.debug(f"Window: package selection changed : {pkg}")
+            self.set_pkg_info(pkg)
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""

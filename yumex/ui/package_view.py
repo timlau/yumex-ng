@@ -75,7 +75,8 @@ class YumexPackageView(Gtk.ColumnView):
 
     def refresh(self):
         """refresh the view"""
-        self.selection.selection_changed(0, len(self.store))
+        if len(self.store) > 0:
+            self.selection.selection_changed(0, len(self.store))
 
     def get_packages(self, pkg_filter: PackageFilter):
         """fetch the packages and add them to the store"""
@@ -89,7 +90,8 @@ class YumexPackageView(Gtk.ColumnView):
                 self.presenter.progress.hide()
                 error_dialog(self.get_root(), "Error in loading packages", str(error))
             # refresh the package description for the selected package in the view
-            self.on_selection_changed(self.selection, 0, 0)
+            if len(self.store) > 0:
+                self.on_selection_changed(self.selection, 0, 0)
 
         logger.debug(f"Loading packages : {pkg_filter}")
 
