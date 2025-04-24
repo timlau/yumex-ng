@@ -1,6 +1,6 @@
 import pytest
-
 from gi.repository import Gio
+
 from yumex.utils.enums import SortType
 from yumex.utils.storage import PackageStorage
 
@@ -19,6 +19,15 @@ def test_storage_add_pkg(storage: PackageStorage, pkg):
     """should contain one package added package"""
     storage.add_package(pkg)
     assert len(storage) == 1
+    assert storage.get_storage()[0] == pkg
+
+
+def test_storage_add_pkg_twice(storage: PackageStorage, pkg):
+    """should contain one package added package twice"""
+    storage.add_package(pkg)
+    storage.add_package(pkg)
+    assert len(storage) == 1
+    assert storage._index == {pkg.nevra: 1}
     assert storage.get_storage()[0] == pkg
 
 
