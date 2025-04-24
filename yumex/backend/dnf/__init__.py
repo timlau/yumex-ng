@@ -104,6 +104,11 @@ class YumexPackage(GObject.GObject):
         """name-(epoch:)version-release.arch"""
         return f"{self.name}-{self.evr}.{self.arch}"
 
+    @property
+    def na(self) -> str:
+        """name-(epoch:)version-release.arch"""
+        return f"{self.name}.{self.arch}"
+
     def __repr__(self) -> str:
         return f"YumexPackage({self.nevra}) from {self.repo}"
 

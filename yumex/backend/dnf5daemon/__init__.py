@@ -269,8 +269,8 @@ class YumexRootBackend:
                         logger.debug(f"adding {pkg.nevra} for remove")
                         to_remove.append(pkg.nevra)
                     case PackageTodo.DOWNGRADE:
-                        logger.debug(f"adding {pkg.nevra} for downgrade")
-                        to_downgrade.append(pkg.nevra)
+                        logger.debug(f"adding {pkg.na} for downgrade")
+                        to_downgrade.append(pkg.na)
                     case PackageTodo.REINSTALL:
                         logger.debug(f"adding {pkg.nevra} for reinstall")
                         to_reinstall.append(pkg.nevra)
