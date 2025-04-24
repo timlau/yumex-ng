@@ -102,7 +102,7 @@ class YumexQueueView(Gtk.ListView):
                 dep.queue_action = True
                 dep.queued = True
                 dep.todo = self.get_todo(dep)
-            self.storage.insert_sorted(dep, self.sort_by_state)
+                self.storage.insert_sorted(dep, self.sort_by_state)
         self.selection.set_model(self.storage.get_storage())
         # send refresh signal, to refresh the package view
         self.emit("refresh")

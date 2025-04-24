@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from yumex.utils.enums import PackageState, PackageTodo
+from yumex.utils.enums import PackageTodo
 
 
 def get_package_selection_tooltip(pkg):

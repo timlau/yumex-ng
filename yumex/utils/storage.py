@@ -9,6 +9,7 @@ class PackageStorage:
 
     def __init__(self):
         self._store: Gio.ListStore = None
+        self._index: list[str] = []
         self.clear()
 
     def __iter__(self):
@@ -18,13 +19,14 @@ class PackageStorage:
         return len(self._store)
 
     def __contains__(self, item):
-        return item in self._store
+        return item.nevra in self._index
 
     def get_storage(self) -> Gio.ListStore:
         return self._store
 
     def clear(self) -> Gio.ListStore:
         self._store = Gio.ListStore.new(YumexPackage)
+        self._index = []
         return self._store
 
     def add_packages(self, packages: list[YumexPackage]) -> None:
@@ -34,12 +36,14 @@ class PackageStorage:
     def add_package(self, package: YumexPackage) -> None:
         if isinstance(package, YumexPackage):
             self._store.append(package)
+            self._index.append(package.nevra)
         else:
             raise ValueError(f"Can't add {package} to package storage")
 
     def insert_sorted(self, package: YumexPackage, sort_fn: callable) -> None:
         if isinstance(package, YumexPackage):
             self._store.insert_sorted(package, sort_fn)
+            self._index.append(package.nevra)
         else:
             raise ValueError(f"Can't add {package} to package storage")
 
