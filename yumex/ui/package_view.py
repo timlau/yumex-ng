@@ -178,14 +178,18 @@ class YumexPackageView(Gtk.ColumnView):
         """Handle action from the action bar"""
         pkg: YumexPackage = self.selection.get_selected_item()
         logger.debug(f"on_action: {action} on {pkg}")
-        match action:
-            case "downgrade":
-                pkg.todo = PackageTodo.DOWNGRADE
-            case "reinstall":
-                pkg.todo = PackageTodo.REINSTALL
-            case "distrosync":
-                pkg.todo = PackageTodo.DISTROSYNC
-        self.queue_view.add_package(pkg)
+        if pkg.is_installed:
+            match action:
+                case "downgrade":
+                    pkg.todo = PackageTodo.DOWNGRADE
+                case "reinstall":
+                    pkg.todo = PackageTodo.REINSTALL
+                case "distrosync":
+                    pkg.todo = PackageTodo.DISTROSYNC
+            self.queue_view.add_package(pkg)
+            self.presenter.show_message(_(f"Package queued for {action}"))
+        else:
+            self.presenter.show_message(_(f"Package must be installed installed for {action}"))
 
     # --------------------- signals --------------------------------
     @GObject.Signal(arg_types=(object,))
