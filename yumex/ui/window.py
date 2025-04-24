@@ -202,6 +202,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         backend = self.presenter.package_backend
         # build the transaction
         result: TransactionResult = backend.build_transaction(queued, opts)
+        print(result)
         self.progress.hide()
         if result.completed:
             # get confirmation
@@ -211,6 +212,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             transaction_result.show_result(result.data)
             if result.problems:
                 transaction_result.set_problems(result.problems)
+            if not result.data and not result.problems:
+                transaction_result.show_errors(_("Nothing to do in this transaction"))
             transaction_result.show(self)
             if transaction_result.is_offline:
                 opts.offline = True

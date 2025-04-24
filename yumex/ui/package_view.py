@@ -25,7 +25,7 @@ from yumex.ui import get_package_selection_tooltip
 from yumex.ui.dialogs import error_dialog
 from yumex.ui.queue_view import YumexQueueView
 from yumex.utils import RunAsync, timed
-from yumex.utils.enums import PackageFilter, PackageState, SortType
+from yumex.utils.enums import PackageFilter, PackageState, PackageTodo, SortType
 from yumex.utils.storage import PackageStorage
 
 logger = logging.getLogger(__name__)
@@ -178,6 +178,14 @@ class YumexPackageView(Gtk.ColumnView):
         """Handle action from the action bar"""
         pkg: YumexPackage = self.selection.get_selected_item()
         logger.debug(f"on_action: {action} on {pkg}")
+        match action:
+            case "downgrade":
+                pkg.todo = PackageTodo.DOWNGRADE
+            case "reinstall":
+                pkg.todo = PackageTodo.REINSTALL
+            case "distrosync":
+                pkg.todo = PackageTodo.DISTROSYNC
+        self.queue_view.add_package(pkg)
 
     # --------------------- signals --------------------------------
     @GObject.Signal(arg_types=(object,))

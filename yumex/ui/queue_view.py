@@ -123,6 +123,8 @@ class YumexQueueView(Gtk.ListView):
 
     def get_todo(self, pkg: YumexPackage) -> PackageTodo:
         """get todo action"""
+
+        logger.debug(f"get_todo: todo: {pkg.todo} state: {pkg.state} for {pkg}")
         if pkg.todo != PackageTodo.NONE:
             return pkg.todo
         match pkg.state:
@@ -193,7 +195,7 @@ class YumexQueueRow(Gtk.Box):
             case PackageTodo.REINSTALL:
                 self.icon.set_from_icon_name("object-rotate-left-symbolic")
                 self.icon.add_css_class("warning")
-            case PackageTodo.DISTOSYNC:
+            case PackageTodo.DISTROSYNC:
                 self.icon.set_from_icon_name("object-rotate-right-symbolic")
                 self.icon.add_css_class("warning")
             case state:

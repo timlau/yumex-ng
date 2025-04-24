@@ -39,13 +39,13 @@ class FlatpakType(IntEnum):
 class PackageTodo(IntEnum):
     """Package todo action"""
 
-    NONE = auto()
-    INSTALL = auto()
-    REMOVE = auto()
-    UPDATE = auto()
-    REINSTALL = auto()
-    DOWNGRADE = auto()
-    DISTOSYNC = auto()
+    NONE = 0
+    INSTALL = 1
+    REMOVE = 2
+    UPDATE = 3
+    REINSTALL = 4
+    DOWNGRADE = 5
+    DISTROSYNC = 6
 
 
 class FlatpakLocation(StrEnum):

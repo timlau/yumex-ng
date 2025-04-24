@@ -274,7 +274,7 @@ class YumexRootBackend:
                     case PackageTodo.REINSTALL:
                         logger.debug(f"adding {pkg.nevra} for reinstall")
                         to_reinstall.append(pkg.nevra)
-                    case PackageTodo.DISTOSYNC:
+                    case PackageTodo.DISTROSYNC:
                         logger.debug(f"adding {pkg.nevra} for distrosync")
                         to_distrosync.append(pkg.nevra)
                     case _:
@@ -299,7 +299,7 @@ class YumexRootBackend:
                 self.client.session_rpm.reinstall(dbus.Array(to_reinstall), dbus.Dictionary({}))
             if to_distrosync:
                 logger.debug(f"DBUS: {self.client.session_rpm.object_path}.distrosync()")
-                self.client.session_rpm.distrosync(dbus.Array(to_distrosync), dbus.Dictionary({}))
+                self.client.session_rpm.distro_sync(dbus.Array(to_distrosync), dbus.Dictionary({}))
 
         res, err = self.client.resolve(dbus.Dictionary({"allow_erasing": allow_erasing}))
         if res:
@@ -336,7 +336,7 @@ class YumexRootBackend:
         if rc == 0:
             return TransactionResult(True, data=self.build_result(content))
         if rc == 1:
-            return TransactionResult(True, data=self.build_result(content), problems=errors)
+            return TransactionResult(True, data=self.build_result(content), problems=list(errors))
         else:
             error_msgs = "\n".join(errors)
             return TransactionResult(False, error=error_msgs)
