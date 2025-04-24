@@ -19,7 +19,6 @@
 
 import argparse
 import logging
-import subprocess
 import sys
 from pathlib import Path
 from traceback import format_exception
@@ -111,6 +110,8 @@ class YumexApplication(Adw.Application):
         # click the Availble package filter, without looking the UI
         if self.args.flatpakref:
             self.win.install_flatpakref(self.args.flatpakref)
+        elif self.args.rpmfile:
+            self.win.install_rpmfile(self.args.rpmfile)
         elif self.args.update:
             self.win.load_packages("updates")
         elif self.args.flatpak:
@@ -121,17 +122,11 @@ class YumexApplication(Adw.Application):
     def do_command_line(self, args) -> Literal[0]:
         parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
         parser.add_argument("-d", "--debug", help="enable debug logging", action="store_true")
-        parser.add_argument("--exit", help="stop the dnfdaemon system daemon", action="store_true")
         parser.add_argument("--update", help="start on update page", action="store_true")
         parser.add_argument("--flatpakref", help="Install flatpak from a .flatpakref")
+        parser.add_argument("--rpmfile", help="Install a .rpm file")
         parser.add_argument("--flatpak", help="start on flatpak page", action="store_true")
         self.args = parser.parse_args(args.get_arguments()[1:])
-        if self.args.exit:
-            subprocess.call(
-                "/usr/bin/dbus-send --system --print-reply --dest=org.baseurl.DnfSystem / org.baseurl.DnfSystem.Exit",
-                shell=True,
-            )
-            return 0
         setup_logging(debug=self.args.debug)
         global is_local
         logger.debug(f"Version:  {VERSION} ({BACKEND})")
