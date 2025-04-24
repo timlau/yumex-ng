@@ -418,7 +418,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.sidebar_button.set_sensitive(visible)
         self.package_action_button.set_sensitive(visible)
 
-    def on_actions(self, action, *args):
+    def action_dispatch(self, action, *args):
         """Generic action dispatcher"""
         match action.get_name():
             case "page_one":
