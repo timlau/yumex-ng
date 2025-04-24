@@ -275,8 +275,8 @@ class YumexRootBackend:
                         logger.debug(f"adding {pkg.nevra} for reinstall")
                         to_reinstall.append(pkg.nevra)
                     case PackageTodo.DISTROSYNC:
-                        logger.debug(f"adding {pkg.nevra} for distrosync")
-                        to_distrosync.append(pkg.nevra)
+                        logger.debug(f"adding {pkg.na} for distrosync")
+                        to_distrosync.append(pkg.na)
                     case _:
                         logger.debug(f"error in {pkg.nevra} todo: {pkg.todo}")
             if to_remove:
