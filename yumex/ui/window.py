@@ -202,7 +202,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         backend = self.presenter.package_backend
         # build the transaction
         result: TransactionResult = backend.build_transaction(queued, opts)
-        print(result)
         self.progress.hide()
         if result.completed:
             # get confirmation
