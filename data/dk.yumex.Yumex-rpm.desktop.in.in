@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Yum Extender RPM Installer
+Comment=Install a .rpm file
+Exec=yumex --rpmfile %F
+Icon=@APP_ID@
+Terminal=false
+Type=Application
+Categories=System;
+StartupNotify=true
+GenericName=Software Installer
+NoDisplay=true
+MimeType=application/x-rpm

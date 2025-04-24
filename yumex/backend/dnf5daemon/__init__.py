@@ -231,7 +231,7 @@ class YumexRootBackend:
             result_dict[action].append(((nevra, repo), size))
         return result_dict
 
-    def _build_transations(self, pkgs: list[YumexPackage], opts: TransactionOptions) -> tuple[list, int]:
+    def _build_transations(self, pkgs: list, opts: TransactionOptions) -> tuple[list, int]:
         to_install = []
         to_update = []
         to_remove = []
@@ -243,6 +243,11 @@ class YumexRootBackend:
         if opts.system_upgrade:
             res, err = self.system_upgrade(opts.system_upgrade, opts.releasever)
             allow_erasing = True
+        elif opts.is_file:
+            logger.debug(f"adding files for install : {pkgs}")
+            to_install = pkgs
+            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.install()")
+            self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
         else:
             for pkg in pkgs:
                 match pkg.todo:
@@ -309,7 +314,7 @@ class YumexRootBackend:
         self.client.session_rpm.connect_to_signal("transaction_script_start", self.on_transaction_script_start)
         self.client.session_rpm.connect_to_signal("transaction_script_stop", self.on_transaction_script_stop)
 
-    def build_transaction(self, pkgs: list[YumexPackage], opts: TransactionOptions) -> TransactionResult:
+    def build_transaction(self, pkgs: list, opts: TransactionOptions) -> TransactionResult:
         self.last_transaction = pkgs
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))

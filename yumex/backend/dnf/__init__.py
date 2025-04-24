@@ -149,6 +149,7 @@ class TransactionOptions:
     offline: bool = False
     system_upgrade: str | None = None
     releasever: str | None = None
+    is_file: bool = False
 
 
 def reload_metadata_expired():
