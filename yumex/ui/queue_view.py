@@ -190,14 +190,14 @@ class YumexQueueRow(Gtk.Box):
                 self.icon.set_from_icon_name("starred-symbolic")
                 self.icon.add_css_class("accent")
             case PackageTodo.DOWNGRADE:
-                self.icon.set_from_icon_name("go-down-symbolic")
-                self.icon.add_css_class("warning")
-            case PackageTodo.REINSTALL:
-                self.icon.set_from_icon_name("object-rotate-left-symbolic")
-                self.icon.add_css_class("warning")
-            case PackageTodo.DISTROSYNC:
                 self.icon.set_from_icon_name("object-rotate-right-symbolic")
-                self.icon.add_css_class("warning")
+                self.icon.add_css_class("accent")
+            case PackageTodo.REINSTALL:
+                self.icon.set_from_icon_name("media-playlist-repeat-symbolic")
+                self.icon.add_css_class("success")
+            case PackageTodo.DISTROSYNC:
+                self.icon.set_from_icon_name("object-rotate-left-symbolic")
+                self.icon.add_css_class("accent")
             case state:
                 logger.debug(f"set_icon: unknown state {state} for {self.pkg} todo {self.pkg.todo}")
                 self.icon.set_from_icon_name("org.gnome.Settings-privacy-symbolic")
