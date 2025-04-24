@@ -187,10 +187,19 @@ class YumexMainWindow(Adw.ApplicationWindow):
         logger.debug(f"install rpmfile: {rpmfile}")
         self.select_page(Page.PACKAGES)
         inst_file = Path(rpmfile).absolute()
+
         if not inst_file.exists():
             logger.debug(f"install rpmfile: {inst_file} not found")
             self.show_message(_(f"RPM file not found : {inst_file}"))
             return
+        logger.debug(f"Execute the transaction on {inst_file}")
+        opts = TransactionOptions(is_file=True)
+        result = self._do_transaction([inst_file.as_posix()], opts)
+        logger.debug(f"Transaction execution ended : {result}")
+        if result:  # transaction completed without issues\
+            self.show_message(_("Transaction completed succesfully"), timeout=3)
+            # reset everything
+            self.reset_all()
 
     def show_flatpak_view(self):
         self.load_packages("installed")

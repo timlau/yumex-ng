@@ -17,3 +17,4 @@ sandbox/
 profile/
 yumex/service/test.py
 tx
+*.rpm
