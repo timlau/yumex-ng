@@ -29,17 +29,21 @@ class YumexProgress(Adw.Dialog):
 
     def __init__(self, win, **kwargs):
         super().__init__(**kwargs)
+        self._is_shown = False
         self.win = win
 
     def show(self):
         # self.spinner.set_visible(True)
+        self._is_shown = True
         self.present(self.win)
 
     def hide(self, clear: bool = True):
-        self.close()
-        if clear:
-            self.set_title("")
-            self.set_subtitle("")
+        if self._is_shown:
+            self._is_shown = False
+            self.close()
+            if clear:
+                self.set_title("")
+                self.set_subtitle("")
 
     def set_title(self, title: str):
         self.title.set_label(title)
