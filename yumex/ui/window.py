@@ -473,7 +473,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 logger.debug("advanced actions")
                 action = self.advanced_actions.show(self)
             case "downgrade" | "reinstall" | "distrosync":
-                self.package_view.on_action(action.get_name())
+                self.package_view.on_package_action(action.get_name())
             case other:
                 logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")

@@ -21,7 +21,7 @@ from yumex.backend.dnf import YumexPackage
 from yumex.constants import ROOTDIR
 from yumex.ui import get_package_selection_tooltip
 from yumex.utils import RunAsync
-from yumex.utils.enums import PackageState, Page
+from yumex.utils.enums import PackageState, PackageTodo, Page
 from yumex.utils.storage import PackageStorage
 
 logger = logging.getLogger(__name__)
@@ -59,6 +59,7 @@ class YumexQueueView(Gtk.ListView):
         for pkg in pkgs:
             if pkg not in self.storage:
                 pkg.queue_action = True
+                pkg.todo = self.get_todo(pkg)
                 pkg.is_dep = False
                 pkg.queued = True
                 pkg.queue_action = False
@@ -78,6 +79,7 @@ class YumexQueueView(Gtk.ListView):
                 to_keep.append(store_pkg)
             else:  # reset properties for pkg to not keep in queue
                 store_pkg.queue_action = True
+                store_pkg.todo = PackageTodo.NONE
                 store_pkg.queued = False
                 store_pkg.is_dep = False
                 store_pkg.queue_action = False
@@ -99,6 +101,7 @@ class YumexQueueView(Gtk.ListView):
                 dep.is_dep = True
                 dep.queue_action = True
                 dep.queued = True
+                dep.todo = self.get_todo(dep)
             self.storage.insert_sorted(dep, self.sort_by_state)
         self.selection.set_model(self.storage.get_storage())
         # send refresh signal, to refresh the package view
@@ -117,6 +120,23 @@ class YumexQueueView(Gtk.ListView):
 
     def find_by_nevra(self, nevra):
         return self.storage.find_by_nevra(nevra)
+
+    def get_todo(self, pkg: YumexPackage) -> PackageTodo:
+        """get todo action"""
+        if pkg.todo != PackageTodo.NONE:
+            return pkg.todo
+        match pkg.state:
+            case PackageState.INSTALLED:
+                return PackageTodo.REMOVE
+            case PackageState.AVAILABLE:
+                return PackageTodo.INSTALL
+            case PackageState.UPDATE:
+                return PackageTodo.UPDATE
+            case PackageState.DOWNGRADE:
+                return PackageTodo.DOWNGRADE
+            case state:
+                logger.debug(f"get_todo: unknown state {state} for {pkg}")
+        return PackageTodo.NONE
 
     @Gtk.Template.Callback()
     def on_queue_setup(self, widget, item):
@@ -157,19 +177,29 @@ class YumexQueueRow(Gtk.Box):
         self.dep.set_tooltip_text(tip)
 
     def set_icon(self):
-        match self.pkg.state:
-            case PackageState.INSTALLED:
-                self.icon.set_from_icon_name("edit-delete-symbolic")
+        match self.pkg.todo:
+            case PackageTodo.REMOVE:
+                self.icon.set_from_icon_name("value-decrease-symbolic")
                 self.icon.add_css_class("error")
-            case PackageState.AVAILABLE:
-                self.icon.set_from_icon_name("emblem-default-symbolic")
+            case PackageTodo.INSTALL:
+                self.icon.set_from_icon_name("value-increase-symbolic")
                 self.icon.add_css_class("success")
-            case PackageState.UPDATE:
-                self.icon.set_from_icon_name("emblem-synchronizing-symbolic")
+            case PackageTodo.UPDATE:
+                self.icon.set_from_icon_name("starred-symbolic")
                 self.icon.add_css_class("accent")
-            case PackageState.DOWNGRADE:
+            case PackageTodo.DOWNGRADE:
                 self.icon.set_from_icon_name("go-down-symbolic")
                 self.icon.add_css_class("warning")
+            case PackageTodo.REINSTALL:
+                self.icon.set_from_icon_name("object-rotate-left-symbolic")
+                self.icon.add_css_class("warning")
+            case PackageTodo.DISTOSYNC:
+                self.icon.set_from_icon_name("object-rotate-right-symbolic")
+                self.icon.add_css_class("warning")
+            case state:
+                logger.debug(f"set_icon: unknown state {state} for {self.pkg} todo {self.pkg.todo}")
+                self.icon.set_from_icon_name("org.gnome.Settings-privacy-symbolic")
+                self.icon.add_css_class("error")
 
     @Gtk.Template.Callback()
     def on_delete_clicked(self, button):

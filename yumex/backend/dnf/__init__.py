@@ -22,7 +22,7 @@ from gi.repository import Gio, GObject
 
 from yumex.constants import APP_ID
 from yumex.utils import format_number
-from yumex.utils.enums import PackageAction, PackageState  # noqa: F401
+from yumex.utils.enums import PackageAction, PackageState, PackageTodo  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +62,7 @@ class YumexPackage(GObject.GObject):
         self.ref_to: YumexPackage = None
         self._queued: bool = False
         self.queue_action: bool = False
+        self.todo: PackageTodo = PackageTodo.NONE
 
     @GObject.Property(type=bool, default=False)
     def queued(self) -> bool:
