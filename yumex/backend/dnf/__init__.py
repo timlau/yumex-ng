@@ -22,7 +22,7 @@ from gi.repository import Gio, GObject
 
 from yumex.constants import APP_ID
 from yumex.utils import format_number
-from yumex.utils.enums import PackageAction, PackageState  # noqa: F401
+from yumex.utils.enums import PackageAction, PackageState, PackageTodo  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +62,7 @@ class YumexPackage(GObject.GObject):
         self.ref_to: YumexPackage = None
         self._queued: bool = False
         self.queue_action: bool = False
+        self.todo: PackageTodo = PackageTodo.NONE
 
     @GObject.Property(type=bool, default=False)
     def queued(self) -> bool:
@@ -102,6 +103,11 @@ class YumexPackage(GObject.GObject):
     def nevra(self) -> str:
         """name-(epoch:)version-release.arch"""
         return f"{self.name}-{self.evr}.{self.arch}"
+
+    @property
+    def na(self) -> str:
+        """name-(epoch:)version-release.arch"""
+        return f"{self.name}.{self.arch}"
 
     def __repr__(self) -> str:
         return f"YumexPackage({self.nevra}) from {self.repo}"

@@ -30,7 +30,6 @@ template $YumexMainWindow: Adw.ApplicationWindow {
           action-name: "app.sidebar";
         }
 
-        [start]
         ToggleButton search_button {
           icon-name: "system-search";
           tooltip-text: _("Search");
@@ -43,6 +42,12 @@ template $YumexMainWindow: Adw.ApplicationWindow {
               action: "activate";
             }
           }
+        }
+
+        Gtk.MenuButton package_action_button {
+          tooltip-text: _("Package Action Menu");
+          icon-name: "view-more-symbolic";
+          menu-model: package_menu;
         }
 
         [title]
@@ -295,6 +300,25 @@ menu main-menu {
     item {
       label: _("_About Yum Extender");
       action: "app.about";
+    }
+  }
+}
+
+menu package_menu {
+  section {
+    item {
+      label: _("_Downgrade");
+      action: "app.downgrade";
+    }
+
+    item {
+      label: _("_Reinstall");
+      action: "app.reinstall";
+    }
+
+    item {
+      label: _("_Distro Sync");
+      action: "app.distrosync";
     }
   }
 }

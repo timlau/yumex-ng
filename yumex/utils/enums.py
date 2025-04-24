@@ -36,6 +36,18 @@ class FlatpakType(IntEnum):
     DEBUG = 4
 
 
+class PackageTodo(IntEnum):
+    """Package todo action"""
+
+    NONE = 0
+    INSTALL = 1
+    REMOVE = 2
+    UPDATE = 3
+    REINSTALL = 4
+    DOWNGRADE = 5
+    DISTROSYNC = 6
+
+
 class FlatpakLocation(StrEnum):
     """flatpak install location"""
 

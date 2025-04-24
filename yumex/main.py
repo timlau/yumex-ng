@@ -99,6 +99,9 @@ class YumexApplication(Adw.Application):
         self.create_action("page_one", self.win.on_actions, ["<Alt>1"])
         self.create_action("page_two", self.win.on_actions, ["<Alt>2"])
         self.create_action("page_three", self.win.on_actions, ["<Alt>3"])
+        self.create_action("downgrade", self.win.on_actions)
+        self.create_action("reinstall", self.win.on_actions)
+        self.create_action("distrosync", self.win.on_actions)
 
         # call a test function to test gui code, should not be enabled, if not testing
         if BUILD_TYPE == "debug" or self.args.debug:

@@ -10,7 +10,7 @@ from yumex.backend import TransactionResult
 from yumex.backend.dnf import TransactionOptions, YumexPackage
 from yumex.backend.dnf5daemon.filter import FilterUpdates
 from yumex.backend.interface import Presenter, Progress
-from yumex.utils.enums import InfoType, PackageFilter, PackageState
+from yumex.utils.enums import InfoType, PackageFilter, PackageState, PackageTodo
 
 from .client import Dnf5DbusClient
 
@@ -249,6 +249,8 @@ class YumexRootBackend:
         to_update = []
         to_remove = []
         to_downgrade = []
+        to_reinstall = []
+        to_distrosync = []
         allow_erasing = False
         self.client.session_goal.reset()
         if opts.system_upgrade:
@@ -256,19 +258,27 @@ class YumexRootBackend:
             allow_erasing = True
         else:
             for pkg in pkgs:
-                match pkg.state:
-                    case PackageState.AVAILABLE:
+                match pkg.todo:
+                    case PackageTodo.INSTALL:
                         logger.debug(f"adding {pkg.nevra} for install")
                         to_install.append(pkg.nevra)
-                    case PackageState.UPDATE:
+                    case PackageTodo.UPDATE:
                         logger.debug(f"adding {pkg.nevra} for update")
                         to_update.append(pkg.nevra)
-                    case PackageState.INSTALLED:
+                    case PackageTodo.REMOVE:
                         logger.debug(f"adding {pkg.nevra} for remove")
                         to_remove.append(pkg.nevra)
-                    case PackageState.DOWNGRADE:
-                        logger.debug(f"adding {pkg.nevra} for downgrade")
-                        to_downgrade.append(pkg.nevra)
+                    case PackageTodo.DOWNGRADE:
+                        logger.debug(f"adding {pkg.na} for downgrade")
+                        to_downgrade.append(pkg.na)
+                    case PackageTodo.REINSTALL:
+                        logger.debug(f"adding {pkg.nevra} for reinstall")
+                        to_reinstall.append(pkg.nevra)
+                    case PackageTodo.DISTROSYNC:
+                        logger.debug(f"adding {pkg.na} for distrosync")
+                        to_distrosync.append(pkg.na)
+                    case _:
+                        logger.debug(f"error in {pkg.nevra} todo: {pkg.todo}")
             if to_remove:
                 logger.debug(f"DBUS: {self.client.session_rpm.object_path}.remove()")
                 self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
@@ -284,6 +294,12 @@ class YumexRootBackend:
                 logger.debug(f"DBUS: {self.client.session_rpm.object_path}.downgrade()")
                 self.client.session_rpm.downgrade(dbus.Array(to_downgrade), dbus.Dictionary({}))
                 allow_erasing = True
+            if to_reinstall:
+                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.reinstall()")
+                self.client.session_rpm.reinstall(dbus.Array(to_reinstall), dbus.Dictionary({}))
+            if to_distrosync:
+                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.distrosync()")
+                self.client.session_rpm.distro_sync(dbus.Array(to_distrosync), dbus.Dictionary({}))
 
         res, err = self.client.resolve(dbus.Dictionary({"allow_erasing": allow_erasing}))
         if res:
@@ -320,7 +336,7 @@ class YumexRootBackend:
         if rc == 0:
             return TransactionResult(True, data=self.build_result(content))
         if rc == 1:
-            return TransactionResult(True, data=self.build_result(content), problems=errors)
+            return TransactionResult(True, data=self.build_result(content), problems=list(errors))
         else:
             error_msgs = "\n".join(errors)
             return TransactionResult(False, error=error_msgs)

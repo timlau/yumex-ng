@@ -13,7 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
-from yumex.utils.enums import PackageState
+from yumex.utils.enums import PackageTodo
 
 
 def get_package_selection_tooltip(pkg):
@@ -25,21 +25,33 @@ def get_package_selection_tooltip(pkg):
     if pkg.is_dep:
         if pkg.ref_to:
             name = f" ({str(pkg.ref_to.nevra)})"
-        match pkg.state:
-            case PackageState.INSTALLED:
+        match pkg.todo:
+            case PackageTodo.REMOVE:
                 tip = _(f"Queued for deletion as a dependency {name}")
-            case PackageState.AVAILABLE:
+            case PackageTodo.INSTALL:
                 tip = _(f"Queued for installation as a dependency {name}")
-            case PackageState.UPDATE:
+            case PackageTodo.UPDATE:
                 tip = _(f"Queued for updating as a dependency {name}")
+            case PackageTodo.REINSTALL:
+                tip = _(f"Queued for reinstallation as a dependency {name}")
+            case PackageTodo.DOWNGRADE:
+                tip = _(f"Queued for downgrading as a dependency {name}")
+            case PackageTodo.DISTROSYNC:
+                tip = _(f"Queued for distribution synchronization as a dependency {name}")
     else:
-        match pkg.state:
-            case PackageState.INSTALLED:
+        match pkg.todo:
+            case PackageTodo.REMOVE:
                 tip = _("Queued for deletion")
-            case PackageState.AVAILABLE:
+            case PackageTodo.INSTALL:
                 tip = _("Queued for installation")
-            case PackageState.UPDATE:
+            case PackageTodo.UPDATE:
                 tip = _("Queued for updating")
+            case PackageTodo.REINSTALL:
+                tip = _("Queued for reinstallation")
+            case PackageTodo.DOWNGRADE:
+                tip = _("Queued for downgrading")
+            case PackageTodo.DISTROSYNC:
+                tip = _("Queued for distribution synchronization")
 
     return tip
 

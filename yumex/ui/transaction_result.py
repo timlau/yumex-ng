@@ -60,7 +60,7 @@ class YumexTransactionResult(Adw.Dialog):
         self._loop.run()
 
     def set_problems(self, prob: list):
-        self.problems.set_tooltip_text("\n".join(prob))
+        self.problems.set_text("\n".join(prob))
         self.prob_grp.set_visible(True)
 
     def show_result(self, result_dict):
@@ -79,6 +79,10 @@ class YumexTransactionResult(Adw.Dialog):
         self.prob_grp.set_visible(True)
 
     def populate(self, result_dict):
+        if not result_dict:
+            self.result_frame.set_visible(False)
+            self.confirm_button.set_visible(False)
+            return
         for key in result_dict:
             if key in ["replaced"]:
                 continue
@@ -108,6 +112,10 @@ class YumexTransactionResult(Adw.Dialog):
                 return _("Skipped Packages")
             case "downgrade":
                 return _("Packages for downgrading")
+            case "reinstall":
+                return _("Packages for re-installation")
+            case "distrosync":
+                return _("Packages for distribution synchronization")
             case _:
                 return action
 

@@ -65,6 +65,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
     queue_page = Gtk.Template.Child()
     flatpaks_page = Gtk.Template.Child()
     flatpak_update_all: Gtk.Button = Gtk.Template.Child()
+    package_menu = Gtk.Template.Child()
+    package_action_button = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -120,6 +122,10 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.progress = YumexProgress(self)
         self.setup_packages_and_queue()
         self.setup_flatpaks()
+        self.popover = Gtk.PopoverMenu()
+        self.popover.set_menu_model(self.package_menu)
+        self.popover.set_has_arrow(False)
+        self.popover.set_parent(self)
 
     def setup_flatpaks(self):
         self.flatpak_view = YumexFlatpakView(self.presenter)
@@ -196,6 +202,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         backend = self.presenter.package_backend
         # build the transaction
         result: TransactionResult = backend.build_transaction(queued, opts)
+        print(result)
         self.progress.hide()
         if result.completed:
             # get confirmation
@@ -205,6 +212,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             transaction_result.show_result(result.data)
             if result.problems:
                 transaction_result.set_problems(result.problems)
+            if not result.data and not result.problems:
+                transaction_result.show_errors(_("Nothing to do in this transaction"))
             transaction_result.show(self)
             if transaction_result.is_offline:
                 opts.offline = True
@@ -406,6 +415,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.search_button.set_sensitive(visible)
         self.search_bar.set_visible(visible)
         self.sidebar_button.set_sensitive(visible)
+        self.package_action_button.set_sensitive(visible)
 
     def on_actions(self, action, *args):
         """Generic action dispatcher"""
@@ -465,6 +475,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case "adv-actions":
                 logger.debug("advanced actions")
                 action = self.advanced_actions.show(self)
+            case "downgrade" | "reinstall" | "distrosync":
+                self.package_view.on_package_action(action.get_name())
             case other:
                 logger.debug(f"ERROR: action: {other} not defined")
                 raise ValueError(f"action: {other} not defined")
