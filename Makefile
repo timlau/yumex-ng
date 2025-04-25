@@ -178,5 +178,10 @@ memray-updater-live:
 	@-mkdir -p profile
 	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
 
-
-
+SRPMS_UPSTREAM:
+	@-rm $(BUILDDIR)/RPMS/noarch/*.rpm
+	@-rm $(BUILDDIR)/SRPMS/*.rpm
+	@spectool -g -C $(BUILDDIR) -S yumex.spec 
+	@rpmbuild --define '_topdir $(BUILDDIR)' -ba yumex.spec
+	@echo "RPMS Build:"
+	@tree -P *.rpm -I *.src.rpm  $(BUILDDIR)/RPMS/noarch/
