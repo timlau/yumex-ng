@@ -104,12 +104,6 @@ fi
 %systemd_user_postun_with_reload %{name}-updater.service
 %systemd_user_postun %{name}-updater.service
 
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
-%posttrans -n %{name}-updater
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
 %preun -n %{name}-updater
 %systemd_user_preun %{name}-updater.service
 
