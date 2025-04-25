@@ -83,7 +83,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-update-desktop-database %{_datadir}/applications &> /dev/null || :
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 %post -n %{name}-updater
@@ -94,7 +93,6 @@ if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-update-desktop-database %{_datadir}/applications &> /dev/null || :
 
 %files -f  %{app_name}.lang
 %doc README.md
