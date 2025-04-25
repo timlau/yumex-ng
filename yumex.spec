@@ -91,7 +91,6 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 %postun
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 fi
 
 %files -f  %{app_name}.lang
@@ -112,10 +111,8 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
 
 %posttrans
-/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %posttrans -n %{name}-updater
-/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %systemd_user_post  %{name}-updater.service
 
 # Iterate over all user sessions
