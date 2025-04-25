@@ -4,11 +4,11 @@
 
 Name:     %{app_name}
 Version:  5.2.0
-Release:  1%{?dist}
+Release:  2%{?dist}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
-License:  GPLv3+
+License:  GPL-3.0-or-later
 URL:      http://yumex.dk
 Source0:  https://github.com/timlau/yumex-ng/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 
@@ -144,6 +144,9 @@ done
 %systemd_user_preun yumex-updater.service
 
 %changelog
+
+* Fri Apr 25 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-2
+- Changed license to GPL-3.0-or-later
 
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
 - the 5.2.0 stable release
