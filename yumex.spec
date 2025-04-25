@@ -88,6 +88,7 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 %post -n %{name}-updater
 %systemd_user_post  %{name}-updater.service
 
+
 %postun
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
@@ -99,38 +100,18 @@ if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-
+%systemd_user_postun_with_restart %{name}-updater.service
+%systemd_user_postun_with_reload %{name}-updater.service
+%systemd_user_postun %{name}-updater.service
 
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %posttrans -n %{name}-updater
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-%systemd_user_post  %{name}-updater.service
-
-# Iterate over all user sessions
-for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
-    uid=$(loginctl show-session $session -p User --value)
-    user=$(getent passwd $uid | cut -d: -f1)
-
-    # Debug statement to verify user and UID
-    echo "Applying preset and restarting service for user $user with UID $uid"
-
-    # Set environment variables for the user session
-    XDG_RUNTIME_DIR="/run/user/$uid"
-    DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-
-    # Apply the preset for the user session
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user preset yumex-updater.service" || echo "Failed to apply preset for user $user"
-
-    # Reload the user daemon and restart the service
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user daemon-reload" || echo "Failed to perform daemon-reload for user $user"
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater.service" || echo "Failed to restart service for user $user"
-done
 
 %preun -n %{name}-updater
-%systemd_user_preun  %{name}-updater.service
-
+%systemd_user_preun %{name}-updater.service
 
 %files -f  %{app_name}.lang
 %doc README.md
