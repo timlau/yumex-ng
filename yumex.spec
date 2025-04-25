@@ -110,17 +110,17 @@ fi
 %files -f  %{app_name}.lang
 %doc README.md
 %license LICENSE
-%{_datadir}/%{app_name}/yumex.gresource
+%{_datadir}/%{app_name}/
 %{_bindir}/%{app_name}
-%{python3_sitelib}/%{app_name}
+%{python3_sitelib}/%{app_name}/
 %{_datadir}/applications/%{app_id}*.desktop
 %{_datadir}/icons/hicolor/scalable/apps/dk.yumex.Yumex.svg
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %files -n %{name}-updater
-%{_userunitdir}/*.service
-%{_prefix}/lib/systemd/user-preset/*.preset
+%{_userunitdir}/%{name}-updater.service
+%{_prefix}/lib/systemd/user-preset/*%{name}-updater.preset
 %{_bindir}/yumex_updater
 %{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
 
