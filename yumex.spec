@@ -87,7 +87,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 %post -n %{name}-updater
-%systemd_user_post yumex-updater.service
+%systemd_user_post  %{name}-updater.service
 
 %postun
 if [ $1 -eq 0 ] ; then
@@ -118,7 +118,7 @@ update-desktop-database %{_datadir}/applications &> /dev/null || :
 
 %posttrans -n %{name}-updater
 /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
-%systemd_user_post yumex-updater.service
+%systemd_user_post  %{name}-updater.service
 
 # Iterate over all user sessions
 for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
@@ -141,12 +141,14 @@ for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
 done
 
 %preun -n %{name}-updater
-%systemd_user_preun yumex-updater.service
+%systemd_user_preun  %{name}-updater.service
 
 %changelog
 
 * Fri Apr 25 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-2
 - Changed license to GPL-3.0-or-later
+- Fixed changelog dates
+- use macro for systemd service name
 
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
 - the 5.2.0 stable release
