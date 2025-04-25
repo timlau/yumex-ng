@@ -91,28 +91,21 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 %postun
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
 
-%files -f  %{app_name}.lang
-%doc README.md
-%license LICENSE
-%{_datadir}/%{app_name}/yumex.gresource
-%{_bindir}/%{app_name}
-%{python3_sitelib}/%{app_name}
-%{_datadir}/applications/%{app_id}*.desktop
-%{_datadir}/icons/hicolor/scalable/apps/dk.yumex.Yumex.svg
-%{_metainfodir}/%{app_id}.metainfo.xml
-%{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
+%postun -n %{name}-updater
+if [ $1 -eq 0 ] ; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
 
-%files -n %{name}-updater
-%{_userunitdir}/*.service
-%{_prefix}/lib/systemd/user-preset/*.preset
-%{_bindir}/yumex_updater
-%{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
 
 %posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %posttrans -n %{name}-updater
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %systemd_user_post  %{name}-updater.service
 
 # Iterate over all user sessions
@@ -138,13 +131,35 @@ done
 %preun -n %{name}-updater
 %systemd_user_preun  %{name}-updater.service
 
+
+%files -f  %{app_name}.lang
+%doc README.md
+%license LICENSE
+%{_datadir}/%{app_name}/yumex.gresource
+%{_bindir}/%{app_name}
+%{python3_sitelib}/%{app_name}
+%{_datadir}/applications/%{app_id}*.desktop
+%{_datadir}/icons/hicolor/scalable/apps/dk.yumex.Yumex.svg
+%{_metainfodir}/%{app_id}.metainfo.xml
+%{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
+
+%files -n %{name}-updater
+%{_userunitdir}/*.service
+%{_prefix}/lib/systemd/user-preset/*.preset
+%{_bindir}/yumex_updater
+%{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
+
+
+
+
 %changelog
 
 * Fri Apr 25 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-2
 - Changed license to GPL-3.0-or-later
 - Fixed changelog dates
 - use macro for systemd service name
-
+- reorganize scriptlets to be more readable
+ 
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
 - the 5.2.0 stable release
 
