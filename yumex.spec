@@ -159,7 +159,7 @@ done
 - Fixed changelog dates
 - use macro for systemd service name
 - reorganize scriptlets to be more readable
- 
+
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
 - the 5.2.0 stable release
 
