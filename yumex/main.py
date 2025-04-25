@@ -168,25 +168,16 @@ class YumexApplication(Adw.Application):
             license_type=Gtk.License.GPL_3_0,
             version=f"{VERSION} ({BACKEND})",
             release_notes_version=VERSION,
-            release_notes=_(
-                """
-        <ul>
-          <li>Backend resign to use Dnf5Daemon for all actions</li>
-          <li>DNF4 is no longer supported</li>
-          <li>lot of code fixes and optimization</li>
-        </ul>
-"""
-            ),
-            comments=_(
-                """
-Yum Extender is a Package management to install, update and remove packages
-"""
-            ),
+            release_notes="""
+            <ul>
+                <li>Added support for offline transaction during boot</li>
+                <li>Added support of reinstall, downgrade,distro-sync</li>
+                <li>Added support for system upgrade to next Fedora release</li>
+                <li>Added support for installing .rpm files from file manager</li>
+            </ul>
+            """,
+            comments=_("Yum Extender is a Package management to install, update and remove packages"),
         )
-        # about.add_credit_section(
-        #     _("Section title"),
-        #     ["Somebody https://yumex.dk"],
-        # )
         about.add_acknowledgement_section(
             _("Special thanks to"),
             ["Thomas Crider https://github.com/GloriousEggroll"],

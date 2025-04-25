@@ -21,3 +21,8 @@ indent_size = 4
 
 [*.blp]
 indent_size = 2
+
+
+[*.xml.in.in]
+indent_size = 2
+

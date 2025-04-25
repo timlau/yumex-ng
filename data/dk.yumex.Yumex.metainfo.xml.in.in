@@ -11,10 +11,12 @@
 
   <description>
     <p>
-      Yum Extender is a graphical package management application. It allows you to search and browse for packages to install,
+      Yum Extender is a graphical package management application. It allows you to search and browse
+      for packages to install,
       remove and update on your computer.
     </p>
-    <p>It is designed to give you full control over the packages on your computer and to be used by all users.</p>
+    <p>It is designed to give you full control over the packages on your computer and to be used by
+      all users.</p>
     <p>Features:</p>
     <ul>
       <li>Browse packages available for installation or update</li>
@@ -37,18 +39,32 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="5.2.0" date="2025-04-15" type="devel"><description>
-        <p>Yum Extender 5.2.0 add many fixes and improvments </p>
+    <release version="5.4.0" date="2025-04-24" type="devel">
+      <description>
+        <p>Yum Extender 5.4.0 add many fixes and improvments </p>
         <ul>
-        <li>Use only dnf5daemon for all package actions</li>        
+          <li>Added support for offline transaction during boot</li>
+          <li>Added support of reinstall, downgrade,distro-sync</li>
+          <li>Added support for system upgrade to next Fedora release</li>
+          <li>Added support for installing .rpm files from file manager</li>
         </ul>
       </description>
-    </release>  
-    <release version="5.0.3" date="2024-11-07" type="devel"><description>
+    </release>
+    <release version="5.2.0" date="2025-04-15" type="devel">
+      <description>
+        <p>Yum Extender 5.2.0 add many fixes and improvments </p>
+        <ul>
+          <li>Use only dnf5daemon for all package actions</li>
+        </ul>
+      </description>
+    </release>
+    <release version="5.0.3" date="2024-11-07" type="devel">
+      <description>
         <p>Yum Extender 5.0.3 add many fixes and improvments </p>
       </description>
     </release>
-    <release version="5.0.2" date="2024-07-26" type="devel"><description>
+    <release version="5.0.2" date="2024-07-26" type="devel">
+      <description>
         <p>Yum Extender 5.0.2 add many fixes and improvments </p>
         <ul>
           <li>Added support for notifications on updates</li>
@@ -56,14 +72,16 @@
         </ul>
       </description>
     </release>
-    <release version="5.0.1" date="2024-06-27" type="devel"><description>
+    <release version="5.0.1" date="2024-06-27" type="devel">
+      <description>
         <p>Yum Extender 5.0.1 add many fixes and small improvments </p>
         <ul>
           <li>Add yumex-updater systray application there checks for updates</li>
         </ul>
       </description>
     </release>
-    <release version="5.0.0" date="2024-06-11" type="devel"><description>
+    <release version="5.0.0" date="2024-06-11" type="devel">
+      <description>
         <p>Yum Extender 5.0.0 add many fixes and small improvments </p>
         <ul>
           <li>Support for update info with dnf5</li>
@@ -73,7 +91,8 @@
         </ul>
       </description>
     </release>
-    <release version="4.9.4" date="2023-04-20" type="devel"><description>
+    <release version="4.9.4" date="2023-04-20" type="devel">
+      <description>
         <p>Yum Extender 4.9.4 add many fixes and small improvments </p>
         <ul>
           <li>Support for importing gpg keys from repositories</li>
@@ -82,7 +101,8 @@
         </ul>
       </description>
     </release>
-    <release version="4.9.3" date="2023-01-21" type="devel"><description>
+    <release version="4.9.3" date="2023-01-21" type="devel">
+      <description>
         <p>Yum Extender 4.9.3 improve the flatpak installer </p>
         <ul>
           <li>flatpak install with search and select available results</li>
@@ -90,7 +110,8 @@
         </ul>
       </description>
     </release>
-    <release version="4.9.2" date="2023-01-04" type="devel"><description>
+    <release version="4.9.2" date="2023-01-04" type="devel">
+      <description>
         <p>Yum Extender 4.9.2 adds support for flatpaks </p>
         <ul>
           <li>Browse installed flatpaks</li>
@@ -98,7 +119,8 @@
         </ul>
       </description>
     </release>
-    <release version="4.9.1" date="2022-12-23" type="devel"><description>
+    <release version="4.9.1" date="2022-12-23" type="devel">
+      <description>
         <p>Yum Extender 4.9.1 is a total rewrite using a modern toolchain </p>
         <ul>
           <li>New fresh scalable UI using Gtk4 and Libadwaita</li>
@@ -150,4 +172,3 @@
     <contentattribute id="money-gambling">none</contentattribute>
   </contentrating>
 </component>
-
