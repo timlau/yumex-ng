@@ -3,8 +3,8 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.3.0
-Release:  1%{?dist}
+Version:  5.3.1
+Release:  %autorelease %{?gitdate}
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
@@ -145,6 +145,9 @@ done
 
 %changelog
 
+* Sat Apr 26 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.3.1-1
+- bump version to 5.3.1
+- use autorelease for easier setting gitdate for git builds
 * Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.3.0-1
 - bump version to 5.3.0
 
