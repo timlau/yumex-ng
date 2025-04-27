@@ -4,8 +4,12 @@ DATADIR = /usr/share
 PYTHON = python3
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
+NAME = $(shell git config --get user.name)
+EMAIL = $(shell git config --get user.email)
+PACKAGER = $(NAME) <$(EMAIL)>
 NEW_REL=%autorelease -p -s $(GITDATE)
 GIT_MASTER=main
+RPMBUILD_OPTS = -D '_topdir $(BUILDDIR)' -D 'packager $(PACKAGER)'
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64 -r fedora-42-x86_64 -r fedora-42-aarch64
@@ -40,7 +44,7 @@ release:
 # build local rpms with dnf5 backend and start a copr build
 copr-release:
 	@$(MAKE) archive
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
+	@-rpmbuild $(RPMBUILD_OPTS) -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # cleanup the test branch used to create the test release
@@ -50,17 +54,15 @@ test-checkout:
 	@git checkout -q -b release-test
 
 test-cleanup:
-	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
+	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git checkout -f
 	@git checkout -q ${GIT_MASTER}
 	@-git stash pop -q
 	@git branch -q -D release-test
 
 show-vars:
-	@echo ${GITDATE}
-	@echo ${BUMPED_MINOR}
-	@echo ${NEW_VER}-${NEW_REL}
-	@echo ${GIT_BRANCH}
+	@echo "GITDATE     : ${GITDATE}"
+	@echo "PACKAGER    : ${PACKAGER}"
 
 #make a test release with the dnf5 backend
 test-release:
@@ -71,7 +73,7 @@ test-release:
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
 	# Build RPMS
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${VERSION}.tar.gz
+	@-rpmbuild $(RPMBUILD_OPTS) -ta ${APPNAME}-${VERSION}.tar.gz
 	@$(MAKE) test-cleanup
 
 test-reinstall:
