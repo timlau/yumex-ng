@@ -8,7 +8,7 @@ Release:  %autorelease
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
-License:  GPLv3+
+License:  GPL-3.0-or-later
 URL:      http://yumex.dk
 Source0:  https://github.com/timlau/yumex-ng/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 
