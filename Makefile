@@ -4,12 +4,12 @@ DATADIR = /usr/share
 PYTHON = python3
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
-VER_REGEX=\(^Version:\s*[0-9]*\.[0-9]*\.\)\(.*\)
-BUMPED_MINOR=${shell VN=`cat ${APPNAME}.spec | grep Version| sed  's/${VER_REGEX}/\2/'`; echo $$(($$VN + 1))}
-NEW_VER=${shell cat ${APPNAME}.spec | grep Version| sed  's/\(^Version:\s*\)\([0-9]*\.[0-9]*\.\)\(.*\)/\2${BUMPED_MINOR}/'}
-NEW_REL=0.1.${GITDATE}
-DIST=${shell rpm --eval "%{dist}"}
+NAME = $(shell git config --get user.name)
+EMAIL = $(shell git config --get user.email)
+PACKAGER = $(NAME) <$(EMAIL)>
+NEW_REL=%autorelease -p -s $(GITDATE)
 GIT_MASTER=main
+RPMBUILD_OPTS = -D '_topdir $(BUILDDIR)' -D 'packager $(PACKAGER)'
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64 -r fedora-42-x86_64 -r fedora-42-aarch64
@@ -44,7 +44,7 @@ release:
 # build local rpms with dnf5 backend and start a copr build
 copr-release:
 	@$(MAKE) archive
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
+	@-rpmbuild $(RPMBUILD_OPTS) -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # cleanup the test branch used to create the test release
@@ -54,29 +54,26 @@ test-checkout:
 	@git checkout -q -b release-test
 
 test-cleanup:
-	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
+	@rm -rf ${APPNAME}-${VERSION}.tar.gz
 	@git checkout -f
 	@git checkout -q ${GIT_MASTER}
 	@-git stash pop -q
 	@git branch -q -D release-test
 
 show-vars:
-	@echo ${GITDATE}
-	@echo ${BUMPED_MINOR}
-	@echo ${NEW_VER}-${NEW_REL}
-	@echo ${GIT_BRANCH}
+	@echo "GITDATE     : ${GITDATE}"
+	@echo "PACKAGER    : ${PACKAGER}"
 
 #make a test release with the dnf5 backend
 test-release:
 	@$(MAKE) test-checkout
-	# +1 Minor version and add 0.1-gitYYYYMMDD release
-	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e 's/${VER_REGEX}/\1${BUMPED_MINOR}/' -e 's/\(^Release:\s*\)\([0-9]*\)\(.*\)./\10.1.${GITDATE}%{?dist}/' > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
-	@git commit -a -m "bumped ${APPNAME} version ${NEW_VER}-${NEW_REL}"
+	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e '7 s/%autorelease/${NEW_REL}/'  > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
+	@git commit -a -m "bumped ${APPNAME} release"
 	# Make archive
-	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
-	@git archive --format=tar --prefix=$(APPNAME)-$(NEW_VER)/ HEAD | gzip -9v >${APPNAME}-$(NEW_VER).tar.gz
+	@rm -rf ${APPNAME}-${VERSION}.tar.gz
+	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
 	# Build RPMS
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -ta ${APPNAME}-${NEW_VER}.tar.gz
+	@-rpmbuild $(RPMBUILD_OPTS) -ta ${APPNAME}-${VERSION}.tar.gz
 	@$(MAKE) test-cleanup
 
 test-reinstall:
@@ -100,8 +97,9 @@ rpm:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
 test-copr:
+	@$(MAKE) clean
 	@$(MAKE) test-release
-	copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${NEW_VER}-${NEW_REL}*.src.rpm
+	@copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # Make a local build and run it
 localbuild:
@@ -141,16 +139,18 @@ transifex-update:
 
 # fetct .po files from transifex and commit to git
 transifex-get:
-	tx pull
+	tx pull -f
 	git add po/*
 	git commit -m "i18n: updated translations from transifex"
 
 # run unit tests
 run-tests:
 	pytest
-# Run dnf5deamon pytest
-run-tests-dnf5daemon:
-	pytest tests/dont_test_dnf5_backend_root.py -s -v
+
+# Run live envrionment pytest
+run-tests-live:
+	pytest tests/dont_test_*.py -s -v
+
 # run unit tests and generate html coverage report
 run-test-report:
 	pytest --cov --cov-report html
@@ -178,10 +178,14 @@ memray-updater-live:
 	@-mkdir -p profile
 	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
 
-SRPMS_UPSTREAM:
+
+run-gui-test: localbuild
+	@python tests/guitest/main.py
+
+upstream_rpms:
 	@-rm $(BUILDDIR)/RPMS/noarch/*.rpm
 	@-rm $(BUILDDIR)/SRPMS/*.rpm
-	@spectool -g -C $(BUILDDIR) -S yumex.spec 
-	@rpmbuild --define '_topdir $(BUILDDIR)' -ba yumex.spec
+	@spectool -g -C $(BUILDDIR) -S yumex.spec
+	@rpmbuild $(RPMBUILD_OPTS) -ba yumex.spec
 	@echo "RPMS Build:"
 	@tree -P *.rpm -I *.src.rpm  $(BUILDDIR)/RPMS/noarch/
