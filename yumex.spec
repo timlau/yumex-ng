@@ -83,65 +83,46 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-update-desktop-database %{_datadir}/applications &> /dev/null || :
-glib-compile-schemas /usr/share/glib-2.0/schemas/ &> /dev/null || :
+glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 %post -n %{name}-updater
-%systemd_user_post yumex-updater.service
+%systemd_user_post  %{name}-updater.service
+
 
 %postun
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-update-desktop-database %{_datadir}/applications &> /dev/null || :
+
+%postun -n %{name}-updater
+if [ $1 -eq 0 ] ; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
+%systemd_user_postun_with_restart %{name}-updater.service
+%systemd_user_postun_with_reload %{name}-updater.service
+%systemd_user_postun %{name}-updater.service
+
+%preun -n %{name}-updater
+%systemd_user_preun %{name}-updater.service
 
 %files -f  %{app_name}.lang
 %doc README.md
 %license LICENSE
-%{_datadir}/%{app_name}/yumex.gresource
+%{_datadir}/%{app_name}/
 %{_bindir}/%{app_name}
-%{python3_sitelib}/%{app_name}
+%{python3_sitelib}/%{app_name}/
 %{_datadir}/applications/%{app_id}*.desktop
 %{_datadir}/icons/hicolor/scalable/apps/dk.yumex.Yumex.svg
 %{_metainfodir}/%{app_id}.metainfo.xml
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
 
 %files -n %{name}-updater
-%{_userunitdir}/*.service
-%{_prefix}/lib/systemd/user-preset/*.preset
+%{_userunitdir}/%{name}-updater.service
+%{_prefix}/lib/systemd/user-preset/*%{name}-updater.preset
 %{_bindir}/yumex_updater
 %{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
-
-%posttrans -n %{name}-updater
-/usr/bin/gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
-%systemd_user_post yumex-updater.service
-
-# Iterate over all user sessions
-for session in $(loginctl list-sessions --no-legend | awk '{print $1}'); do
-    uid=$(loginctl show-session $session -p User --value)
-    user=$(getent passwd $uid | cut -d: -f1)
-
-    # Debug statement to verify user and UID
-    # echo "Applying preset and restarting service for user $user with UID $uid"
-
-    # Set environment variables for the user session
-    XDG_RUNTIME_DIR="/run/user/$uid"
-    DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-
-    # Apply the preset for the user session
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user preset yumex-updater.service" || echo "Failed to apply preset for user $user"
-
-    # Reload the user daemon and restart the service
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user daemon-reload" || echo "Failed to perform daemon-reload for user $user"
-    su - $user -c "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS systemctl --user restart yumex-updater.service" || echo "Failed to restart service for user $user"
-done
-
-%preun -n %{name}-updater
-%systemd_user_preun yumex-updater.service
 
 %changelog
 
