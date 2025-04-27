@@ -182,3 +182,10 @@ memray-updater-live:
 run-gui-test: localbuild
 	@python tests/guitest/main.py
 
+upstream_rpms:
+	@-rm $(BUILDDIR)/RPMS/noarch/*.rpm
+	@-rm $(BUILDDIR)/SRPMS/*.rpm
+	@spectool -g -C $(BUILDDIR) -S yumex.spec
+	@rpmbuild $(RPMBUILD_OPTS) -ba yumex.spec
+	@echo "RPMS Build:"
+	@tree -P *.rpm -I *.src.rpm  $(BUILDDIR)/RPMS/noarch/
