@@ -1,8 +1,7 @@
 %global app_id dk.yumex.Yumex
 %global app_build release
-%global app_name yumex
 
-Name:     %{app_name}
+Name:     yumex
 Version:  5.3.2
 Release:  %autorelease
 Summary:  Yum Extender graphical package management tool
@@ -73,7 +72,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 %install
 %meson_install
 
-%find_lang %{app_name}
+%find_lang %{name}
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -100,12 +99,12 @@ fi
 %preun -n %{name}-updater
 %systemd_user_preun %{name}-updater.service
 
-%files -f  %{app_name}.lang
+%files -f  %{name}.lang
 %doc README.md
 %license LICENSE
-%{_datadir}/%{app_name}/
-%{_bindir}/%{app_name}
-%{python3_sitelib}/%{app_name}/
+%{_datadir}/%{name}/
+%{_bindir}/%{name}
+%{python3_sitelib}/%{name}/
 %{_datadir}/applications/%{app_id}*.desktop
 %{_datadir}/icons/hicolor/scalable/apps/dk.yumex.Yumex.svg
 %{_metainfodir}/%{app_id}.metainfo.xml

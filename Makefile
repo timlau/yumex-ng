@@ -67,7 +67,7 @@ show-vars:
 #make a test release with the dnf5 backend
 test-release:
 	@$(MAKE) test-checkout
-	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e '7 s/%autorelease/${NEW_REL}/'  > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
+	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e '6 s/%autorelease/${NEW_REL}/'  > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
 	@git commit -a -m "bumped ${APPNAME} release"
 	# Make archive
 	@rm -rf ${APPNAME}-${VERSION}.tar.gz
