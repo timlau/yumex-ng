@@ -4,6 +4,8 @@ DATADIR = /usr/share
 PYTHON = python3
 VERSION=$(shell awk '/Version:/ { print $$2 }' ${APPNAME}.spec)
 GITDATE=git$(shell date +%Y%m%d)
+NEW_REL=%autorelease -p -s $(GITDATE)
+GIT_MASTER=main
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
 COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64 -r fedora-42-x86_64 -r fedora-42-aarch64
@@ -41,13 +43,36 @@ copr-release:
 	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 	@copr-cli build --nowait yumex-ng $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
+# cleanup the test branch used to create the test release
+test-checkout:
+	@-git stash clear
+	@-git stash push -m "save local changes" -q
+	@git checkout -q -b release-test
+
+test-cleanup:
+	@rm -rf ${APPNAME}-${NEW_VER}.tar.gz
+	@git checkout -f
+	@git checkout -q ${GIT_MASTER}
+	@-git stash pop -q
+	@git branch -q -D release-test
+
 show-vars:
 	@echo ${GITDATE}
+	@echo ${BUMPED_MINOR}
+	@echo ${NEW_VER}-${NEW_REL}
+	@echo ${GIT_BRANCH}
 
 #make a test release with the dnf5 backend
 test-release:
-	@$(MAKE) archive
-	@-rpmbuild --define '_topdir $(BUILDDIR)' -D 'app_build debug' -D 'gitdate -p -s ${GITDATE}' -D 'app_build debug' -ta  ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
+	@$(MAKE) test-checkout
+	@cat ${APPNAME}.spec | sed  -e '2 s/release/debug/' -e '7 s/%autorelease/${NEW_REL}/'  > ${APPNAME}-test.spec ; mv ${APPNAME}-test.spec ${APPNAME}.spec
+	@git commit -a -m "bumped ${APPNAME} release"
+	# Make archive
+	@rm -rf ${APPNAME}-${VERSION}.tar.gz
+	@git archive --format=tar --prefix=$(APPNAME)-$(VERSION)/ HEAD | gzip -9v >${APPNAME}-$(VERSION).tar.gz
+	# Build RPMS
+	@-rpmbuild --define '_topdir $(BUILDDIR)' -ta ${APPNAME}-${VERSION}.tar.gz
+	@$(MAKE) test-cleanup
 
 test-reinstall:
 	@$(MAKE) clean
@@ -70,8 +95,9 @@ rpm:
 	@rpmbuild --define '_topdir $(BUILDDIR)' -ta ${BUILDDIR}/SOURCES/${APPNAME}-$(VERSION).tar.gz
 
 test-copr:
+	@$(MAKE) clean
 	@$(MAKE) test-release
-	copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-${VERSION}-*${GITDATE}*.src.rpm
+	@copr-cli build --nowait yumex-ng-dev $(COPR_REL_DNF5) $(BUILDDIR)/SRPMS/${APPNAME}-$(VERSION)*.src.rpm
 
 # Make a local build and run it
 localbuild:

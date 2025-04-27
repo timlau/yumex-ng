@@ -3,8 +3,8 @@
 %global app_name yumex
 
 Name:     %{app_name}
-Version:  5.3.1
-Release:  %autorelease %{?gitdate}
+Version:  5.3.2
+Release:  %autorelease
 Summary:  Yum Extender graphical package management tool
 
 Group:    Applications/System
