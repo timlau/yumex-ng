@@ -34,15 +34,10 @@ Requires: appstream >= 1.0.2
 
 Recommends: %{name}-updater
 
-
 # dnf5 requirements
 Requires: dnf5daemon-server >= 5.2.12
 Provides: yumex-dnf5 = %{version}-%{release}
 Obsoletes: yumex-dnf5 < %{version}-%{release}
-
-Obsoletes: yumex-dnf <= 4.5.1
-
-
 
 %description
 Graphical package tool for maintain packages on the system
@@ -63,7 +58,6 @@ Obsoletes: yumex-updater-systray < %{version}-%{release}
 
 %description -n %{name}-updater
 Service to check and notify about available updates
-
 
 %prep
 %setup -q
@@ -87,7 +81,6 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 %post -n %{name}-updater
 %systemd_user_post  %{name}-updater.service
-
 
 %postun
 if [ $1 -eq 0 ] ; then
@@ -125,65 +118,4 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/yumex-update-*.svg
 
 %changelog
-
-* Sat Apr 26 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.3.1-1
-- bump version to 5.3.1
-- use autorelease for easier setting gitdate for git builds
-* Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.3.0-1
-- bump version to 5.3.0
-
-* Tue Apr 15 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.2.0-1
-- the 5.2.0 stable release
-
-* Mon Mar 31 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.1.0-1
-- the 5.1.0 release
-- cleanup requirement for only using dnf5daemon for everything
-
-* Thu Mar 27 2025 Tim Lauridsen <timlau@fedoraproject.org> 5.0.3-2
-- remove support for dnf4
-
-* Thu Nov 7 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.3-1
-- the 5.0.3 release
-
-* Fri Jul 26 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.2-1
-- the 5.0.2 release
-
-* Sun Jul 7 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-3
-- remove updater .conf file
-
-* Thu Jun 27 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-2
-- fix nameing for yumex-dnf5 build
-
-* Thu Jun 27 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.1-1
-- the 5.0.1 release
-
-* Tue Jun 25 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-3
-- split updater service into sub-package
-
-* Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-2
-- added updater service
-- include all .desktop files
-- add appstream requirement
-- add version requirement to flatpak-libs.
-
-* Tue Jun 11 2024 Tim Lauridsen <timlau@fedoraproject.org> 5.0.0-1
-- the 5.0.0 release
-
-* Thu Apr 20 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.4-1
-- the 4.99.4 release
-
-* Sat Jan 21 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.3-1
-- the 4.99.3 release
-
-* Wed Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
-- add support for building with dnf5 backend
-
-* Wed Jan 4 2023 Tim Lauridsen <timlau@fedoraproject.org> 4.99.2-1
-- the 4.99.2 release
-
-* Tue Dec 20 2022 Tim Lauridsen <timlau@fedoraproject.org> 4.99.1-1
-- the 4.99.1 release
-
-* Tue Dec 20 2022 Tim Lauridsen <timlau@fedoraproject.org> 4.99.0-1
-- initial release (dev)
-
+%autochangelog
