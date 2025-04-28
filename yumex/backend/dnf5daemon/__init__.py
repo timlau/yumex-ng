@@ -357,67 +357,67 @@ class YumexRootBackend:
             return TransactionResult(True, data=None)  # type: ignore
 
     def on_download_mirror_failure(self, session, *args):
-        logger.debug(f"Signal : download_mirror_failure ({args})")
+        logger.debug(f"SIGNAL : download_mirror_failure ({args})")
 
     def on_transaction_before_begin(self, session, *args):
-        logger.debug(f"Signal : transaction_before_begin ({args})")
+        logger.debug(f"SIGNAL : transaction_before_begin ({args})")
         if self._offline:
             self.progress.set_title(_("Building Offline Transaction"))
         else:
             self.progress.set_title(_("Applying Transaction"))
 
     def on_transaction_after_complete(self, session, *args):
-        logger.debug(f"Signal : transaction_after_complete ({args})")
+        logger.debug(f"SIGNAL : transaction_after_complete ({args})")
         self.progress.hide()
 
     def on_transaction_verify_start(self, session, total):
-        logger.debug(f"Signal : transaction_verify_start ({total})")
+        logger.debug(f"SIGNAL : transaction_verify_start ({total})")
         self.progress.set_title(_("Verifying Packages"))
         self.progress.set_progress(0.0)
 
     def on_transaction_verify_progress(self, session, amount, total):
-        logger.debug(f"Signal : transaction_verify_progress ({amount}/{total})")
+        logger.debug(f"SIGNAL : transaction_verify_progress ({amount}/{total})")
         if total > 0:
             self.progress.set_progress(amount / total)
 
     def on_transaction_verify_stop(self, session, total):
-        logger.debug(f"Signal : transaction_verify_stop ({total})")
+        logger.debug(f"SIGNAL : transaction_verify_stop ({total})")
         self.progress.set_progress(1.0)
         self.progress.set_title(_("Applying Transaction"))
 
     def on_transaction_script_start(self, session, pkg, typ, *args):
         script_type = str(ScriptType(typ))
-        logger.debug(f"Signal : transaction_script_start : {pkg} ({script_type}) ({args})")
+        logger.debug(f"SIGNAL : transaction_script_start : {pkg} ({script_type}) ({args})")
         self.progress.set_subtitle(_("Running Scripts") + f" ({script_type}) : {pkg}")
         self.progress.set_progress(0.0)
 
     def on_transaction_script_stop(self, session, pkg, *args):
-        logger.debug(f"Signal : transaction_script_stop : {pkg} {args}")
+        logger.debug(f"SIGNAL : transaction_script_stop : {pkg} {args}")
         self.progress.set_progress(1.0)
 
     def on_transaction_action_start(self, session, package_id, action, total):
-        logger.debug(f"Signal : transaction_action_start: action {action} total: {total} id: {package_id}")
+        logger.debug(f"SIGNAL : transaction_action_start: action {action} total: {total} id: {package_id}")
         action_str = get_action(action)
         self.progress.set_subtitle(f" {action_str} {package_id}")
         self.progress.set_progress(0.0)
 
     def on_transaction_action_progress(self, session, package_id, amount, total):
-        logger.debug(f"Signal : transaction_action_progress: amount {amount} total: {total} id: {package_id}")
+        logger.debug(f"SIGNAL : transaction_action_progress: amount {amount} total: {total} id: {package_id}")
         if total > 0:
             self.progress.set_progress(amount / total)
 
     def on_transaction_action_stop(self, session, package_id, total):
-        logger.debug(f"Signal : transaction_action_stop: total: {total} id: {package_id}")
+        logger.debug(f"SIGNAL : transaction_action_stop: total: {total} id: {package_id}")
         self.progress.set_progress(0.0)
 
     def on_download_add_new(self, session, *args):
         if len(args) == 3:
             download_id, pkg_name, total_to_download = args
         else:
-            logger.debug(f"Signal: download_add_new unexpected args: {args}")
+            logger.debug(f"SIGNAL: download_add_new unexpected args: {args}")
             return
         logger.debug(
-            f"Signal : download_add_new: download_id: {download_id}"
+            f"SIGNAL : download_add_new: download_id: {download_id}"
             f" total_to_download: {total_to_download}"
             f" pkg_name: {pkg_name}"
         )
@@ -437,10 +437,10 @@ class YumexRootBackend:
         if len(args) == 3:
             download_id, total_to_download, downloaded = args
         else:
-            logger.debug(f"Signal: download_progress: unexpected args: {args}")
+            logger.debug(f"SIGNAL: download_progress: unexpected args: {args}")
             return
         logger.debug(
-            f"Signal : download_progress: download_id: {download_id}"
+            f"SIGNAL : download_progress: download_id: {download_id}"
             f" downloaded: {downloaded} total_to_download: {total_to_download}"
         )
         pkg: DownloadPackage = self.download_queue.get(download_id)  # type: ignore
@@ -461,9 +461,9 @@ class YumexRootBackend:
         if len(args) == 3:
             download_id, status, msg = args
         else:
-            logger.debug(f"Signal: download_end: unexpected args: {args}")
+            logger.debug(f"SIGNAL: download_end: unexpected args: {args}")
             return
-        logger.debug(f"Signal : download_end: download_id: {download_id} status: {status} msg: {msg}")
+        logger.debug(f"SIGNAL : download_end: download_id: {download_id} status: {status} msg: {msg}")
         pkg: DownloadPackage = self.download_queue.get(download_id)  # type: ignore
         if status == 0:
             match pkg.package_type:
@@ -484,7 +484,7 @@ class YumexRootBackend:
 
     def on_repo_key_import_request(self, session, key_id, user_ids, key_fingerprint, key_url, timestamp):
         logger.debug(
-            f"Signal : repo_key_import_request: {session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
+            f"SIGNAL : repo_key_import_request: {session, key_id, user_ids, key_fingerprint, key_url, timestamp}"
         )
         # <arg name="session_object_path" type="o" />
         # <arg name="key_id" type="s" />
