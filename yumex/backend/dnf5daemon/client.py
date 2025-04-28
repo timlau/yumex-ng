@@ -135,13 +135,13 @@ class Dnf5DbusClient:
         return partial(self.async_dbus.call, getattr(proxy, method), timeout=1000 * 60 * 20)
 
     def resolve(self, *args):
-        logger.debug(f"DBUS: {self.session_goal.object_path}.resolve()")
+        logger.debug(f"DBUS: {self.session_goal.dbus_interface}.resolve()")
         resolve = self._async_method("resolve", proxy=self.session_goal)
         res, err = resolve(dbus.Array())
         return res, err
 
     def do_transaction(self, options={}):
-        logger.debug(f"DBUS: {self.session_goal.object_path}.do_transaction()")
+        logger.debug(f"DBUS: {self.session_goal.dbus_interface}.do_transaction()")
         do_transaction = self._async_method("do_transaction", proxy=self.session_goal)
         options["comment"] = "Yum Extender Transaction"
         res, err = do_transaction(options)
@@ -152,7 +152,7 @@ class Dnf5DbusClient:
         return self.session_repo.confirm_key(key_id, confirmed)
 
     def repo_list(self):
-        logger.debug(f"DBUS: {self.session_repo.object_path}.list()")
+        logger.debug(f"DBUS: {self.session_repo.dbus_interface}.list()")
         get_list = self._async_method("list", proxy=self.session_repo)
         res, err = get_list({"repo_attrs": dbus.Array(["name", "enabled", "priority"]), "enable_disable": "all"})
         return res, err
@@ -254,7 +254,7 @@ class Dnf5DbusClient:
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
 
-        # logger.debug(f"DBUS: {self.session_rpm.object_path}.list_fd()")
+        # logger.debug(f"DBUS: {self.session_rpm.dbus_interface}.list_fd()")
         result = list(self._list_fd(options))
         logger.debug(f"list_fd({args}) returned : {len(result)} elements")
         return result
@@ -290,7 +290,7 @@ class Dnf5DbusClient:
             options["arch"] = kwargs.pop("arch")
         # get and async partial function
         # logger.debug(f" --> options: {options} ")
-        logger.debug(f"DBUS: {self.session_rpm.object_path}.list()")
+        logger.debug(f"DBUS: {self.session_rpm.dbus_interface}.list()")
         get_list = self._async_method("list", proxy=self.session_rpm)
         res, err = get_list(options)
         # print(res, err)
@@ -308,7 +308,7 @@ class Dnf5DbusClient:
         # options[""] = get_variant(list[str], [])
         # print(f" --> options: {options} ")
         # print(self.session_advisory)
-        logger.debug(f"DBUS: {self.session_advisory.object_path}.list()")
+        logger.debug(f"DBUS: {self.session_advisory.dbus_interface}.list()")
         get_list = self._async_method("list", proxy=self.session_advisory)
         res, err = get_list(options)
         return res, err
@@ -330,7 +330,7 @@ class Dnf5DbusClient:
     @dbus_exception
     def offline_get_status(self):
         """Get the status of the offline update"""
-        logger.debug(f"DBUS: {self.session_offline.object_path}.get_status()")
+        logger.debug(f"DBUS: {self.session_offline.dbus_interface}.get_status()")
         pending, status = self.session_offline.get_status()
         logger.debug(f"offline_get_status() returned : pending : {pending} stautus :{status}")
         return bool(pending), dict(status)
@@ -338,7 +338,7 @@ class Dnf5DbusClient:
     @dbus_exception
     def offline_clean(self):
         """Cancel the offline update"""
-        logger.debug(f"DBUS: {self.session_offline.object_path}.cancel()")
+        logger.debug(f"DBUS: {self.session_offline.dbus_interface}.cancel()")
         clean = self._async_method("clean", proxy=self.session_offline)
         success, err_msg = clean()
         logger.debug(f"clean() returned : success : {success} err_msg : {err_msg}")
@@ -347,7 +347,7 @@ class Dnf5DbusClient:
     @dbus_exception
     def offline_reboot(self):
         """Reboot the system and install the offline update"""
-        logger.debug(f"DBUS: {self.session_offline.object_path}.set_finish_action()")
+        logger.debug(f"DBUS: {self.session_offline.dbus_interface}.set_finish_action()")
         reboot = self._async_method("set_finish_action", proxy=self.session_offline)
         success, err_msg = reboot("reboot")
         logger.debug(f"offline_reboot() returned : success : {success} err_msg : {err_msg}")
