@@ -3,7 +3,7 @@ using Adw 1;
 
 template $YumexTransactionResult: Adw.Dialog {
   content-width: 700;
-  content-height: 700;
+  content-height: 900;
 
   Adw.ToolbarView main_content {
     [top]
@@ -60,6 +60,8 @@ template $YumexTransactionResult: Adw.Dialog {
       margin-bottom: 20;
 
       Gtk.Frame result_frame {
+        vexpand: true;
+
         Gtk.ScrolledWindow {
           Gtk.ListView result_view {
             margin-start: 10;
@@ -91,7 +93,7 @@ template $YumexTransactionResult: Adw.Dialog {
           Gtk.Box {
             orientation: horizontal;
             hexpand: false;
-            vexpand: false;
+            vexpand: true;
             valign: center;
 
             Gtk.Button copy {
@@ -114,7 +116,7 @@ template $YumexTransactionResult: Adw.Dialog {
 
           Gtk.ScrolledWindow {
             width-request: 800;
-            height-request: 600;
+            height-request: 300;
 
             Gtk.Label problems {
               margin-start: 10;
