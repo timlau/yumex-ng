@@ -17,5 +17,7 @@
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true
-    }
+    },
+    "C_Cpp.default.compileCommands": "/home/tim/udv/github/yumex-ng/builddir/compile_commands.json",
+    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
 }
