@@ -313,6 +313,9 @@ class YumexRootBackend:
         self.client.session_rpm.connect_to_signal("transaction_after_complete", self.on_transaction_after_complete)
         self.client.session_rpm.connect_to_signal("transaction_script_start", self.on_transaction_script_start)
         self.client.session_rpm.connect_to_signal("transaction_script_stop", self.on_transaction_script_stop)
+        self.client.session_rpm.connect_to_signal("transaction_verify_start", self.on_transaction_verify_start)
+        self.client.session_rpm.connect_to_signal("transaction_verify_progress", self.on_transaction_verify_progress)
+        self.client.session_rpm.connect_to_signal("transaction_verify_stop", self.on_transaction_verify_stop)
 
     def build_transaction(self, pkgs: list, opts: TransactionOptions) -> TransactionResult:
         self.last_transaction = pkgs
@@ -366,6 +369,20 @@ class YumexRootBackend:
     def on_transaction_after_complete(self, session, *args):
         logger.debug(f"Signal : transaction_after_complete ({args})")
         self.progress.hide()
+
+    def on_transaction_verify_start(self, session, total):
+        logger.debug(f"Signal : transaction_verify_start ({total})")
+        self.progress.set_title(_("Verifying Packages"))
+        self.progress.set_progress(0.0)
+
+    def on_transaction_verify_progress(self, session, amount, total):
+        logger.debug(f"Signal : transaction_verify_progress ({amount}/{total})")
+        if total > 0:
+            self.progress.set_progress(amount / total)
+
+    def on_transaction_verify_stop(self, session, total):
+        logger.debug(f"Signal : transaction_verify_stop ({total})")
+        self.progress.set_progress(1.0)
 
     def on_transaction_script_start(self, session, pkg, typ, *args):
         script_type = str(ScriptType(typ))
