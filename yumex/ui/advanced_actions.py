@@ -63,6 +63,12 @@ class YumexAdvancedActions(Adw.Dialog):
         self.emit("action", "refresh-cache", None)
 
     @Gtk.Template.Callback()
+    def on_distro_sync_system(self, button):
+        """Distro sync on all installed packages"""
+        self.close()
+        self.emit("action", "distro-sync-system", None)
+
+    @Gtk.Template.Callback()
     def on_system_upgrade(self, button):
         """Perform a system upgrade"""
         self.close()

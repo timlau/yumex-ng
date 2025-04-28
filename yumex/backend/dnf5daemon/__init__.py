@@ -243,6 +243,10 @@ class YumexRootBackend:
         if opts.system_upgrade:
             res, err = self.system_upgrade(opts.system_upgrade, opts.releasever)
             allow_erasing = True
+        elif opts.distro_sync:
+            to_distrosync = [pkg.na for pkg in self._get_yumex_packages(self.installed)]
+            logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.distrosync()")
+            self.client.session_rpm.distro_sync(dbus.Array(to_distrosync), dbus.Dictionary({}))
         elif opts.is_file:
             logger.debug(f"adding files for install : {pkgs}")
             to_install = pkgs

@@ -150,6 +150,7 @@ class TransactionOptions:
     system_upgrade: str | None = None
     releasever: str | None = None
     is_file: bool = False
+    distro_sync: bool = False
 
 
 def reload_metadata_expired():

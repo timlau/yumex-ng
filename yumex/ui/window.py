@@ -511,6 +511,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 self.on_action_cancel_system_upgrade(parameter)
             case "reboot":
                 self.on_action_reboot()
+            case "distro-sync-system":
+                self.on_action_distro_sync_system()
             case _:
                 logger.debug(f"ERROR: action: {action} not defined")
 
@@ -557,6 +559,17 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if result:  # transaction completed without issues\
             self.show_message(_("Offline Transaction completed succesfully"), timeout=3)
             self.on_action_reboot()
+            # reset everything
+            self.reset_all()
+
+    def on_action_distro_sync_system(self):
+        """handler for distro-sync action"""
+        logger.debug("Execute distro-sync")
+        opts = TransactionOptions(distro_sync=True)
+        result = self._do_transaction([], opts)
+        logger.debug(f"Transaction execution ended : {result}")
+        if result:
+            self.show_message(_("Distro-Sync completed succesfully"), timeout=3)
             # reset everything
             self.reset_all()
 

@@ -31,6 +31,12 @@ template $YumexAdvancedActions: Adw.Dialog {
         tooltip-text: _("Expire the DNF cache, so it will be refreshed from repositories.");
       }
 
+      Adw.ButtonRow {
+        title: _("Distro-Sync System");
+        activated => $on_distro_sync_system();
+        tooltip-text: _("distro-sync all installed packages to the repo version.");
+      }
+
       Adw.ExpanderRow system_upgrade {
         title: _("System Upgrade");
         expanded: true;
