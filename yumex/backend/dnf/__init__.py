@@ -22,7 +22,7 @@ from gi.repository import Gio, GObject
 
 from yumex.constants import APP_ID
 from yumex.utils import format_number
-from yumex.utils.enums import PackageAction, PackageState, PackageTodo  # noqa: F401
+from yumex.utils.enums import PackageAction, PackageState, PackageTodo, TransactionCommand  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -146,11 +146,9 @@ class YumexPackage(GObject.GObject):
 class TransactionOptions:
     """Transaction options for dnfdaemon"""
 
+    command: TransactionCommand = TransactionCommand.NONE
+    parameter: str = ""
     offline: bool = False
-    system_upgrade: str | None = None
-    releasever: str | None = None
-    is_file: bool = False
-    distro_sync: bool = False
 
 
 def reload_metadata_expired():

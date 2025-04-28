@@ -34,7 +34,7 @@ from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.search_settings import YumexSearchSettings
 from yumex.ui.transaction_result import YumexTransactionResult
 from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release
-from yumex.utils.enums import InfoType, PackageFilter, Page, SortType
+from yumex.utils.enums import InfoType, PackageFilter, Page, SortType, TransactionCommand
 from yumex.utils.updater import sync_updates
 
 logger = logging.getLogger(__name__)
@@ -193,7 +193,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.show_message(_(f"RPM file not found : {inst_file}"))
             return
         logger.debug(f"Execute the transaction on {inst_file}")
-        opts = TransactionOptions(is_file=True)
+        opts = TransactionOptions(command=TransactionCommand.IS_FILE)
         result = self._do_transaction([inst_file.as_posix()], opts)
         logger.debug(f"Transaction execution ended : {result}")
         if result:  # transaction completed without issues\
@@ -550,7 +550,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         if releasever <= current_release:
             self.show_message(_("system upgrade target release must to larger than current release"))
             return
-        opts = TransactionOptions(system_upgrade="upgrade", releasever=releasever, offline=True)
+        opts = TransactionOptions(command=TransactionCommand.SYSTEM_UPGRADE, parameter=releasever, offline=True)
         result = self._do_transaction([], opts)
         logger.debug(f"Transaction execution ended : {result}")
         # we have to reset the backend to current releasever
@@ -565,7 +565,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def on_action_distro_sync_system(self):
         """handler for distro-sync action"""
         logger.debug("Execute distro-sync")
-        opts = TransactionOptions(distro_sync=True)
+        opts = TransactionOptions(command=TransactionCommand.SYSTEM_DISTRO_SYNC)
         result = self._do_transaction([], opts)
         logger.debug(f"Transaction execution ended : {result}")
         if result:

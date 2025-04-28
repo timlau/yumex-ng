@@ -17,6 +17,7 @@ from yumex.utils.enums import (
     PackageTodo,
     ScriptType,
     TransactionAction,
+    TransactionCommand,
 )
 
 from .client import Dnf5DbusClient
@@ -240,14 +241,14 @@ class YumexRootBackend:
         to_distrosync = []
         allow_erasing = False
         self.client.session_goal.reset()
-        if opts.system_upgrade:
-            res, err = self.system_upgrade(opts.system_upgrade, opts.releasever)
+        if opts.command == TransactionCommand.SYSTEM_UPGRADE:
+            res, err = self.system_upgrade("systemupgrade", opts.parameter)
             allow_erasing = True
-        elif opts.distro_sync:
+        elif opts.command == TransactionCommand.SYSTEM_DISTRO_SYNC:
             to_distrosync = [pkg.na for pkg in self._get_yumex_packages(self.installed)]
             logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.distrosync()")
             self.client.session_rpm.distro_sync(dbus.Array(to_distrosync), dbus.Dictionary({}))
-        elif opts.is_file:
+        elif opts.command == TransactionCommand.IS_FILE:
             logger.debug(f"adding files for install : {pkgs}")
             to_install = pkgs
             logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.install()")
@@ -701,7 +702,7 @@ class YumexRootBackend:
 
     def system_upgrade(self, mode, releasever):
         self.reopen_session({"releasever": releasever})
-        options = dbus.Dictionary({"mode": mode, "releasever": releasever})
+        options = dbus.Dictionary({"mode": "upgrade", "releasever": releasever})
         res, err = self.client.system_upgrade(options)
         return res, err
 

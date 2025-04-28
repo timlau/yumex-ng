@@ -109,6 +109,13 @@ class TransactionAction(IntEnum):
     RESET = 10
 
 
+class TransactionCommand(Enum):
+    NONE = auto()
+    SYSTEM_UPGRADE = auto()
+    IS_FILE = auto()
+    SYSTEM_DISTRO_SYNC = auto()
+
+
 class DownloadType(Enum):
     REPO = auto()
     PACKAGE = auto()
