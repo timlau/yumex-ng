@@ -383,6 +383,7 @@ class YumexRootBackend:
     def on_transaction_verify_stop(self, session, total):
         logger.debug(f"Signal : transaction_verify_stop ({total})")
         self.progress.set_progress(1.0)
+        self.progress.set_title(_("Applying Transaction"))
 
     def on_transaction_script_start(self, session, pkg, typ, *args):
         script_type = str(ScriptType(typ))
