@@ -190,7 +190,7 @@ class YumexRootBackend:
         # self.client.close_session()
         # self.client.open_session()
         # self.connect_signals()
-        logger.debug(f"DBUS: {self.client.session_base.object_path}.reset()")
+        logger.debug(f"DBUS: {self.client.session_base.dbus_interface}.reset()")
         self.client.session_base.reset()
         logger.debug("Dnf5Demon is reset...")
         self._installed_evr = self.fetch_installed_evr()
@@ -246,7 +246,7 @@ class YumexRootBackend:
         elif opts.is_file:
             logger.debug(f"adding files for install : {pkgs}")
             to_install = pkgs
-            logger.debug(f"DBUS: {self.client.session_rpm.object_path}.install()")
+            logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.install()")
             self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
         else:
             for pkg in pkgs:
@@ -272,25 +272,25 @@ class YumexRootBackend:
                     case _:
                         logger.debug(f"error in {pkg.nevra} todo: {pkg.todo}")
             if to_remove:
-                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.remove()")
+                logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.remove()")
                 self.client.session_rpm.remove(dbus.Array(to_remove), dbus.Dictionary({}))
             if to_install:
-                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.install()")
+                logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.install()")
                 self.client.session_rpm.install(dbus.Array(to_install), dbus.Dictionary({}))
 
             if to_update:
-                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.update()")
+                logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.update()")
                 self.client.session_rpm.upgrade(dbus.Array(to_update), dbus.Dictionary({}))
 
             if to_downgrade:
-                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.downgrade()")
+                logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.downgrade()")
                 self.client.session_rpm.downgrade(dbus.Array(to_downgrade), dbus.Dictionary({}))
                 allow_erasing = True
             if to_reinstall:
-                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.reinstall()")
+                logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.reinstall()")
                 self.client.session_rpm.reinstall(dbus.Array(to_reinstall), dbus.Dictionary({}))
             if to_distrosync:
-                logger.debug(f"DBUS: {self.client.session_rpm.object_path}.distrosync()")
+                logger.debug(f"DBUS: {self.client.session_rpm.dbus_interface}.distrosync()")
                 self.client.session_rpm.distro_sync(dbus.Array(to_distrosync), dbus.Dictionary({}))
 
         res, err = self.client.resolve(dbus.Dictionary({"allow_erasing": allow_erasing}))
