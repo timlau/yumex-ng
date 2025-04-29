@@ -135,6 +135,9 @@ class InfoType(StrEnum):
     DESCRIPTION = auto()
     FILES = auto()
     UPDATE_INFO = auto()
+    CHANGELOG = auto()
+    PROVIDES = auto()
+    REQUIRES = auto()
 
 
 # ["name", "arch", "size", "repo"]

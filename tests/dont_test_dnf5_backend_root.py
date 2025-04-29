@@ -281,6 +281,45 @@ def test_package_info_files(backend):
     assert "/usr/bin/0xFFFF" in files
 
 
+def test_package_info_provides(backend):
+    pkgs = backend.search("yumex")
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    result = backend.get_package_info(pkg, InfoType.PROVIDES)
+    print()
+    print(pkg)
+    print(result)
+    assert isinstance(result, list)
+    assert len(result) > 0
+
+
+def test_package_info_requires(backend):
+    pkgs = backend.search("yumex")
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    result = backend.get_package_info(pkg, InfoType.REQUIRES)
+    print()
+    print(pkg)
+    print(result)
+    assert isinstance(result, list)
+    assert len(result) > 0
+
+
+def test_package_info_changelog(backend):
+    pkgs = backend.search("yumex")
+    assert isinstance(pkgs, list)
+    assert len(pkgs) > 0
+    pkg = pkgs[0]
+    result = backend.get_package_info(pkg, InfoType.CHANGELOG)
+    print()
+    print(pkg)
+    print(result)
+    assert isinstance(result, list)
+    assert len(result) > 0
+
+
 def test_package_info_files_0ad(backend):
     pkgs = backend.search("0ad")
     assert isinstance(pkgs, list)

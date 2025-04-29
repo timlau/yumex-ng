@@ -553,6 +553,7 @@ class YumexRootBackend:
             package_attrs=["nevra", attribute],
             scope="all",
         )
+        print(result)
         if result:
             return result[0][attribute]
         return None
@@ -590,6 +591,27 @@ class YumexRootBackend:
             return info_list
         return []
 
+    def _get_changelog(self, pkg: YumexPackage):
+        changelog = self._get_package_attribute(pkg, "changelogs")
+        print(changelog)
+        if changelog:
+            return changelog
+        return []
+
+    def _get_provides(self, pkg: YumexPackage):
+        provides = self._get_package_attribute(pkg, "provides")
+        print(provides)
+        if provides:
+            return provides
+        return []
+
+    def _get_requires(self, pkg: YumexPackage):
+        requires = self._get_package_attribute(pkg, "requires")
+        print(requires)
+        if requires:
+            return requires
+        return []
+
     def get_package_info(self, pkg: YumexPackage, attr: InfoType):
         match attr:
             case InfoType.DESCRIPTION:
@@ -598,6 +620,12 @@ class YumexRootBackend:
                 return self._get_files(pkg)
             case InfoType.UPDATE_INFO:
                 return self._get_update_info(pkg)
+            case InfoType.CHANGELOG:
+                return self._get_changelog(pkg)
+            case InfoType.PROVIDES:
+                return self._get_provides(pkg)
+            case InfoType.REQUIRES:
+                return self._get_requires(pkg)
             case other:
                 raise ValueError(f"Unknown package info: {other}")
 
