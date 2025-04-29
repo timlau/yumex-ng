@@ -76,7 +76,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-glib-compile-schemas /usr/share/glib-2.0/schemas/
+glib-compile-schemas /usr/share/glib-2.0/schemas/ &>/dev/null || :
 
 %post -n %{name}-updater
 %systemd_user_post  %{name}-updater.service
