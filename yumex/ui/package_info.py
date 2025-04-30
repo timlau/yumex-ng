@@ -13,6 +13,7 @@
 #
 # Copyright (C) 2024 Tim Lauridsen
 
+import html
 import logging
 
 from gi.repository import Adw, Gtk  # type: ignore
@@ -66,7 +67,7 @@ class YumexPackageInfo(Gtk.Box):
             case InfoType.DESCRIPTION:
                 # a string
                 return pkg_info
-            case InfoType.FILES:
+            case InfoType.FILES | InfoType.PROVIDES | InfoType.REQUIRES:
                 # list of filename
                 return "\n".join(pkg_info)
             case InfoType.UPDATE_INFO:
@@ -81,6 +82,7 @@ class YumexPackageInfo(Gtk.Box):
     def write_text(self, txt):
         if txt is None:
             txt = ""
+        txt = html.escape(txt)
         self.info.set_title(txt)
         self.update_info_grp.set_visible(False)
         self.description_grp.set_visible(True)

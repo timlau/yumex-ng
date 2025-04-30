@@ -286,13 +286,13 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.progress.set_title(_("Running Flatpak Transaction"))
         return confirm
 
-    def set_pkg_info(self, pkg):
+    def set_pkg_info(self, pkg, refresh=False):
         def completed(pkg_info, error=False):
             self.package_info.update(self.info_type, pkg_info)
 
         if pkg is None:
             return self.package_info.clear()
-        if self._last_selected_pkg and pkg == self._last_selected_pkg:
+        if not refresh and self._last_selected_pkg and pkg == self._last_selected_pkg:
             return
         self._last_selected_pkg = pkg
         RunAsync(self.presenter.get_package_info, completed, pkg, self.info_type)
@@ -607,7 +607,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         info_type = InfoType(info_type)
         logger.debug(f"SIGNAL: info-type-changed : {info_type}")
         self.info_type = info_type
-        self.package_view.on_selection_changed(self.package_view.get_model(), 0, 0)
+        pkg = self._last_selected_pkg
+        self.set_pkg_info(pkg, refresh=True)
         self.sidebar.set_show_sidebar(False)
 
     def on_sort_attr_changed(self, widget, sort_attr: str):

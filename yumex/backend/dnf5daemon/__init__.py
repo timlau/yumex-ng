@@ -553,7 +553,6 @@ class YumexRootBackend:
             package_attrs=["nevra", attribute],
             scope="all",
         )
-        print(result)
         if result:
             return result[0][attribute]
         return None
@@ -575,7 +574,6 @@ class YumexRootBackend:
         result, error = self.client.advisory_list(pkg.name, advisor_attrs=ADVISOR_ATTRS)
         if result:
             for res in result:
-                # print(res)
                 timestamp = datetime.datetime.fromtimestamp(res["buildtime"])
                 updated = timestamp.strftime("%Y-%m-%d %H:%M:%S")
                 info_list.append(
@@ -600,14 +598,12 @@ class YumexRootBackend:
 
     def _get_provides(self, pkg: YumexPackage):
         provides = self._get_package_attribute(pkg, "provides")
-        print(provides)
         if provides:
             return provides
         return []
 
     def _get_requires(self, pkg: YumexPackage):
         requires = self._get_package_attribute(pkg, "requires")
-        print(requires)
         if requires:
             return requires
         return []

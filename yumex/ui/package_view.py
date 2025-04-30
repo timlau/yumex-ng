@@ -46,7 +46,7 @@ class YumexPackageView(Gtk.ColumnView):
     sizes = Gtk.Template.Child()
     descriptions = Gtk.Template.Child()
 
-    selection = Gtk.Template.Child("selection")
+    selection: Gtk.SingleSelection = Gtk.Template.Child("selection")
 
     def __init__(self, presenter: Presenter, qview: YumexQueueView, **kwargs):
         super().__init__(**kwargs)
