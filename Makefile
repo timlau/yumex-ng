@@ -186,6 +186,6 @@ pytest-live:
 pytest-report:
 	pytest --cov --cov-report html
 
-pytest-gui: localbuild
+test-gui: localbuild
 	@python tests/guitest/main.py
 
