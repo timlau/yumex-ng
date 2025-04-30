@@ -143,19 +143,6 @@ transifex-get:
 	git add po/*
 	git commit -m "i18n: updated translations from transifex"
 
-# run unit tests
-run-tests:
-	pytest
-
-# Run live envrionment pytest
-run-tests-live:
-	pytest tests/dont_test_*.py -s -v
-
-# run unit tests and generate html coverage report
-run-test-report:
-	pytest --cov --cov-report html
-
-
 run-updater:
 	@systemctl --user stop yumex-updater.service
 	@$(MAKE) localbuild
@@ -179,12 +166,26 @@ memray-updater-live:
 	@-python3 -m memray run --live ./builddir/bin/yumex_updater_systray
 
 
-run-gui-test: localbuild
-	@python tests/guitest/main.py
-
 upstream_rpms: clean
 	@mkdir -p $(BUILDDIR)/SOURCES
 	@spectool -g -C $(BUILDDIR)/SOURCES -S yumex.spec
 	@rpmbuild $(RPMBUILD_OPTS) -ba yumex.spec
 	@echo "RPMS Build:"
 	@tree -P *.rpm -I *.src.rpm  $(BUILDDIR)/RPMS/noarch/
+
+
+# run unit tests
+pytest:
+	pytest
+
+# Run live envrionment pytest
+pytest-live:
+	pytest tests/dont_test_*.py -s -v
+
+# run unit tests and generate html coverage report
+pytest-report:
+	pytest --cov --cov-report html
+
+pytest-gui: localbuild
+	@python tests/guitest/main.py
+
