@@ -15,7 +15,7 @@ Source0:  %{url}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 BuildArch: noarch
 BuildRequires: python3-devel
 BuildRequires: meson
-BuildRequires: blueprint-compiler >= 0.4.0
+BuildRequires: blueprint-compiler >= 0.16.0
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 BuildRequires: libappstream-glib
