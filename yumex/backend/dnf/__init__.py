@@ -63,6 +63,7 @@ class YumexPackage(GObject.GObject):
         self._queued: bool = False
         self.queue_action: bool = False
         self.todo: PackageTodo = PackageTodo.NONE
+        self.calc_todo()
 
     @GObject.Property(type=bool, default=False)
     def queued(self) -> bool:
@@ -140,6 +141,20 @@ class YumexPackage(GObject.GObject):
             repo,
         )
         return ",".join([str(elem) for elem in nevra_r])
+
+    def calc_todo(self):
+        match self.state:
+            case PackageState.INSTALLED:
+                self.todo = PackageTodo.REMOVE
+            case PackageState.AVAILABLE:
+                self.todo = PackageTodo.INSTALL
+            case PackageState.UPDATE:
+                self.todo = PackageTodo.UPDATE
+            case PackageState.DOWNGRADE:
+                self.todo = PackageTodo.DOWNGRADE
+
+    def todo_str(self):
+        return PackageTodo(self.todo).name.lower()
 
 
 @dataclass

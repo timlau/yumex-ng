@@ -360,11 +360,13 @@ def test_package_info_update(backend):
 
 
 def test_package_depsolve(backend):
-    pkgs = backend.search("0ad")
+    pkgs = backend.search("0ad*.x86_64")
     assert isinstance(pkgs, list)
     assert len(pkgs) > 0
     pkg = pkgs[0]
     print()
+    print(pkg)
+    print("todo", pkg.todo_str())
     ypkgs = backend.depsolve([pkg])
     assert isinstance(ypkgs, list)
     assert len(ypkgs) > 0
