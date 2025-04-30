@@ -509,12 +509,14 @@ class YumexRootBackend:
             logger.debug("Denied RPM GPG key")
             self.client.confirm_key(key_id, False)
 
-    def check_for_downgrades(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
+    def check_for_installed(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
         """check for downgrades"""
         for pkg in pkgs:
             if pkg.name in self._installed_evr:
                 if pkg.evr < self._installed_evr[pkg.name]:
                     pkg.set_state(PackageState.DOWNGRADE)
+                if pkg.evr > self._installed_evr[pkg.name]:
+                    pkg.set_state(PackageState.UPDATE)
         return pkgs
 
     # Implement PackageBackend
@@ -542,7 +544,7 @@ class YumexRootBackend:
             txt = f"*{txt}*"
         result = self.client.package_list_fd(txt, **kw_args)
         if result:
-            pkgs = self.check_for_downgrades(self._get_yumex_packages(result))
+            pkgs = self.check_for_installed(self._get_yumex_packages(result))
             return pkgs
         else:
             return []
@@ -648,7 +650,7 @@ class YumexRootBackend:
                 ypkg.is_dep = True
                 dep_pkgs.append(ypkg)
                 logger.debug(f"Adding {ypkg} as dependency")
-        return self.check_for_downgrades(dep_pkgs)
+        return self.check_for_installed(dep_pkgs)
 
     # Helpers (PackageBackend)
 
