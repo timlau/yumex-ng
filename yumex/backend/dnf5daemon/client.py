@@ -74,8 +74,9 @@ class Dnf5DbusClient:
         self._connected = False
 
     @dbus_exception
-    def open_session(self, options={}):
+    def open_session(self, options=dbus.Dictionary({})):
         if not self._connected:
+            options["config"] = {"optional_metadata_types": "other"}
             logger.debug(f"DBUS: {self.iface_session.object_path}.open_session({options})")
             self.session = self.iface_session.open_session(options)
             if self.session:

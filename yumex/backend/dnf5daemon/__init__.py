@@ -727,7 +727,7 @@ class YumexRootBackend:
         return success, err_mesg
 
     def system_upgrade(self, mode, releasever):
-        self.reopen_session({"releasever": releasever})
+        self.reopen_session(dbus.Dictionary({"releasever": releasever}))
         options = dbus.Dictionary({"mode": "upgrade", "releasever": releasever})
         res, err = self.client.system_upgrade(options)
         return res, err
