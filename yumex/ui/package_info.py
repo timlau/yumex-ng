@@ -67,7 +67,7 @@ class YumexPackageInfo(Gtk.Box):
             case InfoType.DESCRIPTION:
                 # a string
                 return pkg_info
-            case InfoType.FILES | InfoType.PROVIDES | InfoType.REQUIRES:
+            case InfoType.FILES | InfoType.PROVIDES | InfoType.REQUIRES | InfoType.CHANGELOG:
                 # list of filename
                 return "\n".join(pkg_info)
             case InfoType.UPDATE_INFO:
