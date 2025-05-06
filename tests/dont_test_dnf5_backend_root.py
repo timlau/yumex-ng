@@ -318,6 +318,7 @@ def test_package_info_changelog(backend):
     print(result)
     assert isinstance(result, list)
     assert len(result) > 0
+    print(result[0])
 
 
 def test_package_info_files_0ad(backend):

@@ -593,10 +593,13 @@ class YumexRootBackend:
 
     def _get_changelog(self, pkg: YumexPackage):
         changelog = self._get_package_attribute(pkg, "changelogs")
-        print(changelog)
+        result = []
         if changelog:
-            return changelog
-        return []
+            for time_int, who, what in changelog:
+                timestamp = datetime.datetime.fromtimestamp(time_int)
+                time_str = timestamp.strftime("* %a %b %m %Y")
+                result.append(time_str + " " + who + "\n" + what)
+        return result
 
     def _get_provides(self, pkg: YumexPackage):
         provides = self._get_package_attribute(pkg, "provides")
