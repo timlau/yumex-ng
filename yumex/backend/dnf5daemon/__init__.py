@@ -393,7 +393,7 @@ class YumexRootBackend:
     def on_transaction_script_start(self, session, pkg, typ, *args):
         script_type = str(ScriptType(typ))
         logger.debug(f"SIGNAL : transaction_script_start : {pkg} ({script_type}) ({args})")
-        self.progress.set_subtitle(_("Running Scripts") + f" ({script_type}) : {pkg}")
+        self.progress.set_subtitle(_("Running Scriptlets") + f" ({script_type}) : {pkg}")
         self.progress.set_progress(0.0)
 
     def on_transaction_script_stop(self, session, pkg, *args):
