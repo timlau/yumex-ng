@@ -189,7 +189,7 @@ class Dnf5DbusClient:
             # wait for data
             polled_event = poller.poll(timeout)
             if not polled_event:
-                logger.error("Timeout reached.")
+                logger.error("Timeout reached. (_list_fd)")
                 break
 
             # we know there is only one fd registered in poller
