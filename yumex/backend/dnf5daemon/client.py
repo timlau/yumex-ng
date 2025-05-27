@@ -176,8 +176,8 @@ class Dnf5DbusClient:
         # prepare for polling
         poller = select.poll()
         poller.register(pipe_r, select.POLLIN)
-        # wait for data 10 secs at most
-        timeout = 10000
+        # wait for data 180 secs at most
+        timeout = 180000
         # 64k is a typical size of a pipe
         buffer_size = 65536
 
