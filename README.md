@@ -10,6 +10,8 @@ It tracks the development of gtk4, libadwaita and dnf5 close, so it is not at go
 
 Follow news in [Announcements](https://github.com/timlau/yumex-ng/discussions/categories/announcements)
 
+I you like Yum Extender, you can support my work by using the sponsor button on the top of the page.
+
 ## History
 This is the 3. generation of Yum Extender.
 - The first generation was working with yum back in the days.
