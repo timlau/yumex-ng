@@ -74,8 +74,9 @@ class Dnf5DbusClient:
         self._connected = False
 
     @dbus_exception
-    def open_session(self, options={}):
+    def open_session(self, options=dbus.Dictionary({})):
         if not self._connected:
+            options["config"] = {"optional_metadata_types": "other"}
             logger.debug(f"DBUS: {self.iface_session.object_path}.open_session({options})")
             self.session = self.iface_session.open_session(options)
             if self.session:
@@ -175,8 +176,8 @@ class Dnf5DbusClient:
         # prepare for polling
         poller = select.poll()
         poller.register(pipe_r, select.POLLIN)
-        # wait for data 10 secs at most
-        timeout = 10000
+        # wait for data 180 secs at most
+        timeout = 180000
         # 64k is a typical size of a pipe
         buffer_size = 65536
 
@@ -188,7 +189,7 @@ class Dnf5DbusClient:
             # wait for data
             polled_event = poller.poll(timeout)
             if not polled_event:
-                logger.error("Timeout reached.")
+                logger.error("Timeout reached. (_list_fd)")
                 break
 
             # we know there is only one fd registered in poller

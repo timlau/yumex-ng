@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-29 08:59+0200\n"
+"POT-Creation-Date: 2025-05-09 08:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: yumex/backend/flatpak/transaction.py:66
-#: yumex/backend/dnf5daemon/__init__.py:76 yumex/ui/flatpak_result.py:37
+#: yumex/backend/dnf5daemon/__init__.py:76
+#: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
 msgid "Installing"
-msgstr ""
-
-#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
-msgid "Uninstalling"
-msgstr ""
-
-#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:41
-msgid "Updating"
-msgstr ""
-
-#: yumex/backend/flatpak/transaction.py:182
-msgid "flatpak transaction failed"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:78
@@ -75,7 +63,7 @@ msgid "Verifying Packages"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:396
-msgid "Running Scripts"
+msgid "Running Scriptlets"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:434
@@ -86,28 +74,16 @@ msgstr ""
 msgid "Download Reposiory Information"
 msgstr ""
 
-#: yumex/ui/package_info.py:25
-msgid "Bugfix"
+#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
+msgid "Uninstalling"
 msgstr ""
 
-#: yumex/ui/package_info.py:26
-msgid "New Package"
+#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:41
+msgid "Updating"
 msgstr ""
 
-#: yumex/ui/package_info.py:27
-msgid "Security"
-msgstr ""
-
-#: yumex/ui/package_info.py:28
-msgid "Enhancement"
-msgstr ""
-
-#: yumex/ui/package_info.py:60
-msgid "no update information found"
-msgstr ""
-
-#: yumex/ui/package_info.py:91
-msgid "Undefined"
+#: yumex/backend/flatpak/transaction.py:182
+msgid "flatpak transaction failed"
 msgstr ""
 
 #: yumex/ui/flatpak_view.py:90
@@ -158,14 +134,6 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: yumex/ui/package_view.py:98
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/package_view.py:99
-msgid "This may take a little while"
-msgstr ""
-
 #: yumex/ui/transaction_result.py:104
 msgid "Packages for installation"
 msgstr ""
@@ -192,6 +160,38 @@ msgstr ""
 
 #: yumex/ui/transaction_result.py:118
 msgid "Packages for distribution synchronization"
+msgstr ""
+
+#: yumex/ui/package_info.py:26
+msgid "Bugfix"
+msgstr ""
+
+#: yumex/ui/package_info.py:27
+msgid "New Package"
+msgstr ""
+
+#: yumex/ui/package_info.py:28
+msgid "Security"
+msgstr ""
+
+#: yumex/ui/package_info.py:29
+msgid "Enhancement"
+msgstr ""
+
+#: yumex/ui/package_info.py:61
+msgid "no update information found"
+msgstr ""
+
+#: yumex/ui/package_info.py:93
+msgid "Undefined"
+msgstr ""
+
+#: yumex/ui/package_view.py:98
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/package_view.py:99
+msgid "This may take a little while"
 msgstr ""
 
 #: yumex/ui/window.py:200 yumex/ui/window.py:343
@@ -284,64 +284,8 @@ msgstr ""
 msgid "Bugzilla References"
 msgstr ""
 
-#: data/ui/package_settings.blp:13
-msgid "Package filter"
-msgstr ""
-
-#: data/ui/package_settings.blp:19
-msgid "Installed"
-msgstr ""
-
-#: data/ui/package_settings.blp:37
-msgid "Updates"
-msgstr ""
-
-#: data/ui/package_settings.blp:54
-msgid "All"
-msgstr ""
-
-#: data/ui/package_settings.blp:72 data/ui/window.blp:35
-msgid "Search"
-msgstr ""
-
-#: data/ui/package_settings.blp:91
-msgid "View Settings"
-msgstr ""
-
-#: data/ui/package_settings.blp:108
-msgid "Select what attribute to sort by"
-msgstr ""
-
-#: data/ui/package_settings.blp:124
-msgid "Select what package information to show"
-msgstr ""
-
-#: data/ui/package_settings.blp:132 data/ui/package_view.blp:21
+#: data/ui/package_view.blp:21 data/ui/package_settings.blp:132
 msgid "Name"
-msgstr ""
-
-#: data/ui/package_settings.blp:133
-msgid "Arch"
-msgstr ""
-
-#: data/ui/package_settings.blp:134 data/ui/package_view.blp:42
-msgid "Size"
-msgstr ""
-
-#: data/ui/package_settings.blp:135
-msgid "Repo"
-msgstr ""
-
-#: data/ui/package_settings.blp:142
-msgid "Description"
-msgstr ""
-
-#: data/ui/package_settings.blp:143
-msgid "Filelist"
-msgstr ""
-
-#: data/ui/package_settings.blp:144
-msgid "Update Info"
 msgstr ""
 
 #: data/ui/package_view.blp:28
@@ -350,6 +294,10 @@ msgstr ""
 
 #: data/ui/package_view.blp:35
 msgid "Arch."
+msgstr ""
+
+#: data/ui/package_view.blp:42 data/ui/package_settings.blp:134
+msgid "Size"
 msgstr ""
 
 #: data/ui/package_view.blp:49
@@ -366,14 +314,6 @@ msgstr ""
 
 #: data/ui/package_view.blp:107 data/ui/shortcuts.blp:67
 msgid "Deselect All"
-msgstr ""
-
-#: data/ui/queue_row.blp:21
-msgid "Added as a dependency"
-msgstr ""
-
-#: data/ui/queue_row.blp:47
-msgid "Remove item from queue"
 msgstr ""
 
 #: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
@@ -438,6 +378,14 @@ msgstr ""
 
 #: data/ui/preferences.blp:126
 msgid "Show Source/Debug Repositories"
+msgstr ""
+
+#: data/ui/queue_row.blp:21
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:47
+msgid "Remove item from queue"
 msgstr ""
 
 #: data/ui/flatpak_result.blp:16
@@ -594,6 +542,10 @@ msgstr ""
 msgid "Select Package filters"
 msgstr ""
 
+#: data/ui/window.blp:35 data/ui/package_settings.blp:72
+msgid "Search"
+msgstr ""
+
 #: data/ui/window.blp:48
 msgid "Package Action Menu"
 msgstr ""
@@ -735,6 +687,66 @@ msgstr ""
 msgid "Prepare transaction for apply on next boot."
 msgstr ""
 
+#: data/ui/package_settings.blp:13
+msgid "Package filter"
+msgstr ""
+
+#: data/ui/package_settings.blp:19
+msgid "Installed"
+msgstr ""
+
+#: data/ui/package_settings.blp:37
+msgid "Updates"
+msgstr ""
+
+#: data/ui/package_settings.blp:54
+msgid "All"
+msgstr ""
+
+#: data/ui/package_settings.blp:91
+msgid "View Settings"
+msgstr ""
+
+#: data/ui/package_settings.blp:108
+msgid "Select what attribute to sort by"
+msgstr ""
+
+#: data/ui/package_settings.blp:124
+msgid "Select what package information to show"
+msgstr ""
+
+#: data/ui/package_settings.blp:133
+msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:135
+msgid "Repo"
+msgstr ""
+
+#: data/ui/package_settings.blp:141
+msgid "Description"
+msgstr ""
+
+#: data/ui/package_settings.blp:142
+msgid "Filelist"
+msgstr ""
+
+#: data/ui/package_settings.blp:143
+msgid "Update Info"
+msgstr ""
+
+#: data/ui/package_settings.blp:144
+msgid "Provides"
+msgstr ""
+
+#: data/ui/package_settings.blp:145
+msgid "Requires"
+msgstr ""
+
+#: data/ui/package_settings.blp:146
+msgid "Changelog"
+msgstr ""
+
 #: data/ui/transaction_result.blp:16
 msgid "Transaction Result"
 msgstr ""
@@ -755,22 +767,22 @@ msgstr ""
 msgid "This transaction will be performed offline during reboot"
 msgstr ""
 
-#: data/dk.yumex.Yumex.desktop.in.in:3
-msgid "Install, update and remove applications"
-msgstr ""
-
-#: data/dk.yumex.Yumex.desktop.in.in:10
-#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
-#: data/dk.yumex.Yumex-rpm.desktop.in.in:10
-msgid "Software Installer"
-msgstr ""
-
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
 msgid "Yum Extender Flatpak Installer"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:3
 msgid "Install flatpak defined in .flatpakref"
+msgstr ""
+
+#: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
+#: data/dk.yumex.Yumex.desktop.in.in:10
+#: data/dk.yumex.Yumex-rpm.desktop.in.in:10
+msgid "Software Installer"
+msgstr ""
+
+#: data/dk.yumex.Yumex.desktop.in.in:3
+msgid "Install, update and remove applications"
 msgstr ""
 
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:2

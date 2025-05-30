@@ -21,7 +21,7 @@ from yumex.backend.dnf import YumexPackage
 from yumex.constants import ROOTDIR
 from yumex.ui import get_package_selection_tooltip
 from yumex.utils import RunAsync
-from yumex.utils.enums import PackageState, PackageTodo, Page
+from yumex.utils.enums import PackageTodo, Page
 from yumex.utils.storage import PackageStorage
 
 logger = logging.getLogger(__name__)
@@ -59,7 +59,6 @@ class YumexQueueView(Gtk.ListView):
         for pkg in pkgs:
             if pkg not in self.storage:
                 pkg.queue_action = True
-                pkg.todo = self.get_todo(pkg)
                 pkg.is_dep = False
                 pkg.queued = True
                 pkg.queue_action = False
@@ -101,7 +100,6 @@ class YumexQueueView(Gtk.ListView):
                 dep.is_dep = True
                 dep.queue_action = True
                 dep.queued = True
-                dep.todo = self.get_todo(dep)
                 self.storage.insert_sorted(dep, self.sort_by_state)
         self.selection.set_model(self.storage.get_storage())
         # send refresh signal, to refresh the package view
@@ -120,25 +118,6 @@ class YumexQueueView(Gtk.ListView):
 
     def find_by_nevra(self, nevra):
         return self.storage.find_by_nevra(nevra)
-
-    def get_todo(self, pkg: YumexPackage) -> PackageTodo:
-        """get todo action"""
-
-        logger.debug(f"get_todo: todo: {pkg.todo} state: {pkg.state} for {pkg}")
-        if pkg.todo != PackageTodo.NONE:
-            return pkg.todo
-        match pkg.state:
-            case PackageState.INSTALLED:
-                return PackageTodo.REMOVE
-            case PackageState.AVAILABLE:
-                return PackageTodo.INSTALL
-            case PackageState.UPDATE:
-                return PackageTodo.UPDATE
-            case PackageState.DOWNGRADE:
-                return PackageTodo.DOWNGRADE
-            case state:
-                logger.debug(f"get_todo: unknown state {state} for {pkg}")
-        return PackageTodo.NONE
 
     @Gtk.Template.Callback()
     def on_queue_setup(self, widget, item):

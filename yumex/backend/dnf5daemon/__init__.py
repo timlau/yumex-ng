@@ -393,7 +393,7 @@ class YumexRootBackend:
     def on_transaction_script_start(self, session, pkg, typ, *args):
         script_type = str(ScriptType(typ))
         logger.debug(f"SIGNAL : transaction_script_start : {pkg} ({script_type}) ({args})")
-        self.progress.set_subtitle(_("Running Scripts") + f" ({script_type}) : {pkg}")
+        self.progress.set_subtitle(_("Running Scriptlets") + f" ({script_type}) : {pkg}")
         self.progress.set_progress(0.0)
 
     def on_transaction_script_stop(self, session, pkg, *args):
@@ -509,12 +509,14 @@ class YumexRootBackend:
             logger.debug("Denied RPM GPG key")
             self.client.confirm_key(key_id, False)
 
-    def check_for_downgrades(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
+    def check_for_installed(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
         """check for downgrades"""
         for pkg in pkgs:
             if pkg.name in self._installed_evr:
                 if pkg.evr < self._installed_evr[pkg.name]:
                     pkg.set_state(PackageState.DOWNGRADE)
+                if pkg.evr > self._installed_evr[pkg.name]:
+                    pkg.set_state(PackageState.UPDATE)
         return pkgs
 
     # Implement PackageBackend
@@ -542,7 +544,7 @@ class YumexRootBackend:
             txt = f"*{txt}*"
         result = self.client.package_list_fd(txt, **kw_args)
         if result:
-            pkgs = self.check_for_downgrades(self._get_yumex_packages(result))
+            pkgs = self.check_for_installed(self._get_yumex_packages(result))
             return pkgs
         else:
             return []
@@ -591,10 +593,13 @@ class YumexRootBackend:
 
     def _get_changelog(self, pkg: YumexPackage):
         changelog = self._get_package_attribute(pkg, "changelogs")
-        print(changelog)
+        result = []
         if changelog:
-            return changelog
-        return []
+            for time_int, who, what in changelog:
+                timestamp = datetime.datetime.fromtimestamp(time_int)
+                time_str = timestamp.strftime("* %a %b %m %Y")
+                result.append(time_str + " " + who + "\n" + what)
+        return result
 
     def _get_provides(self, pkg: YumexPackage):
         provides = self._get_package_attribute(pkg, "provides")
@@ -648,7 +653,7 @@ class YumexRootBackend:
                 ypkg.is_dep = True
                 dep_pkgs.append(ypkg)
                 logger.debug(f"Adding {ypkg} as dependency")
-        return self.check_for_downgrades(dep_pkgs)
+        return self.check_for_installed(dep_pkgs)
 
     # Helpers (PackageBackend)
 
@@ -725,7 +730,7 @@ class YumexRootBackend:
         return success, err_mesg
 
     def system_upgrade(self, mode, releasever):
-        self.reopen_session({"releasever": releasever})
+        self.reopen_session(dbus.Dictionary({"releasever": releasever}))
         options = dbus.Dictionary({"mode": "upgrade", "releasever": releasever})
         res, err = self.client.system_upgrade(options)
         return res, err
