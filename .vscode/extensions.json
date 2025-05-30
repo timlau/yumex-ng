@@ -1,0 +1,28 @@
+{
+    "recommendations": [
+        "1dot75cm.rpmspec",
+        "aaron-bond.better-comments",
+        "andenetalexander.vim-cheatsheet",
+        "bierner.markdown-mermaid",
+        "charliermarsh.ruff",
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
+        "github.copilot",
+        "github.copilot-chat",
+        "gruntfuggly.todo-tree",
+        "kevinrose.vsc-python-indent",
+        "mesonbuild.mesonbuild",
+        "ms-python.debugpy",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vscode.makefile-tools",
+        "naumovs.color-highlight",
+        "oderwat.indent-rainbow",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "usernamehw.errorlens",
+        "vscodevim.vim",
+        "yzhang.markdown-all-in-one",
+    ]
+}
