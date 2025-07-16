@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 08:00+0200\n"
+"POT-Creation-Date: 2025-07-16 08:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgid "Download Packages"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:436
-msgid "Download Reposiory Information"
+msgid "Download Repository Information"
 msgstr ""
 
 #: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
@@ -162,30 +162,6 @@ msgstr ""
 msgid "Packages for distribution synchronization"
 msgstr ""
 
-#: yumex/ui/package_info.py:26
-msgid "Bugfix"
-msgstr ""
-
-#: yumex/ui/package_info.py:27
-msgid "New Package"
-msgstr ""
-
-#: yumex/ui/package_info.py:28
-msgid "Security"
-msgstr ""
-
-#: yumex/ui/package_info.py:29
-msgid "Enhancement"
-msgstr ""
-
-#: yumex/ui/package_info.py:61
-msgid "no update information found"
-msgstr ""
-
-#: yumex/ui/package_info.py:93
-msgid "Undefined"
-msgstr ""
-
 #: yumex/ui/package_view.py:98
 msgid "Loading Packages"
 msgstr ""
@@ -245,6 +221,30 @@ msgstr ""
 
 #: yumex/ui/window.py:584
 msgid "Offline transaction cancel failed"
+msgstr ""
+
+#: yumex/ui/package_info.py:26
+msgid "Bugfix"
+msgstr ""
+
+#: yumex/ui/package_info.py:27
+msgid "New Package"
+msgstr ""
+
+#: yumex/ui/package_info.py:28
+msgid "Security"
+msgstr ""
+
+#: yumex/ui/package_info.py:29
+msgid "Enhancement"
+msgstr ""
+
+#: yumex/ui/package_info.py:61
+msgid "no update information found"
+msgstr ""
+
+#: yumex/ui/package_info.py:93
+msgid "Undefined"
 msgstr ""
 
 #: yumex/main.py:179
@@ -316,6 +316,14 @@ msgstr ""
 msgid "Deselect All"
 msgstr ""
 
+#: data/ui/queue_row.blp:21
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:47
+msgid "Remove item from queue"
+msgstr ""
+
 #: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
 msgid "Preferences"
 msgstr ""
@@ -380,12 +388,61 @@ msgstr ""
 msgid "Show Source/Debug Repositories"
 msgstr ""
 
-#: data/ui/queue_row.blp:21
-msgid "Added as a dependency"
+#: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
+#: data/ui/window.blp:291
+msgid "Advanced Actions"
 msgstr ""
 
-#: data/ui/queue_row.blp:47
-msgid "Remove item from queue"
+#: data/ui/advanced_actions.blp:29
+msgid "Refresh DNF Cache"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:31
+msgid "Expire the DNF cache, so it will be refreshed from repositories."
+msgstr ""
+
+#: data/ui/advanced_actions.blp:35
+msgid "Distro-Sync System"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:37
+msgid "distro-sync all installed packages to the repo version."
+msgstr ""
+
+#: data/ui/advanced_actions.blp:41
+msgid "System Upgrade"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:45
+msgid "Fedora release"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:49
+msgid "Run System Upgrade"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:51
+msgid "Upgrade system to next release (offline)."
+msgstr ""
+
+#: data/ui/advanced_actions.blp:56
+msgid "Offline Transaction  is available"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:61
+msgid "Cancel Transaction"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:63
+msgid "Cancel and clear offline transaction."
+msgstr ""
+
+#: data/ui/advanced_actions.blp:71
+msgid "Apply on Reboot"
+msgstr ""
+
+#: data/ui/advanced_actions.blp:73
+msgid "Prepare transaction for apply on next boot."
 msgstr ""
 
 #: data/ui/flatpak_result.blp:16
@@ -533,6 +590,26 @@ msgstr ""
 msgid "Remove selected flatpak"
 msgstr ""
 
+#: data/ui/transaction_result.blp:16
+msgid "Transaction Result"
+msgstr ""
+
+#: data/ui/transaction_result.blp:90
+msgid "Problems in Transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:101
+msgid "Copy to clipboard"
+msgstr ""
+
+#: data/ui/transaction_result.blp:137
+msgid "Offline Transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:138
+msgid "This transaction will be performed offline during reboot"
+msgstr ""
+
 #: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:7
 msgid "Yum Extender"
@@ -610,11 +687,6 @@ msgstr ""
 msgid "_Preferences"
 msgstr ""
 
-#: data/ui/window.blp:291 data/ui/advanced_actions.blp:5
-#: data/ui/advanced_actions.blp:17
-msgid "Advanced Actions"
-msgstr ""
-
 #: data/ui/window.blp:296
 msgid "Keyboard Shortcuts"
 msgstr ""
@@ -633,58 +705,6 @@ msgstr ""
 
 #: data/ui/window.blp:320
 msgid "_Distro Sync"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:29
-msgid "Refresh DNF Cache"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:31
-msgid "Expire the DNF cache, so it will be refreshed from repositories."
-msgstr ""
-
-#: data/ui/advanced_actions.blp:35
-msgid "Distro-Sync System"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:37
-msgid "distro-sync all installed packages to the repo version."
-msgstr ""
-
-#: data/ui/advanced_actions.blp:41
-msgid "System Upgrade"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:45
-msgid "Fedora release"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:49
-msgid "Run System Upgrade"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:51
-msgid "Upgrade system to next release (offline)."
-msgstr ""
-
-#: data/ui/advanced_actions.blp:56
-msgid "Offline Transaction  is available"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:61
-msgid "Cancel Transaction"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:63
-msgid "Cancel and clear offline transaction."
-msgstr ""
-
-#: data/ui/advanced_actions.blp:71
-msgid "Apply on Reboot"
-msgstr ""
-
-#: data/ui/advanced_actions.blp:73
-msgid "Prepare transaction for apply on next boot."
 msgstr ""
 
 #: data/ui/package_settings.blp:13
@@ -745,26 +765,6 @@ msgstr ""
 
 #: data/ui/package_settings.blp:146
 msgid "Changelog"
-msgstr ""
-
-#: data/ui/transaction_result.blp:16
-msgid "Transaction Result"
-msgstr ""
-
-#: data/ui/transaction_result.blp:90
-msgid "Problems in Transaction"
-msgstr ""
-
-#: data/ui/transaction_result.blp:101
-msgid "Copy to clipboard"
-msgstr ""
-
-#: data/ui/transaction_result.blp:137
-msgid "Offline Transaction"
-msgstr ""
-
-#: data/ui/transaction_result.blp:138
-msgid "This transaction will be performed offline during reboot"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
