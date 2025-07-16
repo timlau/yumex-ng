@@ -14,6 +14,7 @@
 # Copyright (C) 2025 Tim Lauridsen
 
 import logging
+import time
 from pathlib import Path
 
 from gi.repository import Adw, Gio, Gtk  # type: ignore
@@ -425,9 +426,12 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # handle other page dependend widgets
         match self.active_page:
             case Page.PACKAGES | Page.QUEUE:
-                self.apply_button.set_sensitive(True)
+                if not self.queue_view.is_empty():
+                    self.apply_button.set_visible(True)
+                else:
+                    self.apply_button.set_visible(False)
             case Page.FLATPAKS:
-                self.apply_button.set_sensitive(False)
+                self.apply_button.set_visible(False)
 
     def _set_vidgets_visibility(self, visible):
         self.search_button.set_sensitive(visible)
@@ -624,6 +628,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         match page:
             case Page.PACKAGES:
                 self.packages_page.set_needs_attention(state)
+                self.apply_button.set_visible(state)
             case Page.FLATPAKS:
                 logger.debug(f"set_need_attetion (flatpak): state: {state} ")
                 self.flatpaks_page.set_needs_attention(state)
@@ -637,6 +642,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 pass
             case Page.QUEUE:
                 self.queue_page.set_needs_attention(state)
+                self.apply_button.set_visible(state)
 
     def select_page(self, page: Page):
         self.stack.set_visible_child_name(page)

@@ -39,10 +39,15 @@ class YumexQueueView(Gtk.ListView):
         self.presenter = presenter
         self.storage = PackageStorage()
         self.selection.set_model(self.storage.get_storage())
+        self.working = False
 
     def reset(self):
         self.selection.set_model(self.storage.clear())
         self.refresh_attention()
+
+    def is_empty(self):
+        """Check if queue is empty"""
+        return len(self.storage) == 0
 
     def refresh_attention(self):
         self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
@@ -63,6 +68,7 @@ class YumexQueueView(Gtk.ListView):
                 pkg.queued = True
                 pkg.queue_action = False
                 self.storage.insert_sorted(pkg, self.sort_by_state)
+        self.working = True
         RunAsync(self.presenter.depsolve, self.add_deps_to_queue, self.storage)
 
     def remove_package(self, pkg):
@@ -86,6 +92,7 @@ class YumexQueueView(Gtk.ListView):
         if len(to_keep):  # check if there something in the queue
             for pkg in to_keep:
                 self.storage.insert_sorted(pkg, self.sort_by_state)
+            self.working = True
             RunAsync(self.presenter.depsolve, self.add_deps_to_queue, store)
         else:
             self.add_deps_to_queue([])
@@ -103,6 +110,7 @@ class YumexQueueView(Gtk.ListView):
                 self.storage.insert_sorted(dep, self.sort_by_state)
         self.selection.set_model(self.storage.get_storage())
         # send refresh signal, to refresh the package view
+        self.working = False
         self.emit("refresh")
         self.refresh_attention()
 
