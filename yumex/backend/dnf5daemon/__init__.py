@@ -433,7 +433,7 @@ class YumexRootBackend:
                 case DownloadType.PACKAGE:
                     self.progress.set_title(_("Download Packages"))
                 case DownloadType.REPO:
-                    self.progress.set_title(_("Download Reposiory Information"))
+                    self.progress.set_title(_("Download Repository Information"))
                 case DownloadType.UNKNOWN:
                     logger.debug(f"unknown download type : {pkg.id}")
         self.progress.set_subtitle(_(f"Downloading : {pkg_name}"))
