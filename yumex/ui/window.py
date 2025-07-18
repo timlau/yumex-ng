@@ -14,7 +14,6 @@
 # Copyright (C) 2025 Tim Lauridsen
 
 import logging
-import time
 from pathlib import Path
 
 from gi.repository import Adw, Gio, Gtk  # type: ignore
@@ -71,7 +70,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.app = kwargs["application"]
+        self.app: Adw.Application = kwargs["application"]
         self.settings = Gio.Settings(APP_ID)
         self.search_settings = YumexSearchSettings()
         self.current_pkg_filer = None
@@ -597,6 +596,16 @@ class YumexMainWindow(Adw.ApplicationWindow):
             case Page.FLATPAKS:
                 self.flatpak_view.refresh_need_attention()
 
+    def _update_package_menu(self, pkg_filter: PackageFilter):
+        """Update the select menu item state based on the current package filter"""
+        logger.debug(f"Update select menu for filter: {pkg_filter}")
+        if pkg_filter == PackageFilter.UPDATES:
+            self.app.action_select_all.set_enabled(True)
+            self.app.action_deselect_all.set_enabled(True)
+        else:
+            self.app.action_select_all.set_enabled(False)
+            self.app.action_deselect_all.set_enabled(False)
+
     def on_package_filter_changed(self, widget, pkg_filter):
         logger.debug(f"SIGNAL: package filter changed : {pkg_filter}")
         # entry = self.search_bar.get_child()
@@ -606,6 +615,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.search_bar.set_search_mode(False)
         self.search_entry.delete_text(0, -1)
         self.package_view.get_packages(pkg_filter)
+        self._update_package_menu(pkg_filter)
 
     def on_info_type_changed(self, widget, info_type: str):
         info_type = InfoType(info_type)

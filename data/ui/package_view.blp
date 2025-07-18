@@ -14,7 +14,6 @@ template $YumexPackageView: Gtk.ColumnView {
   Gtk.ColumnViewColumn queued {
     factory: queued_factory;
     title: "✔";
-    header-menu: package_header;
   }
 
   Gtk.ColumnViewColumn names {
@@ -99,11 +98,4 @@ Gtk.SignalListItemFactory description_factory {
 Gtk.SingleSelection selection {
   autoselect: true;
   selection-changed => $on_selection_changed();
-}
-
-menu package_header {
-  section {
-    item (_("Select All"), "app.select_all")
-    item (_("Deselect All"), "app.deselect_all")
-  }
 }

@@ -79,8 +79,10 @@ class YumexApplication(Adw.Application):
         self.create_action("preferences", self.on_preferences, ["<Ctrl>comma"])
 
         # windows related actions
-        self.create_action("select_all", self.win.action_dispatch, ["<Ctrl>A"])
-        self.create_action("deselect_all", self.win.action_dispatch, ["<Shift><Ctrl>A"])
+        self.action_select_all = self.create_action("select_all", self.win.action_dispatch, ["<Ctrl>A"])
+        self.action_deselect_all = self.create_action("deselect_all", self.win.action_dispatch, ["<Shift><Ctrl>A"])
+        self.action_select_all.set_enabled(False)
+        self.action_deselect_all.set_enabled(False)
         self.create_action("sidebar", self.win.action_dispatch, ["F9"])
         self.create_action("clear_queue", self.win.action_dispatch)
         self.create_action("filter_installed", self.win.action_dispatch, ["<Alt>I"])
@@ -101,6 +103,7 @@ class YumexApplication(Adw.Application):
         self.create_action("downgrade", self.win.action_dispatch)
         self.create_action("reinstall", self.win.action_dispatch)
         self.create_action("distrosync", self.win.action_dispatch)
+        print(self.list_actions())
 
         # call a test function to test gui code, should not be enabled, if not testing
         if BUILD_TYPE == "debug" or self.args.debug:
@@ -150,6 +153,7 @@ class YumexApplication(Adw.Application):
         self.add_action(action)
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
+        return action
 
     def on_about(self, *_args) -> None:
         about = Adw.AboutDialog(
