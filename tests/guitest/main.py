@@ -28,8 +28,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    pkgdatadir = "/home/tim/udv/github/yumex-ng/builddir/data"
-    localedir = "/home/tim/udv/github/yumex-ng/builddir/share/locale"
+    pkgdatadir = "/home/tim/udv/github/yumex/builddir/data"
+    localedir = "/home/tim/udv/github/yumex/builddir/share/locale"
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     gettext.install("yumex", localedir)
@@ -38,12 +38,12 @@ if __name__ == "__main__":
     locale.textdomain("yumex")
 
     # In the local use case, use yumex module from the sourcetree
-    sys.path.insert(1, "/home/tim/udv/github/yumex-ng")
+    sys.path.insert(1, "/home/tim/udv/github/yumex")
 
     # In the local use case the installed schemas go in <builddir>/data
-    os.environ["XDG_DATA_DIRS"] = "/home/tim/udv/github/yumex-ng/builddir/share:" + os.environ.get("XDG_DATA_DIRS", "")
+    os.environ["XDG_DATA_DIRS"] = "/home/tim/udv/github/yumex/builddir/share:" + os.environ.get("XDG_DATA_DIRS", "")
 
-    pkgdatadir = "/home/tim/udv/github/yumex-ng/builddir/data"
+    pkgdatadir = "/home/tim/udv/github/yumex/builddir/data"
     resource = Gio.Resource.load(os.path.join(pkgdatadir, "yumex.gresource"))
     Gio.Resource._register(resource)
     main()
