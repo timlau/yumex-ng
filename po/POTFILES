@@ -20,16 +20,16 @@ yumex/ui/package_settings.py
 yumex/ui/flatpak_search.py
 yumex/ui/flatpak_view.py
 yumex/ui/preferences.py
-yumex/ui/__init__.py
 yumex/ui/advanced_actions.py
 yumex/ui/dialogs.py
 yumex/ui/progress.py
 yumex/ui/search_settings.py
 yumex/ui/transaction_result.py
-yumex/ui/package_view.py
-yumex/ui/window.py
 yumex/ui/package_info.py
 yumex/ui/queue_view.py
+yumex/ui/package_view.py
+yumex/ui/window.py
+yumex/ui/__init__.py
 yumex/utils/types.py
 yumex/utils/updater.py
 yumex/utils/exceptions.py
@@ -41,7 +41,6 @@ yumex/main.py
 data/ui/flatpak_row.blp
 data/ui/flatpak_view.blp
 data/ui/package_info.blp
-data/ui/package_view.blp
 data/ui/queue_row.blp
 data/ui/queue_view.blp
 data/ui/repository.blp
@@ -55,6 +54,7 @@ data/ui/shortcuts.blp
 data/ui/transaction_result.blp
 data/ui/window.blp
 data/ui/package_settings.blp
+data/ui/package_view.blp
 data/dk.yumex.Yumex-flatpakref.desktop.in.in
 data/dk.yumex.Yumex.desktop.in.in
 data/dk.yumex.Yumex-rpm.desktop.in.in
