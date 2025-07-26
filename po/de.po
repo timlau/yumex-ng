@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-16 08:47+0200\n"
+"POT-Creation-Date: 2025-07-26 17:07+0200\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Language-Team: German (https://app.transifex.com/timlau/teams/16939/de/)\n"
 "MIME-Version: 1.0\n"
@@ -94,30 +94,6 @@ msgstr ""
 msgid "Unused flatpaks were removed"
 msgstr ""
 
-#: yumex/ui/__init__.py:44
-msgid "Queued for deletion"
-msgstr ""
-
-#: yumex/ui/__init__.py:46
-msgid "Queued for installation"
-msgstr ""
-
-#: yumex/ui/__init__.py:48
-msgid "Queued for updating"
-msgstr ""
-
-#: yumex/ui/__init__.py:50
-msgid "Queued for reinstallation"
-msgstr ""
-
-#: yumex/ui/__init__.py:52
-msgid "Queued for downgrading"
-msgstr ""
-
-#: yumex/ui/__init__.py:54
-msgid "Queued for distribution synchronization"
-msgstr ""
-
 #: yumex/ui/dialogs.py:17
 msgid "Quit"
 msgstr ""
@@ -162,68 +138,6 @@ msgstr ""
 msgid "Packages for distribution synchronization"
 msgstr ""
 
-#: yumex/ui/package_view.py:98
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/package_view.py:99
-msgid "This may take a little while"
-msgstr ""
-
-#: yumex/ui/window.py:200 yumex/ui/window.py:343
-msgid "Transaction completed succesfully"
-msgstr ""
-
-#: yumex/ui/window.py:233
-msgid "Nothing to do in this transaction"
-msgstr ""
-
-#: yumex/ui/window.py:244
-msgid "Running Transaction"
-msgstr ""
-
-#: yumex/ui/window.py:286
-msgid "Running Flatpak Transaction"
-msgstr ""
-
-#: yumex/ui/window.py:523
-msgid "Offline transaction"
-msgstr ""
-
-#: yumex/ui/window.py:524
-msgid ""
-"Do you want to prepare the offline transaction to be applied on next reboot "
-"?"
-msgstr ""
-
-#: yumex/ui/window.py:530
-msgid "Offline trasaction prepared to be applied on next reboot"
-msgstr ""
-
-#: yumex/ui/window.py:533
-msgid "Offline transaction prepare failed"
-msgstr ""
-
-#: yumex/ui/window.py:551
-msgid "system upgrade target release must to larger than current release"
-msgstr ""
-
-#: yumex/ui/window.py:560
-msgid "Offline Transaction completed succesfully"
-msgstr ""
-
-#: yumex/ui/window.py:572
-msgid "Distro-Sync completed succesfully"
-msgstr ""
-
-#: yumex/ui/window.py:581
-msgid "Offline transaction cancelled"
-msgstr ""
-
-#: yumex/ui/window.py:584
-msgid "Offline transaction cancel failed"
-msgstr ""
-
 #: yumex/ui/package_info.py:26
 msgid "Bugfix"
 msgstr ""
@@ -248,16 +162,102 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: yumex/main.py:179
+#: yumex/ui/package_view.py:98
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/package_view.py:99
+msgid "This may take a little while"
+msgstr ""
+
+#: yumex/ui/window.py:200 yumex/ui/window.py:343
+msgid "Transaction completed succesfully"
+msgstr ""
+
+#: yumex/ui/window.py:233
+msgid "Nothing to do in this transaction"
+msgstr ""
+
+#: yumex/ui/window.py:244
+msgid "Running Transaction"
+msgstr ""
+
+#: yumex/ui/window.py:286
+msgid "Running Flatpak Transaction"
+msgstr ""
+
+#: yumex/ui/window.py:526
+msgid "Offline transaction"
+msgstr ""
+
+#: yumex/ui/window.py:527
+msgid ""
+"Do you want to prepare the offline transaction to be applied on next reboot "
+"?"
+msgstr ""
+
+#: yumex/ui/window.py:533
+msgid "Offline trasaction prepared to be applied on next reboot"
+msgstr ""
+
+#: yumex/ui/window.py:536
+msgid "Offline transaction prepare failed"
+msgstr ""
+
+#: yumex/ui/window.py:554
+msgid "system upgrade target release must to larger than current release"
+msgstr ""
+
+#: yumex/ui/window.py:563
+msgid "Offline Transaction completed succesfully"
+msgstr ""
+
+#: yumex/ui/window.py:575
+msgid "Distro-Sync completed succesfully"
+msgstr ""
+
+#: yumex/ui/window.py:584
+msgid "Offline transaction cancelled"
+msgstr ""
+
+#: yumex/ui/window.py:587
+msgid "Offline transaction cancel failed"
+msgstr ""
+
+#: yumex/ui/__init__.py:44
+msgid "Queued for deletion"
+msgstr ""
+
+#: yumex/ui/__init__.py:46
+msgid "Queued for installation"
+msgstr ""
+
+#: yumex/ui/__init__.py:48
+msgid "Queued for updating"
+msgstr ""
+
+#: yumex/ui/__init__.py:50
+msgid "Queued for reinstallation"
+msgstr ""
+
+#: yumex/ui/__init__.py:52
+msgid "Queued for downgrading"
+msgstr ""
+
+#: yumex/ui/__init__.py:54
+msgid "Queued for distribution synchronization"
+msgstr ""
+
+#: yumex/main.py:183
 msgid ""
 "Yum Extender is a Package management to install, update and remove packages"
 msgstr ""
 
-#: yumex/main.py:182
+#: yumex/main.py:186
 msgid "Special thanks to"
 msgstr ""
 
-#: yumex/main.py:211
+#: yumex/main.py:215
 msgid "Critical Error"
 msgstr ""
 
@@ -283,38 +283,6 @@ msgstr ""
 
 #: data/ui/package_info.blp:75
 msgid "Bugzilla References"
-msgstr ""
-
-#: data/ui/package_view.blp:21 data/ui/package_settings.blp:132
-msgid "Name"
-msgstr ""
-
-#: data/ui/package_view.blp:28
-msgid "Version"
-msgstr ""
-
-#: data/ui/package_view.blp:35
-msgid "Arch."
-msgstr ""
-
-#: data/ui/package_view.blp:42 data/ui/package_settings.blp:134
-msgid "Size"
-msgstr ""
-
-#: data/ui/package_view.blp:49
-msgid "Summary"
-msgstr ""
-
-#: data/ui/package_view.blp:56 data/ui/preferences.blp:118
-msgid "Repository"
-msgstr ""
-
-#: data/ui/package_view.blp:106 data/ui/shortcuts.blp:62
-msgid "Select All"
-msgstr ""
-
-#: data/ui/package_view.blp:107 data/ui/shortcuts.blp:67
-msgid "Deselect All"
 msgstr ""
 
 #: data/ui/queue_row.blp:21
@@ -377,6 +345,10 @@ msgstr ""
 msgid "Send Notification on updates"
 msgstr ""
 
+#: data/ui/preferences.blp:118 data/ui/package_view.blp:55
+msgid "Repository"
+msgstr ""
+
 #: data/ui/preferences.blp:122
 msgid "Repository Settings"
 msgstr ""
@@ -390,7 +362,7 @@ msgid "Show Source/Debug Repositories"
 msgstr ""
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
-#: data/ui/window.blp:291
+#: data/ui/window.blp:293
 msgid "Advanced Actions"
 msgstr ""
 
@@ -475,12 +447,8 @@ msgstr ""
 msgid "Active Remotes: "
 msgstr ""
 
-#: data/ui/search_settings.blp:5
+#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
 msgid "Search Settings"
-msgstr ""
-
-#: data/ui/search_settings.blp:14
-msgid "Seatch Settings"
 msgstr ""
 
 #: data/ui/search_settings.blp:17
@@ -545,6 +513,14 @@ msgstr ""
 
 #: data/ui/shortcuts.blp:57
 msgid "Toggled queued"
+msgstr ""
+
+#: data/ui/shortcuts.blp:62 data/ui/window.blp:329
+msgid "Select All"
+msgstr ""
+
+#: data/ui/shortcuts.blp:67 data/ui/window.blp:334
+msgid "Deselect All"
 msgstr ""
 
 #: data/ui/shortcuts.blp:72
@@ -632,79 +608,79 @@ msgstr ""
 msgid "Main Menu"
 msgstr ""
 
-#: data/ui/window.blp:73
+#: data/ui/window.blp:75
 msgid "Apply"
 msgstr ""
 
-#: data/ui/window.blp:77
+#: data/ui/window.blp:79
 msgid "Apply Package Actions"
 msgstr ""
 
-#: data/ui/window.blp:96
+#: data/ui/window.blp:98
 msgid "Package Name"
 msgstr ""
 
-#: data/ui/window.blp:121
+#: data/ui/window.blp:123
 msgid "Packages"
 msgstr ""
 
-#: data/ui/window.blp:168
+#: data/ui/window.blp:170
 msgid "Flatpaks"
 msgstr ""
 
-#: data/ui/window.blp:192
+#: data/ui/window.blp:194
 msgid "Update All Flatpaks (Apps & Runtimes)"
 msgstr ""
 
-#: data/ui/window.blp:198
+#: data/ui/window.blp:200
 msgid "search for new flatpak to install"
 msgstr ""
 
-#: data/ui/window.blp:204
+#: data/ui/window.blp:206
 msgid "uninstall selected flatpak"
 msgstr ""
 
-#: data/ui/window.blp:210
+#: data/ui/window.blp:212
 msgid "Remove unused flatpaks (runtimes etc.)"
 msgstr ""
 
-#: data/ui/window.blp:222
+#: data/ui/window.blp:224
 msgid "show/hide runtimes"
 msgstr ""
 
-#: data/ui/window.blp:232
+#: data/ui/window.blp:234
 msgid "Groups"
 msgstr ""
 
-#: data/ui/window.blp:243
+#: data/ui/window.blp:245
 msgid "Queue"
 msgstr ""
 
-#: data/ui/window.blp:269
+#: data/ui/window.blp:271
 msgid "Remove all from queue"
 msgstr ""
 
-#: data/ui/window.blp:286
+#: data/ui/window.blp:288
 msgid "_Preferences"
 msgstr ""
 
-#: data/ui/window.blp:296
+#: data/ui/window.blp:298
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: data/ui/window.blp:301
+#: data/ui/window.blp:303
 msgid "_About Yum Extender"
 msgstr ""
 
-#: data/ui/window.blp:310
+#: data/ui/window.blp:312
 msgid "_Downgrade"
 msgstr ""
 
-#: data/ui/window.blp:315
+#: data/ui/window.blp:317
 msgid "_Reinstall"
 msgstr ""
 
-#: data/ui/window.blp:320
+#: data/ui/window.blp:322
 msgid "_Distro Sync"
 msgstr ""
 
@@ -736,8 +712,16 @@ msgstr ""
 msgid "Select what package information to show"
 msgstr ""
 
+#: data/ui/package_settings.blp:132 data/ui/package_view.blp:20
+msgid "Name"
+msgstr ""
+
 #: data/ui/package_settings.blp:133
 msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:134 data/ui/package_view.blp:41
+msgid "Size"
 msgstr ""
 
 #: data/ui/package_settings.blp:135
@@ -766,6 +750,18 @@ msgstr ""
 
 #: data/ui/package_settings.blp:146
 msgid "Changelog"
+msgstr ""
+
+#: data/ui/package_view.blp:27
+msgid "Version"
+msgstr ""
+
+#: data/ui/package_view.blp:34
+msgid "Arch."
+msgstr ""
+
+#: data/ui/package_view.blp:48
+msgid "Summary"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
