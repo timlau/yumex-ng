@@ -55,7 +55,7 @@ def create_package(pkg) -> YumexPackage:
     else:
         vr = evr
         e = 0
-    v, r = vr.split("-")
+    v, r = vr.split("-",1 )
     state = PackageState.INSTALLED if pkg["is_installed"] else PackageState.AVAILABLE
     return YumexPackage(
         name=str(pkg["name"]),
