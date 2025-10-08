@@ -146,10 +146,11 @@ class YumexFlatpakSearch(Adw.Dialog):
         row: Row = item.get_child()
         pkg: AppStreamPackage = item.get_item().pkg
         version = pkg.version
+        developer = pkg.developer
         if version:
-            row.set_title(f"{pkg.name} - {version}")
+            row.set_title(f"{pkg.name} - {version} - {developer}" if developer else f"{pkg.name} - {version}")
         else:
-            row.set_title(f"{pkg.name}")
+            row.set_title(f"{pkg.name} - {developer}" if developer else pkg.name)
         summary = GLib.markup_escape_text(pkg.summary)
         row.set_subtitle(summary)
         row.set_tooltip_text(pkg.flatpak_bundle)

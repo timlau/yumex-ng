@@ -24,7 +24,7 @@ import gi
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
 
-from gi.repository import AppStream, Flatpak, Gio  # type: ignore # noqa: E402
+from gi.repository import AppStream, Flatpak, Gio, GLib  # type: ignore # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,11 @@ class AppStreamPackage:
                 version = release.get_version()
                 return version
         return None
+
+    @property
+    def developer(self) -> str:
+        developer = str(self.component.get_developer().get_name())
+        return GLib.markup_escape_text(developer) if developer else None
 
     def __str__(self) -> str:
         return f"{self.name} - {self.summary} ({self.flatpak_bundle})"
