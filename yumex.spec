@@ -2,7 +2,7 @@
 %global app_build release
 
 Name:     yumex
-Version:  5.3.2
+Version:  5.4.0
 Release:  %autorelease
 Summary:  Yum Extender graphical package management tool
 

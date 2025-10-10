@@ -39,7 +39,7 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="5.4.0" date="2025-04-24" type="devel">
+    <release version="5.4.0" date="2025-10-10" type="devel">
       <description>
         <p>Yum Extender 5.4.0 add many fixes and improvments </p>
         <ul>

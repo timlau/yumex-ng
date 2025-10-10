@@ -63,6 +63,7 @@ test-cleanup:
 show-vars:
 	@echo "GITDATE     : ${GITDATE}"
 	@echo "PACKAGER    : ${PACKAGER}"
+	@echo "VERSION     : ${VERSION}"
 
 #make a test release with the dnf5 backend
 test-release:
