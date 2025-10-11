@@ -103,7 +103,6 @@ class YumexApplication(Adw.Application):
         self.create_action("downgrade", self.win.action_dispatch)
         self.create_action("reinstall", self.win.action_dispatch)
         self.create_action("distrosync", self.win.action_dispatch)
-        print(self.list_actions())
 
         # call a test function to test gui code, should not be enabled, if not testing
         if BUILD_TYPE == "debug" or self.args.debug:
