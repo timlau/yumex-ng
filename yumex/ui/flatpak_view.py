@@ -65,38 +65,38 @@ class YumexFlatpakView(Gtk.ListView):
         self.presenter.set_needs_attention(Page.FLATPAKS, self.backend.number_of_updates())
 
     def get_icon_paths(self) -> list[str]:
-        """list of possible icon location for installed flatpaks"""
+        """List of possible icon location for installed flatpaks"""
         if "XDG_DATA_DIRS" in os.environ:
             return [f"{path}/icons/" for path in os.environ["XDG_DATA_DIRS"].split(":")]
         else:
             return []
 
     def find_icon(self, pkg: FlatpakPackage) -> str | None:
-        """find icon file for an installed flatpak"""
+        """Find icon file for an installed flatpak"""
         for path in self.icons_paths:
             if files := list(Path(f"{path}").rglob(f"{pkg.id}.*")):
                 return files[0].as_posix()
         return None
 
     def install_flatpakref(self, flatpakref: Path):
-        logger.debug(f"install flatpakref: {flatpakref}")
+        logger.debug(f"Install flatpakref: {flatpakref}")
         if self.do_transaction(self.backend.install_flatpakref, flatpakref):
             self.presenter.show_message(_(f"{flatpakref} was installed"), timeout=2)
 
     def update_all(self) -> None:
-        """update all flatpaks with pending updates"""
+        """Update all flatpaks with pending updates"""
 
         if self.do_transaction(self.backend.do_update_all):
-            self.presenter.show_message(_("flatpaks were updated"), timeout=2)
+            self.presenter.show_message(_("Flatpaks were updated"), timeout=2)
 
     def remove_unused(self) -> None:
-        """remove all unused flatpaks (runtimes etc)"""
+        """Remove all unused flatpaks (runtimes etc)"""
 
         if self.do_transaction(self.backend.do_remove_unused):
             self.presenter.show_message(_("Unused flatpaks were removed"), timeout=2)
 
     def update(self, pkg) -> None:
-        """update a flatpak"""
+        """Update a flatpak"""
 
         if self.do_transaction(self.backend.do_update, [pkg]):
             self.presenter.show_message(_(f"{pkg.id} is now updated"), timeout=2)
@@ -123,7 +123,7 @@ class YumexFlatpakView(Gtk.ListView):
                     self.presenter.show_message(f"{fp_id} is not found on {remote}")
 
     def remove(self, pkg=None) -> None:
-        """remove an flatpak"""
+        """Remove an flatpak"""
         selected = [pkg] if pkg else [self.selection.get_selected_item()]
         if self.do_transaction(self.backend.do_remove, selected):
             self.presenter.show_message(_(f"{selected[0].id} is now removed"), timeout=2)
@@ -166,7 +166,7 @@ class YumexFlatpakView(Gtk.ListView):
 
     @Gtk.Template.Callback()
     def on_row_bind(self, widget, item) -> None:
-        """bind row data to row widgets"""
+        """Bind row data to row widgets"""
         row = item.get_child()
         pkg: FlatpakPackage = item.get_item()
         row.pkg = pkg
