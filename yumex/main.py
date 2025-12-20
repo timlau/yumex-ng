@@ -15,8 +15,6 @@
 # Copyright (C) 2024 Tim Lauridsen
 #
 #
-
-
 import argparse
 import logging
 import sys
@@ -31,6 +29,7 @@ from yumex.ui.dialogs import error_dialog
 from yumex.ui.preferences import YumexPreferences
 from yumex.ui.window import YumexMainWindow
 from yumex.utils import setup_logging
+from yumex.utils.enums import PackageFilter
 from yumex.utils.exceptions import YumexException
 
 logger = logging.getLogger(__name__)
@@ -115,11 +114,11 @@ class YumexApplication(Adw.Application):
         elif self.args.rpmfile:
             self.win.install_rpmfile(self.args.rpmfile)
         elif self.args.update:
-            self.win.load_packages("updates")
+            self.win.load_packages(PackageFilter.UPDATES)
         elif self.args.flatpak:
             self.win.show_flatpak_view()
         else:
-            self.win.load_packages("installed")
+            self.win.load_packages(PackageFilter.INSTALLED)
 
     def do_command_line(self, args) -> Literal[0]:
         parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
@@ -130,7 +129,7 @@ class YumexApplication(Adw.Application):
         parser.add_argument("--flatpak", help="start on flatpak page", action="store_true")
         self.args = parser.parse_args(args.get_arguments()[1:])
         setup_logging(debug=self.args.debug)
-        global is_local
+        # global is_local
         logger.debug(f"Version:  {VERSION} ({BACKEND})")
         logger.debug(f"executable : {args.get_arguments()[0]}")
         logger.debug(f"commmand-line : {self.args}")

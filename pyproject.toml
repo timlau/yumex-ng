@@ -20,6 +20,8 @@ line-ending = "auto"
 select = ["E", "F"]
 ignore = ["F821", "E402"]
 
+[tool.ty.rules]
+unresolved-reference = "ignore"
 
 [tool.pyright]
 typeCheckingMode = "off"
