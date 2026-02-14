@@ -12,7 +12,7 @@ GIT_MASTER=main
 RPMBUILD_OPTS = -D '_topdir $(BUILDDIR)' -D 'packager $(PACKAGER)'
 CURDIR = ${shell pwd}
 BUILDDIR= $(CURDIR)/build
-COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-41-x86_64 -r fedora-41-aarch64 -r fedora-42-x86_64 -r fedora-42-aarch64 -r fedora-43-x86_64 -r fedora-43-aarch64
+COPR_REL_DNF5 = -r fedora-rawhide-x86_64 -r fedora-rawhide-aarch64 -r fedora-44-x86_64 -r fedora-44-aarch64 -r fedora-42-x86_64 -r fedora-42-aarch64 -r fedora-43-x86_64 -r fedora-43-aarch64
 
 all:
 	@echo "Nothing to do, use a specific target"
@@ -189,4 +189,3 @@ pytest-report:
 
 test-gui: localbuild
 	@python tests/guitest/main.py
-
