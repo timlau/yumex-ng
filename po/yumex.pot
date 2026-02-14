@@ -1,14 +1,14 @@
 # Yum Extender (yumex) POT file
-# Copyright (C) 2025 Tim Lauridsen
+# Copyright (C) 2026 Tim Lauridsen
 # This file is distributed under the GNU GPLv3 license.
-# Tim Lauridsen, 2025.
+# Tim Lauridsen, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 17:07+0200\n"
+"POT-Creation-Date: 2026-02-14 09:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgid "Building Transaction"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:370
-#: yumex/backend/dnf5daemon/__init__.py:479 yumex/ui/window.py:242
+#: yumex/backend/dnf5daemon/__init__.py:479 yumex/ui/window.py:243
 msgid "Building Offline Transaction"
 msgstr ""
 
@@ -86,12 +86,41 @@ msgstr ""
 msgid "flatpak transaction failed"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:90
-msgid "flatpaks were updated"
+#: yumex/main.py:181
+msgid ""
+"Yum Extender is a Package management to install, update and remove packages"
 msgstr ""
 
-#: yumex/ui/flatpak_view.py:96
-msgid "Unused flatpaks were removed"
+#: yumex/main.py:184
+msgid "Special thanks to"
+msgstr ""
+
+#: yumex/main.py:213
+msgid "Critical Error"
+msgstr ""
+
+#: yumex/ui/__init__.py:44
+msgid "Queued for deletion"
+msgstr ""
+
+#: yumex/ui/__init__.py:46
+msgid "Queued for installation"
+msgstr ""
+
+#: yumex/ui/__init__.py:48
+msgid "Queued for updating"
+msgstr ""
+
+#: yumex/ui/__init__.py:50
+msgid "Queued for reinstallation"
+msgstr ""
+
+#: yumex/ui/__init__.py:52
+msgid "Queued for downgrading"
+msgstr ""
+
+#: yumex/ui/__init__.py:54
+msgid "Queued for distribution synchronization"
 msgstr ""
 
 #: yumex/ui/dialogs.py:17
@@ -110,32 +139,12 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:104
-msgid "Packages for installation"
+#: yumex/ui/flatpak_view.py:90
+msgid "Flatpaks were updated"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:106
-msgid "Packages for deletion"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:108 yumex/ui/transaction_result.py:110
-msgid "Packages for updating"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:112
-msgid "Skipped Packages"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:114
-msgid "Packages for downgrading"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:116
-msgid "Packages for re-installation"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:118
-msgid "Packages for distribution synchronization"
+#: yumex/ui/flatpak_view.py:96
+msgid "Unused flatpaks were removed"
 msgstr ""
 
 #: yumex/ui/package_info.py:26
@@ -170,194 +179,85 @@ msgstr ""
 msgid "This may take a little while"
 msgstr ""
 
-#: yumex/ui/window.py:200 yumex/ui/window.py:343
+#: yumex/ui/transaction_result.py:119
+msgid "Packages for installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:121
+msgid "Packages for deletion"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:123 yumex/ui/transaction_result.py:125
+msgid "Packages for updating"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:127
+msgid "Skipped Packages"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:129
+msgid "Packages for downgrading"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:131
+msgid "Packages for re-installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:133
+msgid "Packages for distribution synchronization"
+msgstr ""
+
+#: yumex/ui/window.py:200 yumex/ui/window.py:344
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:233
+#: yumex/ui/window.py:234
 msgid "Nothing to do in this transaction"
 msgstr ""
 
-#: yumex/ui/window.py:244
+#: yumex/ui/window.py:245
 msgid "Running Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:286
+#: yumex/ui/window.py:287
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:526
+#: yumex/ui/window.py:527
 msgid "Offline transaction"
 msgstr ""
 
-#: yumex/ui/window.py:527
+#: yumex/ui/window.py:528
 msgid ""
 "Do you want to prepare the offline transaction to be applied on next reboot ?"
 msgstr ""
 
-#: yumex/ui/window.py:533
+#: yumex/ui/window.py:534
 msgid "Offline trasaction prepared to be applied on next reboot"
 msgstr ""
 
-#: yumex/ui/window.py:536
+#: yumex/ui/window.py:537
 msgid "Offline transaction prepare failed"
 msgstr ""
 
-#: yumex/ui/window.py:554
+#: yumex/ui/window.py:555
 msgid "system upgrade target release must to larger than current release"
 msgstr ""
 
-#: yumex/ui/window.py:563
+#: yumex/ui/window.py:564
 msgid "Offline Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:575
+#: yumex/ui/window.py:576
 msgid "Distro-Sync completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:584
+#: yumex/ui/window.py:585
 msgid "Offline transaction cancelled"
 msgstr ""
 
-#: yumex/ui/window.py:587
+#: yumex/ui/window.py:588
 msgid "Offline transaction cancel failed"
-msgstr ""
-
-#: yumex/ui/__init__.py:44
-msgid "Queued for deletion"
-msgstr ""
-
-#: yumex/ui/__init__.py:46
-msgid "Queued for installation"
-msgstr ""
-
-#: yumex/ui/__init__.py:48
-msgid "Queued for updating"
-msgstr ""
-
-#: yumex/ui/__init__.py:50
-msgid "Queued for reinstallation"
-msgstr ""
-
-#: yumex/ui/__init__.py:52
-msgid "Queued for downgrading"
-msgstr ""
-
-#: yumex/ui/__init__.py:54
-msgid "Queued for distribution synchronization"
-msgstr ""
-
-#: yumex/main.py:183
-msgid ""
-"Yum Extender is a Package management to install, update and remove packages"
-msgstr ""
-
-#: yumex/main.py:186
-msgid "Special thanks to"
-msgstr ""
-
-#: yumex/main.py:215
-msgid "Critical Error"
-msgstr ""
-
-#: data/ui/flatpak_row.blp:50
-msgid "Update is available"
-msgstr ""
-
-#: data/ui/flatpak_row.blp:63
-msgid "Uninstall flatpak"
-msgstr ""
-
-#: data/ui/package_info.blp:24
-msgid "Advisory ID"
-msgstr ""
-
-#: data/ui/package_info.blp:37
-msgid "Advisory Type"
-msgstr ""
-
-#: data/ui/package_info.blp:50
-msgid "Advisory Issued"
-msgstr ""
-
-#: data/ui/package_info.blp:75
-msgid "Bugzilla References"
-msgstr ""
-
-#: data/ui/queue_row.blp:21
-msgid "Added as a dependency"
-msgstr ""
-
-#: data/ui/queue_row.blp:47
-msgid "Remove item from queue"
-msgstr ""
-
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
-msgid "Preferences"
-msgstr ""
-
-#: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
-msgid "Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:14
-msgid "Flatpak Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:17
-msgid "Default Location"
-msgstr ""
-
-#: data/ui/preferences.blp:23
-msgid "Default Remote"
-msgstr ""
-
-#: data/ui/preferences.blp:29
-msgid "Metadata Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:32
-msgid "Min. Refresh interval (minutes)"
-msgstr ""
-
-#: data/ui/preferences.blp:47
-msgid "Updater Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:50
-msgid "Custom System Updater (path)"
-msgstr ""
-
-#: data/ui/preferences.blp:65
-msgid "Check updates interval (minutes)"
-msgstr ""
-
-#: data/ui/preferences.blp:79
-msgid "Show systray icon on updates"
-msgstr ""
-
-#: data/ui/preferences.blp:91
-msgid "Use dark systray icon"
-msgstr ""
-
-#: data/ui/preferences.blp:104
-msgid "Send Notification on updates"
-msgstr ""
-
-#: data/ui/preferences.blp:118 data/ui/package_view.blp:55
-msgid "Repository"
-msgstr ""
-
-#: data/ui/preferences.blp:122
-msgid "Repository Settings"
-msgstr ""
-
-#: data/ui/preferences.blp:123
-msgid "The available and enabled repositories"
-msgstr ""
-
-#: data/ui/preferences.blp:126
-msgid "Show Source/Debug Repositories"
 msgstr ""
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
@@ -430,6 +330,14 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
+#: data/ui/flatpak_row.blp:50
+msgid "Update is available"
+msgstr ""
+
+#: data/ui/flatpak_row.blp:63
+msgid "Uninstall flatpak"
+msgstr ""
+
 #: data/ui/flatpak_search.blp:16
 msgid "Search Flatpaks"
 msgstr ""
@@ -444,6 +352,182 @@ msgstr ""
 
 #: data/ui/flatpak_search.blp:111
 msgid "Active Remotes: "
+msgstr ""
+
+#: data/ui/package_info.blp:24
+msgid "Advisory ID"
+msgstr ""
+
+#: data/ui/package_info.blp:37
+msgid "Advisory Type"
+msgstr ""
+
+#: data/ui/package_info.blp:50
+msgid "Advisory Issued"
+msgstr ""
+
+#: data/ui/package_info.blp:75
+msgid "Bugzilla References"
+msgstr ""
+
+#: data/ui/package_settings.blp:13
+msgid "Package filter"
+msgstr ""
+
+#: data/ui/package_settings.blp:19
+msgid "Installed"
+msgstr ""
+
+#: data/ui/package_settings.blp:37
+msgid "Updates"
+msgstr ""
+
+#: data/ui/package_settings.blp:54
+msgid "All"
+msgstr ""
+
+#: data/ui/package_settings.blp:72 data/ui/window.blp:35
+msgid "Search"
+msgstr ""
+
+#: data/ui/package_settings.blp:91
+msgid "View Settings"
+msgstr ""
+
+#: data/ui/package_settings.blp:108
+msgid "Select what attribute to sort by"
+msgstr ""
+
+#: data/ui/package_settings.blp:124
+msgid "Select what package information to show"
+msgstr ""
+
+#: data/ui/package_settings.blp:132 data/ui/package_view.blp:20
+msgid "Name"
+msgstr ""
+
+#: data/ui/package_settings.blp:133
+msgid "Arch"
+msgstr ""
+
+#: data/ui/package_settings.blp:134 data/ui/package_view.blp:41
+msgid "Size"
+msgstr ""
+
+#: data/ui/package_settings.blp:135
+msgid "Repo"
+msgstr ""
+
+#: data/ui/package_settings.blp:141
+msgid "Description"
+msgstr ""
+
+#: data/ui/package_settings.blp:142
+msgid "Filelist"
+msgstr ""
+
+#: data/ui/package_settings.blp:143
+msgid "Update Info"
+msgstr ""
+
+#: data/ui/package_settings.blp:144
+msgid "Provides"
+msgstr ""
+
+#: data/ui/package_settings.blp:145
+msgid "Requires"
+msgstr ""
+
+#: data/ui/package_settings.blp:146
+msgid "Changelog"
+msgstr ""
+
+#: data/ui/package_view.blp:27
+msgid "Version"
+msgstr ""
+
+#: data/ui/package_view.blp:34
+msgid "Arch."
+msgstr ""
+
+#: data/ui/package_view.blp:48
+msgid "Summary"
+msgstr ""
+
+#: data/ui/package_view.blp:55 data/ui/preferences.blp:118
+msgid "Repository"
+msgstr ""
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
+msgid "Preferences"
+msgstr ""
+
+#: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
+msgid "Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:14
+msgid "Flatpak Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:17
+msgid "Default Location"
+msgstr ""
+
+#: data/ui/preferences.blp:23
+msgid "Default Remote"
+msgstr ""
+
+#: data/ui/preferences.blp:29
+msgid "Metadata Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:32
+msgid "Min. Refresh interval (minutes)"
+msgstr ""
+
+#: data/ui/preferences.blp:47
+msgid "Updater Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:50
+msgid "Custom System Updater (path)"
+msgstr ""
+
+#: data/ui/preferences.blp:65
+msgid "Check updates interval (minutes)"
+msgstr ""
+
+#: data/ui/preferences.blp:79
+msgid "Show systray icon on updates"
+msgstr ""
+
+#: data/ui/preferences.blp:91
+msgid "Use dark systray icon"
+msgstr ""
+
+#: data/ui/preferences.blp:104
+msgid "Send Notification on updates"
+msgstr ""
+
+#: data/ui/preferences.blp:122
+msgid "Repository Settings"
+msgstr ""
+
+#: data/ui/preferences.blp:123
+msgid "The available and enabled repositories"
+msgstr ""
+
+#: data/ui/preferences.blp:126
+msgid "Show Source/Debug Repositories"
+msgstr ""
+
+#: data/ui/queue_row.blp:21
+msgid "Added as a dependency"
+msgstr ""
+
+#: data/ui/queue_row.blp:47
+msgid "Remove item from queue"
 msgstr ""
 
 #: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
@@ -578,11 +662,15 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
-#: data/ui/transaction_result.blp:137
+#: data/ui/transaction_result.blp:136
+msgid "Install Size"
+msgstr ""
+
+#: data/ui/transaction_result.blp:140
 msgid "Offline Transaction"
 msgstr ""
 
-#: data/ui/transaction_result.blp:138
+#: data/ui/transaction_result.blp:141
 msgid "This transaction will be performed offline during reboot"
 msgstr ""
 
@@ -593,10 +681,6 @@ msgstr ""
 
 #: data/ui/window.blp:29
 msgid "Select Package filters"
-msgstr ""
-
-#: data/ui/window.blp:35 data/ui/package_settings.blp:72
-msgid "Search"
 msgstr ""
 
 #: data/ui/window.blp:48
@@ -683,86 +767,6 @@ msgstr ""
 msgid "_Distro Sync"
 msgstr ""
 
-#: data/ui/package_settings.blp:13
-msgid "Package filter"
-msgstr ""
-
-#: data/ui/package_settings.blp:19
-msgid "Installed"
-msgstr ""
-
-#: data/ui/package_settings.blp:37
-msgid "Updates"
-msgstr ""
-
-#: data/ui/package_settings.blp:54
-msgid "All"
-msgstr ""
-
-#: data/ui/package_settings.blp:91
-msgid "View Settings"
-msgstr ""
-
-#: data/ui/package_settings.blp:108
-msgid "Select what attribute to sort by"
-msgstr ""
-
-#: data/ui/package_settings.blp:124
-msgid "Select what package information to show"
-msgstr ""
-
-#: data/ui/package_settings.blp:132 data/ui/package_view.blp:20
-msgid "Name"
-msgstr ""
-
-#: data/ui/package_settings.blp:133
-msgid "Arch"
-msgstr ""
-
-#: data/ui/package_settings.blp:134 data/ui/package_view.blp:41
-msgid "Size"
-msgstr ""
-
-#: data/ui/package_settings.blp:135
-msgid "Repo"
-msgstr ""
-
-#: data/ui/package_settings.blp:141
-msgid "Description"
-msgstr ""
-
-#: data/ui/package_settings.blp:142
-msgid "Filelist"
-msgstr ""
-
-#: data/ui/package_settings.blp:143
-msgid "Update Info"
-msgstr ""
-
-#: data/ui/package_settings.blp:144
-msgid "Provides"
-msgstr ""
-
-#: data/ui/package_settings.blp:145
-msgid "Requires"
-msgstr ""
-
-#: data/ui/package_settings.blp:146
-msgid "Changelog"
-msgstr ""
-
-#: data/ui/package_view.blp:27
-msgid "Version"
-msgstr ""
-
-#: data/ui/package_view.blp:34
-msgid "Arch."
-msgstr ""
-
-#: data/ui/package_view.blp:48
-msgid "Summary"
-msgstr ""
-
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
 msgid "Yum Extender Flatpak Installer"
 msgstr ""
@@ -772,13 +776,9 @@ msgid "Install flatpak defined in .flatpakref"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
-#: data/dk.yumex.Yumex.desktop.in.in:10
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:10
+#: data/dk.yumex.Yumex.desktop.in.in:10
 msgid "Software Installer"
-msgstr ""
-
-#: data/dk.yumex.Yumex.desktop.in.in:3
-msgid "Install, update and remove applications"
 msgstr ""
 
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:2
@@ -787,6 +787,10 @@ msgstr ""
 
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:3
 msgid "Install a .rpm file"
+msgstr ""
+
+#: data/dk.yumex.Yumex.desktop.in.in:3
+msgid "Install, update and remove applications"
 msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:8
