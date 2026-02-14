@@ -37,6 +37,7 @@ class YumexTransactionResult(Adw.Dialog):
     confirm_button = Gtk.Template.Child("confirm")
     cancel_button = Gtk.Template.Child("cancel")
     copy_button = Gtk.Template.Child("copy")
+    total_size: Adw.SwitchRow = Gtk.Template.Child()
     offline: Adw.SwitchRow = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
@@ -89,6 +90,20 @@ class YumexTransactionResult(Adw.Dialog):
             childen = [ResultElem(result_elem=(name, repo, size)) for (name, repo), size in result_dict[key]]
             elem = ResultElem(title=self._get_title(key), children=childen)
             self.store.append(elem)
+
+    def get_total_size(self, result_dict) -> int:
+        total_size = 0
+        for key in result_dict:
+            # if key not in ["install","upgrade"]:
+                # continue
+            for (name, repo), size in result_dict[key]:
+                total_size += size
+        return total_size
+
+    def set_total_size(self, result_dict: dict):
+        total_size: int = self.get_total_size(result_dict)
+        logger.debug(f"total size : {format_number(total_size)}")
+        self.total_size.set_subtitle(format_number(total_size))
 
     def add_tree_node(self, item):
         if not item.children:

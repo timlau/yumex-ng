@@ -132,7 +132,10 @@ template $YumexTransactionResult: Adw.Dialog {
           }
         }
       }
-
+      Adw.ActionRow total_size {
+        title: _("Install Size");
+        subtitle: "0 Mb";
+      }
       Adw.SwitchRow offline {
         title: _("Offline Transaction");
         subtitle: _("This transaction will be performed offline during reboot");

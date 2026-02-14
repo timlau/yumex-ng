@@ -33,7 +33,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.search_settings import YumexSearchSettings
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release
+from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release,format_number
 from yumex.utils.enums import InfoType, PackageFilter, Page, SortType, TransactionCommand
 from yumex.utils.updater import sync_updates
 
@@ -227,6 +227,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             if opts.offline:  # force offline transaction
                 transaction_result.set_offline(True)
             transaction_result.show_result(result.data)
+            transaction_result.set_total_size(result.data)
             if result.problems:
                 transaction_result.set_problems(result.problems)
             if not result.data and not result.problems:
