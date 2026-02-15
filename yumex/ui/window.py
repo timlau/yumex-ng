@@ -13,10 +13,12 @@
 #
 # Copyright (C) 2025 Tim Lauridsen
 
+from yumex.backend.dnf5daemon import YumexPackageBackend
+
 import logging
 from pathlib import Path
 
-from gi.repository import Adw, Gio, Gtk  # type: ignore
+from gi.repository import Adw, Gio, Gtk
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import TransactionOptions, YumexPackage
@@ -33,7 +35,7 @@ from yumex.ui.progress import YumexProgress
 from yumex.ui.queue_view import YumexQueueView
 from yumex.ui.search_settings import YumexSearchSettings
 from yumex.ui.transaction_result import YumexTransactionResult
-from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release,format_number
+from yumex.utils import BUILD_TYPE, RunAsync, get_distro_release
 from yumex.utils.enums import InfoType, PackageFilter, Page, SortType, TransactionCommand
 from yumex.utils.updater import sync_updates
 
@@ -70,8 +72,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.app: Adw.Application = kwargs["application"]
-        self.settings = Gio.Settings(APP_ID)
+        self.app = kwargs["application"]
+        self.settings = Gio.Settings(APP_ID)  # ty:ignore[invalid-argument-type]
         self.search_settings = YumexSearchSettings()
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
@@ -85,7 +87,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.connect("unrealize", self.on_window_close)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
-        self.presenter = YumexPresenter(self)
+        self.presenter:YumexPresenter = YumexPresenter(self)
         # Setup Advanced actions dialog
         self.advanced_actions = YumexAdvancedActions(self)
         self.advanced_actions.connect("action", self.on_advanced_actions)
@@ -101,8 +103,8 @@ class YumexMainWindow(Adw.ApplicationWindow):
         win_size = self.get_default_size()
 
         # Save windows size
-        self.settings.set_int("window-width", win_size.width)
-        self.settings.set_int("window-height", win_size.height)
+        self.settings.set_int("window-width", win_size.width)  # ty:ignore[unresolved-attribute]
+        self.settings.set_int("window-height", win_size.height)  # ty:ignore[unresolved-attribute]
 
         # Save coloumn widths
         for setting in PACKAGE_COLUMNS:
@@ -202,7 +204,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
             self.reset_all()
 
     def show_flatpak_view(self):
-        self.load_packages("installed")
+        self.load_packages(PackageFilter.INSTALLED)
         self.select_page(Page.FLATPAKS)
 
     def load_packages(self, pkg_filter: PackageFilter):
@@ -217,7 +219,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
-        backend = self.presenter.package_backend
+        backend:YumexPackageBackend = self.presenter.package_backend
         # build the transaction
         result: TransactionResult = backend.build_transaction(queued, opts)
         self.progress.hide()
@@ -232,7 +234,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                 transaction_result.set_problems(result.problems)
             if not result.data and not result.problems:
                 transaction_result.show_errors(_("Nothing to do in this transaction"))
-            transaction_result.show(self)
+            transaction_result.show_windows(self)
             if transaction_result.is_offline:
                 opts.offline = True
             if transaction_result.confirm:
@@ -246,31 +248,19 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     result: TransactionResult = backend.run_transaction(opts)
                     if result.completed:
                         return True
-                    if result.key_install and result.key_values:
-                        self.progress.hide()
-                        ok = self.confirm_gpg_import(result.key_values)
-                        if ok:
-                            logger.debug("Re-run transaction and import GPG keys")
-                            # tell the backend to import this gpg key in next run
-                            backend.do_gpg_import()
-                            # rebuild the transaction again, before re-run
-                            backend.build_transaction(queued, opts)
-                            continue
-                        else:
-                            return True
                     else:
                         break
         if result.error:
             self.progress.hide()
             transaction_result = YumexTransactionResult()
             transaction_result.show_errors(result.error)
-            transaction_result.show(self)
+            transaction_result.show_windows(self)
 
             # self.show_message(result.error)
         return False
 
     def confirm_gpg_import(self, key_values):
-        dialog = GPGDialog(self, key_values)
+        dialog = GPGDialog(self, key_values)  # ty:ignore[invalid-argument-type]
         dialog.show()
         logger.debug(f"Install key: {dialog.install_key}")
         return dialog.install_key
@@ -368,8 +358,9 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # if self.package_settings.current_pkg_filter == PackageFilter.SEARCH:
         logger.debug("Reset search")
         # GLib.idle_add(self.load_packages, self._last_filter)
-        self.load_packages(self._last_filter)
-        self._last_filter = None
+        if self._last_filter:
+            self.load_packages(self._last_filter)
+        self._last_filter:PackageFilter| None = None
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
@@ -526,7 +517,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         logger.debug("offline transaction on reboot prepare")
         title = _("Offline transaction")
         msg = _("Do you want to prepare the offline transaction to be applied on next reboot ?")
-        dialog = YesNoDialog(self, msg, title)
+        dialog = YesNoDialog(self, msg, title)  # ty:ignore[invalid-argument-type]
         dialog.show()
         if dialog.answer:
             rc = self.presenter.reboot_and_install()

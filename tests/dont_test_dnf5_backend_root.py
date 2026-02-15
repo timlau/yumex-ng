@@ -14,10 +14,9 @@ to excute the test
 
 from dataclasses import fields
 
-import pytest
 
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.dnf5daemon import UpdateInfo, YumexRootBackend, create_package
+from yumex.backend.dnf5daemon import UpdateInfo, YumexPackageBackend, create_package
 from yumex.utils import setup_logging
 from yumex.utils.enums import InfoType, PackageFilter, PackageState
 from yumex.utils.exceptions import YumexException
@@ -35,7 +34,7 @@ def presenter():
 
 @pytest.fixture
 def backend(presenter):
-    backend = YumexRootBackend(presenter=presenter)
+    backend = YumexPackageBackend(presenter=presenter)
     yield backend
     backend.close()
     del backend
@@ -84,10 +83,10 @@ def yumex_package() -> YumexPackage:
 
 def test_setup(backend):
     """Test we can create and dnf backend instance"""
-    assert isinstance(backend, YumexRootBackend)
+    assert isinstance(backend, YumexPackageBackend)
 
 
-def test_installed(backend: YumexRootBackend):
+def test_installed(backend: YumexPackageBackend):
     installed = backend.installed
     assert isinstance(installed, list)
     assert len(installed) > 0
@@ -99,7 +98,7 @@ def test_installed(backend: YumexRootBackend):
     assert sorted(expected_attr) == sorted(pkg.keys())
 
 
-def test_updates(backend: YumexRootBackend):
+def test_updates(backend: YumexPackageBackend):
     updates = backend.updates
     print(f"\nUpdates : {updates}")
     assert isinstance(updates, list)
@@ -112,7 +111,7 @@ def test_updates(backend: YumexRootBackend):
         assert sorted(expected_attr) == sorted(pkg.keys())
 
 
-def test_available(backend: YumexRootBackend):
+def test_available(backend: YumexPackageBackend):
     available = backend.available
     assert isinstance(available, list)
     assert len(available) > 0
@@ -376,12 +375,12 @@ def test_package_depsolve(backend):
 
 # Require root access, so will ask for polkit auth
 @pytest.mark.skip
-def test_clean(backend: YumexRootBackend):
+def test_clean(backend: YumexPackageBackend):
     result = backend.client.clean("expire-cache")
     assert result[0]
 
 
-def test_exception(backend: YumexRootBackend):
+def test_exception(backend: YumexPackageBackend):
     """Test the @yumex.utils.dbus_exception decorator does the right thing"""
     with pytest.raises(YumexException):
         backend.client._test_exception()

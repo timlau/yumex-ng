@@ -22,6 +22,14 @@ ignore = ["F821", "E402"]
 
 [tool.ty.rules]
 unresolved-reference = "ignore"
+invalid-argument-type = "warn"
+unresolved-attribute = "warn"
+
+[tool.ty.analysis]
+allowed-unresolved-imports = ["gi.**"]
+
+[tool.ty.environment]
+extra-paths= ["/home/tim/.local/lib/python3.14/site-packages/"]
 
 [tool.pyright]
 typeCheckingMode = "off"

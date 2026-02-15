@@ -19,19 +19,13 @@ from typing import Iterable
 
 from yumex.backend.cache import YumexPackageCache
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.dnf5daemon import YumexRootBackend
+from yumex.backend.dnf5daemon import YumexPackageBackend
 from yumex.backend.flatpak.backend import FlatpakBackend
-from yumex.backend.interface import (
-    PackageBackend,
-    PackageCache,
-    Progress,
-)
 from yumex.utils.enums import (
     InfoType,
     PackageFilter,
     Page,
 )
-from yumex.utils.types import MainWindow
 
 
 class YumexPresenter:
@@ -39,29 +33,24 @@ class YumexPresenter:
 
     It works as a middle man between the UI and backend package data, so the UI can work
     diffent package backend in a more generic way.
-
-    The used package backends, implement the PackageBackend protocol methods, so the UI has a well
-    defined interface to using the backend without knowledge of packaging API used.
-
-    Implements Presenter,PackageBackend,PackageCache protocols
     """
 
-    def __init__(self, win: MainWindow) -> None:
-        self._win: MainWindow = win
-        self._backend: PackageBackend = None
-        self._cache: YumexPackageCache = None
-        self._fp_backend: FlatpakBackend = None
+    def __init__(self, win) -> None:
+        self._win = win
+        self._backend: PackageBackend | None = None
+        self._cache: YumexPackageCache | None = None
+        self._fp_backend: FlatpakBackend | None = None
 
     @property
-    def package_backend(self) -> PackageBackend:
+    def package_backend(self) -> YumexPackageBackend:
         if not self._backend:
-            self._backend: PackageBackend = YumexRootBackend(self)
+            self._backend: YumexPackageBackend = YumexPackageBackend(self)
         return self._backend
 
     @property
-    def package_cache(self) -> PackageCache:
+    def package_cache(self) -> YumexPackageCache:
         if not self._cache:
-            self._cache: PackageCache = YumexPackageCache(backend=self.package_backend)
+            self._cache: YumexPackageCache = YumexPackageCache(backend=self.package_backend)
         return self._cache
 
     @property
@@ -75,7 +64,8 @@ class YumexPresenter:
         return self._win.progress
 
     def reset_backend(self) -> None:
-        self._backend.reset()
+        if self._backend:
+            self._backend.reset()
 
     def reset_flatpak_backend(self) -> None:
         del self._fp_backend
@@ -92,7 +82,7 @@ class YumexPresenter:
     def get_package_info(self, pkg: YumexPackage, attr: InfoType) -> str | None:
         return self.package_backend.get_package_info(pkg, attr)
 
-    def get_repositories(self) -> list[(str, str, bool, int)]:  # id, name, enabled, priority
+    def get_repositories(self) -> list[tuple[str, str, bool, int]]:  # id, name, enabled, priority
         return self.package_backend.get_repositories()
 
     def depsolve(self, pkgs: Iterable[YumexPackage]) -> list[YumexPackage]:
@@ -102,19 +92,18 @@ class YumexPresenter:
         """Check if there is an offline transaction"""
         return self.package_backend.has_offline_transaction()
 
-    def cancel_offline_transaction(self) -> bool:
+    def cancel_offline_transaction(self):
         """Cancel the offline transaction"""
         return self.package_backend.cancel_offline_transaction()
 
-    def reboot_and_install(self) -> bool:
+    def reboot_and_install(self):
         """Reboot and install the system upgrade"""
         return self.package_backend.reboot_and_install()
 
-    # PackageCache protocol implementation
     def get_packages_by_filter(self, pkgfilter: PackageFilter, reset=False) -> list[YumexPackage]:
         return self.package_cache.get_packages_by_filter(pkgfilter, reset)
 
-    def get_packages(self, pkgs: list[YumexPackage]) -> list[YumexPackage]:
+    def get_packages(self, pkgs: list[YumexPackage]) -> Generator[YumexPackage, None, None]:
         return self.package_cache.get_packages(pkgs)
 
     def get_package(self, pkg: YumexPackage) -> YumexPackage:
@@ -122,7 +111,7 @@ class YumexPresenter:
 
     # Main Window helpers
 
-    def get_main_window(self) -> MainWindow:
+    def get_main_window(self) -> YumexMainWindow:
         return self._win
 
     def show_message(self, title, timeout=2):

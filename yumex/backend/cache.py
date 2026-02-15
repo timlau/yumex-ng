@@ -2,7 +2,6 @@ import logging
 from typing import Generator
 
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.interface import PackageBackend
 from yumex.utils.enums import PackageFilter, PackageState
 
 logger = logging.getLogger(__name__)
@@ -15,9 +14,9 @@ class YumexPackageCache:
     Implement the PackageCache protocol class
     """
 
-    def __init__(self, backend: PackageBackend) -> None:
+    def __init__(self, backend: YumexPackageBackend) -> None:
         self._packages = {}
-        self.backend: PackageBackend = backend
+        self.backend: YumexPackageBackend = backend
         self._package_dict = {}
 
     def get_packages_by_filter(self, pkgfilter: PackageFilter, reset=False) -> list[YumexPackage]:

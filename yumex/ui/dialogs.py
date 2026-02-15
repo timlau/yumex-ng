@@ -3,7 +3,7 @@ from gi.repository import Adw, GLib
 from yumex.utils.types import MainWindow
 
 
-def error_dialog(win: MainWindow, title: str, msg: str):
+def error_dialog(win, title: str, msg: str):
     def response(dialog, result, *args):
         raise SystemExit
 

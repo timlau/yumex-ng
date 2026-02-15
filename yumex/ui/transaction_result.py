@@ -16,7 +16,7 @@
 import html
 import logging
 
-from gi.repository import Adw, Gio, GLib, GObject, Gtk  # type: ignore
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from yumex.constants import ROOTDIR
 from yumex.utils import format_number
@@ -56,7 +56,7 @@ class YumexTransactionResult(Adw.Dialog):
         self.offline.set_active(offline)
         self.offline.set_sensitive(False)
 
-    def show(self, win):
+    def show_windows(self, win):
         self.present(win)
         self._loop.run()
 

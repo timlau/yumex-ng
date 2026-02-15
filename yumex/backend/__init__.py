@@ -29,4 +29,4 @@ class TransactionResult:
     error: str = ""
     problems: list = field(default_factory=list)
     key_install: bool = False
-    key_values: tuple = None
+    key_values: tuple|None = None

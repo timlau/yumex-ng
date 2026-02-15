@@ -20,9 +20,9 @@ import logging
 import sys
 from pathlib import Path
 from traceback import format_exception
-from typing import Literal
 
-from gi.repository import Adw, Gio, Gtk  # type: ignore
+
+from gi.repository import Adw, Gio, Gtk
 
 from yumex.constants import APP_ID, BACKEND, BUILD_TYPE, ROOTDIR, VERSION
 from yumex.ui.dialogs import error_dialog
@@ -45,7 +45,6 @@ class YumexApplication(Adw.Application):
         super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.set_resource_base_path(ROOTDIR)
         self.style_manager = Adw.StyleManager.get_default()
-        self.args = None
 
     def do_activate(self) -> None:
         """Called when the application is activated.
@@ -120,23 +119,23 @@ class YumexApplication(Adw.Application):
         else:
             self.win.load_packages(PackageFilter.INSTALLED)
 
-    def do_command_line(self, args) -> Literal[0]:
+    def do_command_line(self, command_line):
         parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
         parser.add_argument("-d", "--debug", help="enable debug logging", action="store_true")
         parser.add_argument("--update", help="start on update page", action="store_true")
         parser.add_argument("--flatpakref", help="Install flatpak from a .flatpakref")
         parser.add_argument("--rpmfile", help="Install a .rpm file")
         parser.add_argument("--flatpak", help="start on flatpak page", action="store_true")
-        self.args = parser.parse_args(args.get_arguments()[1:])
+        self.args = parser.parse_args(command_line.get_arguments()[1:])
         setup_logging(debug=self.args.debug)
         # global is_local
         logger.debug(f"Version:  {VERSION} ({BACKEND})")
-        logger.debug(f"executable : {args.get_arguments()[0]}")
+        logger.debug(f"executable : {command_line.get_arguments()[0]}")
         logger.debug(f"commmand-line : {self.args}")
         self.activate()
         return 0
 
-    def create_action(self, name, callback, shortcuts=None) -> None:
+    def create_action(self, name, callback, shortcuts=None) -> Gio.SimpleAction:
         """Add an application action.
 
         Args:

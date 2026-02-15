@@ -1,14 +1,13 @@
 import datetime
 import logging
 from dataclasses import asdict, dataclass, field
-from typing import Iterable, Self
+from typing import Iterable, Self, Any
 
 import dbus
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import TransactionOptions, YumexPackage
 from yumex.backend.dnf5daemon.filter import FilterUpdates
-from yumex.backend.interface import Presenter, Progress
 from yumex.utils.enums import (
     DownloadType,
     InfoType,
@@ -165,21 +164,21 @@ class DownloadQueue:
         return len(self.queue)
 
 
-class YumexRootBackend:
+class YumexPackageBackend:
     def __init__(self, presenter) -> None:
         super().__init__()
-        self.presenter: Presenter = presenter
+        self.presenter: YumexPresenter = presenter
         self.last_transaction = None
         self.download_queue = DownloadQueue()
         self.client = Dnf5DbusClient()
         self.client.open_session()
         self.connect_signals()
-        repo_prioritiy = {id: priority for id, _, _, priority in self.get_repositories()}
+        repo_prioritiy: dict = {id: priority for id, _, _, priority in self.get_repositories()}
         self.filter_updates = FilterUpdates(repo_prioritiy, self.get_packages_by_name)
         self._installed_evr = self.fetch_installed_evr()
         self._offline = False
 
-    def fetch_installed_evr(self) -> list[YumexPackage]:
+    def fetch_installed_evr(self) -> dict[str, str]:
         """build dict of installed package name and evr"""
         inst_dict = {}
         for pkg in self.installed:
@@ -232,7 +231,7 @@ class YumexRootBackend:
             result_dict[action].append(((nevra, repo), size))
         return result_dict
 
-    def _build_transations(self, pkgs: list, opts: TransactionOptions) -> tuple[list, int]:
+    def _build_transations(self, pkgs: Iterable[YumexPackage], opts: TransactionOptions) -> tuple[list, int]:
         to_install = []
         to_update = []
         to_remove = []
@@ -448,7 +447,7 @@ class YumexRootBackend:
             f"SIGNAL : download_progress: download_id: {download_id}"
             f" downloaded: {downloaded} total_to_download: {total_to_download}"
         )
-        pkg: DownloadPackage = self.download_queue.get(download_id)  # type: ignore
+        pkg: DownloadPackage = self.download_queue.get(download_id)
         self.progress.set_subtitle(_(f"Downloading : {pkg.name}"))
         match pkg.package_type:
             case DownloadType.PACKAGE:
@@ -469,7 +468,7 @@ class YumexRootBackend:
             logger.debug(f"SIGNAL: download_end: unexpected args: {args}")
             return
         logger.debug(f"SIGNAL : download_end: download_id: {download_id} status: {status} msg: {msg}")
-        pkg: DownloadPackage = self.download_queue.get(download_id)  # type: ignore
+        pkg: DownloadPackage = self.download_queue.get(download_id)
         if status == 0:
             match pkg.package_type:
                 case DownloadType.PACKAGE:
@@ -519,7 +518,6 @@ class YumexRootBackend:
                     pkg.set_state(PackageState.UPDATE)
         return pkgs
 
-    # Implement PackageBackend
 
     @property
     def package_attr(self) -> list[str]:
@@ -630,10 +628,11 @@ class YumexRootBackend:
             case other:
                 raise ValueError(f"Unknown package info: {other}")
 
-    def get_repositories(self) -> list[str]:
+    def get_repositories(self) -> list[tuple]:
         repos, error = self.client.repo_list()
         if error:
             self.presenter.show_message(error)
+            return []
         else:
             return [(repo["id"], repo["name"], repo["enabled"], repo["priority"]) for repo in repos]
 
@@ -655,10 +654,9 @@ class YumexRootBackend:
                 logger.debug(f"Adding {ypkg} as dependency")
         return self.check_for_installed(dep_pkgs)
 
-    # Helpers (PackageBackend)
 
     @property
-    def installed(self) -> list[dict[str, any]]:
+    def installed(self) -> list[dict[str, Any]]:
         result = self.client.package_list_fd(
             "*",
             package_attrs=self.package_attr,
@@ -667,7 +665,7 @@ class YumexRootBackend:
         return result
 
     @property
-    def available(self) -> list[dict[str, any]]:
+    def available(self) -> list[dict[str, Any]]:
         result = self.client.package_list_fd(
             "*",
             package_attrs=self.package_attr,
@@ -676,7 +674,7 @@ class YumexRootBackend:
         return result
 
     @property
-    def updates(self) -> list[dict[str, any]]:
+    def updates(self) -> list[dict[str, Any]]:
         updates = self.client.package_list_fd(
             "*",
             package_attrs=self.package_attr,
@@ -687,7 +685,7 @@ class YumexRootBackend:
         else:
             return []
 
-    def _get_yumex_packages(self, pkgs: list[dict[str, any]], state=PackageState.AVAILABLE) -> list[YumexPackage]:
+    def _get_yumex_packages(self, pkgs: list[dict[str, Any]], state=PackageState.AVAILABLE) -> list[YumexPackage]:
         nevra_dict = {}
         for pkg in pkgs:
             ypkg: YumexPackage = create_package(pkg)
@@ -715,14 +713,14 @@ class YumexRootBackend:
         pending, _ = self.client.offline_get_status()
         return pending
 
-    def cancel_offline_transaction(self) -> bool:
+    def cancel_offline_transaction(self) -> tuple[bool, list[str]]:
         """Cancel the offline transaction"""
         if not self.has_offline_transaction():
             return False, ["No offline transaction found"]
         success, err_mesg = self.client.offline_clean()
         return success, err_mesg
 
-    def reboot_and_install(self) -> bool:
+    def reboot_and_install(self) -> tuple[bool, list[str]]:
         """Reboot and install the system upgrade"""
         if not self.has_offline_transaction():
             return False, ["No offline transaction found"]

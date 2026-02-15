@@ -12,14 +12,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright (C) 2024 Tim Lauridsen
-
-
 import logging
 
 from gi.repository import Gio, GObject, Gtk
 
 from yumex.backend.dnf import YumexPackage
-from yumex.backend.interface import Presenter
+from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, ROOTDIR
 from yumex.ui import get_package_selection_tooltip
 from yumex.ui.dialogs import error_dialog
@@ -48,14 +46,14 @@ class YumexPackageView(Gtk.ColumnView):
 
     selection: Gtk.SingleSelection = Gtk.Template.Child("selection")
 
-    def __init__(self, presenter: Presenter, qview: YumexQueueView, **kwargs):
+    def __init__(self, presenter: YumexPresenter, qview: YumexQueueView, **kwargs):
         super().__init__(**kwargs)
         self.presenter = presenter
         self.storage = PackageStorage()
         self.queue_view = qview
         self.sort_attr = SortType.NAME
         self.batch_selection = False
-        self.settings = Gio.Settings(APP_ID)
+        self.settings = Gio.Settings(APP_ID)  # ty:ignore[invalid-argument-type]
         self.setup()
 
     def setup(self):
@@ -153,9 +151,9 @@ class YumexPackageView(Gtk.ColumnView):
         to_delete = []
         for pkg in self.store:
             if state:
-                if not pkg.queued:
+                if not pkg.queued:  # ty:ignore[unresolved-attribute]
                     self._set_queued(pkg, True, to_add)
-            elif pkg.queued:
+            elif pkg.queued:  # ty:ignore[unresolved-attribute]
                 self._set_queued(pkg, False, to_delete)
         if to_add:
             self.queue_view.add_packages(to_add)
@@ -172,13 +170,15 @@ class YumexPackageView(Gtk.ColumnView):
 
     def toggle_selected(self):
         if len(self.store) > 0:
-            pkg: YumexPackage = self.selection.get_selected_item()
+            pkg: YumexPackage = self.selection.get_selected_item()  # ty:ignore[invalid-assignment]
             pkg.queued = not pkg.queued
             self.refresh()
 
     def on_package_action(self, action):
         """Handle action from the action bar"""
-        pkg: YumexPackage = self.selection.get_selected_item()
+        pkg:YumexPackage = self.selection.get_selected_item()  # ty:ignore[invalid-assignment]
+        if not pkg:
+            return
         logger.debug(f"on_action: {action} on {pkg}")
         if pkg.is_installed:
             match action:
@@ -236,7 +236,7 @@ class YumexPackageView(Gtk.ColumnView):
         if self.batch_selection:
             return
         if len(self.store) > 0:
-            pkg: YumexPackage = self.selection.get_selected_item()
+            pkg: YumexPackage = self.selection.get_selected_item()  # ty:ignore[invalid-assignment]
             if self.last_selected is None or pkg != self.last_selected:
                 logger.debug(f"SIGNAL: emit selection_changed: {pkg}")
                 self.emit("selection-changed", pkg)
