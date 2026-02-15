@@ -15,12 +15,11 @@
 # Copyright (C) 2024 Tim Lauridsen
 #
 #
-import argparse
 import logging
 import sys
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from traceback import format_exception
-
 
 from gi.repository import Adw, Gio, Gtk
 
@@ -45,6 +44,8 @@ class YumexApplication(Adw.Application):
         super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
         self.set_resource_base_path(ROOTDIR)
         self.style_manager = Adw.StyleManager.get_default()
+        self.args: argparse.Namespace  # parsed command line options
+        self.win: YumexMainWindow # Application main window
 
     def do_activate(self) -> None:
         """Called when the application is activated.
@@ -55,21 +56,21 @@ class YumexApplication(Adw.Application):
 
         self.win: YumexMainWindow = self.props.active_window
         if not self.win:
-            self.win = YumexMainWindow(
-                application=self,
-                default_height=self.settings.get_int("window-height"),
-                default_width=self.settings.get_int("window-width"),
-                fullscreened=self.settings.get_boolean("window-fullscreen"),
-                maximized=self.settings.get_boolean("window-maximized"),
-            )
-            window_height = self.settings.get_int("window-height")
-            window_width = self.settings.get_int("window-width")
-            fullscreened = self.settings.get_boolean("window-fullscreen")
-            maximized = self.settings.get_boolean("window-maximized")
+            window_height:int = self.settings.get_int("window-height")
+            window_width:int = self.settings.get_int("window-width")
+            fullscreened:bool = self.settings.get_boolean("window-fullscreen")
+            maximized:bool = self.settings.get_boolean("window-maximized")
             logger.debug(f"window-height: {window_height}")
             logger.debug(f"window-width: {window_width}")
             logger.debug(f"fullscreened: {fullscreened}")
             logger.debug(f"maximized: {maximized}")
+            self.win = YumexMainWindow(
+                application=self,
+                default_height=window_height,
+                default_width=window_width,
+                fullscreened=fullscreened,
+                maximized=maximized,
+            )
 
         # create app actions
         self.create_action("about", self.on_about)
@@ -120,13 +121,13 @@ class YumexApplication(Adw.Application):
             self.win.load_packages(PackageFilter.INSTALLED)
 
     def do_command_line(self, command_line):
-        parser = argparse.ArgumentParser(prog="yumex", description="Yum Extender package management application")
+        parser: ArgumentParser = ArgumentParser(prog="yumex", description="Yum Extender package management application")
         parser.add_argument("-d", "--debug", help="enable debug logging", action="store_true")
         parser.add_argument("--update", help="start on update page", action="store_true")
         parser.add_argument("--flatpakref", help="Install flatpak from a .flatpakref")
         parser.add_argument("--rpmfile", help="Install a .rpm file")
         parser.add_argument("--flatpak", help="start on flatpak page", action="store_true")
-        self.args = parser.parse_args(command_line.get_arguments()[1:])
+        self.args: Namespace = parser.parse_args(command_line.get_arguments()[1:])
         setup_logging(debug=self.args.debug)
         # global is_local
         logger.debug(f"Version:  {VERSION} ({BACKEND})")
