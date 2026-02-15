@@ -166,6 +166,16 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.clamp_packages.set_maximum_size(clamp_width)
         self.clamp_packages.set_tightening_threshold(clamp_width - 100)
         self.package_paned.set_position(self.settings.get_int("pkg-paned-pos"))
+        if self.settings.get_boolean("window-maximized"):
+            self.maximize()
+        else:
+            if self.is_maximized:
+                self.unmaximize()
+        if self.settings.get_boolean("window-fullscreen"):
+            self.fullscreen()
+        else:
+            if self.is_fullscreen:
+                self.unfullscreen()
 
     def on_queue_refresh(self, *args):
         """handle the refressh signal from queue view"""
