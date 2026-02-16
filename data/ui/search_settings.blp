@@ -13,6 +13,28 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
     Adw.PreferencesGroup search {
       title: _("Search Settings");
 
+      Adw.EntryRow repos {
+        [suffix]
+        Gtk.Button {
+          visible: true;
+          tooltip-text: _("Clear the repository keywords");
+
+          styles [
+            "flat",
+            "circular",
+            "error",
+          ]
+
+          icon-name: "edit-clear-symbolic";
+          clicked => $on_repo_clear_clicked();
+        }
+
+        title: _("Repository keywords (blank = show all)");
+        tooltip-text: _("Comma separated keywords to match against enabled repositories\n Ex. 'fed' will match 'fedora'");
+        show-apply-button: true;
+        apply => $on_repos_activate();
+      }
+
       Adw.SpinRow latest_limit {
         title: _("Number of package versions");
         value: 1.0;
@@ -52,21 +74,6 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
         title: _("Search scope");
         model: scopes;
         selected: 0;
-      }
-      Adw.EntryRow repos {
-        [suffix]
-        Gtk.Button {
-          visible: true;
-          styles [
-            "flat","circular","error"
-          ]
-          icon-name: "edit-clear-symbolic";
-          clicked => $on_repo_clear_clicked();
-        }
-        title: _("Repositories (blank = all)");
-        show-apply-button: true;
-        apply => $on_repos_activate();
-
       }
     }
   }
