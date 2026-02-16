@@ -73,7 +73,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
         self.settings = Gio.Settings.new(APP_ID)
-        self.search_settings = YumexSearchSettings()
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
         self._last_selected_pkg: YumexPackage = None
@@ -87,6 +86,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
         self.presenter: YumexPresenter = YumexPresenter(self)
+        self.search_settings = YumexSearchSettings(self.presenter)
         # Setup Advanced actions dialog
         self.advanced_actions = YumexAdvancedActions(self)
         self.advanced_actions.connect("action", self.on_advanced_actions)
@@ -152,10 +152,6 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # setup package info
         self.package_info = YumexPackageInfo()
         self.update_info_box.append(self.package_info)
-        # setup search repos
-        repos = self.presenter.get_repositories()
-        search_repos: list[str] = [str(id) for id,name, enabled, prio in repos if enabled]
-        self.search_settings.set_available_repos(search_repos)
 
         # self.search_entry.connect("move-focus", lambda _: True)
 

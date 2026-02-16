@@ -34,21 +34,28 @@ class YumexSearchSettings(Adw.PreferencesDialog):
     latest_limit: Adw.SpinRow = Gtk.Template.Child()
     repos: Adw.EntryRow = Gtk.Template.Child()
 
-    def __init__(self, **kwargs):
+    def __init__(self,presenter, **kwargs):
         super().__init__(**kwargs)
+        self.presenter = presenter
         self.connect("unrealize", self.on_close)
         self.options = {}
         self._loop = GLib.MainLoop()
         self.latest_limit.set_value(1.0)
-        self.available_repos = []
+        self._available_repos = []
 
     def show_dialog(self, win):
         self.present(win)
         self._loop.run()
         return self.options
 
-    def set_available_repos(self, repos: list[str]):
-        self.available_repos = repos
+    @property
+    def available_repos(self) -> list[str]:
+        # lazy load the list of available repositories
+        if not self._available_repos:
+            repos = self.presenter.get_repositories()
+            search_repos: list[str] = [str(id) for id,name, enabled, prio in repos if enabled]
+            self._available_repo = search_repos
+        return self._available_repo
 
     def filter_repo(self):
         repos = self.repos.get_text().strip()
