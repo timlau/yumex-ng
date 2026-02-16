@@ -67,13 +67,3 @@ Problem 1: installed package libtinysparql-3.9.1-2.fc42.x86_64 requires libicui1
   - problem with installed package"""  # noqa: E501
     result.show_errors(msg)
     result.present(win)
-
-
-def test_search_settings(win):
-    from yumex.ui.search_settings import YumexSearchSettings
-
-    """Test the search settings dialog."""
-    settings = YumexSearchSettings()
-    rc = settings.show_dialog(win)
-    print(rc)
-    print(settings.options)
