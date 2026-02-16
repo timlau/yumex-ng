@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 09:55+0100\n"
+"POT-Creation-Date: 2026-02-16 19:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,60 +17,60 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: yumex/backend/dnf5daemon/__init__.py:76
+#: yumex/backend/dnf5daemon/__init__.py:75
 #: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
 msgid "Installing"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:78
+#: yumex/backend/dnf5daemon/__init__.py:77
 msgid "Upgrading"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:80
+#: yumex/backend/dnf5daemon/__init__.py:79
 msgid "Downgrading"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:82
+#: yumex/backend/dnf5daemon/__init__.py:81
 msgid "Reinstalling"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:84
+#: yumex/backend/dnf5daemon/__init__.py:83
 msgid "Removing"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:86
+#: yumex/backend/dnf5daemon/__init__.py:85
 msgid "Replacing"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:328
-#: yumex/backend/dnf5daemon/__init__.py:348 yumex/ui/window.py:219
+#: yumex/backend/dnf5daemon/__init__.py:327
+#: yumex/backend/dnf5daemon/__init__.py:347 yumex/ui/window.py:220
 msgid "Building Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:370
-#: yumex/backend/dnf5daemon/__init__.py:479 yumex/ui/window.py:243
+#: yumex/backend/dnf5daemon/__init__.py:369
+#: yumex/backend/dnf5daemon/__init__.py:478 yumex/ui/window.py:244
 msgid "Building Offline Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:372
-#: yumex/backend/dnf5daemon/__init__.py:391
-#: yumex/backend/dnf5daemon/__init__.py:481
+#: yumex/backend/dnf5daemon/__init__.py:371
+#: yumex/backend/dnf5daemon/__init__.py:390
+#: yumex/backend/dnf5daemon/__init__.py:480
 msgid "Applying Transaction"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:380
+#: yumex/backend/dnf5daemon/__init__.py:379
 msgid "Verifying Packages"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:396
+#: yumex/backend/dnf5daemon/__init__.py:395
 msgid "Running Scriptlets"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:434
+#: yumex/backend/dnf5daemon/__init__.py:433
 msgid "Download Packages"
 msgstr ""
 
-#: yumex/backend/dnf5daemon/__init__.py:436
+#: yumex/backend/dnf5daemon/__init__.py:435
 msgid "Download Repository Information"
 msgstr ""
 
@@ -84,19 +84,6 @@ msgstr ""
 
 #: yumex/backend/flatpak/transaction.py:182
 msgid "flatpak transaction failed"
-msgstr ""
-
-#: yumex/main.py:181
-msgid ""
-"Yum Extender is a Package management to install, update and remove packages"
-msgstr ""
-
-#: yumex/main.py:184
-msgid "Special thanks to"
-msgstr ""
-
-#: yumex/main.py:213
-msgid "Critical Error"
 msgstr ""
 
 #: yumex/ui/__init__.py:44
@@ -121,22 +108,6 @@ msgstr ""
 
 #: yumex/ui/__init__.py:54
 msgid "Queued for distribution synchronization"
-msgstr ""
-
-#: yumex/ui/dialogs.py:17
-msgid "Quit"
-msgstr ""
-
-#: yumex/ui/dialogs.py:42
-msgid "Install GPG Key"
-msgstr ""
-
-#: yumex/ui/dialogs.py:50 yumex/ui/dialogs.py:79
-msgid "Yes"
-msgstr ""
-
-#: yumex/ui/dialogs.py:52 yumex/ui/dialogs.py:81
-msgid "No"
 msgstr ""
 
 #: yumex/ui/flatpak_view.py:90
@@ -171,12 +142,20 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: yumex/ui/package_view.py:98
-msgid "Loading Packages"
+#: yumex/ui/dialogs.py:17
+msgid "Quit"
 msgstr ""
 
-#: yumex/ui/package_view.py:99
-msgid "This may take a little while"
+#: yumex/ui/dialogs.py:42
+msgid "Install GPG Key"
+msgstr ""
+
+#: yumex/ui/dialogs.py:50 yumex/ui/dialogs.py:79
+msgid "Yes"
+msgstr ""
+
+#: yumex/ui/dialogs.py:52 yumex/ui/dialogs.py:81
+msgid "No"
 msgstr ""
 
 #: yumex/ui/transaction_result.py:119
@@ -207,57 +186,78 @@ msgstr ""
 msgid "Packages for distribution synchronization"
 msgstr ""
 
-#: yumex/ui/window.py:200 yumex/ui/window.py:344
+#: yumex/ui/package_view.py:96
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/package_view.py:97
+msgid "This may take a little while"
+msgstr ""
+
+#: yumex/ui/window.py:201 yumex/ui/window.py:333
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:234
+#: yumex/ui/window.py:235
 msgid "Nothing to do in this transaction"
 msgstr ""
 
-#: yumex/ui/window.py:245
+#: yumex/ui/window.py:246
 msgid "Running Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:287
+#: yumex/ui/window.py:276
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:527
+#: yumex/ui/window.py:517
 msgid "Offline transaction"
 msgstr ""
 
-#: yumex/ui/window.py:528
+#: yumex/ui/window.py:518
 msgid ""
 "Do you want to prepare the offline transaction to be applied on next reboot ?"
 msgstr ""
 
-#: yumex/ui/window.py:534
+#: yumex/ui/window.py:524
 msgid "Offline trasaction prepared to be applied on next reboot"
 msgstr ""
 
-#: yumex/ui/window.py:537
+#: yumex/ui/window.py:527
 msgid "Offline transaction prepare failed"
 msgstr ""
 
-#: yumex/ui/window.py:555
+#: yumex/ui/window.py:545
 msgid "system upgrade target release must to larger than current release"
 msgstr ""
 
-#: yumex/ui/window.py:564
+#: yumex/ui/window.py:554
 msgid "Offline Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:576
+#: yumex/ui/window.py:566
 msgid "Distro-Sync completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:585
+#: yumex/ui/window.py:575
 msgid "Offline transaction cancelled"
 msgstr ""
 
-#: yumex/ui/window.py:588
+#: yumex/ui/window.py:578
 msgid "Offline transaction cancel failed"
+msgstr ""
+
+#: yumex/main.py:181
+msgid ""
+"Yum Extender is a Package management to install, update and remove packages"
+msgstr ""
+
+#: yumex/main.py:184
+msgid "Special thanks to"
+msgstr ""
+
+#: yumex/main.py:213
+msgid "Critical Error"
 msgstr ""
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
@@ -530,34 +530,6 @@ msgstr ""
 msgid "Remove item from queue"
 msgstr ""
 
-#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
-msgid "Search Settings"
-msgstr ""
-
-#: data/ui/search_settings.blp:17
-msgid "Number of package versions"
-msgstr ""
-
-#: data/ui/search_settings.blp:31
-msgid "Search in filesystem"
-msgstr ""
-
-#: data/ui/search_settings.blp:36
-msgid "Search in provides"
-msgstr ""
-
-#: data/ui/search_settings.blp:41
-msgid "Search in binaries"
-msgstr ""
-
-#: data/ui/search_settings.blp:46
-msgid "Filter on archs"
-msgstr ""
-
-#: data/ui/search_settings.blp:52
-msgid "Search scope"
-msgstr ""
-
 #: data/ui/shortcuts.blp:9
 msgid "General"
 msgstr ""
@@ -765,6 +737,48 @@ msgstr ""
 
 #: data/ui/window.blp:322
 msgid "_Distro Sync"
+msgstr ""
+
+#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
+msgid "Search Settings"
+msgstr ""
+
+#: data/ui/search_settings.blp:20
+msgid "Clear the repository keywords"
+msgstr ""
+
+#: data/ui/search_settings.blp:32
+msgid "Repository keywords (blank = show all)"
+msgstr ""
+
+#: data/ui/search_settings.blp:33
+msgid ""
+"Comma separated keywords to match against enabled repositories\n"
+" Ex. 'fed' will match 'fedora'"
+msgstr ""
+
+#: data/ui/search_settings.blp:39
+msgid "Number of package versions"
+msgstr ""
+
+#: data/ui/search_settings.blp:53
+msgid "Search in filesystem"
+msgstr ""
+
+#: data/ui/search_settings.blp:58
+msgid "Search in provides"
+msgstr ""
+
+#: data/ui/search_settings.blp:63
+msgid "Search in binaries"
+msgstr ""
+
+#: data/ui/search_settings.blp:68
+msgid "Filter on archs"
+msgstr ""
+
+#: data/ui/search_settings.blp:74
+msgid "Search scope"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
