@@ -249,7 +249,9 @@ class Dnf5DbusClient:
         # limit packages to one of “all”, “installed”, “available”, “upgrades”, “upgradable”
         options["scope"] = kwargs.pop("scope", "all")
         if "repo" in kwargs:
-            options["repo"] = kwargs.pop("repo")
+            repos = kwargs.pop("repo")
+            if repos:
+                options["repo"] = dbus.Array(repos)
         if "arch" in kwargs:
             options["arch"] = kwargs.pop("arch")
         # get and async partial function
