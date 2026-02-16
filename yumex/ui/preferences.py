@@ -43,7 +43,7 @@ class YumexPreferences(Adw.PreferencesDialog):
     def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
         self.presenter = presenter
-        self.settings = Gio.Settings(APP_ID)
+        self.settings:Gio.Settings = Gio.Settings.new(APP_ID)
         self._repos = []
         self.connect("unrealize", self.save_settings)
         self.setup_repo()
@@ -94,18 +94,18 @@ class YumexPreferences(Adw.PreferencesDialog):
         self.update_remote(location)
 
     def get_current_location(self) -> FlatpakLocation:
-        return FlatpakLocation(self.fp_location.get_selected_item().get_string())
+        return FlatpakLocation(self.fp_location.get_selected_item().get_string())  # ty:ignore[unresolved-attribute]
 
-    def get_current_remote(self) -> FlatpakLocation:
+    def get_current_remote(self) -> FlatpakLocation|None:
         selected = self.fp_remote.get_selected_item()
         if selected:
-            remote = selected.get_string()
+            remote = selected.get_string()  # ty:ignore[unresolved-attribute]
         else:
             remote = None
         return remote
 
     def set_selected_location(self, current_location):
-        for ndx, location in enumerate(self.fp_location.get_model()):
+        for ndx, location in enumerate(self.fp_location.get_model()):  # ty:ignore[invalid-argument-type]
             if location.get_string() == current_location:
                 self.fp_location.set_selected(ndx)
                 break
@@ -142,17 +142,17 @@ class YumexPreferences(Adw.PreferencesDialog):
             return selected
 
         self.fp_remote.set_sensitive(True)
-        for ndx, remote in enumerate(self.fp_remote.get_model()):
+        for ndx, remote in enumerate(self.fp_remote.get_model()):  # ty:ignore[invalid-argument-type]
             if remote.get_string() == current_remote:
                 self.fp_remote.set_selected(ndx)
                 selected = current_remote
                 break
         if not selected:  # if current_remote not found, select first remote
             self.fp_remote.set_selected(0)
-            selected = self.fp_remote.get_selected_item().get_string()
+            selected = self.fp_remote.get_selected_item().get_string()  # ty:ignore[unresolved-attribute]
         return selected
 
-    def get_remotes(self, location: FlatpakLocation) -> list:
+    def get_remotes(self, location: FlatpakLocation) -> Gtk.StringList:
         remotes = self.presenter.flatpak_backend.get_remotes(location=location)
         model = Gtk.StringList.new()
         if not remotes:
@@ -165,7 +165,7 @@ class YumexPreferences(Adw.PreferencesDialog):
     @Gtk.Template.Callback()
     def on_location_selected(self, widget, data):
         """capture the Notify for the selected property is changed"""
-        location = FlatpakLocation(self.fp_location.get_selected_item().get_string())
+        location = FlatpakLocation(self.fp_location.get_selected_item().get_string())  # ty:ignore[unresolved-attribute]
         self.update_remote(location)
 
     @Gtk.Template.Callback()

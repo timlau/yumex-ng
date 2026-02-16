@@ -167,7 +167,7 @@ class TransactionOptions:
 
 
 def reload_metadata_expired():
-    settings = Gio.Settings(APP_ID)
+    settings = Gio.Settings.new(APP_ID)
     last_load: int = settings.get_int64("meta-load-time")
     load_periode: int = settings.get_int("meta-load-periode")
     update_time = datetime.fromtimestamp(last_load) + timedelta(seconds=load_periode)
@@ -176,5 +176,5 @@ def reload_metadata_expired():
 
 
 def update_metadata_timestamp():
-    settings = Gio.Settings(APP_ID)
+    settings = Gio.Settings.new(APP_ID)
     settings.set_int64("meta-load-time", int(datetime.now().timestamp()))

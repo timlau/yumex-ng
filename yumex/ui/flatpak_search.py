@@ -53,7 +53,7 @@ class YumexFlatpakSearch(Adw.Dialog):
         super().__init__()
         self.presenter = presenter
         self.backend: FlatpakBackend = presenter.flatpak_backend
-        self.settings = Gio.Settings(APP_ID)
+        self.settings = Gio.Settings.new(APP_ID)
         self.confirm = False
         self._loop = GLib.MainLoop()
         self.search_id.set_key_capture_widget(self)

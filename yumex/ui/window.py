@@ -72,7 +72,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = kwargs["application"]
-        self.settings = Gio.Settings(APP_ID)  # ty:ignore[invalid-argument-type]
+        self.settings = Gio.Settings.new(APP_ID)
         self.search_settings = YumexSearchSettings()
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None

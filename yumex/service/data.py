@@ -53,7 +53,7 @@ class Config:
     @classmethod
     def from_gsettings(cls):
         logger.debug("CONFIG: Loading config from gsettings")
-        settings: Gio.Settings = Gio.Settings(APP_ID)
+        settings: Gio.Settings = Gio.Settings.new(APP_ID)
         custom_updater = settings.get_string("upd-custom")
         show_icon = settings.get_boolean("upd-show-icon")
         update_interval = settings.get_int("upd-interval")

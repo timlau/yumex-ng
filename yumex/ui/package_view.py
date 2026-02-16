@@ -53,7 +53,7 @@ class YumexPackageView(Gtk.ColumnView):
         self.queue_view = qview
         self.sort_attr = SortType.NAME
         self.batch_selection = False
-        self.settings = Gio.Settings(APP_ID)  # ty:ignore[invalid-argument-type]
+        self.settings = Gio.Settings.new(APP_ID)
         self.setup()
 
     def setup(self):

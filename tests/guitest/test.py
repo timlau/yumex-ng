@@ -10,7 +10,7 @@ def test_system_upgrade_dialog(win):
     from yumex.ui.dialogs import YesNoDialog
 
     """Test the system upgrade dialog."""
-    dialog = YesNoDialog(win)
+    dialog = YesNoDialog(win,"This is a test","this is the title")
     dialog.show()
     print(f"reboot : {dialog.answer}")
     assert dialog.answer is True or dialog.answer is False
