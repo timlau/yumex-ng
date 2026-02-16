@@ -13,8 +13,6 @@
 #
 # Copyright (C) 2025 Tim Lauridsen
 
-from yumex.backend.dnf5daemon import YumexPackageBackend
-
 import logging
 from pathlib import Path
 
@@ -22,6 +20,7 @@ from gi.repository import Adw, Gio, Gtk
 
 from yumex.backend import TransactionResult
 from yumex.backend.dnf import TransactionOptions, YumexPackage
+from yumex.backend.dnf5daemon import YumexPackageBackend
 from yumex.backend.presenter import YumexPresenter
 from yumex.constants import APP_ID, PACKAGE_COLUMNS, ROOTDIR
 from yumex.ui.advanced_actions import YumexAdvancedActions
@@ -87,7 +86,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.connect("unrealize", self.on_window_close)
         # connect to changes on Adw.ViewStack
         self.stack.get_pages().connect("selection-changed", self.on_stack_changed)
-        self.presenter:YumexPresenter = YumexPresenter(self)
+        self.presenter: YumexPresenter = YumexPresenter(self)
         # Setup Advanced actions dialog
         self.advanced_actions = YumexAdvancedActions(self)
         self.advanced_actions.connect("action", self.on_advanced_actions)
@@ -153,7 +152,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # setup package info
         self.package_info = YumexPackageInfo()
         self.update_info_box.append(self.package_info)
-        # setup search
+        # setup search repos
+        repos = self.presenter.get_repositories()
+        search_repos: list[str] = [str(id) for id,name, enabled, prio in repos if enabled]
+        self.search_settings.set_available_repos(search_repos)
+
         # self.search_entry.connect("move-focus", lambda _: True)
 
     def set_saved_setting(self):
@@ -219,7 +222,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         """execute the transaction with the root backend."""
         self.progress.show()
         self.progress.set_title(_("Building Transaction"))
-        backend:YumexPackageBackend = self.presenter.package_backend
+        backend: YumexPackageBackend = self.presenter.package_backend
         # build the transaction
         result: TransactionResult = backend.build_transaction(queued, opts)
         self.progress.hide()
@@ -360,7 +363,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         # GLib.idle_add(self.load_packages, self._last_filter)
         if self._last_filter:
             self.load_packages(self._last_filter)
-        self._last_filter:PackageFilter| None = None
+        self._last_filter: PackageFilter | None = None
 
     @Gtk.Template.Callback()
     def on_search_changed(self, widget):
