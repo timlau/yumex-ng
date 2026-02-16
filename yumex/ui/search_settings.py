@@ -64,8 +64,6 @@ class YumexSearchSettings(Adw.PreferencesDialog):
 
     def get_dnf_options(self):
         """Get the dnf options from the search settings dialog."""
-        #     options["repo"] = kwargs.pop("repo")
-
         options = {
             "with_filenames": self.with_filenames.get_active(),
             "with_provides": self.with_provides.get_active(),
@@ -85,3 +83,7 @@ class YumexSearchSettings(Adw.PreferencesDialog):
         self._loop.quit()
         self.options = self.get_dnf_options()
         self.close()
+
+    @Gtk.Template.Callback()
+    def on_repos_activate(self, *args):
+       self.on_close()
