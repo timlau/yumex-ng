@@ -48,7 +48,6 @@ class YumexSearchSettings(Adw.PreferencesDialog):
         return self.options
 
     def set_available_repos(self, repos: list[str]):
-        logger.debug(f"set_available_repos: {repos}")
         self.available_repos = repos
 
     def filter_repo(self):
@@ -59,7 +58,6 @@ class YumexSearchSettings(Adw.PreferencesDialog):
         if not self.available_repos:
             return keys
         found = [str(repo) for repo in self.available_repos if any(key in repo for key in keys)]
-        logger.debug(f"search repos : {found}")
         return found
 
     def get_dnf_options(self):
