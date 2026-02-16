@@ -54,6 +54,15 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
         selected: 0;
       }
       Adw.EntryRow repos {
+        [suffix]
+        Gtk.Button {
+          visible: true;
+          styles [
+            "flat","circular","error"
+          ]
+          icon-name: "edit-clear-symbolic";
+          clicked => $on_repo_clear_clicked();
+        }
         title: _("Repositories (blank = all)");
         show-apply-button: true;
         apply => $on_repos_activate();

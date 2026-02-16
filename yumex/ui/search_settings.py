@@ -34,7 +34,7 @@ class YumexSearchSettings(Adw.PreferencesDialog):
     latest_limit: Adw.SpinRow = Gtk.Template.Child()
     repos: Adw.EntryRow = Gtk.Template.Child()
 
-    def __init__(self,presenter, **kwargs):
+    def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
         self.presenter = presenter
         self.connect("unrealize", self.on_close)
@@ -53,7 +53,7 @@ class YumexSearchSettings(Adw.PreferencesDialog):
         # lazy load the list of available repositories
         if not self._available_repos:
             repos = self.presenter.get_repositories()
-            search_repos: list[str] = [str(id) for id,name, enabled, prio in repos if enabled]
+            search_repos: list[str] = [str(id) for id, name, enabled, prio in repos if enabled]
             self._available_repo = search_repos
         return self._available_repo
 
@@ -91,4 +91,9 @@ class YumexSearchSettings(Adw.PreferencesDialog):
 
     @Gtk.Template.Callback()
     def on_repos_activate(self, *args):
-       self.on_close()
+        self.on_close()
+
+    @Gtk.Template.Callback()
+    def on_repo_clear_clicked(self, *args):
+        self.repos.set_text("")
+        self.on_close()
