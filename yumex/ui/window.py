@@ -386,7 +386,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_search_settings(self, widget):
-        options = self.search_settings.show(self)
+        options = self.search_settings.show_dialog(self)
         logger.debug(f"search settings : {options}")
         self.search_entry.grab_focus()
         self.on_search_activate(self.search_entry)

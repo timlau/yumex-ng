@@ -32,6 +32,7 @@ class YumexSearchSettings(Adw.PreferencesDialog):
     arch = Gtk.Template.Child()
     scope = Gtk.Template.Child()
     latest_limit: Adw.SpinRow = Gtk.Template.Child()
+    repos: Adw.EntryRow = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -39,11 +40,25 @@ class YumexSearchSettings(Adw.PreferencesDialog):
         self.options = {}
         self._loop = GLib.MainLoop()
         self.latest_limit.set_value(1.0)
+        self.available_repos = []
 
-    def show(self, win):
+    def show_dialog(self, win):
         self.present(win)
         self._loop.run()
         return self.options
+
+    def set_available_repos(self, repos: list[str]):
+        self.available_repos = repos
+
+    def filter_repo(self):
+        repos = self.repos.get_text().strip()
+        if not repos:
+            return []
+        keys = [repo.strip() for repo in repos.split(",") if repo.strip()]
+        if not self.available_repos:
+            return keys
+        found = [repo for repo in self.available_repos if any(key in repo for key in keys)]
+        return found
 
     def get_dnf_options(self):
         """Get the dnf options from the search settings dialog."""
@@ -59,6 +74,7 @@ class YumexSearchSettings(Adw.PreferencesDialog):
         arch = self.arch.get_selected_item().get_string()
         if arch != "all":
             options["arch"] = [arch]
+        options["repo"] = self.filter_repo()
 
         return options
 

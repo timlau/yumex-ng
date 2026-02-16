@@ -74,6 +74,6 @@ def test_search_settings(win):
 
     """Test the search settings dialog."""
     settings = YumexSearchSettings()
-    rc = settings.show(win)
+    rc = settings.show_dialog(win)
     print(rc)
     print(settings.options)
