@@ -7,7 +7,7 @@ from typing import Any
 
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import GLib  # type: ignore
+from gi.repository import GLib
 
 from yumex.utils import dbus_exception
 from yumex.utils.exceptions import YumexException
@@ -34,7 +34,7 @@ class AsyncCaller:
     def __init__(self) -> None:
         self.res = None
         self.err = None
-        self.loop = None
+        self.loop: GLib.MainLoop
 
     def error_handler(self, e) -> None:
         logger.error(e)
@@ -267,7 +267,7 @@ class Dnf5DbusClient:
         """Just for testing purpose"""
         raise dbus.exceptions.DBusException("DBUSError : Something strange in the neighborhood")
 
-    def package_list(self, *args, **kwargs) -> list[list[str]]:
+    def package_list(self, *args, **kwargs) -> tuble[list, str]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
 
         *args is package patterns to match

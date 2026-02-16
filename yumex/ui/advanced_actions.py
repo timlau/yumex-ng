@@ -38,7 +38,7 @@ class YumexAdvancedActions(Adw.Dialog):
         self.win = win
         self.presenter = win.presenter
 
-    def show(self, win):
+    def show_dialog(self, win):
         """Show the dialog."""
         self.present(win)
         # Set button sensitivity based on if there is an offline transaction

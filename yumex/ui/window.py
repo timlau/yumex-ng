@@ -272,7 +272,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         logger.debug("Window: confirm flatpak transaction")
         dialog = YumexFlatpakResult()
         dialog.populate(refs)
-        dialog.show(self)
+        dialog.show_dialog(self)
         confirm = dialog.confirm
         del dialog
         if confirm:
@@ -490,7 +490,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
                     self.package_view.toggle_selected()
             case "adv-actions":
                 logger.debug("advanced actions")
-                action = self.advanced_actions.show(self)
+                action = self.advanced_actions.show_dialog(self)
             case "downgrade" | "reinstall" | "distrosync":
                 self.package_view.on_package_action(action.get_name())
             case other:

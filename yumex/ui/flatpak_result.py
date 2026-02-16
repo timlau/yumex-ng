@@ -59,11 +59,11 @@ class YumexFlatpakResult(Adw.Dialog):
         self.store = Gio.ListStore.new(ResultElem)
         self.selection.set_model(self.store)
 
-    def show(self, win):
+    def show_dialog(self, win):
         self.present(win)
         self._loop.run()
 
-    def populate(self, results: list[str, FlatpakAction, str]):
+    def populate(self, results):
         for ref, action, source, location in results:
             elem = ResultElem(ref, action, source, location)
             logger.debug(f" --> Adding element {elem}")
