@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 19:33+0100\n"
+"POT-Creation-Date: 2026-02-17 07:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -761,24 +761,48 @@ msgstr ""
 msgid "Number of package versions"
 msgstr ""
 
-#: data/ui/search_settings.blp:53
+#: data/ui/search_settings.blp:40
+msgid "Number of packaage versions to show in search results"
+msgstr ""
+
+#: data/ui/search_settings.blp:54
 msgid "Search in filesystem"
 msgstr ""
 
-#: data/ui/search_settings.blp:58
+#: data/ui/search_settings.blp:55
+msgid "Search in containing files"
+msgstr ""
+
+#: data/ui/search_settings.blp:60
 msgid "Search in provides"
 msgstr ""
 
-#: data/ui/search_settings.blp:63
+#: data/ui/search_settings.blp:61
+msgid "Search in package provides"
+msgstr ""
+
+#: data/ui/search_settings.blp:66
 msgid "Search in binaries"
 msgstr ""
 
-#: data/ui/search_settings.blp:68
+#: data/ui/search_settings.blp:67
+msgid "Search in package binaries"
+msgstr ""
+
+#: data/ui/search_settings.blp:72
 msgid "Filter on archs"
 msgstr ""
 
-#: data/ui/search_settings.blp:74
+#: data/ui/search_settings.blp:73
+msgid "Filter on package architectures"
+msgstr ""
+
+#: data/ui/search_settings.blp:79
 msgid "Search scope"
+msgstr ""
+
+#: data/ui/search_settings.blp:80
+msgid "Filter on installation status"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
