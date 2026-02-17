@@ -1,7 +1,7 @@
 # Yum Extender (yumex) POT file
-# Copyright (C) 2025 Tim Lauridsen
+# Copyright (C) 2026 Tim Lauridsen
 # This file is distributed under the GNU GPLv3 license.
-# Tim Lauridsen, 2025.
+# Tim Lauridsen, 2026.
 # 
 # Translators:
 # Davidmp <medipas@gmail.com>, 2025
@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 17:07+0200\n"
+"POT-Creation-Date: 2026-02-17 07:22+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>, 2025\n"
 "Language-Team: Catalan (https://app.transifex.com/timlau/teams/16939/ca/)\n"
@@ -21,60 +21,60 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: yumex/backend/dnf5daemon/__init__.py:76
+#: yumex/backend/dnf5daemon/__init__.py:75
 #: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
 msgid "Installing"
 msgstr "S'instal·la"
 
-#: yumex/backend/dnf5daemon/__init__.py:78
+#: yumex/backend/dnf5daemon/__init__.py:77
 msgid "Upgrading"
 msgstr "S'actualitza"
 
-#: yumex/backend/dnf5daemon/__init__.py:80
+#: yumex/backend/dnf5daemon/__init__.py:79
 msgid "Downgrading"
 msgstr "Es degrada"
 
-#: yumex/backend/dnf5daemon/__init__.py:82
+#: yumex/backend/dnf5daemon/__init__.py:81
 msgid "Reinstalling"
 msgstr "Es reinstal·la"
 
-#: yumex/backend/dnf5daemon/__init__.py:84
+#: yumex/backend/dnf5daemon/__init__.py:83
 msgid "Removing"
 msgstr "Se suprimeix"
 
-#: yumex/backend/dnf5daemon/__init__.py:86
+#: yumex/backend/dnf5daemon/__init__.py:85
 msgid "Replacing"
 msgstr "Es reemplaça"
 
-#: yumex/backend/dnf5daemon/__init__.py:328
-#: yumex/backend/dnf5daemon/__init__.py:348 yumex/ui/window.py:219
+#: yumex/backend/dnf5daemon/__init__.py:327
+#: yumex/backend/dnf5daemon/__init__.py:347 yumex/ui/window.py:220
 msgid "Building Transaction"
 msgstr "Es construeix la transacció"
 
-#: yumex/backend/dnf5daemon/__init__.py:370
-#: yumex/backend/dnf5daemon/__init__.py:479 yumex/ui/window.py:242
+#: yumex/backend/dnf5daemon/__init__.py:369
+#: yumex/backend/dnf5daemon/__init__.py:478 yumex/ui/window.py:244
 msgid "Building Offline Transaction"
 msgstr "Es construeix la transacció fora de línia"
 
-#: yumex/backend/dnf5daemon/__init__.py:372
-#: yumex/backend/dnf5daemon/__init__.py:391
-#: yumex/backend/dnf5daemon/__init__.py:481
+#: yumex/backend/dnf5daemon/__init__.py:371
+#: yumex/backend/dnf5daemon/__init__.py:390
+#: yumex/backend/dnf5daemon/__init__.py:480
 msgid "Applying Transaction"
 msgstr "S'aplica la transacció"
 
-#: yumex/backend/dnf5daemon/__init__.py:380
+#: yumex/backend/dnf5daemon/__init__.py:379
 msgid "Verifying Packages"
 msgstr "Es verifiquen els paquets"
 
-#: yumex/backend/dnf5daemon/__init__.py:396
+#: yumex/backend/dnf5daemon/__init__.py:395
 msgid "Running Scriptlets"
 msgstr "S'executen els scriptlets"
 
-#: yumex/backend/dnf5daemon/__init__.py:434
+#: yumex/backend/dnf5daemon/__init__.py:433
 msgid "Download Packages"
 msgstr "Baixada dels paquets"
 
-#: yumex/backend/dnf5daemon/__init__.py:436
+#: yumex/backend/dnf5daemon/__init__.py:435
 msgid "Download Repository Information"
 msgstr "Baixa la informació del repositori"
 
@@ -89,148 +89,6 @@ msgstr "S'actualitza"
 #: yumex/backend/flatpak/transaction.py:182
 msgid "flatpak transaction failed"
 msgstr "La transacció de flatpak ha fallat."
-
-#: yumex/ui/flatpak_view.py:90
-msgid "flatpaks were updated"
-msgstr "S'han actualitzat els flatpaks."
-
-#: yumex/ui/flatpak_view.py:96
-msgid "Unused flatpaks were removed"
-msgstr "S'han suprimit els flatpaks no usats."
-
-#: yumex/ui/dialogs.py:17
-msgid "Quit"
-msgstr "Surt"
-
-#: yumex/ui/dialogs.py:42
-msgid "Install GPG Key"
-msgstr "Instal·la la clau GPG"
-
-#: yumex/ui/dialogs.py:50 yumex/ui/dialogs.py:79
-msgid "Yes"
-msgstr "Sí"
-
-#: yumex/ui/dialogs.py:52 yumex/ui/dialogs.py:81
-msgid "No"
-msgstr "No"
-
-#: yumex/ui/transaction_result.py:104
-msgid "Packages for installation"
-msgstr "Paquets per a instal·lar"
-
-#: yumex/ui/transaction_result.py:106
-msgid "Packages for deletion"
-msgstr "Paquets per a suprimir"
-
-#: yumex/ui/transaction_result.py:108 yumex/ui/transaction_result.py:110
-msgid "Packages for updating"
-msgstr "Paquets per a actualitzar"
-
-#: yumex/ui/transaction_result.py:112
-msgid "Skipped Packages"
-msgstr "Paquets omesos"
-
-#: yumex/ui/transaction_result.py:114
-msgid "Packages for downgrading"
-msgstr "Paquets per degradar"
-
-#: yumex/ui/transaction_result.py:116
-msgid "Packages for re-installation"
-msgstr "Paquets per reinstal·lar"
-
-#: yumex/ui/transaction_result.py:118
-msgid "Packages for distribution synchronization"
-msgstr "Paquets per a la sincronització de la distribució"
-
-#: yumex/ui/package_info.py:26
-msgid "Bugfix"
-msgstr "Correcció d'errors"
-
-#: yumex/ui/package_info.py:27
-msgid "New Package"
-msgstr "Paquet nou"
-
-#: yumex/ui/package_info.py:28
-msgid "Security"
-msgstr "Seguretat"
-
-#: yumex/ui/package_info.py:29
-msgid "Enhancement"
-msgstr "Millora"
-
-#: yumex/ui/package_info.py:61
-msgid "no update information found"
-msgstr "no s'ha trobat informació de l'actualització"
-
-#: yumex/ui/package_info.py:93
-msgid "Undefined"
-msgstr "No definit"
-
-#: yumex/ui/package_view.py:98
-msgid "Loading Packages"
-msgstr "Es carreguen els paquets"
-
-#: yumex/ui/package_view.py:99
-msgid "This may take a little while"
-msgstr "Això pot trigar una mica"
-
-#: yumex/ui/window.py:200 yumex/ui/window.py:343
-msgid "Transaction completed succesfully"
-msgstr "La transacció s'ha completat correctament."
-
-#: yumex/ui/window.py:233
-msgid "Nothing to do in this transaction"
-msgstr "No hi ha res per fer en aquesta transacció."
-
-#: yumex/ui/window.py:244
-msgid "Running Transaction"
-msgstr "S'executa la transacció"
-
-#: yumex/ui/window.py:286
-msgid "Running Flatpak Transaction"
-msgstr "Execució de la transacció de Flatpak"
-
-#: yumex/ui/window.py:526
-msgid "Offline transaction"
-msgstr "Transacció fora de línia"
-
-#: yumex/ui/window.py:527
-msgid ""
-"Do you want to prepare the offline transaction to be applied on next reboot "
-"?"
-msgstr ""
-"Voleu preparar la transacció fora de línia perquè s'apliqui al proper "
-"reinici?"
-
-#: yumex/ui/window.py:533
-msgid "Offline trasaction prepared to be applied on next reboot"
-msgstr "Transacció fora de línia preparada per aplicar-se al proper reinici"
-
-#: yumex/ui/window.py:536
-msgid "Offline transaction prepare failed"
-msgstr "Ha fallat la preparació de la transacció fora de línia."
-
-#: yumex/ui/window.py:554
-msgid "system upgrade target release must to larger than current release"
-msgstr ""
-"la versió de destinació de l'actualització del sistema ha de ser superior a "
-"la versió actual"
-
-#: yumex/ui/window.py:563
-msgid "Offline Transaction completed succesfully"
-msgstr "La transacció fora de línia s'ha completat correctament."
-
-#: yumex/ui/window.py:575
-msgid "Distro-Sync completed succesfully"
-msgstr "La sincronització de la distribució s'ha completat correctament."
-
-#: yumex/ui/window.py:584
-msgid "Offline transaction cancelled"
-msgstr "S'ha cancel·lat la transacció fora de línia."
-
-#: yumex/ui/window.py:587
-msgid "Offline transaction cancel failed"
-msgstr "Ha fallat cancel·lar la transacció fora de línia."
 
 #: yumex/ui/__init__.py:44
 msgid "Queued for deletion"
@@ -256,120 +114,162 @@ msgstr "A la cua per a la degradació"
 msgid "Queued for distribution synchronization"
 msgstr "A la cua per a la sincronització de la distribució"
 
-#: yumex/main.py:183
+#: yumex/ui/flatpak_view.py:90
+msgid "Flatpaks were updated"
+msgstr ""
+
+#: yumex/ui/flatpak_view.py:96
+msgid "Unused flatpaks were removed"
+msgstr "S'han suprimit els flatpaks no usats."
+
+#: yumex/ui/package_info.py:26
+msgid "Bugfix"
+msgstr "Correcció d'errors"
+
+#: yumex/ui/package_info.py:27
+msgid "New Package"
+msgstr "Paquet nou"
+
+#: yumex/ui/package_info.py:28
+msgid "Security"
+msgstr "Seguretat"
+
+#: yumex/ui/package_info.py:29
+msgid "Enhancement"
+msgstr "Millora"
+
+#: yumex/ui/package_info.py:61
+msgid "no update information found"
+msgstr "no s'ha trobat informació de l'actualització"
+
+#: yumex/ui/package_info.py:93
+msgid "Undefined"
+msgstr "No definit"
+
+#: yumex/ui/dialogs.py:17
+msgid "Quit"
+msgstr "Surt"
+
+#: yumex/ui/dialogs.py:42
+msgid "Install GPG Key"
+msgstr "Instal·la la clau GPG"
+
+#: yumex/ui/dialogs.py:50 yumex/ui/dialogs.py:79
+msgid "Yes"
+msgstr "Sí"
+
+#: yumex/ui/dialogs.py:52 yumex/ui/dialogs.py:81
+msgid "No"
+msgstr "No"
+
+#: yumex/ui/transaction_result.py:119
+msgid "Packages for installation"
+msgstr "Paquets per a instal·lar"
+
+#: yumex/ui/transaction_result.py:121
+msgid "Packages for deletion"
+msgstr "Paquets per a suprimir"
+
+#: yumex/ui/transaction_result.py:123 yumex/ui/transaction_result.py:125
+msgid "Packages for updating"
+msgstr "Paquets per a actualitzar"
+
+#: yumex/ui/transaction_result.py:127
+msgid "Skipped Packages"
+msgstr "Paquets omesos"
+
+#: yumex/ui/transaction_result.py:129
+msgid "Packages for downgrading"
+msgstr "Paquets per degradar"
+
+#: yumex/ui/transaction_result.py:131
+msgid "Packages for re-installation"
+msgstr "Paquets per reinstal·lar"
+
+#: yumex/ui/transaction_result.py:133
+msgid "Packages for distribution synchronization"
+msgstr "Paquets per a la sincronització de la distribució"
+
+#: yumex/ui/package_view.py:96
+msgid "Loading Packages"
+msgstr "Es carreguen els paquets"
+
+#: yumex/ui/package_view.py:97
+msgid "This may take a little while"
+msgstr "Això pot trigar una mica"
+
+#: yumex/ui/window.py:201 yumex/ui/window.py:333
+msgid "Transaction completed succesfully"
+msgstr "La transacció s'ha completat correctament."
+
+#: yumex/ui/window.py:235
+msgid "Nothing to do in this transaction"
+msgstr "No hi ha res per fer en aquesta transacció."
+
+#: yumex/ui/window.py:246
+msgid "Running Transaction"
+msgstr "S'executa la transacció"
+
+#: yumex/ui/window.py:276
+msgid "Running Flatpak Transaction"
+msgstr "Execució de la transacció de Flatpak"
+
+#: yumex/ui/window.py:517
+msgid "Offline transaction"
+msgstr "Transacció fora de línia"
+
+#: yumex/ui/window.py:518
+msgid ""
+"Do you want to prepare the offline transaction to be applied on next reboot "
+"?"
+msgstr ""
+"Voleu preparar la transacció fora de línia perquè s'apliqui al proper "
+"reinici?"
+
+#: yumex/ui/window.py:524
+msgid "Offline trasaction prepared to be applied on next reboot"
+msgstr "Transacció fora de línia preparada per aplicar-se al proper reinici"
+
+#: yumex/ui/window.py:527
+msgid "Offline transaction prepare failed"
+msgstr "Ha fallat la preparació de la transacció fora de línia."
+
+#: yumex/ui/window.py:545
+msgid "system upgrade target release must to larger than current release"
+msgstr ""
+"la versió de destinació de l'actualització del sistema ha de ser superior a "
+"la versió actual"
+
+#: yumex/ui/window.py:554
+msgid "Offline Transaction completed succesfully"
+msgstr "La transacció fora de línia s'ha completat correctament."
+
+#: yumex/ui/window.py:566
+msgid "Distro-Sync completed succesfully"
+msgstr "La sincronització de la distribució s'ha completat correctament."
+
+#: yumex/ui/window.py:575
+msgid "Offline transaction cancelled"
+msgstr "S'ha cancel·lat la transacció fora de línia."
+
+#: yumex/ui/window.py:578
+msgid "Offline transaction cancel failed"
+msgstr "Ha fallat cancel·lar la transacció fora de línia."
+
+#: yumex/main.py:181
 msgid ""
 "Yum Extender is a Package management to install, update and remove packages"
 msgstr ""
 "El Yum Extender és un gestor de paquets per instal·lar, actualitzar i "
 "suprimir paquets."
 
-#: yumex/main.py:186
+#: yumex/main.py:184
 msgid "Special thanks to"
 msgstr "Agraïments especials per a"
 
-#: yumex/main.py:215
+#: yumex/main.py:213
 msgid "Critical Error"
 msgstr "Error crític"
-
-#: data/ui/flatpak_row.blp:50
-msgid "Update is available"
-msgstr "Hi ha disponible una actualització"
-
-#: data/ui/flatpak_row.blp:63
-msgid "Uninstall flatpak"
-msgstr "Desinstal·la el flatpak"
-
-#: data/ui/package_info.blp:24
-msgid "Advisory ID"
-msgstr "ID d'assessorament"
-
-#: data/ui/package_info.blp:37
-msgid "Advisory Type"
-msgstr "Tipus d'assessorament"
-
-#: data/ui/package_info.blp:50
-msgid "Advisory Issued"
-msgstr "Assessorament emès"
-
-#: data/ui/package_info.blp:75
-msgid "Bugzilla References"
-msgstr "Referències de Bugzilla"
-
-#: data/ui/queue_row.blp:21
-msgid "Added as a dependency"
-msgstr "Afegit com a dependència"
-
-#: data/ui/queue_row.blp:47
-msgid "Remove item from queue"
-msgstr "Suprimeix l'element de la cua"
-
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
-msgid "Preferences"
-msgstr "Preferències"
-
-#: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
-msgid "Settings"
-msgstr "Configuració"
-
-#: data/ui/preferences.blp:14
-msgid "Flatpak Settings"
-msgstr "Paràmetres de Flatpak"
-
-#: data/ui/preferences.blp:17
-msgid "Default Location"
-msgstr "Ubicació predeterminada"
-
-#: data/ui/preferences.blp:23
-msgid "Default Remote"
-msgstr "Remot predeterminat"
-
-#: data/ui/preferences.blp:29
-msgid "Metadata Settings"
-msgstr "Paràmetres de les metadades"
-
-#: data/ui/preferences.blp:32
-msgid "Min. Refresh interval (minutes)"
-msgstr "Interval mínim d'actualització (minuts)"
-
-#: data/ui/preferences.blp:47
-msgid "Updater Settings"
-msgstr "Paràmetres de l'actualització"
-
-#: data/ui/preferences.blp:50
-msgid "Custom System Updater (path)"
-msgstr "Actualitzador del sistema personalitzat (camí)"
-
-#: data/ui/preferences.blp:65
-msgid "Check updates interval (minutes)"
-msgstr "Interval de comprovació d'actualitzacions (minuts)"
-
-#: data/ui/preferences.blp:79
-msgid "Show systray icon on updates"
-msgstr "Mostra la icona d'actualitzacions a la safata del sistema"
-
-#: data/ui/preferences.blp:91
-msgid "Use dark systray icon"
-msgstr "Usa la icona fosca de la safata del sistema"
-
-#: data/ui/preferences.blp:104
-msgid "Send Notification on updates"
-msgstr "Envia una notificació d'actualitzacions"
-
-#: data/ui/preferences.blp:118 data/ui/package_view.blp:55
-msgid "Repository"
-msgstr "Dipòsit"
-
-#: data/ui/preferences.blp:122
-msgid "Repository Settings"
-msgstr "Paràmetres del dipòsit"
-
-#: data/ui/preferences.blp:123
-msgid "The available and enabled repositories"
-msgstr "Els dipòsits disponibles i habilitats"
-
-#: data/ui/preferences.blp:126
-msgid "Show Source/Debug Repositories"
-msgstr "Mostra els repositoris font / depuració"
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
 #: data/ui/window.blp:293
@@ -444,6 +344,14 @@ msgstr "Cancel·la"
 msgid "Confirm"
 msgstr "Confirmeu-ho"
 
+#: data/ui/flatpak_row.blp:50
+msgid "Update is available"
+msgstr "Hi ha disponible una actualització"
+
+#: data/ui/flatpak_row.blp:63
+msgid "Uninstall flatpak"
+msgstr "Desinstal·la el flatpak"
+
 #: data/ui/flatpak_search.blp:16
 msgid "Search Flatpaks"
 msgstr "Cerca flatpaks"
@@ -460,33 +368,181 @@ msgstr "Localització de la instal·lació"
 msgid "Active Remotes: "
 msgstr "Remots actius:"
 
-#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
-msgid "Search Settings"
-msgstr "Paràmetres de la cerca"
+#: data/ui/package_info.blp:24
+msgid "Advisory ID"
+msgstr "ID d'assessorament"
 
-#: data/ui/search_settings.blp:17
-msgid "Number of package versions"
-msgstr "Nombre de versions del paquet"
+#: data/ui/package_info.blp:37
+msgid "Advisory Type"
+msgstr "Tipus d'assessorament"
 
-#: data/ui/search_settings.blp:31
-msgid "Search in filesystem"
-msgstr "Cerca al sistema de fitxers"
+#: data/ui/package_info.blp:50
+msgid "Advisory Issued"
+msgstr "Assessorament emès"
 
-#: data/ui/search_settings.blp:36
-msgid "Search in provides"
-msgstr "Cerca a les provisions"
+#: data/ui/package_info.blp:75
+msgid "Bugzilla References"
+msgstr "Referències de Bugzilla"
 
-#: data/ui/search_settings.blp:41
-msgid "Search in binaries"
-msgstr "Cerca als binaris"
+#: data/ui/package_settings.blp:13
+msgid "Package filter"
+msgstr "Filtre de paquets"
 
-#: data/ui/search_settings.blp:46
-msgid "Filter on archs"
-msgstr "Filtra per arquitectura"
+#: data/ui/package_settings.blp:19
+msgid "Installed"
+msgstr "Instal·lat"
 
-#: data/ui/search_settings.blp:52
-msgid "Search scope"
-msgstr "Àmbit de cerca"
+#: data/ui/package_settings.blp:37
+msgid "Updates"
+msgstr "Actualitzacions"
+
+#: data/ui/package_settings.blp:54
+msgid "All"
+msgstr "Tot"
+
+#: data/ui/package_settings.blp:72 data/ui/window.blp:35
+msgid "Search"
+msgstr "Cerca"
+
+#: data/ui/package_settings.blp:91
+msgid "View Settings"
+msgstr "Paràmetres de la visualització"
+
+#: data/ui/package_settings.blp:108
+msgid "Select what attribute to sort by"
+msgstr "Seleccioneu per quin atribut classificar-los"
+
+#: data/ui/package_settings.blp:124
+msgid "Select what package information to show"
+msgstr "Seleccioneu quina informació del paquet voleu que es mostri"
+
+#: data/ui/package_settings.blp:132 data/ui/package_view.blp:20
+msgid "Name"
+msgstr "Nom"
+
+#: data/ui/package_settings.blp:133
+msgid "Arch"
+msgstr "Arquitectura"
+
+#: data/ui/package_settings.blp:134 data/ui/package_view.blp:41
+msgid "Size"
+msgstr "Mida"
+
+#: data/ui/package_settings.blp:135
+msgid "Repo"
+msgstr "Dipòsit"
+
+#: data/ui/package_settings.blp:141
+msgid "Description"
+msgstr "Descripció"
+
+#: data/ui/package_settings.blp:142
+msgid "Filelist"
+msgstr "Llista de fitxers"
+
+#: data/ui/package_settings.blp:143
+msgid "Update Info"
+msgstr "Informació de l'actualització"
+
+#: data/ui/package_settings.blp:144
+msgid "Provides"
+msgstr "Provisions"
+
+#: data/ui/package_settings.blp:145
+msgid "Requires"
+msgstr "Requeriments"
+
+#: data/ui/package_settings.blp:146
+msgid "Changelog"
+msgstr "Registre de canvis"
+
+#: data/ui/package_view.blp:27
+msgid "Version"
+msgstr "Versió"
+
+#: data/ui/package_view.blp:34
+msgid "Arch."
+msgstr "Arquitectura"
+
+#: data/ui/package_view.blp:48
+msgid "Summary"
+msgstr "Resum"
+
+#: data/ui/package_view.blp:55 data/ui/preferences.blp:118
+msgid "Repository"
+msgstr "Dipòsit"
+
+#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
+msgid "Preferences"
+msgstr "Preferències"
+
+#: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
+msgid "Settings"
+msgstr "Configuració"
+
+#: data/ui/preferences.blp:14
+msgid "Flatpak Settings"
+msgstr "Paràmetres de Flatpak"
+
+#: data/ui/preferences.blp:17
+msgid "Default Location"
+msgstr "Ubicació predeterminada"
+
+#: data/ui/preferences.blp:23
+msgid "Default Remote"
+msgstr "Remot predeterminat"
+
+#: data/ui/preferences.blp:29
+msgid "Metadata Settings"
+msgstr "Paràmetres de les metadades"
+
+#: data/ui/preferences.blp:32
+msgid "Min. Refresh interval (minutes)"
+msgstr "Interval mínim d'actualització (minuts)"
+
+#: data/ui/preferences.blp:47
+msgid "Updater Settings"
+msgstr "Paràmetres de l'actualització"
+
+#: data/ui/preferences.blp:50
+msgid "Custom System Updater (path)"
+msgstr "Actualitzador del sistema personalitzat (camí)"
+
+#: data/ui/preferences.blp:65
+msgid "Check updates interval (minutes)"
+msgstr "Interval de comprovació d'actualitzacions (minuts)"
+
+#: data/ui/preferences.blp:79
+msgid "Show systray icon on updates"
+msgstr "Mostra la icona d'actualitzacions a la safata del sistema"
+
+#: data/ui/preferences.blp:91
+msgid "Use dark systray icon"
+msgstr "Usa la icona fosca de la safata del sistema"
+
+#: data/ui/preferences.blp:104
+msgid "Send Notification on updates"
+msgstr "Envia una notificació d'actualitzacions"
+
+#: data/ui/preferences.blp:122
+msgid "Repository Settings"
+msgstr "Paràmetres del dipòsit"
+
+#: data/ui/preferences.blp:123
+msgid "The available and enabled repositories"
+msgstr "Els dipòsits disponibles i habilitats"
+
+#: data/ui/preferences.blp:126
+msgid "Show Source/Debug Repositories"
+msgstr "Mostra els repositoris font / depuració"
+
+#: data/ui/queue_row.blp:21
+msgid "Added as a dependency"
+msgstr "Afegit com a dependència"
+
+#: data/ui/queue_row.blp:47
+msgid "Remove item from queue"
+msgstr "Suprimeix l'element de la cua"
 
 #: data/ui/shortcuts.blp:9
 msgid "General"
@@ -592,11 +648,15 @@ msgstr "Problemes a la transacció"
 msgid "Copy to clipboard"
 msgstr "Copia al porta-retalls"
 
-#: data/ui/transaction_result.blp:137
+#: data/ui/transaction_result.blp:136
+msgid "Install Size"
+msgstr ""
+
+#: data/ui/transaction_result.blp:140
 msgid "Offline Transaction"
 msgstr "Transacció fora de línia"
 
-#: data/ui/transaction_result.blp:138
+#: data/ui/transaction_result.blp:141
 msgid "This transaction will be performed offline during reboot"
 msgstr "Aquesta transacció es farà fora de línia durant el reinici."
 
@@ -608,10 +668,6 @@ msgstr "Yum Extender"
 #: data/ui/window.blp:29
 msgid "Select Package filters"
 msgstr "Seleccioneu els filtres de paquets"
-
-#: data/ui/window.blp:35 data/ui/package_settings.blp:72
-msgid "Search"
-msgstr "Cerca"
 
 #: data/ui/window.blp:48
 msgid "Package Action Menu"
@@ -697,85 +753,71 @@ msgstr "_Reinstal·la"
 msgid "_Distro Sync"
 msgstr "Sincronització de _distribució"
 
-#: data/ui/package_settings.blp:13
-msgid "Package filter"
-msgstr "Filtre de paquets"
+#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
+msgid "Search Settings"
+msgstr "Paràmetres de la cerca"
 
-#: data/ui/package_settings.blp:19
-msgid "Installed"
-msgstr "Instal·lat"
+#: data/ui/search_settings.blp:20
+msgid "Clear the repository keywords"
+msgstr ""
 
-#: data/ui/package_settings.blp:37
-msgid "Updates"
-msgstr "Actualitzacions"
+#: data/ui/search_settings.blp:32
+msgid "Repository keywords (blank = show all)"
+msgstr ""
 
-#: data/ui/package_settings.blp:54
-msgid "All"
-msgstr "Tot"
+#: data/ui/search_settings.blp:33
+msgid ""
+"Comma separated keywords to match against enabled repositories\n"
+" Ex. 'fed' will match 'fedora'"
+msgstr ""
 
-#: data/ui/package_settings.blp:91
-msgid "View Settings"
-msgstr "Paràmetres de la visualització"
+#: data/ui/search_settings.blp:39
+msgid "Number of package versions"
+msgstr "Nombre de versions del paquet"
 
-#: data/ui/package_settings.blp:108
-msgid "Select what attribute to sort by"
-msgstr "Seleccioneu per quin atribut classificar-los"
+#: data/ui/search_settings.blp:40
+msgid "Number of packaage versions to show in search results"
+msgstr ""
 
-#: data/ui/package_settings.blp:124
-msgid "Select what package information to show"
-msgstr "Seleccioneu quina informació del paquet voleu que es mostri"
+#: data/ui/search_settings.blp:54
+msgid "Search in filesystem"
+msgstr "Cerca al sistema de fitxers"
 
-#: data/ui/package_settings.blp:132 data/ui/package_view.blp:20
-msgid "Name"
-msgstr "Nom"
+#: data/ui/search_settings.blp:55
+msgid "Search in containing files"
+msgstr ""
 
-#: data/ui/package_settings.blp:133
-msgid "Arch"
-msgstr "Arquitectura"
+#: data/ui/search_settings.blp:60
+msgid "Search in provides"
+msgstr "Cerca a les provisions"
 
-#: data/ui/package_settings.blp:134 data/ui/package_view.blp:41
-msgid "Size"
-msgstr "Mida"
+#: data/ui/search_settings.blp:61
+msgid "Search in package provides"
+msgstr ""
 
-#: data/ui/package_settings.blp:135
-msgid "Repo"
-msgstr "Dipòsit"
+#: data/ui/search_settings.blp:66
+msgid "Search in binaries"
+msgstr "Cerca als binaris"
 
-#: data/ui/package_settings.blp:141
-msgid "Description"
-msgstr "Descripció"
+#: data/ui/search_settings.blp:67
+msgid "Search in package binaries"
+msgstr ""
 
-#: data/ui/package_settings.blp:142
-msgid "Filelist"
-msgstr "Llista de fitxers"
+#: data/ui/search_settings.blp:72
+msgid "Filter on archs"
+msgstr "Filtra per arquitectura"
 
-#: data/ui/package_settings.blp:143
-msgid "Update Info"
-msgstr "Informació de l'actualització"
+#: data/ui/search_settings.blp:73
+msgid "Filter on package architectures"
+msgstr ""
 
-#: data/ui/package_settings.blp:144
-msgid "Provides"
-msgstr "Provisions"
+#: data/ui/search_settings.blp:79
+msgid "Search scope"
+msgstr "Àmbit de cerca"
 
-#: data/ui/package_settings.blp:145
-msgid "Requires"
-msgstr "Requeriments"
-
-#: data/ui/package_settings.blp:146
-msgid "Changelog"
-msgstr "Registre de canvis"
-
-#: data/ui/package_view.blp:27
-msgid "Version"
-msgstr "Versió"
-
-#: data/ui/package_view.blp:34
-msgid "Arch."
-msgstr "Arquitectura"
-
-#: data/ui/package_view.blp:48
-msgid "Summary"
-msgstr "Resum"
+#: data/ui/search_settings.blp:80
+msgid "Filter on installation status"
+msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
 msgid "Yum Extender Flatpak Installer"
@@ -786,14 +828,10 @@ msgid "Install flatpak defined in .flatpakref"
 msgstr "Instal·leu un flatpak definit a .flatpakref"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
-#: data/dk.yumex.Yumex.desktop.in.in:10
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:10
+#: data/dk.yumex.Yumex.desktop.in.in:10
 msgid "Software Installer"
 msgstr "Instal·lador de programari"
-
-#: data/dk.yumex.Yumex.desktop.in.in:3
-msgid "Install, update and remove applications"
-msgstr "Instal·leu, actualitzeu i suprimiu aplicacions"
 
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:2
 msgid "Yum Extender RPM Installer"
@@ -802,6 +840,10 @@ msgstr "Instal·lador d'RPM Yum Extender"
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:3
 msgid "Install a .rpm file"
 msgstr "Instal·la un fitxer .rpm"
+
+#: data/dk.yumex.Yumex.desktop.in.in:3
+msgid "Install, update and remove applications"
+msgstr "Instal·leu, actualitzeu i suprimiu aplicacions"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:8
 msgid "Graphical package manager"
