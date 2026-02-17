@@ -17,7 +17,7 @@
         <file preprocess="xml-stripblanks">ui/flatpak_search.ui</file>
         <file preprocess="xml-stripblanks">ui/search_settings.ui</file>
         <file preprocess="xml-stripblanks">ui/advanced_actions.ui</file>
-        <file preprocess="xml-stripblanks" alias="gtk/help-overlay.ui">ui/shortcuts.ui</file>
+        <file preprocess="xml-stripblanks" alias="shortcuts-dialog.ui">ui/shortcuts-dialog.ui</file>
         <file preprocess="xml-stripblanks">icons/scalable/actions/dock-left-symbolic.svg</file>
         <file preprocess="xml-stripblanks">icons/scalable/actions/test-pass-symbolic.svg</file>
         <file preprocess="xml-stripblanks">icons/scalable/actions/server-pick-symbolic.svg</file>

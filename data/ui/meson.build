@@ -15,7 +15,7 @@ blueprints = custom_target(
         'queue_view.blp',
         'repository.blp',
         'search_settings.blp',
-        'shortcuts.blp',
+        'shortcuts-dialog.blp',
         'transaction_result.blp',
         'window.blp',
     ),
