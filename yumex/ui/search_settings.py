@@ -33,6 +33,7 @@ class YumexSearchSettings(Adw.PreferencesDialog):
     scope = Gtk.Template.Child()
     latest_limit: Adw.SpinRow = Gtk.Template.Child()
     repos: Adw.EntryRow = Gtk.Template.Child()
+    clear_repo: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self, presenter, **kwargs):
         super().__init__(**kwargs)
@@ -92,6 +93,13 @@ class YumexSearchSettings(Adw.PreferencesDialog):
     @Gtk.Template.Callback()
     def on_repos_activate(self, *args):
         self.on_close()
+
+    @Gtk.Template.Callback()
+    def on_repos_changed(self, *args):
+        if self.repos.get_text_length() > 0:
+            self.clear_repo.set_visible(True)
+        else:
+            self.clear_repo.set_visible(False)
 
     @Gtk.Template.Callback()
     def on_repo_clear_clicked(self, *args):

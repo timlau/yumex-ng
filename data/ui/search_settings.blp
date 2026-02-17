@@ -15,8 +15,8 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
 
       Adw.EntryRow repos {
         [suffix]
-        Gtk.Button {
-          visible: true;
+        Gtk.Button clear_repo {
+          visible: false;
           tooltip-text: _("Clear the repository keywords");
 
           styles [
@@ -33,6 +33,7 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
         tooltip-text: _("Comma separated keywords to match against enabled repositories\n Ex. 'fed' will match 'fedora'");
         show-apply-button: true;
         apply => $on_repos_activate();
+        changed => $on_repos_changed();
       }
 
       Adw.SpinRow latest_limit {
