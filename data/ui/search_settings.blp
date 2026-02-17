@@ -37,6 +37,7 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
 
       Adw.SpinRow latest_limit {
         title: _("Number of package versions");
+        tooltip-text: _("Number of packaage versions to show in search results");
         value: 1.0;
 
         adjustment: Gtk.Adjustment {
@@ -51,27 +52,32 @@ template $YumexSearchSettings: Adw.PreferencesDialog {
 
       Adw.SwitchRow with_filenames {
         title: _("Search in filesystem");
+        tooltip-text: _("Search in containing files");
         active: false;
       }
 
       Adw.SwitchRow with_provides {
         title: _("Search in provides");
+        tooltip-text: _("Search in package provides");
         active: false;
       }
 
       Adw.SwitchRow with_binaries {
         title: _("Search in binaries");
+        tooltip-text: _("Search in package binaries");
         active: false;
       }
 
       Adw.ComboRow arch {
         title: _("Filter on archs");
+        tooltip-text: _("Filter on package architectures");
         model: archs;
         selected: 0;
       }
 
       Adw.ComboRow scope {
         title: _("Search scope");
+        tooltip-text: _("Filter on installation status");
         model: scopes;
         selected: 0;
       }
