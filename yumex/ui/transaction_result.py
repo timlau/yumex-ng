@@ -94,8 +94,8 @@ class YumexTransactionResult(Adw.Dialog):
     def get_total_size(self, result_dict) -> int:
         total_size = 0
         for key in result_dict:
-            # if key not in ["install","upgrade"]:
-                # continue
+            if key in ["replaced"]:
+                continue
             for (name, repo), size in result_dict[key]:
                 total_size += size
         return total_size
