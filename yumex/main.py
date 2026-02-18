@@ -21,6 +21,7 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from traceback import format_exception
 
+from black.output import err
 from gi.repository import Adw, Gio, Gtk
 
 from yumex.constants import APP_ID, BACKEND, BUILD_TYPE, ROOTDIR, VERSION
@@ -45,7 +46,7 @@ class YumexApplication(Adw.Application):
         self.set_resource_base_path(ROOTDIR)
         self.style_manager = Adw.StyleManager.get_default()
         self.args: argparse.Namespace  # parsed command line options
-        self.win: YumexMainWindow # Application main window
+        self.win: YumexMainWindow  # Application main window
 
     def do_activate(self) -> None:
         """Called when the application is activated.
@@ -56,10 +57,10 @@ class YumexApplication(Adw.Application):
 
         self.win: YumexMainWindow = self.props.active_window
         if not self.win:
-            window_height:int = self.settings.get_int("window-height")
-            window_width:int = self.settings.get_int("window-width")
-            fullscreened:bool = self.settings.get_boolean("window-fullscreen")
-            maximized:bool = self.settings.get_boolean("window-maximized")
+            window_height: int = self.settings.get_int("window-height")
+            window_width: int = self.settings.get_int("window-width")
+            fullscreened: bool = self.settings.get_boolean("window-fullscreen")
+            maximized: bool = self.settings.get_boolean("window-maximized")
             logger.debug(f"window-height: {window_height}")
             logger.debug(f"window-width: {window_width}")
             logger.debug(f"fullscreened: {fullscreened}")
@@ -209,8 +210,28 @@ class YumexApplication(Adw.Application):
         tb_file.write_text(msg)
         logger.debug(f"traceback written to {tb_file}")
         self.win.progress.hide()
+        print(exc_type)
+        print(exc_value.msg)
         if exc_type == YumexException:
-            error_dialog(self.win, title=_("Critical Error"), msg=exc_value.msg)
+            if "org.freedesktop.DBus.Error.ServiceUnknown" in exc_value.msg:
+                title = _("dnf5daemon-server Error")
+                err_msg = (
+                    "Yum Extender could not communicate with the dnf5daemon-server."
+                    " Please restart Yum Extender and try again."
+                    " If the problem persists, please report this issue to the developer."
+                )
+            elif "org.freedesktop.DBus.Error.NoReply" in exc_value.msg:
+                title = _("dnf5daemon-server Error")
+                err_msg = (
+                    "Yum Extender did not receive a response from the dnf5daemon-server."
+                    " This could be caused by a temporary issue with the dnf5daemon-server or a problem with your system."
+                    " Please restart Yum Extender and try again."
+                    " If the problem persists, please report this issue to the developer."
+                )
+            else:
+                title = _("Yum Extender Ctritical Error")
+                err_msg = f"An unexpected error occurred while running Yum Extender:\n\n{exc_value.msg}\n\nPlease report this issue to the developer."
+            error_dialog(self.win, title=title, msg=err_msg)
         else:
             error_dialog(self.win, title="Uncaught exception", msg=msg)
 

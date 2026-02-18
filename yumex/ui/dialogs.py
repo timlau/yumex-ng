@@ -1,9 +1,9 @@
-from gi.repository import Adw, GLib
+from gi.repository import Adw, GLib, Gtk
 
 from yumex.utils.types import MainWindow
 
 
-def error_dialog(win, title: str, msg: str):
+def error_dialog(win, title: str, msg: str, show_link:bool = True):
     def response(dialog, result, *args):
         raise SystemExit
 
@@ -19,6 +19,10 @@ def error_dialog(win, title: str, msg: str):
     dialog.set_close_response("quit")
     dialog.connect("response", response)
     dialog.add_css_class("error_dialog")
+    if show_link:
+        link = "https://github.com/timlau/yumex-ng/issues"
+        link_button = Gtk.LinkButton.new_with_label(link, _("Report Issue on GitHub"))
+        dialog.set_extra_child(link_button)
     dialog.present(win)
 
 
