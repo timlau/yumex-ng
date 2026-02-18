@@ -34,7 +34,7 @@ This is the 3. generation of Yum Extender.
 -   `make test-update` ( if yumex is installed on a previous date )
 -   `make test-reinst` ( if yumex is installed on the same date )
 
-## Packages for Fedora 41,42 & Rawhide (COPR)
+## Packages for Fedora 42-44 & Rawhide (COPR)
 
 **Stable**
 [yumex-ng](https://copr.fedorainfracloud.org/coprs/timlau/yumex-ng/)
