@@ -319,7 +319,11 @@ class YumexMainWindow(Adw.ApplicationWindow):
 
     def on_testing(self, *args):
         """Used to test gui stuff <Shift><Ctrl>T to activate"""
-        print(1 / 0)
+        from yumex.ui.error_dialog import YumexErrorDialog
+        dialog = YumexErrorDialog()
+        dialog.set_title("This is an error title")
+        dialog.set_error("This is an error message\nwith multiple lines\nand special characters <>&\"'")
+        dialog.show_dialog(self)
 
     def on_apply_actions_clicked(self, *_args):
         """handler for the apply button"""

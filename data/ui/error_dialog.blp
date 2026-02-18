@@ -1,0 +1,86 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $YumexErrorDialog: Adw.Dialog {
+  content-width: 700;
+  content-height: 600;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar titlebar {
+      centering-policy: strict;
+      show-end-title-buttons: false;
+
+      [title]
+      Gtk.Label {
+        label: _("Yum Extender Error");
+      }
+
+      [start]
+      Gtk.Button copy {
+        icon-name: "edit-copy-symbolic";
+        tooltip-text: _("Copy error to clipboard");
+        clicked => $on_copy_clicked();
+      }
+
+      [end]
+      Gtk.Button quit {
+        label: _("Quit");
+
+        styles [
+          "destructive-action",
+        ]
+
+        clicked => $on_quit_clicked();
+
+      }
+    }
+
+    Adw.PreferencesGroup err_grp {
+      margin-top: 20;
+      visible: true;
+
+      Adw.ActionRow title_row {
+        title: _("Yum Extender Error");
+        subtitle-selectable: true;
+
+        styles [
+          "errors-title",
+        ]
+      }
+
+      Gtk.Frame {
+        margin-start: 10;
+        margin-end: 10;
+        margin-top: 10;
+        margin-bottom: 10;
+
+        Gtk.ScrolledWindow {
+          width-request: 800;
+          height-request: 300;
+
+          Gtk.Label errors {
+            margin-start: 10;
+            margin-end: 10;
+            valign: start;
+            halign: start;
+            xalign: 0;
+
+            styles [
+              "errors",
+            ]
+          }
+        }
+      }
+
+      Gtk.LinkButton {
+        margin-start: 10;
+        margin-end: 10;
+        margin-top: 10;
+        margin-bottom: 10;
+        uri: "https://github.com/timlau/yumex-ng/issues";
+        label: _("Report Issue on GitHub");
+      }
+    }
+  }
+}

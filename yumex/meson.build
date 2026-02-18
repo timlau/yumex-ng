@@ -54,6 +54,7 @@ yumex_ui_modules = [
     'ui/window.py',
     'ui/search_settings.py',
     'ui/advanced_actions.py',
+    'ui/error_dialog.py',
 ]
 PY_INSTALLDIR.install_sources(yumex_ui_modules, subdir: 'yumex/ui')
 

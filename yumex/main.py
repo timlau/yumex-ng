@@ -25,7 +25,7 @@ from black.output import err
 from gi.repository import Adw, Gio, Gtk
 
 from yumex.constants import APP_ID, BACKEND, BUILD_TYPE, ROOTDIR, VERSION
-from yumex.ui.dialogs import error_dialog
+from yumex.ui.error_dialog import YumexErrorDialog
 from yumex.ui.preferences import YumexPreferences
 from yumex.ui.window import YumexMainWindow
 from yumex.utils import setup_logging
@@ -210,30 +210,34 @@ class YumexApplication(Adw.Application):
         tb_file.write_text(msg)
         logger.debug(f"traceback written to {tb_file}")
         self.win.progress.hide()
-        print(exc_type)
-        print(exc_value.msg)
+        dialog = YumexErrorDialog()
         if exc_type == YumexException:
             if "org.freedesktop.DBus.Error.ServiceUnknown" in exc_value.msg:
                 title = _("dnf5daemon-server Error")
                 err_msg = (
-                    "Yum Extender could not communicate with the dnf5daemon-server."
-                    " Please restart Yum Extender and try again."
-                    " If the problem persists, please report this issue to the developer."
+                    "Yum Extender could not communicate with the dnf5daemon-server.\n"
+                    "Please restart Yum Extender and try again.\n"
+                    "If the problem persists, please report this issue to the developer.\n"
                 )
             elif "org.freedesktop.DBus.Error.NoReply" in exc_value.msg:
                 title = _("dnf5daemon-server Error")
                 err_msg = (
-                    "Yum Extender did not receive a response from the dnf5daemon-server."
-                    " This could be caused by a temporary issue with the dnf5daemon-server or a problem with your system."
-                    " Please restart Yum Extender and try again."
-                    " If the problem persists, please report this issue to the developer."
+                    "Yum Extender did not receive a response from the dnf5daemon-server.\n"
+                    "This could be caused by a temporary issue with the dnf5daemon-server or a problem with your system.\n"
+                    "Please restart Yum Extender and try again.\n"
+                    "If the problem persists, please report this issue to the developer."
                 )
             else:
                 title = _("Yum Extender Ctritical Error")
-                err_msg = f"An unexpected error occurred while running Yum Extender:\n\n{exc_value.msg}\n\nPlease report this issue to the developer."
-            error_dialog(self.win, title=title, msg=err_msg)
+                err_msg = f"An unexpected error occurred while running Yum Extender:\n\n{msg}\n\nPlease report this issue to the developer."
+
         else:
-            error_dialog(self.win, title="Uncaught exception", msg=msg)
+            title = "Uncaught exception"
+            err_msg = msg
+        dialog.set_error(err_msg)
+        dialog.set_title(title)
+        dialog.show_dialog(self.win)
+        sys.exit(0)
 
 
 def main() -> int:

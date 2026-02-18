@@ -18,6 +18,7 @@ blueprints = custom_target(
         'shortcuts-dialog.blp',
         'transaction_result.blp',
         'window.blp',
+        'error_dialog.blp'
     ),
     output: '.',
     command: [

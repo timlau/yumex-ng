@@ -159,6 +159,17 @@ spinner {
     padding: 1em;
 }
 
+.errors {
+    font-family: monospace;
+    font-size: 0.9em;
+    color: @error_color;
+    padding: 1em;
+}
+
+.errors-title {
+    font-size: 1.2em;
+    color: @accent_fg_color;
+}
 
 .error_dialog label.body {
     font-family: monospace;
