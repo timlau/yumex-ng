@@ -18,12 +18,12 @@
 #
 #
 
-import os
-import sys
-import signal
-import locale
-import shutil
 import gettext
+import locale
+import os
+import shutil
+import signal
+import sys
 
 is_local = "@local_build@" == "True"
 pkgdatadir = "@PKGDATA_DIR@"
@@ -57,10 +57,10 @@ if __name__ == "__main__":
     gi.require_version("Gtk", "4.0")
     gi.require_version("Adw", "1")
 
-    from gi.repository import Gio  # type: ignore
+    from gi.repository import Gio
 
     resource = Gio.Resource.load(os.path.join(pkgdatadir, "yumex.gresource"))
-    Gio.Resource._register(resource)
+    Gio.Resource._register(resource)  # ty:ignore[unresolved-attribute]
 
     from yumex import main
 
