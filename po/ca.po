@@ -4,7 +4,7 @@
 # Tim Lauridsen, 2026.
 # 
 # Translators:
-# Davidmp <medipas@gmail.com>, 2025
+# Davidmp <medipas@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-17 07:22+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>, 2025\n"
+"Last-Translator: Davidmp <medipas@gmail.com>, 2026\n"
 "Language-Team: Catalan (https://app.transifex.com/timlau/teams/16939/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,7 +116,7 @@ msgstr "A la cua per a la sincronització de la distribució"
 
 #: yumex/ui/flatpak_view.py:90
 msgid "Flatpaks were updated"
-msgstr ""
+msgstr "S'han actualitzat els Flatpaks."
 
 #: yumex/ui/flatpak_view.py:96
 msgid "Unused flatpaks were removed"
@@ -650,7 +650,7 @@ msgstr "Copia al porta-retalls"
 
 #: data/ui/transaction_result.blp:136
 msgid "Install Size"
-msgstr ""
+msgstr "Mida de la instal·lació"
 
 #: data/ui/transaction_result.blp:140
 msgid "Offline Transaction"
@@ -759,17 +759,19 @@ msgstr "Paràmetres de la cerca"
 
 #: data/ui/search_settings.blp:20
 msgid "Clear the repository keywords"
-msgstr ""
+msgstr "Neteja les paraules clau del repositori"
 
 #: data/ui/search_settings.blp:32
 msgid "Repository keywords (blank = show all)"
-msgstr ""
+msgstr "Paraules clau del repositori (en blanc = mostra-ho tot)"
 
 #: data/ui/search_settings.blp:33
 msgid ""
 "Comma separated keywords to match against enabled repositories\n"
 " Ex. 'fed' will match 'fedora'"
 msgstr ""
+"Paraules clau separades per comes per coincidir amb els repositoris habilitats\n"
+"Ex. 'fed' coincidirà amb 'fedora'"
 
 #: data/ui/search_settings.blp:39
 msgid "Number of package versions"
@@ -778,6 +780,7 @@ msgstr "Nombre de versions del paquet"
 #: data/ui/search_settings.blp:40
 msgid "Number of packaage versions to show in search results"
 msgstr ""
+"Nombre de versions del paquet que es mostraran als resultats de la cerca"
 
 #: data/ui/search_settings.blp:54
 msgid "Search in filesystem"
@@ -785,7 +788,7 @@ msgstr "Cerca al sistema de fitxers"
 
 #: data/ui/search_settings.blp:55
 msgid "Search in containing files"
-msgstr ""
+msgstr "Cerca als fitxers continguts"
 
 #: data/ui/search_settings.blp:60
 msgid "Search in provides"
@@ -793,7 +796,7 @@ msgstr "Cerca a les provisions"
 
 #: data/ui/search_settings.blp:61
 msgid "Search in package provides"
-msgstr ""
+msgstr "Cerca a les provisions dels paquets"
 
 #: data/ui/search_settings.blp:66
 msgid "Search in binaries"
@@ -801,7 +804,7 @@ msgstr "Cerca als binaris"
 
 #: data/ui/search_settings.blp:67
 msgid "Search in package binaries"
-msgstr ""
+msgstr "Cerca als binaris de paquets"
 
 #: data/ui/search_settings.blp:72
 msgid "Filter on archs"
@@ -809,7 +812,7 @@ msgstr "Filtra per arquitectura"
 
 #: data/ui/search_settings.blp:73
 msgid "Filter on package architectures"
-msgstr ""
+msgstr "Filtra per arquitectures de paquets"
 
 #: data/ui/search_settings.blp:79
 msgid "Search scope"
@@ -817,7 +820,7 @@ msgstr "Àmbit de cerca"
 
 #: data/ui/search_settings.blp:80
 msgid "Filter on installation status"
-msgstr ""
+msgstr "Filtra per estat d'instal·lació"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
 msgid "Yum Extender Flatpak Installer"
