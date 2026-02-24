@@ -15,7 +15,7 @@
 
 """Custom types used for type hinting for more clarity"""
 
-from typing import TYPE_CHECKING, NewType
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from yumex.ui.window import YumexMainWindow  # noqa: F401
@@ -26,5 +26,5 @@ gi.require_version("Flatpak", "1.0")
 from gi.repository import Flatpak, Adw
 
 # we can not use the YumexMainWindow direct, because of circular imports
-MainWindow = NewType("MainWindow",  Adw.ApplicationWindow)
-FlatpakRef =  NewType("FlatpakRef", Flatpak.Ref)
+type MainWindow = Adw.ApplicationWindow
+type FlatpakRef = Flatpak.Ref

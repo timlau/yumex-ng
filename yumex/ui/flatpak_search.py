@@ -77,7 +77,7 @@ class YumexFlatpakSearch(Adw.Dialog):
     def setup_location(self):
         """set the location bases on the settings"""
         fp_location = FlatpakLocation(self.settings.get_string("fp-location"))
-        for ndx, location in enumerate(self.location.get_model()):
+        for ndx, location in enumerate(self.location.get_model()):  # ty:ignore[invalid-argument-type]
             if location.get_string() == fp_location:
                 self.location.set_selected(ndx)
         if fp_location == "user":
@@ -85,9 +85,9 @@ class YumexFlatpakSearch(Adw.Dialog):
 
     @Gtk.Template.Callback()
     def on_location_selected(self, *args):
-        logger.debug(f"fp_search: location changed : {self.location.get_selected_item().get_string()}")
+        logger.debug(f"fp_search: location changed : {self.location.get_selected_item().get_string()}")  # ty:ignore[unresolved-attribute]
         self.app_search = AppstreamSearcher()
-        fp_location = FlatpakLocation(self.location.get_selected_item().get_string())
+        fp_location = FlatpakLocation(self.location.get_selected_item().get_string())  # ty:ignore[unresolved-attribute]
         installation = self.backend.get_installation(fp_location)
         self.app_search.add_installation(installation)
         remotes = self.backend.get_remotes(fp_location)
@@ -123,7 +123,7 @@ class YumexFlatpakSearch(Adw.Dialog):
         if key == "" or len(key) < 3:
             self._clear()
             return
-        location = FlatpakLocation(self.location.get_selected_item().get_string())
+        location = FlatpakLocation(self.location.get_selected_item().get_string())  # ty:ignore[unresolved-attribute]
         logger.debug(f"(flatpak_seach) key: {key}  location: {location}")
         self._clear()
         packages = self.app_search.search(key)
@@ -164,7 +164,7 @@ class YumexFlatpakSearch(Adw.Dialog):
         """set the flatpak icon in the ui of current found flatpak"""
         if not remote_name:
             return
-        location = FlatpakLocation(self.location.get_selected_item().get_string())
+        location = FlatpakLocation(self.location.get_selected_item().get_string())  # ty:ignore[unresolved-attribute]
         icon_path = self.backend.get_icon_path(remote_name, location)
         icon_file = Path(f"{icon_path}/{id}.png")
         if icon_file.exists():

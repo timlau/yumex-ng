@@ -31,6 +31,9 @@ allowed-unresolved-imports = ["gi.**"]
 [tool.ty.environment]
 extra-paths= ["/home/tim/.local/lib/python3.14/site-packages/"]
 
+[tool.ty.src]
+exclude = ["tests/**", "builddir/**"]
+
 [tool.pyright]
 typeCheckingMode = "off"
 exclude = ["**/builddir"]
