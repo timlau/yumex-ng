@@ -41,7 +41,7 @@ class FlatpakTransaction:
         self.win = backend.win
         self.backend = backend
         self.first_run = first_run
-        self._current_result = None
+        self._current_result:list[TransactionOperation]
         self.failed = False
         self.failed_msg = None
         if location is FlatpakLocation.SYSTEM:
@@ -83,7 +83,7 @@ class FlatpakTransaction:
         self.current_action = 0
         self.elem_progress = 1.0 / self.num_actions
         if self.first_run:
-            self._current_result = transaction.get_operations()
+            self._current_result:list[TransactionOperation] = transaction.get_operations()
             return False
         else:
             return True

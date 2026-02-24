@@ -17,6 +17,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from typing import Optional
 
 from gi.repository import Gio, GObject
 
@@ -59,7 +60,7 @@ class YumexPackage(GObject.GObject):
         self.state: PackageState = kwargs.pop("state", PackageState.AVAILABLE)
         self.action: PackageAction = kwargs.pop("action", PackageAction.NONE)
         self.is_dep: bool = False
-        self.ref_to: YumexPackage| None = None
+        self.ref_to: Optional[YumexPackage] = None
         self._queued: bool = False
         self.queue_action: bool = False
         self.todo: PackageTodo = PackageTodo.NONE

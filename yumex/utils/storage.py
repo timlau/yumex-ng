@@ -1,3 +1,4 @@
+from typing import Optional, Callable
 import logging
 
 from gi.repository import Gio
@@ -12,7 +13,7 @@ class PackageStorage:
     """A wrapper for a Gio.ListStore with YumexPackage objects"""
 
     def __init__(self):
-        self._store: Gio.ListStore = None
+        self._store: Gio.ListStore[YumexPackage]
         self._index: dict = {}
         self.clear()
 
@@ -47,7 +48,7 @@ class PackageStorage:
         else:
             raise ValueError(f"Can't add {package} to package storage")
 
-    def insert_sorted(self, package: YumexPackage, sort_fn: callable) -> None:
+    def insert_sorted(self, package: YumexPackage, sort_fn: Callable[[YumexPackage, YumexPackage], bool]) -> None:
         if isinstance(package, YumexPackage):
             if package.nevra in self._index:
                 logger.debug(f"Package {package} already exists in storage")
@@ -71,5 +72,5 @@ class PackageStorage:
                 raise ValueError(f"Unknown sort type: {other}")
         return self._store
 
-    def find_by_nevra(self, nevra: str) -> YumexPackage | None:
+    def find_by_nevra(self, nevra: str) -> Optional[YumexPackage]:
         return next((pkg for pkg in self._store if pkg.nevra == nevra), None)

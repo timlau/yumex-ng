@@ -15,6 +15,7 @@
 
 import logging
 from pathlib import Path
+from typing import Optional
 
 from gi.repository import Adw, Gio, Gtk
 
@@ -75,7 +76,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         self.settings = Gio.Settings.new(APP_ID)
         self.current_pkg_filer = None
         self.previuos_pkg_filer = None
-        self._last_selected_pkg: YumexPackage| None = None
+        self._last_selected_pkg: Optional[YumexPackage] = None
         self.info_type: InfoType = InfoType.DESCRIPTION
         self._last_filter: PackageFilter | None = None
         self._resetting = False
@@ -259,7 +260,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         return False
 
     def confirm_gpg_import(self, key_values):
-        dialog = GPGDialog(self, key_values)  # ty:ignore[invalid-argument-type]
+        dialog = GPGDialog(self, key_values)
         dialog.show()
         logger.debug(f"Install key: {dialog.install_key}")
         return dialog.install_key
@@ -520,7 +521,7 @@ class YumexMainWindow(Adw.ApplicationWindow):
         logger.debug("offline transaction on reboot prepare")
         title = _("Offline transaction")
         msg = _("Do you want to prepare the offline transaction to be applied on next reboot ?")
-        dialog = YesNoDialog(self, msg, title)  # ty:ignore[invalid-argument-type]
+        dialog = YesNoDialog(self, msg, title)
         dialog.show()
         if dialog.answer:
             rc = self.presenter.reboot_and_install()
