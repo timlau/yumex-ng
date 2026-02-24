@@ -64,7 +64,7 @@ class YumexFlatpakSearch(Adw.Dialog):
         self.setup_location()
         self.install.set_sensitive(False)
 
-    def show(self, win):
+    def show_dialog(self, win):
         self.present(win)
         self._loop.run()
 

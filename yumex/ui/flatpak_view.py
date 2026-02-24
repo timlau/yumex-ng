@@ -104,14 +104,14 @@ class YumexFlatpakView(Gtk.ListView):
     def search(self):
         self.presenter.select_page(Page.FLATPAKS)
         flatpak_search = YumexFlatpakSearch(self.presenter)
-        flatpak_search.show(self.presenter.get_main_window())
+        flatpak_search.show_dialog(self.presenter.get_main_window())
         selected = flatpak_search.selection.get_selected_item()
         if selected:
             pkg: AppStreamPackage = flatpak_search.selection.get_selected_item().pkg
             fp_id = pkg.flatpak_id
             if fp_id:
                 remote = pkg.repo_name
-                location = flatpak_search.location.get_selected_item().get_string()
+                location = flatpak_search.location.get_selected_item().get_string()  # ty:ignore[unresolved-attribute]
                 ref = self.backend.find_ref(remote, fp_id, location)
                 logger.debug(f"FlatPakView.Search : remote: {remote} location: {location} ref: {ref}")
                 if ref:

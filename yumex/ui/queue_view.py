@@ -52,7 +52,7 @@ class YumexQueueView(Gtk.ListView):
     def refresh_attention(self):
         self.presenter.set_needs_attention(Page.QUEUE, len(self.storage))
 
-    def contains(self, pkg):
+    def contains_pkg(self, pkg):
         return pkg in self.storage
 
     def add_package(self, pkg):
@@ -157,7 +157,7 @@ class YumexQueueRow(Gtk.Box):
     def __init__(self, view, **kwargs):
         super().__init__(**kwargs)
         self.view: YumexQueueView = view
-        self.pkg: YumexPackage = None
+        self.pkg: YumexPackage
 
     def set_tooltip(self):
         tip = get_package_selection_tooltip(self.pkg)

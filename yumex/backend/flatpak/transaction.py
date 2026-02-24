@@ -22,7 +22,6 @@ from gi.repository import Flatpak, GLib
 
 from yumex.backend.flatpak import FlatpakPackage, FlatpakUpdate
 from yumex.utils.enums import FlatpakAction, FlatpakLocation
-from yumex.utils.types import FlatpakRefString
 
 logger = logging.getLogger(__name__)
 
@@ -60,8 +59,8 @@ class FlatpakTransaction:
         self.transaction.connect("end-of-lifed", self.operation_eol)
         self.transaction.connect("end-of-lifed-with-rebase", self.operation_eol_rebase)
 
-    def _parse_operation(self, opration_type: Flatpak.TransactionOperationType) -> str:
-        match opration_type.get_operation_type():
+    def _parse_operation(self, oparation_type) -> str:
+        match oparation_type.get_operation_type():
             case Flatpak.TransactionOperationType.INSTALL:
                 return _("Installing")
             case Flatpak.TransactionOperationType.UNINSTALL:
@@ -132,7 +131,7 @@ class FlatpakTransaction:
         logger.debug("operation-error")
         logger.debug(f" --> {str(error)}")
 
-    def add_install(self, to_inst: FlatpakRefString, source: str) -> None:
+    def add_install(self, to_inst, source) -> None:
         """add ref sting to transaction for install"""
         logger.debug(f"adding {to_inst} for install")
         self.transaction.add_install(source, to_inst, None)
@@ -144,7 +143,7 @@ class FlatpakTransaction:
         gl_bytes = GLib.Bytes.new(ref_bytes)
         self.transaction.add_install_flatpakref(gl_bytes)
 
-    def add_remove(self, to_remove: FlatpakRefString) -> None:
+    def add_remove(self, to_remove: str) -> None:
         """add ref sting to transaction for uninstall"""
         logger.debug(f"adding {to_remove} for uninstall")
         self.transaction.add_uninstall(to_remove)
@@ -152,15 +151,15 @@ class FlatpakTransaction:
     def add_update(self, pkg: FlatpakPackage) -> None:
         """add pkg to transaction for update"""
         if pkg.is_update == FlatpakUpdate.UPDATE:
-            self.transaction.add_update(pkg.ref.format_ref(), None, None)
+            self.transaction.add_update(pkg.ref.format_ref(), None, None)  # ty:ignore[unresolved-attribute]
             logger.debug(f"adding {pkg.id} for update")
         elif pkg.is_update == FlatpakUpdate.EOL:
-            rebase_ref = pkg.ref.get_eol_rebase()
+            rebase_ref = pkg.ref.get_eol_rebase()  # ty:ignore[unresolved-attribute]
             logger.debug(f"adding {pkg.id} for rebase")
-            logger.debug(f" flatpak: rebase {pkg.ref.format_ref()} -> {rebase_ref}")
+            logger.debug(f" flatpak: rebase {pkg.ref.format_ref()} -> {rebase_ref}")  # ty:ignore[unresolved-attribute]
             # rebase to new version
             if rebase_ref:
-                self.transacton.add_rebase(pkg.origin, rebase_ref, None, [pkg.ref.get_name()])
+                self.transacton.add_rebase(pkg.origin, rebase_ref, None, [pkg.ref.get_name()])  # ty:ignore[unresolved-attribute]
                 self.add_remove(str(pkg))  # remove the old version
 
     def run(self) -> bool:

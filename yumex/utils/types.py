@@ -27,5 +27,4 @@ from gi.repository import Flatpak, Adw
 
 # we can not use the YumexMainWindow direct, because of circular imports
 MainWindow = NewType("MainWindow",  Adw.ApplicationWindow)
-FlatpakRefString = NewType("FlatpakRefString", str)  # ex. app/org.gnome.design.Contrast/x86_64/stable
 FlatpakRef =  NewType("FlatpakRef", Flatpak.Ref)

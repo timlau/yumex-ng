@@ -16,7 +16,7 @@
 import html
 import logging
 
-from gi.repository import Adw, Gtk  # type: ignore
+from gi.repository import Adw, Gtk
 
 from yumex.constants import ROOTDIR
 from yumex.utils.enums import InfoType

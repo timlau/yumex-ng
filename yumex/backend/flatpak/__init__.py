@@ -20,7 +20,7 @@ from enum import Enum, auto
 from gi.repository import Flatpak, GObject
 
 from yumex.utils.enums import FlatpakLocation, FlatpakType
-from yumex.utils.types import FlatpakRef, FlatpakRefString
+from yumex.utils.types import FlatpakRef
 
 
 class FlatpakUpdate(Enum):
@@ -68,7 +68,7 @@ class FlatpakPackage(GObject.GObject):
     @property
     def version(self) -> str:
         """return the flatpak version"""
-        version = self.ref.get_appdata_version()
+        version = self.ref.get_appdata_version()  # ty:ignore[unresolved-attribute]
         if not version:
             version = ""
         return version
@@ -76,7 +76,7 @@ class FlatpakPackage(GObject.GObject):
     @property
     def summary(self) -> str:
         """return the flatpak summary"""
-        summary = self.ref.get_appdata_summary()
+        summary = self.ref.get_appdata_summary()  # ty:ignore[unresolved-attribute]
         if not summary:
             summary = ""
         return summary
@@ -84,17 +84,17 @@ class FlatpakPackage(GObject.GObject):
     @property
     def origin(self) -> str:
         """return the origin remote"""
-        return self.ref.get_origin()
+        return self.ref.get_origin()  # ty:ignore[unresolved-attribute]
 
     @property
     def id(self) -> str:
         """return the name/id: ex. org.gnome.design.Contrast"""
-        return self.ref.get_name()
+        return self.ref.get_name()  # ty:ignore[unresolved-attribute]
 
     @property
     def type(self) -> FlatpakType:
         """the ref type as Enum (runtime/app/locale)"""
-        ref_kind = self.ref.get_kind()
+        ref_kind = self.ref.get_kind()  # ty:ignore[unresolved-attribute]
         pak_type = FlatpakType.APP
         match ref_kind:
             case Flatpak.RefKind.RUNTIME:
@@ -104,7 +104,7 @@ class FlatpakPackage(GObject.GObject):
         return pak_type
 
     def name_from_id(self):
-        id = self.ref.get_name()
+        id = self.ref.get_name()  # ty:ignore[unresolved-attribute]
         ids = id.split(".")
         match self.type:
             case FlatpakType.APP:
@@ -117,7 +117,7 @@ class FlatpakPackage(GObject.GObject):
                 return id
 
     def get_name(self):
-        name = self.ref.get_appdata_name()
+        name = self.ref.get_appdata_name()  # ty:ignore[unresolved-attribute]
         if not name:
             name = self.name_from_id()
         match self.type:
@@ -130,6 +130,6 @@ class FlatpakPackage(GObject.GObject):
             case _:
                 return f"Other: {name}"
 
-    def __repr__(self) -> FlatpakRefString:
+    def __repr__(self) -> str:
         """return the ref as string: ex. app/org.gnome.design.Contrast/x86_64/stable"""
-        return self.ref.format_ref()
+        return self.ref.format_ref()  # ty:ignore[unresolved-attribute]

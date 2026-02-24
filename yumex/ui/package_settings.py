@@ -37,8 +37,8 @@ class YumexPackageSettings(Gtk.Box):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.current_pkg_filter: PackageFilter = None
-        self.previuos_pkg_filter: PackageFilter = None
+        self.current_pkg_filter: PackageFilter|None = None
+        self.previuos_pkg_filter: PackageFilter|None = None
 
     def set_focus(self):
         """Set focus on the settings sidebar."""
