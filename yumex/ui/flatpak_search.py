@@ -145,12 +145,13 @@ class YumexFlatpakSearch(Adw.Dialog):
         """bind data from the store object to the widget"""
         row: Row = item.get_child()
         pkg: AppStreamPackage = item.get_item().pkg
-        version = pkg.version
-        developer = pkg.developer
+        version = GLib.markup_escape_text(pkg.version)
+        developer = GLib.markup_escape_text(pkg.developer)
+        name = GLib.markup_escape_text(pkg.name)
         if version:
-            row.set_title(f"{pkg.name} - {version} - {developer}" if developer else f"{pkg.name} - {version}")
+            row.set_title(f"{name} - {version} - {developer}" if developer else f"{pkg.name} - {version}")
         else:
-            row.set_title(f"{pkg.name} - {developer}" if developer else pkg.name)
+            row.set_title(f"{name} - {developer}" if developer else name)
         summary = GLib.markup_escape_text(pkg.summary)
         row.set_subtitle(summary)
         row.set_tooltip_text(pkg.flatpak_bundle)
