@@ -149,7 +149,7 @@ class YumexFlatpakSearch(Adw.Dialog):
         developer = GLib.markup_escape_text(pkg.developer)
         name = GLib.markup_escape_text(pkg.name)
         if version:
-            row.set_title(f"{name} - {version} - {developer}" if developer else f"{pkg.name} - {version}")
+            row.set_title(f"{name} - {version} - {developer}" if developer else f"{name} - {version}")
         else:
             row.set_title(f"{name} - {developer}" if developer else name)
         summary = GLib.markup_escape_text(pkg.summary)
