@@ -14,6 +14,7 @@
 # Copyright (C) 2024 Tim Lauridsen
 
 """Backend for searching in flatpak AppStream Metadata"""
+from typing import Optional
 
 import logging
 from enum import IntEnum
@@ -24,7 +25,7 @@ import gi
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
 
-from gi.repository import AppStream, Flatpak, Gio, GLib  # type: ignore # noqa: E402
+from gi.repository import AppStream, Flatpak, Gio, GLib
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +43,8 @@ class AppStreamPackage:
     def __init__(self, comp: AppStream.Component, repo_name) -> None:
         self.component: AppStream.Component = comp
         self.repo_name: str = repo_name
-        bundle: AppStream.Bundle = comp.get_bundle(AppStream.BundleKind.FLATPAK)
-        self.flatpak_bundle: str = bundle.get_id()
+        bundle: Optional[ AppStream.Bundle] = comp.get_bundle(AppStream.BundleKind.FLATPAK)
+        self.flatpak_bundle: str = bundle.get_id() if bundle else ""
         self.match = Match.NONE
 
     @property
@@ -63,8 +64,8 @@ class AppStreamPackage:
         return self.component.get_summary()
 
     @property
-    def version(self) -> str:
-        releases = self.component.get_releases_plain()
+    def version(self) -> Optional[str]:
+        releases = self.component.get_releases_plain()  # ty:ignore[unresolved-attribute]
         if releases:
             release = releases.index_safe(0)
             if release:
@@ -73,8 +74,8 @@ class AppStreamPackage:
         return None
 
     @property
-    def developer(self) -> str:
-        developer = str(self.component.get_developer().get_name())
+    def developer(self) -> Optional[str]:
+        developer = str(self.component.get_developer().get_name())  # ty:ignore[unresolved-attribute]
         return GLib.markup_escape_text(developer) if developer else None
 
     def __str__(self) -> str:
@@ -117,13 +118,13 @@ class AppstreamSearcher:
         packages = []
         metadata = AppStream.Metadata.new()
         metadata.set_format_style(AppStream.FormatStyle.CATALOG)
-        appstream_file = Path(remote.get_appstream_dir().get_path() + "/appstream.xml.gz")
+        appstream_file = Path(remote.get_appstream_dir().get_path() + "/appstream.xml.gz")  # ty:ignore[unsupported-operator]
         if appstream_file.exists():
             metadata.parse_file(Gio.File.new_for_path(appstream_file.as_posix()), AppStream.FormatKind.XML)
-            components: AppStream.ComponentBox = metadata.get_components()
+            components: AppStream.ComponentBox = metadata.get_components()  # ty:ignore[unresolved-attribute]
             i = 0
-            for i in range(components.get_size()):
-                component = components.index_safe(i)
+            for i in range(components.get_size()):  # ty:ignore[unresolved-attribute]
+                component = components.index_safe(i)  # ty:ignore[unresolved-attribute]
                 if component.get_kind() == AppStream.ComponentKind.DESKTOP_APP:
                     bundle = component.get_bundle(AppStream.BundleKind.FLATPAK).get_id()
                     if bundle not in self.installed:

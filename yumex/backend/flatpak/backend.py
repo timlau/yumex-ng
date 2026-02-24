@@ -27,7 +27,6 @@ from yumex.backend.flatpak.transaction import (
     FlatpakTransaction,
 )
 from yumex.utils.enums import FlatpakAction, FlatpakLocation
-from yumex.utils.types import FlatpakRef
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +93,7 @@ class FlatpakBackend:
         """get the default arch"""
         return Flatpak.get_default_arch()
 
-    def is_installed(self, ref: FlatpakRef) -> bool:
+    def is_installed(self, ref: Flatpak.Ref) -> bool:
         """check if a ref is installed"""
         return ref.get_name() in self._installed
 

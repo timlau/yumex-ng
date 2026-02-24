@@ -20,7 +20,6 @@ from enum import Enum, auto
 from gi.repository import Flatpak, GObject
 
 from yumex.utils.enums import FlatpakLocation, FlatpakType
-from yumex.utils.types import FlatpakRef
 
 
 class FlatpakUpdate(Enum):
@@ -34,12 +33,12 @@ class FlatpakPackage(GObject.GObject):
 
     def __init__(
         self,
-        ref: FlatpakRef,
+        ref: Flatpak.Ref,
         location: FlatpakLocation,
         is_update: FlatpakUpdate = FlatpakUpdate.NO,
     ):
         super().__init__()
-        self.ref: FlatpakRef = ref
+        self.ref: Flatpak.Ref = ref
         self.is_update = is_update
         self.location = location
 

@@ -89,7 +89,6 @@ yumex_utils_modules = [
     'utils/__init__.py',
     'utils/enums.py',
     'utils/storage.py',
-    'utils/types.py',
     'utils/updater.py',
     'utils/exceptions.py',
 ]

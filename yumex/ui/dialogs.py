@@ -1,6 +1,5 @@
 from gi.repository import Adw, GLib, Gtk
 
-from yumex.utils.types import MainWindow
 
 
 def error_dialog(win, title: str, msg: str, show_link:bool = True):
@@ -28,7 +27,7 @@ def error_dialog(win, title: str, msg: str, show_link:bool = True):
 
 # TODO: Make a custom GPG Dialog, there is look better
 class GPGDialog(Adw.AlertDialog):
-    def __init__(self, win: MainWindow, key_values: tuple):
+    def __init__(self, win, key_values: tuple):
         super().__init__()
         (
             pkg_id,
@@ -69,7 +68,7 @@ class GPGDialog(Adw.AlertDialog):
 
 
 class YesNoDialog(Adw.AlertDialog):
-    def __init__(self, win: MainWindow, text: str, title: str):
+    def __init__(self, win, text: str, title: str):
         super().__init__()
         self.win = win
         self.answer = False
