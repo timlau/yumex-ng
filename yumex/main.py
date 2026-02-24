@@ -54,7 +54,7 @@ class YumexApplication(Adw.Application):
         necessary.
         """
 
-        self.win: YumexMainWindow = self.props.active_window
+        self.win: YumexMainWindow = self.props.active_window  # ty:ignore[invalid-assignment]
         if not self.win:
             window_height: int = self.settings.get_int("window-height")
             window_width: int = self.settings.get_int("window-width")
