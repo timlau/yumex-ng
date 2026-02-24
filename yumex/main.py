@@ -21,7 +21,6 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from traceback import format_exception
 
-from black.output import err
 from gi.repository import Adw, Gio, Gtk
 
 from yumex.constants import APP_ID, BACKEND, BUILD_TYPE, ROOTDIR, VERSION
