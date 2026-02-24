@@ -27,14 +27,14 @@ from yumex.backend.flatpak.transaction import (
     FlatpakTransaction,
 )
 from yumex.utils.enums import FlatpakAction, FlatpakLocation
-from yumex.utils.types import FlatpakRef, MainWindow
+from yumex.utils.types import FlatpakRef
 
 logger = logging.getLogger(__name__)
 
 
 class FlatpakBackend:
-    def __init__(self, win: MainWindow):
-        self.win: MainWindow = win
+    def __init__(self, win):
+        self.win = win
         self.user: Flatpak.Installation = Flatpak.Installation.new_user()
         self.system: Flatpak.Installation = Flatpak.Installation.new_system()
         self.updates = self._get_updates()
@@ -125,7 +125,7 @@ class FlatpakBackend:
         updates += [ref.get_name() for ref in self.system.list_installed_refs_for_update()]
         return updates
 
-    def _get_package(self, ref, location: FlatpakLocation) -> FlatpakPackage:
+    def _get_flatpak(self, ref, location: FlatpakLocation) -> FlatpakPackage:
         """create a flatpak pkg object with update status"""
         if eol := ref.get_eol():
             logger.debug(f"flatpak: EOL : {ref} {eol}")
@@ -214,23 +214,23 @@ class FlatpakBackend:
 
     def _get_all_updates(self):
         user_updates = [
-            self._get_package(ref, FlatpakAction.UPDATE) for ref in self.user.list_installed_refs_for_update()
+            self._get_flatpak(ref, FlatpakLocation.USER) for ref in self.user.list_installed_refs_for_update()
         ]
         system_updates = [
-            self._get_package(ref, FlatpakAction.UPDATE) for ref in self.system.list_installed_refs_for_update()
+            self._get_flatpak(ref, FlatpakLocation.SYSTEM) for ref in self.system.list_installed_refs_for_update()
         ]
         return user_updates, system_updates
 
     def _get_all_unused(self):
-        user_unused = [self._get_package(ref, FlatpakAction.UNINSTALL) for ref in self.user.list_unused_refs()]
-        system_unused = [self._get_package(ref, FlatpakAction.UNINSTALL) for ref in self.system.list_unused_refs()]
+        user_unused = [self._get_flatpak(ref, FlatpakLocation.USER) for ref in self.user.list_unused_refs()]
+        system_unused = [self._get_flatpak(ref, FlatpakLocation.SYSTEM) for ref in self.system.list_unused_refs()]
         return user_unused, system_unused
 
     def number_of_updates(self) -> int:
         """get the number of available updates."""
         return len(self.updates)
 
-    def do_update_all(self, execute) -> None:
+    def do_update_all(self, execute) :
         """update all flatpaks with available updates"""
         # user_updates = [pkg for pkg in pkgs if pkg.is_update and pkg.is_user]
         # system_updates = [pkg for pkg in pkgs if pkg.is_update and not pkg.is_user]
@@ -238,12 +238,12 @@ class FlatpakBackend:
         user_updates, system_updates = self._get_all_updates()
         return self._do_transaction(user_updates, system_updates, FlatpakAction.UPDATE, execute)
 
-    def do_remove_unused(self, execute) -> None:
+    def do_remove_unused(self, execute) :
         """remove all runtimes (etc)"""
         user_unused, system_unused = self._get_all_unused()
         return self._do_transaction(user_unused, system_unused, FlatpakAction.UNINSTALL, execute)
 
-    def do_install(self, to_inst, source, location: FlatpakLocation, execute) -> None:
+    def do_install(self, to_inst, source, location: FlatpakLocation, execute) :
         """install a flatak by a ref string"""
         pkgs = [to_inst]
         if location == FlatpakLocation.USER:
@@ -251,7 +251,7 @@ class FlatpakBackend:
         else:
             return self._do_transaction([], pkgs, FlatpakAction.INSTALL, execute, source=source)
 
-    def do_remove(self, pkgs: list[FlatpakPackage], execute: bool) -> None:
+    def do_remove(self, pkgs: list[FlatpakPackage], execute: bool):
         """uninstall a flatpak pkg"""
         user_pkgs, system_pkgs = self.filter_by_location(pkgs)
         return self._do_transaction(
@@ -261,7 +261,7 @@ class FlatpakBackend:
             execute=execute,
         )
 
-    def do_update(self, pkgs: list[FlatpakPackage], execute: bool) -> None:
+    def do_update(self, pkgs: list[FlatpakPackage], execute: bool):
         """update a flatpak pkg"""
         user_pkgs, system_pkgs = self.filter_by_location(pkgs)
         return self._do_transaction(
@@ -285,9 +285,9 @@ class FlatpakBackend:
         """get list of installed flatpak pkgs"""
         refs = []
         if location in (FlatpakLocation.USER, FlatpakLocation.BOTH):
-            refs += [self._get_package(ref, location=FlatpakLocation.USER) for ref in self.user.list_installed_refs()]
+            refs += [self._get_flatpak(ref, location=FlatpakLocation.USER) for ref in self.user.list_installed_refs()]
         if location in (FlatpakLocation.SYSTEM, FlatpakLocation.BOTH):
             refs += [
-                self._get_package(ref, location=FlatpakLocation.SYSTEM) for ref in self.system.list_installed_refs()
+                self._get_flatpak(ref, location=FlatpakLocation.SYSTEM) for ref in self.system.list_installed_refs()
             ]
         return refs
