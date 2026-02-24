@@ -135,15 +135,15 @@ class YumexFlatpakSearch(Adw.Dialog):
             self.install.set_sensitive(False)
 
     @Gtk.Template.Callback()
-    def on_setup(self, widget, item):
+    def on_setup(self, widget, item : Gtk.ListItem):
         """Setup the widget to show in the Gtk.Listview"""
-        row = Row()
+        row = FlatpakUIRow()
         item.set_child(row)
 
     @Gtk.Template.Callback()
     def on_bind(self, widget, item):
         """bind data from the store object to the widget"""
-        row: Row = item.get_child()
+        row: FlatpakUIRow = item.get_child()
         pkg: AppStreamPackage = item.get_item().pkg
         version = GLib.markup_escape_text(pkg.version)
         developer = GLib.markup_escape_text(pkg.developer)
@@ -172,7 +172,7 @@ class YumexFlatpakSearch(Adw.Dialog):
             return icon_file.as_posix()
 
 
-class Row(Adw.ActionRow):
+class FlatpakUIRow(Adw.ActionRow):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.icon = Gtk.Image().new_from_icon_name("flatpak-symbolic")
