@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 07:22+0100\n"
+"POT-Creation-Date: 2026-02-25 07:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: yumex/backend/dnf5daemon/__init__.py:75
-#: yumex/backend/flatpak/transaction.py:66 yumex/ui/flatpak_result.py:37
+#: yumex/backend/flatpak/transaction.py:65 yumex/ui/flatpak_result.py:37
 msgid "Installing"
 msgstr ""
 
@@ -43,12 +43,12 @@ msgid "Replacing"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:327
-#: yumex/backend/dnf5daemon/__init__.py:347 yumex/ui/window.py:220
+#: yumex/backend/dnf5daemon/__init__.py:347 yumex/ui/window.py:221
 msgid "Building Transaction"
 msgstr ""
 
 #: yumex/backend/dnf5daemon/__init__.py:369
-#: yumex/backend/dnf5daemon/__init__.py:478 yumex/ui/window.py:244
+#: yumex/backend/dnf5daemon/__init__.py:478 yumex/ui/window.py:245
 msgid "Building Offline Transaction"
 msgstr ""
 
@@ -74,15 +74,15 @@ msgstr ""
 msgid "Download Repository Information"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:68 yumex/ui/flatpak_result.py:39
+#: yumex/backend/flatpak/transaction.py:67 yumex/ui/flatpak_result.py:39
 msgid "Uninstalling"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:70 yumex/ui/flatpak_result.py:41
+#: yumex/backend/flatpak/transaction.py:69 yumex/ui/flatpak_result.py:41
 msgid "Updating"
 msgstr ""
 
-#: yumex/backend/flatpak/transaction.py:182
+#: yumex/backend/flatpak/transaction.py:181
 msgid "flatpak transaction failed"
 msgstr ""
 
@@ -108,6 +108,42 @@ msgstr ""
 
 #: yumex/ui/__init__.py:54
 msgid "Queued for distribution synchronization"
+msgstr ""
+
+#: yumex/ui/package_view.py:96
+msgid "Loading Packages"
+msgstr ""
+
+#: yumex/ui/package_view.py:97
+msgid "This may take a little while"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:119
+msgid "Packages for installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:121
+msgid "Packages for deletion"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:123 yumex/ui/transaction_result.py:125
+msgid "Packages for updating"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:127
+msgid "Skipped Packages"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:129
+msgid "Packages for downgrading"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:131
+msgid "Packages for re-installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:133
+msgid "Packages for distribution synchronization"
 msgstr ""
 
 #: yumex/ui/flatpak_view.py:90
@@ -142,108 +178,80 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: yumex/ui/dialogs.py:17
+#: yumex/ui/dialogs.py:16 data/ui/error_dialog.blp:28
 msgid "Quit"
 msgstr ""
 
-#: yumex/ui/dialogs.py:42
+#: yumex/ui/dialogs.py:23 data/ui/error_dialog.blp:82
+msgid "Report Issue on GitHub"
+msgstr ""
+
+#: yumex/ui/dialogs.py:45
 msgid "Install GPG Key"
 msgstr ""
 
-#: yumex/ui/dialogs.py:50 yumex/ui/dialogs.py:79
+#: yumex/ui/dialogs.py:53 yumex/ui/dialogs.py:82
 msgid "Yes"
 msgstr ""
 
-#: yumex/ui/dialogs.py:52 yumex/ui/dialogs.py:81
+#: yumex/ui/dialogs.py:55 yumex/ui/dialogs.py:84
 msgid "No"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:119
-msgid "Packages for installation"
+#: yumex/ui/flatpak_search.py:218
+msgid "Open on flathub.org"
 msgstr ""
 
-#: yumex/ui/transaction_result.py:121
-msgid "Packages for deletion"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:123 yumex/ui/transaction_result.py:125
-msgid "Packages for updating"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:127
-msgid "Skipped Packages"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:129
-msgid "Packages for downgrading"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:131
-msgid "Packages for re-installation"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:133
-msgid "Packages for distribution synchronization"
-msgstr ""
-
-#: yumex/ui/package_view.py:96
-msgid "Loading Packages"
-msgstr ""
-
-#: yumex/ui/package_view.py:97
-msgid "This may take a little while"
-msgstr ""
-
-#: yumex/ui/window.py:201 yumex/ui/window.py:333
+#: yumex/ui/window.py:202 yumex/ui/window.py:338
 msgid "Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:235
+#: yumex/ui/window.py:236
 msgid "Nothing to do in this transaction"
 msgstr ""
 
-#: yumex/ui/window.py:246
+#: yumex/ui/window.py:247
 msgid "Running Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:276
+#: yumex/ui/window.py:277
 msgid "Running Flatpak Transaction"
 msgstr ""
 
-#: yumex/ui/window.py:517
+#: yumex/ui/window.py:522
 msgid "Offline transaction"
 msgstr ""
 
-#: yumex/ui/window.py:518
+#: yumex/ui/window.py:523
 msgid ""
 "Do you want to prepare the offline transaction to be applied on next reboot ?"
 msgstr ""
 
-#: yumex/ui/window.py:524
+#: yumex/ui/window.py:529
 msgid "Offline trasaction prepared to be applied on next reboot"
 msgstr ""
 
-#: yumex/ui/window.py:527
+#: yumex/ui/window.py:532
 msgid "Offline transaction prepare failed"
 msgstr ""
 
-#: yumex/ui/window.py:545
+#: yumex/ui/window.py:550
 msgid "system upgrade target release must to larger than current release"
 msgstr ""
 
-#: yumex/ui/window.py:554
+#: yumex/ui/window.py:559
 msgid "Offline Transaction completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:566
+#: yumex/ui/window.py:571
 msgid "Distro-Sync completed succesfully"
 msgstr ""
 
-#: yumex/ui/window.py:575
+#: yumex/ui/window.py:580
 msgid "Offline transaction cancelled"
 msgstr ""
 
-#: yumex/ui/window.py:578
+#: yumex/ui/window.py:583
 msgid "Offline transaction cancel failed"
 msgstr ""
 
@@ -256,8 +264,12 @@ msgstr ""
 msgid "Special thanks to"
 msgstr ""
 
-#: yumex/main.py:213
-msgid "Critical Error"
+#: yumex/main.py:215 yumex/main.py:222
+msgid "dnf5daemon-server Error"
+msgstr ""
+
+#: yumex/main.py:230
+msgid "Yum Extender Ctritical Error"
 msgstr ""
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
@@ -458,7 +470,7 @@ msgstr ""
 msgid "Repository"
 msgstr ""
 
-#: data/ui/preferences.blp:5 data/ui/shortcuts.blp:17
+#: data/ui/preferences.blp:5 data/ui/shortcuts-dialog.blp:14
 msgid "Preferences"
 msgstr ""
 
@@ -530,98 +542,6 @@ msgstr ""
 msgid "Remove item from queue"
 msgstr ""
 
-#: data/ui/shortcuts.blp:9
-msgid "General"
-msgstr ""
-
-#: data/ui/shortcuts.blp:12
-msgid "Keyboard shortcuts"
-msgstr ""
-
-#: data/ui/shortcuts.blp:22
-msgid "Apply Actions/Confirm"
-msgstr ""
-
-#: data/ui/shortcuts.blp:27
-msgid "Close Dialog/Cancel"
-msgstr ""
-
-#: data/ui/shortcuts.blp:33
-msgid "Select Packages"
-msgstr ""
-
-#: data/ui/shortcuts.blp:38
-msgid "Select Flatpaks"
-msgstr ""
-
-#: data/ui/shortcuts.blp:43
-msgid "Select Queue"
-msgstr ""
-
-#: data/ui/shortcuts.blp:49
-msgid "Package View"
-msgstr ""
-
-#: data/ui/shortcuts.blp:52
-msgid "Show/Hide Sidebar"
-msgstr ""
-
-#: data/ui/shortcuts.blp:57
-msgid "Toggled queued"
-msgstr ""
-
-#: data/ui/shortcuts.blp:62 data/ui/window.blp:329
-msgid "Select All"
-msgstr ""
-
-#: data/ui/shortcuts.blp:67 data/ui/window.blp:334
-msgid "Deselect All"
-msgstr ""
-
-#: data/ui/shortcuts.blp:72
-msgid "Toggle Searchbar"
-msgstr ""
-
-#: data/ui/shortcuts.blp:77
-msgid "Search Options"
-msgstr ""
-
-#: data/ui/shortcuts.blp:83
-msgid "Package Filters"
-msgstr ""
-
-#: data/ui/shortcuts.blp:86
-msgid "Show Installed"
-msgstr ""
-
-#: data/ui/shortcuts.blp:91
-msgid "Show updates"
-msgstr ""
-
-#: data/ui/shortcuts.blp:96
-msgid "Show All"
-msgstr ""
-
-#: data/ui/shortcuts.blp:102
-msgid "Queue View"
-msgstr ""
-
-#: data/ui/shortcuts.blp:105
-msgid "Clear Queue"
-msgstr ""
-
-#: data/ui/shortcuts.blp:111
-msgid "Flatpak View"
-msgstr ""
-
-#: data/ui/shortcuts.blp:114
-msgid "Search for flatpaks to install"
-msgstr ""
-
-#: data/ui/shortcuts.blp:119
-msgid "Remove selected flatpak"
-msgstr ""
-
 #: data/ui/transaction_result.blp:16
 msgid "Transaction Result"
 msgstr ""
@@ -644,6 +564,164 @@ msgstr ""
 
 #: data/ui/transaction_result.blp:141
 msgid "This transaction will be performed offline during reboot"
+msgstr ""
+
+#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
+msgid "Search Settings"
+msgstr ""
+
+#: data/ui/search_settings.blp:20
+msgid "Clear the repository keywords"
+msgstr ""
+
+#: data/ui/search_settings.blp:32
+msgid "Repository keywords (blank = show all)"
+msgstr ""
+
+#: data/ui/search_settings.blp:33
+msgid ""
+"Comma separated keywords to match against enabled repositories\n"
+" Ex. 'fed' will match 'fedora'"
+msgstr ""
+
+#: data/ui/search_settings.blp:40
+msgid "Number of package versions"
+msgstr ""
+
+#: data/ui/search_settings.blp:41
+msgid "Number of packaage versions to show in search results"
+msgstr ""
+
+#: data/ui/search_settings.blp:55
+msgid "Search in filesystem"
+msgstr ""
+
+#: data/ui/search_settings.blp:56
+msgid "Search in containing files"
+msgstr ""
+
+#: data/ui/search_settings.blp:61
+msgid "Search in provides"
+msgstr ""
+
+#: data/ui/search_settings.blp:62
+msgid "Search in package provides"
+msgstr ""
+
+#: data/ui/search_settings.blp:67
+msgid "Search in binaries"
+msgstr ""
+
+#: data/ui/search_settings.blp:68
+msgid "Search in package binaries"
+msgstr ""
+
+#: data/ui/search_settings.blp:73
+msgid "Filter on archs"
+msgstr ""
+
+#: data/ui/search_settings.blp:74
+msgid "Filter on package architectures"
+msgstr ""
+
+#: data/ui/search_settings.blp:80
+msgid "Search scope"
+msgstr ""
+
+#: data/ui/search_settings.blp:81
+msgid "Filter on installation status"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:6
+msgid "General"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:9
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:19
+msgid "Apply Actions/Confirm"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:24
+msgid "Close Dialog/Cancel"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:30
+msgid "Select Packages"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:35
+msgid "Select Flatpaks"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:40
+msgid "Select Queue"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:46
+msgid "Package View"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:49
+msgid "Show/Hide Sidebar"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:54
+msgid "Toggled queued"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:59 data/ui/window.blp:329
+msgid "Select All"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:64 data/ui/window.blp:334
+msgid "Deselect All"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:69
+msgid "Toggle Searchbar"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:74
+msgid "Search Options"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:80
+msgid "Package Filters"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:83
+msgid "Show Installed"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:88
+msgid "Show updates"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:93
+msgid "Show All"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:99
+msgid "Queue View"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:102
+msgid "Clear Queue"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:108
+msgid "Flatpak View"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:111
+msgid "Search for flatpaks to install"
+msgstr ""
+
+#: data/ui/shortcuts-dialog.blp:116
+msgid "Remove selected flatpak"
 msgstr ""
 
 #: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
@@ -739,70 +817,12 @@ msgstr ""
 msgid "_Distro Sync"
 msgstr ""
 
-#: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
-msgid "Search Settings"
+#: data/ui/error_dialog.blp:16 data/ui/error_dialog.blp:44
+msgid "Yum Extender Error"
 msgstr ""
 
-#: data/ui/search_settings.blp:20
-msgid "Clear the repository keywords"
-msgstr ""
-
-#: data/ui/search_settings.blp:32
-msgid "Repository keywords (blank = show all)"
-msgstr ""
-
-#: data/ui/search_settings.blp:33
-msgid ""
-"Comma separated keywords to match against enabled repositories\n"
-" Ex. 'fed' will match 'fedora'"
-msgstr ""
-
-#: data/ui/search_settings.blp:39
-msgid "Number of package versions"
-msgstr ""
-
-#: data/ui/search_settings.blp:40
-msgid "Number of packaage versions to show in search results"
-msgstr ""
-
-#: data/ui/search_settings.blp:54
-msgid "Search in filesystem"
-msgstr ""
-
-#: data/ui/search_settings.blp:55
-msgid "Search in containing files"
-msgstr ""
-
-#: data/ui/search_settings.blp:60
-msgid "Search in provides"
-msgstr ""
-
-#: data/ui/search_settings.blp:61
-msgid "Search in package provides"
-msgstr ""
-
-#: data/ui/search_settings.blp:66
-msgid "Search in binaries"
-msgstr ""
-
-#: data/ui/search_settings.blp:67
-msgid "Search in package binaries"
-msgstr ""
-
-#: data/ui/search_settings.blp:72
-msgid "Filter on archs"
-msgstr ""
-
-#: data/ui/search_settings.blp:73
-msgid "Filter on package architectures"
-msgstr ""
-
-#: data/ui/search_settings.blp:79
-msgid "Search scope"
-msgstr ""
-
-#: data/ui/search_settings.blp:80
-msgid "Filter on installation status"
+#: data/ui/error_dialog.blp:22
+msgid "Copy error to clipboard"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
