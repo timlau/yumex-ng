@@ -267,7 +267,7 @@ class Dnf5DbusClient:
         """Just for testing purpose"""
         raise dbus.exceptions.DBusException("DBUSError : Something strange in the neighborhood")
 
-    def package_list(self, *args, **kwargs) -> tuble[list, str]:
+    def package_list(self, *args, **kwargs) -> tuple[list, str]:
         """call the org.rpm.dnf.v0.rpm.Repo list method
 
         *args is package patterns to match
