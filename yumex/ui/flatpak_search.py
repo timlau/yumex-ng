@@ -155,11 +155,20 @@ class YumexFlatpakSearch(Adw.Dialog):
         summary = GLib.markup_escape_text(pkg.summary)
         row.set_subtitle(summary)
         row.set_tooltip_text(pkg.flatpak_bundle)
+        if "flathub" in pkg.repo_name:
+            uri = self._get_link(pkg.id)
+            row.uri.set_uri(uri)
+        else:
+            row.uri.set_sensitive(False)
         row.repo.set_text(pkg.repo_name)
         row.branch.set_text(pkg.flatpak_bundle.split("/")[-1])
         icon_file = self._get_icon(pkg.id, pkg.repo_name)
         if icon_file:
             row.icon.set_from_file(icon_file)
+
+    def _get_link(self, id):
+        uri=f"https://flathub.org/en/apps/{id}"
+        return uri
 
     def _get_icon(self, id: str, remote_name: str):
         """set the flatpak icon in the ui of current found flatpak"""
@@ -178,6 +187,11 @@ class FlatpakUIRow(Adw.ActionRow):
         self.icon = Gtk.Image().new_from_icon_name("flatpak-symbolic")
         self.icon.set_icon_size(Gtk.IconSize.LARGE)
         self.add_prefix(self.icon)
+        vbox = Gtk.Box()
+        vbox.set_orientation(Gtk.Orientation.HORIZONTAL)
+        # vbox.props.vexpand = False
+        # vbox.props.hexpand = False
+        vbox.props.valign = Gtk.Align.START
         box = Gtk.Box()
         box.set_orientation(Gtk.Orientation.HORIZONTAL)
         box.props.vexpand = False
@@ -190,4 +204,18 @@ class FlatpakUIRow(Adw.ActionRow):
         self.repo.add_css_class("tag")
         self.repo.add_css_class("origin")
         box.append(self.repo)
-        self.add_suffix(box)
+        vbox.append(box)
+        box = Gtk.Box()
+        box.set_orientation(Gtk.Orientation.HORIZONTAL)
+        box.props.vexpand = False
+        box.props.hexpand = False
+        box.props.valign = Gtk.Align.START
+        box.props.halign = Gtk.Align.START
+        self.uri = Gtk.LinkButton()
+        self.uri.set_use_underline(False)
+        self.uri.set_icon_name("web-browser-symbolic")
+        self.uri.add_css_class("circular")
+        self.uri.set_tooltip_text(_("Open on flathub.org"))
+        box.append(self.uri)
+        vbox.append(box)
+        self.add_suffix(vbox)
