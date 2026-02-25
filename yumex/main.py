@@ -96,9 +96,9 @@ class YumexApplication(Adw.Application):
         self.create_action("flatpak_remove_unused", self.win.action_dispatch)
 
         self.create_action("apply_actions", self.win.action_dispatch, ["<Ctrl>Return"])
-        self.create_action("page_one", self.win.action_dispatch, ["<Alt>1"])
-        self.create_action("page_two", self.win.action_dispatch, ["<Alt>2"])
-        self.create_action("page_three", self.win.action_dispatch, ["<Alt>3"])
+        self.create_action("page_one", self.win.action_dispatch, ["<Alt>1","<Alt>P"])
+        self.create_action("page_two", self.win.action_dispatch, ["<Alt>2","<Alt>F"])
+        self.create_action("page_three", self.win.action_dispatch, ["<Alt>3","<Alt>Q"])
         self.create_action("downgrade", self.win.action_dispatch)
         self.create_action("reinstall", self.win.action_dispatch)
         self.create_action("distrosync", self.win.action_dispatch)
