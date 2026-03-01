@@ -5,6 +5,7 @@ import locale
 import logging
 import threading
 import time
+import os
 
 import dbus
 import dbus.mainloop.glib
@@ -101,7 +102,11 @@ def setup_notification():
 CONFIG = Config.from_gsettings()
 INDICATOR = Indicator(custom_updater=CONFIG.custom_updater, refresh_func=refresh_updates, dark_icon=CONFIG.dark_icon)
 
-if CONFIG.send_notification:
+DISALLOWED_USERS = {"liveuser", "gnome-initial-setup"}
+
+current_user = os.getenv("USER") or os.getlogin()
+
+if CONFIG.send_notification and current_user not in DISALLOWED_USERS:
     NOTIFICATION: Notification = setup_notification()
 else:
     NOTIFICATION = None
