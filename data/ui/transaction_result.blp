@@ -59,6 +59,17 @@ template $YumexTransactionResult: Adw.Dialog {
       margin-top: 20;
       margin-bottom: 20;
 
+      Adw.Banner banner {
+        margin-bottom: 10;
+        title: _("dnf5daemon-server is updated, consider using offline transaction");
+        tooltip-text: _("dnf5daemon-server is applying the transaction to the system.\nUpdating the dnfdaemon-server will restart the service.\n This can cause an error in Yum Extender");
+        revealed: false;
+
+        styles [
+          "banner",
+        ]
+      }
+
       Gtk.Frame result_frame {
         vexpand: true;
 
@@ -132,10 +143,12 @@ template $YumexTransactionResult: Adw.Dialog {
           }
         }
       }
+
       Adw.ActionRow total_size {
         title: _("Install Size");
         subtitle: "0 Mb";
       }
+
       Adw.SwitchRow offline {
         title: _("Offline Transaction");
         subtitle: _("This transaction will be performed offline during reboot");

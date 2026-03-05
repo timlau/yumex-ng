@@ -175,3 +175,8 @@ spinner {
     font-size: 1.2em;
     color: @error_color;
 }
+
+
+.banner {
+    color: @error_color;
+}

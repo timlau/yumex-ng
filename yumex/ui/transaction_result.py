@@ -39,6 +39,7 @@ class YumexTransactionResult(Adw.Dialog):
     copy_button = Gtk.Template.Child("copy")
     total_size: Adw.SwitchRow = Gtk.Template.Child()
     offline: Adw.SwitchRow = Gtk.Template.Child()
+    banner: Adw.Banner = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -59,6 +60,9 @@ class YumexTransactionResult(Adw.Dialog):
     def show_windows(self, win):
         self.present(win)
         self._loop.run()
+
+    def show_banner(self, reveal:bool = True):
+        self.banner.set_revealed(reveal)
 
     def set_problems(self, prob: list):
         self.problems.set_text("\n".join(prob))
@@ -98,6 +102,8 @@ class YumexTransactionResult(Adw.Dialog):
                 continue
             for (name, repo), size in result_dict[key]:
                 total_size += size
+                if "dnf5daemon-server" in name:
+                    self.show_banner()
         return total_size
 
     def set_total_size(self, result_dict: dict):
