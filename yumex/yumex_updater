@@ -152,7 +152,7 @@ def main():
     CONFIG = Config.from_gsettings()
 
     # Only create indicator/notifications in service mode
-    INDICATOR = Indicator(custom_updater=CONFIG.custom_updater, refresh_func=refresh_updates)
+    INDICATOR = Indicator(custom_updater=CONFIG.custom_updater, refresh_func=refresh_updates, dark_icon=CONFIG.dark_icon)
 
     current_user = os.getenv("USER") or os.getlogin()
     if CONFIG.send_notification and current_user not in DISALLOWED_USERS:
