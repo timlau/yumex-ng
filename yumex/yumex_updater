@@ -41,6 +41,12 @@ class UpdateService(dbus.service.Object):
         logger.debug(f"DBUS: RefreshUpdates {refresh}")
         GLib.idle_add(refresh_updates, refresh)
 
+    @dbus.service.method(dbus_interface=UPDATER_BUS_NAME, in_signature="b", out_signature="uuu")
+    def GetUpdates(self, refresh: bool) -> tuple[int, int, int]:
+        updates: Updates = Updates.get_updates(refresh)
+        return updates.sys_update_count, updates.flatpak_user_count, updates.flatpak_sys_count
+
+
 
 def refresh_updates(refresh: bool) -> None:
     """check for new updates"""
