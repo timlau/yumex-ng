@@ -22,14 +22,15 @@ from yumex.service.data import Config, Indicator, Updates, open_yumex
 gettext.install("yumex", LOCALEDIR)
 locale.bindtextdomain("yumex", LOCALEDIR)
 locale.textdomain("yumex")
-
-# Setup logger
 logger = logging.getLogger("yumex_updater")
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="(%(name)-5s) -  %(message)s",
-    datefmt="%H:%M:%S",
-)
+
+def setup_logging():
+    # Setup logger
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="(%(name)-5s) -  %(message)s",
+        datefmt="%H:%M:%S",
+    )
 
 UPDATER_BUS_NAME = "dk.yumex.UpdateService"
 UPDATER_OBJECT_PATH = "/" + UPDATER_BUS_NAME.replace(".", "/")
@@ -148,6 +149,7 @@ def manual_update_check(refresh: bool, json_out: bool = False) -> int:
 
 def main():
     global CONFIG, INDICATOR, NOTIFICATION
+    setup_logging()
 
     CONFIG = Config.from_gsettings()
 
