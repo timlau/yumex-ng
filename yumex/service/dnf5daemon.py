@@ -1,5 +1,5 @@
 import logging
-from typing import Generator
+
 
 import dbus
 
@@ -51,7 +51,7 @@ class Dnf5UpdateChecker:
         self.session = None
         return False  # Do not suppress exceptions
 
-    def open_session(self) -> Generator[tuple[dbus.SystemBus, str], None, None]:
+    def open_session(self):
         """Get a new session with dnf5daemon-server"""
         try:
             iface_session = dbus.Interface(
@@ -98,7 +98,7 @@ class Dnf5UpdateChecker:
             logger.debug(f"Options: {options}")
             return []
 
-    def get_repo_priorities(self) -> list:
+    def get_repo_priorities(self) -> dict[str, int]:
         """Get a list of repositories"""
         try:
             repos = self.iface_repo.list(
@@ -111,7 +111,7 @@ class Dnf5UpdateChecker:
             return repo_prioritiy
         except dbus.DBusException as e:
             logger.error(e)
-            return []
+            return {}
 
     def get_yumex_packages(self, pkgs: list) -> list:
         """Convert a list of packages to YumexPackage objects"""
@@ -130,6 +130,6 @@ class Dnf5UpdateChecker:
             repo_priorities = self.get_repo_priorities()
             updates = FilterUpdates(repo_priorities, self.get_packages_by_name).get_updates(pkgs)
             return updates
-        except dbus.Exception as e:
+        except dbus.DBusException as e:
             logger.error(e)
             return []
