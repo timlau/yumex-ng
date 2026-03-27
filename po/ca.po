@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 07:00+0100\n"
+"POT-Creation-Date: 2026-03-06 06:52+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>, 2026\n"
 "Language-Team: Catalan (https://app.transifex.com/timlau/teams/16939/ca/)\n"
@@ -121,34 +121,6 @@ msgstr "Es carreguen els paquets"
 #: yumex/ui/package_view.py:97
 msgid "This may take a little while"
 msgstr "Això pot trigar una mica"
-
-#: yumex/ui/transaction_result.py:119
-msgid "Packages for installation"
-msgstr "Paquets per a instal·lar"
-
-#: yumex/ui/transaction_result.py:121
-msgid "Packages for deletion"
-msgstr "Paquets per a suprimir"
-
-#: yumex/ui/transaction_result.py:123 yumex/ui/transaction_result.py:125
-msgid "Packages for updating"
-msgstr "Paquets per a actualitzar"
-
-#: yumex/ui/transaction_result.py:127
-msgid "Skipped Packages"
-msgstr "Paquets omesos"
-
-#: yumex/ui/transaction_result.py:129
-msgid "Packages for downgrading"
-msgstr "Paquets per degradar"
-
-#: yumex/ui/transaction_result.py:131
-msgid "Packages for re-installation"
-msgstr "Paquets per reinstal·lar"
-
-#: yumex/ui/transaction_result.py:133
-msgid "Packages for distribution synchronization"
-msgstr "Paquets per a la sincronització de la distribució"
 
 #: yumex/ui/flatpak_view.py:90
 msgid "Flatpaks were updated"
@@ -263,6 +235,34 @@ msgstr "S'ha cancel·lat la transacció fora de línia."
 #: yumex/ui/window.py:583
 msgid "Offline transaction cancel failed"
 msgstr "Ha fallat cancel·lar la transacció fora de línia."
+
+#: yumex/ui/transaction_result.py:125
+msgid "Packages for installation"
+msgstr "Paquets per a instal·lar"
+
+#: yumex/ui/transaction_result.py:127
+msgid "Packages for deletion"
+msgstr "Paquets per a suprimir"
+
+#: yumex/ui/transaction_result.py:129 yumex/ui/transaction_result.py:131
+msgid "Packages for updating"
+msgstr "Paquets per a actualitzar"
+
+#: yumex/ui/transaction_result.py:133
+msgid "Skipped Packages"
+msgstr "Paquets omesos"
+
+#: yumex/ui/transaction_result.py:135
+msgid "Packages for downgrading"
+msgstr "Paquets per degradar"
+
+#: yumex/ui/transaction_result.py:137
+msgid "Packages for re-installation"
+msgstr "Paquets per reinstal·lar"
+
+#: yumex/ui/transaction_result.py:139
+msgid "Packages for distribution synchronization"
+msgstr "Paquets per a la sincronització de la distribució"
 
 #: yumex/main.py:181
 msgid ""
@@ -556,30 +556,6 @@ msgstr "Afegit com a dependència"
 msgid "Remove item from queue"
 msgstr "Suprimeix l'element de la cua"
 
-#: data/ui/transaction_result.blp:16
-msgid "Transaction Result"
-msgstr "Resultat de la transacció"
-
-#: data/ui/transaction_result.blp:90
-msgid "Problems in Transaction"
-msgstr "Problemes a la transacció"
-
-#: data/ui/transaction_result.blp:101
-msgid "Copy to clipboard"
-msgstr "Copia al porta-retalls"
-
-#: data/ui/transaction_result.blp:136
-msgid "Install Size"
-msgstr "Mida de la instal·lació"
-
-#: data/ui/transaction_result.blp:140
-msgid "Offline Transaction"
-msgstr "Transacció fora de línia"
-
-#: data/ui/transaction_result.blp:141
-msgid "This transaction will be performed offline during reboot"
-msgstr "Aquesta transacció es farà fora de línia durant el reinici."
-
 #: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
 msgid "Search Settings"
 msgstr "Paràmetres de la cerca"
@@ -841,6 +817,46 @@ msgstr "Error del Yum Extender"
 #: data/ui/error_dialog.blp:22
 msgid "Copy error to clipboard"
 msgstr "Copia l'error al porta-retalls"
+
+#: data/ui/transaction_result.blp:16
+msgid "Transaction Result"
+msgstr "Resultat de la transacció"
+
+#: data/ui/transaction_result.blp:64
+msgid "dnf5daemon-server is updated, consider using offline transaction"
+msgstr ""
+"El servidor dnf5daemon s'ha actualitzat, considereu l'ús de transaccions "
+"fora de línia."
+
+#: data/ui/transaction_result.blp:65
+msgid ""
+"dnf5daemon-server is applying the transaction to the system.\n"
+"Updating the dnfdaemon-server will restart the service.\n"
+" This can cause an error in Yum Extender"
+msgstr ""
+"El servidor dnf5daemon aplica la transacció al sistema.\n"
+"L'actualització del servidor dnfdaemon reiniciarà el servei.\n"
+"Això pot causar un error al Yum Extender."
+
+#: data/ui/transaction_result.blp:101
+msgid "Problems in Transaction"
+msgstr "Problemes a la transacció"
+
+#: data/ui/transaction_result.blp:112
+msgid "Copy to clipboard"
+msgstr "Copia al porta-retalls"
+
+#: data/ui/transaction_result.blp:148
+msgid "Install Size"
+msgstr "Mida de la instal·lació"
+
+#: data/ui/transaction_result.blp:153
+msgid "Offline Transaction"
+msgstr "Transacció fora de línia"
+
+#: data/ui/transaction_result.blp:154
+msgid "This transaction will be performed offline during reboot"
+msgstr "Aquesta transacció es farà fora de línia durant el reinici."
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
 msgid "Yum Extender Flatpak Installer"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 07:00+0100\n"
+"POT-Creation-Date: 2026-03-06 06:52+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
 "Language-Team: Korean (https://app.transifex.com/timlau/teams/16939/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -116,34 +116,6 @@ msgstr ""
 
 #: yumex/ui/package_view.py:97
 msgid "This may take a little while"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:119
-msgid "Packages for installation"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:121
-msgid "Packages for deletion"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:123 yumex/ui/transaction_result.py:125
-msgid "Packages for updating"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:127
-msgid "Skipped Packages"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:129
-msgid "Packages for downgrading"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:131
-msgid "Packages for re-installation"
-msgstr ""
-
-#: yumex/ui/transaction_result.py:133
-msgid "Packages for distribution synchronization"
 msgstr ""
 
 #: yumex/ui/flatpak_view.py:90
@@ -254,6 +226,34 @@ msgstr ""
 
 #: yumex/ui/window.py:583
 msgid "Offline transaction cancel failed"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:125
+msgid "Packages for installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:127
+msgid "Packages for deletion"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:129 yumex/ui/transaction_result.py:131
+msgid "Packages for updating"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:133
+msgid "Skipped Packages"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:135
+msgid "Packages for downgrading"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:137
+msgid "Packages for re-installation"
+msgstr ""
+
+#: yumex/ui/transaction_result.py:139
+msgid "Packages for distribution synchronization"
 msgstr ""
 
 #: yumex/main.py:181
@@ -543,30 +543,6 @@ msgstr ""
 msgid "Remove item from queue"
 msgstr ""
 
-#: data/ui/transaction_result.blp:16
-msgid "Transaction Result"
-msgstr ""
-
-#: data/ui/transaction_result.blp:90
-msgid "Problems in Transaction"
-msgstr ""
-
-#: data/ui/transaction_result.blp:101
-msgid "Copy to clipboard"
-msgstr ""
-
-#: data/ui/transaction_result.blp:136
-msgid "Install Size"
-msgstr ""
-
-#: data/ui/transaction_result.blp:140
-msgid "Offline Transaction"
-msgstr ""
-
-#: data/ui/transaction_result.blp:141
-msgid "This transaction will be performed offline during reboot"
-msgstr ""
-
 #: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
 msgid "Search Settings"
 msgstr ""
@@ -824,6 +800,41 @@ msgstr ""
 
 #: data/ui/error_dialog.blp:22
 msgid "Copy error to clipboard"
+msgstr ""
+
+#: data/ui/transaction_result.blp:16
+msgid "Transaction Result"
+msgstr ""
+
+#: data/ui/transaction_result.blp:64
+msgid "dnf5daemon-server is updated, consider using offline transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:65
+msgid ""
+"dnf5daemon-server is applying the transaction to the system.\n"
+"Updating the dnfdaemon-server will restart the service.\n"
+" This can cause an error in Yum Extender"
+msgstr ""
+
+#: data/ui/transaction_result.blp:101
+msgid "Problems in Transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:112
+msgid "Copy to clipboard"
+msgstr ""
+
+#: data/ui/transaction_result.blp:148
+msgid "Install Size"
+msgstr ""
+
+#: data/ui/transaction_result.blp:153
+msgid "Offline Transaction"
+msgstr ""
+
+#: data/ui/transaction_result.blp:154
+msgid "This transaction will be performed offline during reboot"
 msgstr ""
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
