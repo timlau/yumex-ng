@@ -50,347 +50,347 @@ msgstr "正在替换"
 #: yumex/backend/dnf5daemon/__init__.py:327
 #: yumex/backend/dnf5daemon/__init__.py:347 yumex/ui/window.py:221
 msgid "Building Transaction"
-msgstr "正在构建交易"
+msgstr "正在构建操作"
 
 #: yumex/backend/dnf5daemon/__init__.py:369
 #: yumex/backend/dnf5daemon/__init__.py:478 yumex/ui/window.py:245
 msgid "Building Offline Transaction"
-msgstr "正在构建离线交易"
+msgstr "正在构建离线操作"
 
 #: yumex/backend/dnf5daemon/__init__.py:371
 #: yumex/backend/dnf5daemon/__init__.py:390
 #: yumex/backend/dnf5daemon/__init__.py:480
 msgid "Applying Transaction"
-msgstr ""
+msgstr "正在应用操作"
 
 #: yumex/backend/dnf5daemon/__init__.py:379
 msgid "Verifying Packages"
-msgstr ""
+msgstr "正在验证软件包"
 
 #: yumex/backend/dnf5daemon/__init__.py:395
 msgid "Running Scriptlets"
-msgstr ""
+msgstr "正在运行脚本"
 
 #: yumex/backend/dnf5daemon/__init__.py:433
 msgid "Download Packages"
-msgstr ""
+msgstr "下载软件包"
 
 #: yumex/backend/dnf5daemon/__init__.py:435
 msgid "Download Repository Information"
-msgstr ""
+msgstr "下载仓库信息"
 
 #: yumex/backend/flatpak/transaction.py:67 yumex/ui/flatpak_result.py:39
 msgid "Uninstalling"
-msgstr ""
+msgstr "正在卸载"
 
 #: yumex/backend/flatpak/transaction.py:69 yumex/ui/flatpak_result.py:41
 msgid "Updating"
-msgstr ""
+msgstr "正在更新"
 
 #: yumex/backend/flatpak/transaction.py:181
 msgid "flatpak transaction failed"
-msgstr ""
+msgstr "Flatpak 操作失败"
 
 #: yumex/ui/__init__.py:44
 msgid "Queued for deletion"
-msgstr ""
+msgstr "已加入删除队列"
 
 #: yumex/ui/__init__.py:46
 msgid "Queued for installation"
-msgstr ""
+msgstr "已加入安装队列"
 
 #: yumex/ui/__init__.py:48
 msgid "Queued for updating"
-msgstr ""
+msgstr "已加入更新队列"
 
 #: yumex/ui/__init__.py:50
 msgid "Queued for reinstallation"
-msgstr ""
+msgstr "已加入重新安装队列"
 
 #: yumex/ui/__init__.py:52
 msgid "Queued for downgrading"
-msgstr ""
+msgstr "已加入降级队列"
 
 #: yumex/ui/__init__.py:54
 msgid "Queued for distribution synchronization"
-msgstr ""
+msgstr "已加入发行版同步队列"
 
 #: yumex/ui/package_view.py:96
 msgid "Loading Packages"
-msgstr ""
+msgstr "正在加载软件包"
 
 #: yumex/ui/package_view.py:97
 msgid "This may take a little while"
-msgstr ""
+msgstr "这可能需要一点时间"
 
 #: yumex/ui/flatpak_view.py:90
 msgid "Flatpaks were updated"
-msgstr ""
+msgstr "Flatpak 已更新"
 
 #: yumex/ui/flatpak_view.py:96
 msgid "Unused flatpaks were removed"
-msgstr ""
+msgstr "已移除未使用的 Flatpak"
 
 #: yumex/ui/package_info.py:26
 msgid "Bugfix"
-msgstr ""
+msgstr "修复错误"
 
 #: yumex/ui/package_info.py:27
 msgid "New Package"
-msgstr ""
+msgstr "新软件包"
 
 #: yumex/ui/package_info.py:28
 msgid "Security"
-msgstr ""
+msgstr "安全"
 
 #: yumex/ui/package_info.py:29
 msgid "Enhancement"
-msgstr ""
+msgstr "增强"
 
 #: yumex/ui/package_info.py:61
 msgid "no update information found"
-msgstr ""
+msgstr "未找到更新信息"
 
 #: yumex/ui/package_info.py:93
 msgid "Undefined"
-msgstr ""
+msgstr "未定义"
 
 #: yumex/ui/dialogs.py:16 data/ui/error_dialog.blp:28
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: yumex/ui/dialogs.py:23 data/ui/error_dialog.blp:82
 msgid "Report Issue on GitHub"
-msgstr ""
+msgstr "在 GitHub 上报告问题"
 
 #: yumex/ui/dialogs.py:45
 msgid "Install GPG Key"
-msgstr ""
+msgstr "安装 GPG 密钥"
 
 #: yumex/ui/dialogs.py:53 yumex/ui/dialogs.py:82
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: yumex/ui/dialogs.py:55 yumex/ui/dialogs.py:84
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #: yumex/ui/flatpak_search.py:218
 msgid "Open on flathub.org"
-msgstr ""
+msgstr "在 flathub.org 上打开"
 
 #: yumex/ui/window.py:202 yumex/ui/window.py:338
 msgid "Transaction completed succesfully"
-msgstr ""
+msgstr "操作成功完成"
 
 #: yumex/ui/window.py:236
 msgid "Nothing to do in this transaction"
-msgstr ""
+msgstr "此操作中没有要执行的操作"
 
 #: yumex/ui/window.py:247
 msgid "Running Transaction"
-msgstr ""
+msgstr "正在运行操作"
 
 #: yumex/ui/window.py:277
 msgid "Running Flatpak Transaction"
-msgstr ""
+msgstr "正在运行 Flatpak 操作"
 
 #: yumex/ui/window.py:522
 msgid "Offline transaction"
-msgstr ""
+msgstr "离线操作"
 
 #: yumex/ui/window.py:523
 msgid ""
 "Do you want to prepare the offline transaction to be applied on next reboot "
 "?"
-msgstr ""
+msgstr "是否要准备在下次重启时应用离线操作？"
 
 #: yumex/ui/window.py:529
 msgid "Offline trasaction prepared to be applied on next reboot"
-msgstr ""
+msgstr "离线操作已准备好在下次重启时应用"
 
 #: yumex/ui/window.py:532
 msgid "Offline transaction prepare failed"
-msgstr ""
+msgstr "离线操作准备失败"
 
 #: yumex/ui/window.py:550
 msgid "system upgrade target release must to larger than current release"
-msgstr ""
+msgstr "系统升级目标版本必须大于当前版本"
 
 #: yumex/ui/window.py:559
 msgid "Offline Transaction completed succesfully"
-msgstr ""
+msgstr "离线操作成功完成"
 
 #: yumex/ui/window.py:571
 msgid "Distro-Sync completed succesfully"
-msgstr ""
+msgstr "发行版同步成功完成"
 
 #: yumex/ui/window.py:580
 msgid "Offline transaction cancelled"
-msgstr ""
+msgstr "离线操作已取消"
 
 #: yumex/ui/window.py:583
 msgid "Offline transaction cancel failed"
-msgstr ""
+msgstr "离线操作取消失败"
 
 #: yumex/ui/transaction_result.py:125
 msgid "Packages for installation"
-msgstr ""
+msgstr "待安装的软件包"
 
 #: yumex/ui/transaction_result.py:127
 msgid "Packages for deletion"
-msgstr ""
+msgstr "待删除的软件包"
 
 #: yumex/ui/transaction_result.py:129 yumex/ui/transaction_result.py:131
 msgid "Packages for updating"
-msgstr ""
+msgstr "待更新的软件包"
 
 #: yumex/ui/transaction_result.py:133
 msgid "Skipped Packages"
-msgstr ""
+msgstr "已跳过的软件包"
 
 #: yumex/ui/transaction_result.py:135
 msgid "Packages for downgrading"
-msgstr ""
+msgstr "待降级的软件包"
 
 #: yumex/ui/transaction_result.py:137
 msgid "Packages for re-installation"
-msgstr ""
+msgstr "待重新安装的软件包"
 
 #: yumex/ui/transaction_result.py:139
 msgid "Packages for distribution synchronization"
-msgstr ""
+msgstr "待发行版同步的软件包"
 
 #: yumex/main.py:181
 msgid ""
 "Yum Extender is a Package management to install, update and remove packages"
-msgstr ""
+msgstr "Yum Extender 是一个用于安装、更新和删除软件包的包管理工具"
 
 #: yumex/main.py:184
 msgid "Special thanks to"
-msgstr ""
+msgstr "特别感谢"
 
 #: yumex/main.py:215 yumex/main.py:222
 msgid "dnf5daemon-server Error"
-msgstr ""
+msgstr "dnf5daemon-server 错误"
 
 #: yumex/main.py:230
 msgid "Yum Extender Ctritical Error"
-msgstr ""
+msgstr "Yum Extender 严重错误"
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
 #: data/ui/window.blp:293
 msgid "Advanced Actions"
-msgstr ""
+msgstr "高级操作"
 
 #: data/ui/advanced_actions.blp:29
 msgid "Refresh DNF Cache"
-msgstr ""
+msgstr "刷新 DNF 缓存"
 
 #: data/ui/advanced_actions.blp:31
 msgid "Expire the DNF cache, so it will be refreshed from repositories."
-msgstr ""
+msgstr "使 DNF 缓存过期，以便从仓库重新刷新。"
 
 #: data/ui/advanced_actions.blp:35
 msgid "Distro-Sync System"
-msgstr ""
+msgstr "发行版同步系统"
 
 #: data/ui/advanced_actions.blp:37
 msgid "distro-sync all installed packages to the repo version."
-msgstr ""
+msgstr "将所有已安装的软件包发行版同步到仓库版本。"
 
 #: data/ui/advanced_actions.blp:41
 msgid "System Upgrade"
-msgstr ""
+msgstr "系统升级"
 
 #: data/ui/advanced_actions.blp:45
 msgid "Fedora release"
-msgstr ""
+msgstr "Fedora 版本"
 
 #: data/ui/advanced_actions.blp:49
 msgid "Run System Upgrade"
-msgstr ""
+msgstr "运行系统升级"
 
 #: data/ui/advanced_actions.blp:51
 msgid "Upgrade system to next release (offline)."
-msgstr ""
+msgstr "将系统升级到下一个版本（离线）。"
 
 #: data/ui/advanced_actions.blp:56
 msgid "Offline Transaction  is available"
-msgstr ""
+msgstr "离线操作可用"
 
 #: data/ui/advanced_actions.blp:61
 msgid "Cancel Transaction"
-msgstr ""
+msgstr "取消操作"
 
 #: data/ui/advanced_actions.blp:63
 msgid "Cancel and clear offline transaction."
-msgstr ""
+msgstr "取消并清除离线操作。"
 
 #: data/ui/advanced_actions.blp:71
 msgid "Apply on Reboot"
-msgstr ""
+msgstr "重启时应用"
 
 #: data/ui/advanced_actions.blp:73
 msgid "Prepare transaction for apply on next boot."
-msgstr ""
+msgstr "准备在下次启动时应用的操作。"
 
 #: data/ui/flatpak_result.blp:16
 msgid "Flatpak Transaction Result"
-msgstr ""
+msgstr "Flatpak 操作结果"
 
 #: data/ui/flatpak_result.blp:21 data/ui/flatpak_search.blp:21
 #: data/ui/transaction_result.blp:21
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: data/ui/flatpak_result.blp:36 data/ui/transaction_result.blp:36
 msgid "Confirm"
-msgstr ""
+msgstr "确认"
 
 #: data/ui/flatpak_row.blp:50
 msgid "Update is available"
-msgstr ""
+msgstr "有可用更新"
 
 #: data/ui/flatpak_row.blp:63
 msgid "Uninstall flatpak"
-msgstr ""
+msgstr "卸载 Flatpak"
 
 #: data/ui/flatpak_search.blp:16
 msgid "Search Flatpaks"
-msgstr ""
+msgstr "搜索 Flatpak"
 
 #: data/ui/flatpak_search.blp:41
 msgid "Install"
-msgstr ""
+msgstr "安装"
 
 #: data/ui/flatpak_search.blp:89
 msgid "Install location"
-msgstr ""
+msgstr "安装位置"
 
 #: data/ui/flatpak_search.blp:111
 msgid "Active Remotes: "
-msgstr ""
+msgstr "激活的远程源："
 
 #: data/ui/package_info.blp:24
 msgid "Advisory ID"
-msgstr ""
+msgstr "公告 ID"
 
 #: data/ui/package_info.blp:37
 msgid "Advisory Type"
-msgstr ""
+msgstr "公告类型"
 
 #: data/ui/package_info.blp:50
 msgid "Advisory Issued"
-msgstr ""
+msgstr "公告发布"
 
 #: data/ui/package_info.blp:75
 msgid "Bugzilla References"
-msgstr ""
+msgstr "Bugzilla 参考"
 
 #: data/ui/package_settings.blp:13
 msgid "Package filter"
-msgstr ""
+msgstr "软件包过滤器"
 
 #: data/ui/package_settings.blp:19
 msgid "Installed"
@@ -402,7 +402,7 @@ msgstr "更新"
 
 #: data/ui/package_settings.blp:54
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: data/ui/package_settings.blp:72 data/ui/window.blp:35
 msgid "Search"
@@ -410,23 +410,23 @@ msgstr "搜索"
 
 #: data/ui/package_settings.blp:91
 msgid "View Settings"
-msgstr ""
+msgstr "查看设置"
 
 #: data/ui/package_settings.blp:108
 msgid "Select what attribute to sort by"
-msgstr ""
+msgstr "选择排序属性"
 
 #: data/ui/package_settings.blp:124
 msgid "Select what package information to show"
-msgstr ""
+msgstr "选择要显示的软件包信息"
 
 #: data/ui/package_settings.blp:132 data/ui/package_view.blp:20
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: data/ui/package_settings.blp:133
 msgid "Arch"
-msgstr ""
+msgstr "架构"
 
 #: data/ui/package_settings.blp:134 data/ui/package_view.blp:41
 msgid "Size"
@@ -434,7 +434,7 @@ msgstr "大小"
 
 #: data/ui/package_settings.blp:135
 msgid "Repo"
-msgstr ""
+msgstr "仓库"
 
 #: data/ui/package_settings.blp:141
 msgid "Description"
@@ -442,27 +442,27 @@ msgstr "描述"
 
 #: data/ui/package_settings.blp:142
 msgid "Filelist"
-msgstr ""
+msgstr "文件列表"
 
 #: data/ui/package_settings.blp:143
 msgid "Update Info"
-msgstr ""
+msgstr "更新信息"
 
 #: data/ui/package_settings.blp:144
 msgid "Provides"
-msgstr ""
+msgstr "提供"
 
 #: data/ui/package_settings.blp:145
 msgid "Requires"
-msgstr ""
+msgstr "需要"
 
 #: data/ui/package_settings.blp:146
 msgid "Changelog"
-msgstr ""
+msgstr "更新日志"
 
 #: data/ui/package_view.blp:27
 msgid "Version"
-msgstr ""
+msgstr "版本"
 
 #: data/ui/package_view.blp:34
 msgid "Arch."
@@ -470,11 +470,11 @@ msgstr "CPU架构"
 
 #: data/ui/package_view.blp:48
 msgid "Summary"
-msgstr ""
+msgstr "摘要"
 
 #: data/ui/package_view.blp:55 data/ui/preferences.blp:118
 msgid "Repository"
-msgstr ""
+msgstr "仓库"
 
 #: data/ui/preferences.blp:5 data/ui/shortcuts-dialog.blp:14
 msgid "Preferences"
@@ -482,229 +482,229 @@ msgstr "选项"
 
 #: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: data/ui/preferences.blp:14
 msgid "Flatpak Settings"
-msgstr ""
+msgstr "Flatpak 设置"
 
 #: data/ui/preferences.blp:17
 msgid "Default Location"
-msgstr ""
+msgstr "默认位置"
 
 #: data/ui/preferences.blp:23
 msgid "Default Remote"
-msgstr ""
+msgstr "默认远程源"
 
 #: data/ui/preferences.blp:29
 msgid "Metadata Settings"
-msgstr ""
+msgstr "元数据设置"
 
 #: data/ui/preferences.blp:32
 msgid "Min. Refresh interval (minutes)"
-msgstr ""
+msgstr "最小刷新间隔（分钟）"
 
 #: data/ui/preferences.blp:47
 msgid "Updater Settings"
-msgstr ""
+msgstr "更新器设置"
 
 #: data/ui/preferences.blp:50
 msgid "Custom System Updater (path)"
-msgstr ""
+msgstr "自定义系统更新器（路径）"
 
 #: data/ui/preferences.blp:65
 msgid "Check updates interval (minutes)"
-msgstr ""
+msgstr "检查更新间隔（分钟）"
 
 #: data/ui/preferences.blp:79
 msgid "Show systray icon on updates"
-msgstr ""
+msgstr "有更新时显示系统托盘图标"
 
 #: data/ui/preferences.blp:91
 msgid "Use dark systray icon"
-msgstr ""
+msgstr "使用暗色系统托盘图标"
 
 #: data/ui/preferences.blp:104
 msgid "Send Notification on updates"
-msgstr ""
+msgstr "有更新时发送通知"
 
 #: data/ui/preferences.blp:122
 msgid "Repository Settings"
-msgstr ""
+msgstr "仓库设置"
 
 #: data/ui/preferences.blp:123
 msgid "The available and enabled repositories"
-msgstr ""
+msgstr "可用和已启用的仓库"
 
 #: data/ui/preferences.blp:126
 msgid "Show Source/Debug Repositories"
-msgstr ""
+msgstr "显示源码/调试仓库"
 
 #: data/ui/queue_row.blp:21
 msgid "Added as a dependency"
-msgstr ""
+msgstr "作为依赖项添加"
 
 #: data/ui/queue_row.blp:47
 msgid "Remove item from queue"
-msgstr ""
+msgstr "从队列中移除项目"
 
 #: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
 msgid "Search Settings"
-msgstr ""
+msgstr "搜索设置"
 
 #: data/ui/search_settings.blp:20
 msgid "Clear the repository keywords"
-msgstr ""
+msgstr "清除仓库关键词"
 
 #: data/ui/search_settings.blp:32
 msgid "Repository keywords (blank = show all)"
-msgstr ""
+msgstr "仓库关键词（空白 = 显示全部）"
 
 #: data/ui/search_settings.blp:33
 msgid ""
 "Comma separated keywords to match against enabled repositories\n"
 " Ex. 'fed' will match 'fedora'"
-msgstr ""
+msgstr "用逗号分隔的关键词来匹配已启用的仓库\n例如 'fed' 将匹配 'fedora'"
 
 #: data/ui/search_settings.blp:40
 msgid "Number of package versions"
-msgstr ""
+msgstr "软件包版本数量"
 
 #: data/ui/search_settings.blp:41
 msgid "Number of packaage versions to show in search results"
-msgstr ""
+msgstr "在搜索结果中显示的软件包版本数量"
 
 #: data/ui/search_settings.blp:55
 msgid "Search in filesystem"
-msgstr ""
+msgstr "在文件系统中搜索"
 
 #: data/ui/search_settings.blp:56
 msgid "Search in containing files"
-msgstr ""
+msgstr "在包含的文件中搜索"
 
 #: data/ui/search_settings.blp:61
 msgid "Search in provides"
-msgstr ""
+msgstr "在提供的内容中搜索"
 
 #: data/ui/search_settings.blp:62
 msgid "Search in package provides"
-msgstr ""
+msgstr "在软件包提供的内容中搜索"
 
 #: data/ui/search_settings.blp:67
 msgid "Search in binaries"
-msgstr ""
+msgstr "在二进制文件中搜索"
 
 #: data/ui/search_settings.blp:68
 msgid "Search in package binaries"
-msgstr ""
+msgstr "在软件包二进制文件中搜索"
 
 #: data/ui/search_settings.blp:73
 msgid "Filter on archs"
-msgstr ""
+msgstr "按架构过滤"
 
 #: data/ui/search_settings.blp:74
 msgid "Filter on package architectures"
-msgstr ""
+msgstr "按软件包架构过滤"
 
 #: data/ui/search_settings.blp:80
 msgid "Search scope"
-msgstr ""
+msgstr "搜索范围"
 
 #: data/ui/search_settings.blp:81
 msgid "Filter on installation status"
-msgstr ""
+msgstr "按安装状态过滤"
 
 #: data/ui/shortcuts-dialog.blp:6
 msgid "General"
-msgstr ""
+msgstr "常规"
 
 #: data/ui/shortcuts-dialog.blp:9
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "键盘快捷键"
 
 #: data/ui/shortcuts-dialog.blp:19
 msgid "Apply Actions/Confirm"
-msgstr ""
+msgstr "应用操作/确认"
 
 #: data/ui/shortcuts-dialog.blp:24
 msgid "Close Dialog/Cancel"
-msgstr ""
+msgstr "关闭对话框/取消"
 
 #: data/ui/shortcuts-dialog.blp:30
 msgid "Select Packages"
-msgstr ""
+msgstr "选择软件包"
 
 #: data/ui/shortcuts-dialog.blp:35
 msgid "Select Flatpaks"
-msgstr ""
+msgstr "选择 Flatpak"
 
 #: data/ui/shortcuts-dialog.blp:40
 msgid "Select Queue"
-msgstr ""
+msgstr "选择队列"
 
 #: data/ui/shortcuts-dialog.blp:46
 msgid "Package View"
-msgstr ""
+msgstr "软件包视图"
 
 #: data/ui/shortcuts-dialog.blp:49
 msgid "Show/Hide Sidebar"
-msgstr ""
+msgstr "显示/隐藏侧边栏"
 
 #: data/ui/shortcuts-dialog.blp:54
 msgid "Toggled queued"
-msgstr ""
+msgstr "切换队列状态"
 
 #: data/ui/shortcuts-dialog.blp:59 data/ui/window.blp:329
 msgid "Select All"
-msgstr ""
+msgstr "全选"
 
 #: data/ui/shortcuts-dialog.blp:64 data/ui/window.blp:334
 msgid "Deselect All"
-msgstr ""
+msgstr "取消全选"
 
 #: data/ui/shortcuts-dialog.blp:69
 msgid "Toggle Searchbar"
-msgstr ""
+msgstr "切换搜索栏"
 
 #: data/ui/shortcuts-dialog.blp:74
 msgid "Search Options"
-msgstr ""
+msgstr "搜索选项"
 
 #: data/ui/shortcuts-dialog.blp:80
 msgid "Package Filters"
-msgstr ""
+msgstr "软件包过滤器"
 
 #: data/ui/shortcuts-dialog.blp:83
 msgid "Show Installed"
-msgstr ""
+msgstr "显示已安装"
 
 #: data/ui/shortcuts-dialog.blp:88
 msgid "Show updates"
-msgstr ""
+msgstr "显示更新"
 
 #: data/ui/shortcuts-dialog.blp:93
 msgid "Show All"
-msgstr ""
+msgstr "显示全部"
 
 #: data/ui/shortcuts-dialog.blp:99
 msgid "Queue View"
-msgstr ""
+msgstr "队列视图"
 
 #: data/ui/shortcuts-dialog.blp:102
 msgid "Clear Queue"
-msgstr ""
+msgstr "清除队列"
 
 #: data/ui/shortcuts-dialog.blp:108
 msgid "Flatpak View"
-msgstr ""
+msgstr "Flatpak 视图"
 
 #: data/ui/shortcuts-dialog.blp:111
 msgid "Search for flatpaks to install"
-msgstr ""
+msgstr "搜索要安装的 Flatpak"
 
 #: data/ui/shortcuts-dialog.blp:116
 msgid "Remove selected flatpak"
-msgstr ""
+msgstr "移除选中的 Flatpak"
 
 #: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:7
@@ -717,7 +717,7 @@ msgstr "选择软件包过滤规则"
 
 #: data/ui/window.blp:48
 msgid "Package Action Menu"
-msgstr ""
+msgstr "软件包操作菜单"
 
 #: data/ui/window.blp:61
 msgid "Main Menu"
@@ -733,7 +733,7 @@ msgstr "应用包管理动作"
 
 #: data/ui/window.blp:98
 msgid "Package Name"
-msgstr ""
+msgstr "软件包名称"
 
 #: data/ui/window.blp:123
 msgid "Packages"
@@ -741,27 +741,27 @@ msgstr "软件包"
 
 #: data/ui/window.blp:170
 msgid "Flatpaks"
-msgstr ""
+msgstr "Flatpak"
 
 #: data/ui/window.blp:194
 msgid "Update All Flatpaks (Apps & Runtimes)"
-msgstr ""
+msgstr "更新所有 Flatpak（应用和运行时）"
 
 #: data/ui/window.blp:200
 msgid "search for new flatpak to install"
-msgstr ""
+msgstr "搜索要安装的新 Flatpak"
 
 #: data/ui/window.blp:206
 msgid "uninstall selected flatpak"
-msgstr ""
+msgstr "卸载选中的 Flatpak"
 
 #: data/ui/window.blp:212
 msgid "Remove unused flatpaks (runtimes etc.)"
-msgstr ""
+msgstr "移除未使用的 Flatpak（运行时等）"
 
 #: data/ui/window.blp:224
 msgid "show/hide runtimes"
-msgstr ""
+msgstr "显示/隐藏运行时"
 
 #: data/ui/window.blp:234
 msgid "Groups"
@@ -773,47 +773,47 @@ msgstr "队列"
 
 #: data/ui/window.blp:271
 msgid "Remove all from queue"
-msgstr ""
+msgstr "从队列中移除全部"
 
 #: data/ui/window.blp:288
 msgid "_Preferences"
-msgstr ""
+msgstr "首选项(_P)"
 
 #: data/ui/window.blp:298
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "键盘快捷键"
 
 #: data/ui/window.blp:303
 msgid "_About Yum Extender"
-msgstr ""
+msgstr "关于 Yum Extender(_A)"
 
 #: data/ui/window.blp:312
 msgid "_Downgrade"
-msgstr ""
+msgstr "降级(_D)"
 
 #: data/ui/window.blp:317
 msgid "_Reinstall"
-msgstr ""
+msgstr "重新安装(_R)"
 
 #: data/ui/window.blp:322
 msgid "_Distro Sync"
-msgstr ""
+msgstr "发行版同步(_D)"
 
 #: data/ui/error_dialog.blp:16 data/ui/error_dialog.blp:44
 msgid "Yum Extender Error"
-msgstr ""
+msgstr "Yum Extender 错误"
 
 #: data/ui/error_dialog.blp:22
 msgid "Copy error to clipboard"
-msgstr ""
+msgstr "复制错误到剪贴板"
 
 #: data/ui/transaction_result.blp:16
 msgid "Transaction Result"
-msgstr ""
+msgstr "操作结果"
 
 #: data/ui/transaction_result.blp:64
 msgid "dnf5daemon-server is updated, consider using offline transaction"
-msgstr ""
+msgstr "dnf5daemon-server 已更新，建议使用离线操作"
 
 #: data/ui/transaction_result.blp:65
 msgid ""
@@ -821,221 +821,224 @@ msgid ""
 "Updating the dnfdaemon-server will restart the service.\n"
 " This can cause an error in Yum Extender"
 msgstr ""
+"dnf5daemon-server 正在将操作应用到系统。\n"
+"更新 dnfdaemon-server 将重启该服务。\n"
+"这可能会导致 Yum Extender 出现错误"
 
 #: data/ui/transaction_result.blp:101
 msgid "Problems in Transaction"
-msgstr ""
+msgstr "操作中的问题"
 
 #: data/ui/transaction_result.blp:112
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "复制到剪贴板"
 
 #: data/ui/transaction_result.blp:148
 msgid "Install Size"
-msgstr ""
+msgstr "安装大小"
 
 #: data/ui/transaction_result.blp:153
 msgid "Offline Transaction"
-msgstr ""
+msgstr "离线操作"
 
 #: data/ui/transaction_result.blp:154
 msgid "This transaction will be performed offline during reboot"
-msgstr ""
+msgstr "此操作将在重启期间离线执行"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:2
 msgid "Yum Extender Flatpak Installer"
-msgstr ""
+msgstr "Yum Extender Flatpak 安装器"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:3
 msgid "Install flatpak defined in .flatpakref"
-msgstr ""
+msgstr "安装 .flatpakref 中定义的 Flatpak"
 
 #: data/dk.yumex.Yumex-flatpakref.desktop.in.in:10
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:10
 #: data/dk.yumex.Yumex.desktop.in.in:10
 msgid "Software Installer"
-msgstr ""
+msgstr "软件安装器"
 
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:2
 msgid "Yum Extender RPM Installer"
-msgstr ""
+msgstr "Yum Extender RPM 安装器"
 
 #: data/dk.yumex.Yumex-rpm.desktop.in.in:3
 msgid "Install a .rpm file"
-msgstr ""
+msgstr "安装 .rpm 文件"
 
 #: data/dk.yumex.Yumex.desktop.in.in:3
 msgid "Install, update and remove applications"
-msgstr ""
+msgstr "安装、更新和删除应用程序"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:8
 msgid "Graphical package manager"
-msgstr ""
+msgstr "图形化包管理器"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:9
 msgid "Tim Lauridsen"
-msgstr ""
+msgstr "Tim Lauridsen"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:13
 msgid ""
 "Yum Extender is a graphical package management application. It allows you to"
 " search and browse for packages to install, remove and update on your "
 "computer."
-msgstr ""
+msgstr "Yum Extender 是一个图形化包管理应用程序。它允许您搜索和浏览要在计算机上安装、删除和更新的软件包。"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:18
 msgid ""
 "It is designed to give you full control over the packages on your computer "
 "and to be used by all users."
-msgstr ""
+msgstr "它旨在为您提供对计算机上软件包的完全控制，并供所有用户使用。"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:20
 msgid "Features:"
-msgstr ""
+msgstr "功能："
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:22
 msgid "Browse packages available for installation or update"
-msgstr ""
+msgstr "浏览可安装或更新的软件包"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:23
 msgid "Browse packages installed on your computer"
-msgstr ""
+msgstr "浏览计算机上已安装的软件包"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:24
 msgid "Search packages by name, summary, description"
-msgstr ""
+msgstr "按名称、摘要、描述搜索软件包"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:25
 msgid "Browse Installed flatpaks"
-msgstr ""
+msgstr "浏览已安装的 Flatpak"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:26
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:118
 msgid "Install, remove and update flatpaks"
-msgstr ""
+msgstr "安装、删除和更新 Flatpak"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:44
 msgid "Yum Extender 5.4.0 add many fixes and improvments"
-msgstr ""
+msgstr "Yum Extender 5.4.0 添加了许多修复和改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:46
 msgid "Added support for offline transaction during boot"
-msgstr ""
+msgstr "添加了启动期间离线操作的支持"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:47
 msgid "Added support of reinstall, downgrade,distro-sync"
-msgstr ""
+msgstr "添加了重新安装、降级、发行版同步的支持"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:48
 msgid "Added support for system upgrade to next Fedora release"
-msgstr ""
+msgstr "添加了系统升级到下一个 Fedora 版本的支持"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:49
 msgid "Added support for installing .rpm files from file manager"
-msgstr ""
+msgstr "添加了从文件管理器安装 .rpm 文件的支持"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:55
 msgid "Yum Extender 5.2.0 add many fixes and improvments"
-msgstr ""
+msgstr "Yum Extender 5.2.0 添加了许多修复和改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:57
 msgid "Use only dnf5daemon for all package actions"
-msgstr ""
+msgstr "对所有包操作仅使用 dnf5daemon"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:63
 msgid "Yum Extender 5.0.3 add many fixes and improvments"
-msgstr ""
+msgstr "Yum Extender 5.0.3 添加了许多修复和改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:68
 msgid "Yum Extender 5.0.2 add many fixes and improvments"
-msgstr ""
+msgstr "Yum Extender 5.0.2 添加了许多修复和改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:70
 msgid "Added support for notifications on updates"
-msgstr ""
+msgstr "添加了更新通知支持"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:71
 msgid "Improved configuration of yumex-updater in yumex ui"
-msgstr ""
+msgstr "改进了 yumex 用户界面中的 yumex-updater 配置"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:77
 msgid "Yum Extender 5.0.1 add many fixes and small improvments"
-msgstr ""
+msgstr "Yum Extender 5.0.1 添加了许多修复和小改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:79
 msgid "Add yumex-updater systray application there checks for updates"
-msgstr ""
+msgstr "添加检查更新的 yumex-updater 系统托盘应用程序"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:85
 msgid "Yum Extender 5.0.0 add many fixes and small improvments"
-msgstr ""
+msgstr "Yum Extender 5.0.0 添加了许多修复和小改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:87
 msgid "Support for update info with dnf5"
-msgstr ""
+msgstr "支持 dnf5 的更新信息"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:88
 msgid "new improved flatpak installer"
-msgstr ""
+msgstr "新的改进版 Flatpak 安装器"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:89
 msgid "cleanup unused flatpaks"
-msgstr ""
+msgstr "清理未使用的 Flatpak"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:90
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:100
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:109
 msgid "lot of code fixes and optimization"
-msgstr ""
+msgstr "大量代码修复和优化"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:96
 msgid "Yum Extender 4.9.4 add many fixes and small improvments"
-msgstr ""
+msgstr "Yum Extender 4.9.4 添加了许多修复和小改进"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:98
 msgid "Support for importing gpg keys from repositories"
-msgstr ""
+msgstr "支持从仓库导入 GPG 密钥"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:99
 msgid "fix installing and updating flatpaks at system location"
-msgstr ""
+msgstr "修复在系统位置安装和更新 Flatpak"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:106
 msgid "Yum Extender 4.9.3 improve the flatpak installer"
-msgstr ""
+msgstr "Yum Extender 4.9.3 改进了 Flatpak 安装器"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:108
 msgid "flatpak install with search and select available results"
-msgstr ""
+msgstr "Flatpak 安装支持搜索和选择可用结果"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:115
 msgid "Yum Extender 4.9.2 adds support for flatpaks"
-msgstr ""
+msgstr "Yum Extender 4.9.2 添加了 Flatpak 支持"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:117
 msgid "Browse installed flatpaks"
-msgstr ""
+msgstr "浏览已安装的 Flatpak"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:124
 msgid "Yum Extender 4.9.1 is a total rewrite using a modern toolchain"
-msgstr ""
+msgstr "Yum Extender 4.9.1 使用现代工具链完全重写"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:126
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
-msgstr ""
+msgstr "使用 Gtk4 和 Libadwaita 的全新可扩展 UI"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:127
 msgid "Using dnf directly for readonly actions"
-msgstr ""
+msgstr "对只读操作直接使用 dnf"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:140
 msgid "yumex"
-msgstr ""
+msgstr "yumex"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:141
 msgid "yumex-dnf"
-msgstr ""
+msgstr "yumex-dnf"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:142
 msgid "Package Manager"
-msgstr ""
+msgstr "包管理器"
