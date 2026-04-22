@@ -6,6 +6,7 @@
 # Translators:
 # Adrien_D, 2025
 # Julien Brd, 2025
+# Tim Lauridsen <tla@rasmil.dk>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 06:52+0100\n"
 "PO-Revision-Date: 2022-12-02 12:11+0000\n"
-"Last-Translator: Julien Brd, 2025\n"
+"Last-Translator: Tim Lauridsen <tla@rasmil.dk>, 2026\n"
 "Language-Team: French (https://app.transifex.com/timlau/teams/16939/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +30,7 @@ msgstr "Installation"
 
 #: yumex/backend/dnf5daemon/__init__.py:77
 msgid "Upgrading"
-msgstr "Mise à jour"
+msgstr "Mise à niveau"
 
 #: yumex/backend/dnf5daemon/__init__.py:79
 msgid "Downgrading"
@@ -125,7 +126,7 @@ msgstr "Cela peut prendre un peu de temps"
 
 #: yumex/ui/flatpak_view.py:90
 msgid "Flatpaks were updated"
-msgstr ""
+msgstr "Les applications Flatpak ont été mises à jour"
 
 #: yumex/ui/flatpak_view.py:96
 msgid "Unused flatpaks were removed"
@@ -149,7 +150,7 @@ msgstr "Amélioration"
 
 #: yumex/ui/package_info.py:61
 msgid "no update information found"
-msgstr "Pas d'information de mise à jour"
+msgstr "aucun renseignement de mise à jour trouvé"
 
 #: yumex/ui/package_info.py:93
 msgid "Undefined"
@@ -161,7 +162,7 @@ msgstr "Quitter"
 
 #: yumex/ui/dialogs.py:23 data/ui/error_dialog.blp:82
 msgid "Report Issue on GitHub"
-msgstr ""
+msgstr "Signaler un problème sur GitHub"
 
 #: yumex/ui/dialogs.py:45
 msgid "Install GPG Key"
@@ -177,7 +178,7 @@ msgstr "Non"
 
 #: yumex/ui/flatpak_search.py:218
 msgid "Open on flathub.org"
-msgstr ""
+msgstr "Ouvrir sur flathub.org"
 
 #: yumex/ui/window.py:202 yumex/ui/window.py:338
 msgid "Transaction completed succesfully"
@@ -264,7 +265,7 @@ msgstr "Paquets à réinstaller"
 
 #: yumex/ui/transaction_result.py:139
 msgid "Packages for distribution synchronization"
-msgstr "Paquets pour réinstallation de la dernière version"
+msgstr "Paquets pour la synchronisation de la distribution"
 
 #: yumex/main.py:181
 msgid ""
@@ -279,11 +280,11 @@ msgstr "Remerciements spéciaux à"
 
 #: yumex/main.py:215 yumex/main.py:222
 msgid "dnf5daemon-server Error"
-msgstr ""
+msgstr "erreur du service dnf5daemon"
 
 #: yumex/main.py:230
 msgid "Yum Extender Ctritical Error"
-msgstr ""
+msgstr "Erreur critique de Yum Extender"
 
 #: data/ui/advanced_actions.blp:5 data/ui/advanced_actions.blp:17
 #: data/ui/window.blp:293
@@ -365,7 +366,7 @@ msgstr "Désinstaller flatpak"
 
 #: data/ui/flatpak_search.blp:16
 msgid "Search Flatpaks"
-msgstr "Rechercher des Flatpak"
+msgstr "Rechercher des Flatpaks"
 
 #: data/ui/flatpak_search.blp:41
 msgid "Install"
@@ -377,7 +378,7 @@ msgstr "Emplacement d'installation"
 
 #: data/ui/flatpak_search.blp:111
 msgid "Active Remotes: "
-msgstr "Remotes actifs :"
+msgstr "Sources actives : "
 
 #: data/ui/package_info.blp:24
 msgid "Advisory ID"
@@ -489,7 +490,7 @@ msgstr "Préférences"
 
 #: data/ui/preferences.blp:10 data/ui/search_settings.blp:10
 msgid "Settings"
-msgstr "Configurations"
+msgstr "Paramètres"
 
 #: data/ui/preferences.blp:14
 msgid "Flatpak Settings"
@@ -501,7 +502,7 @@ msgstr "Emplacement par défaut"
 
 #: data/ui/preferences.blp:23
 msgid "Default Remote"
-msgstr "Remote par défaut"
+msgstr "Dépôt distant par défaut"
 
 #: data/ui/preferences.blp:29
 msgid "Metadata Settings"
@@ -557,21 +558,23 @@ msgstr "Supprimer l'élément de la file d'attente"
 
 #: data/ui/search_settings.blp:5 data/ui/search_settings.blp:14
 msgid "Search Settings"
-msgstr "Options de recherche"
+msgstr "Paramètres de recherche"
 
 #: data/ui/search_settings.blp:20
 msgid "Clear the repository keywords"
-msgstr ""
+msgstr "Effacer les mots-clés du dépôt"
 
 #: data/ui/search_settings.blp:32
 msgid "Repository keywords (blank = show all)"
-msgstr ""
+msgstr "Mots-clés du dépôt (laisser vide pour tout afficher)"
 
 #: data/ui/search_settings.blp:33
 msgid ""
 "Comma separated keywords to match against enabled repositories\n"
 " Ex. 'fed' will match 'fedora'"
 msgstr ""
+"Entrez plusieurs mots-clés séparés par des virgules pour filtrer les dépôts activés\n"
+" (ex. «fed» correspond à «fedora»)"
 
 #: data/ui/search_settings.blp:40
 msgid "Number of package versions"
@@ -579,7 +582,7 @@ msgstr "Nombre de versions du paquet"
 
 #: data/ui/search_settings.blp:41
 msgid "Number of packaage versions to show in search results"
-msgstr ""
+msgstr "Nombre de versions de paquets à afficher dans les résultats"
 
 #: data/ui/search_settings.blp:55
 msgid "Search in filesystem"
@@ -587,15 +590,15 @@ msgstr "Rechercher dans le système de fichiers"
 
 #: data/ui/search_settings.blp:56
 msgid "Search in containing files"
-msgstr ""
+msgstr "Rechercher dans les fichiers inclus"
 
 #: data/ui/search_settings.blp:61
 msgid "Search in provides"
-msgstr "Rechercher dans les provides"
+msgstr "Rechercher dans les éléments fournis"
 
 #: data/ui/search_settings.blp:62
 msgid "Search in package provides"
-msgstr ""
+msgstr "Rechercher dans les contenus fournis par le paquet"
 
 #: data/ui/search_settings.blp:67
 msgid "Search in binaries"
@@ -603,7 +606,7 @@ msgstr "Rechercher dans les exécutables"
 
 #: data/ui/search_settings.blp:68
 msgid "Search in package binaries"
-msgstr ""
+msgstr "Rechercher dans les exécutables du paquet"
 
 #: data/ui/search_settings.blp:73
 msgid "Filter on archs"
@@ -611,7 +614,7 @@ msgstr "Filtrer sur les architectures"
 
 #: data/ui/search_settings.blp:74
 msgid "Filter on package architectures"
-msgstr ""
+msgstr "Filtrer selon l’architecture du paquet"
 
 #: data/ui/search_settings.blp:80
 msgid "Search scope"
@@ -619,7 +622,7 @@ msgstr "Portée de la recherche"
 
 #: data/ui/search_settings.blp:81
 msgid "Filter on installation status"
-msgstr ""
+msgstr "Filtrer selon l’état d’installation"
 
 #: data/ui/shortcuts-dialog.blp:6
 msgid "General"
@@ -707,11 +710,11 @@ msgstr "Vue Flatpak"
 
 #: data/ui/shortcuts-dialog.blp:111
 msgid "Search for flatpaks to install"
-msgstr "Rechercher des Flatpak à installer"
+msgstr "Rechercher des Flatpaks à installer"
 
 #: data/ui/shortcuts-dialog.blp:116
 msgid "Remove selected flatpak"
-msgstr "Supprimer les flatpak installés"
+msgstr "Supprimer le flatpak sélectionné"
 
 #: data/ui/window.blp:5 data/dk.yumex.Yumex.desktop.in.in:2
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:7
@@ -720,7 +723,7 @@ msgstr "Yum Extender"
 
 #: data/ui/window.blp:29
 msgid "Select Package filters"
-msgstr "Sélectionner Filtres de paquet "
+msgstr "Choisissez les filtres de paquets"
 
 #: data/ui/window.blp:48
 msgid "Package Action Menu"
@@ -764,7 +767,7 @@ msgstr "désinstaller le flatpak sélectionné"
 
 #: data/ui/window.blp:212
 msgid "Remove unused flatpaks (runtimes etc.)"
-msgstr "Supprimer les flatpaks unutiles (runtimes etc.)"
+msgstr "Supprimer les flatpaks inutilisés (runtimes etc.)"
 
 #: data/ui/window.blp:224
 msgid "show/hide runtimes"
@@ -808,11 +811,11 @@ msgstr "_Distro Sync"
 
 #: data/ui/error_dialog.blp:16 data/ui/error_dialog.blp:44
 msgid "Yum Extender Error"
-msgstr ""
+msgstr "Erreur de Yum Extender"
 
 #: data/ui/error_dialog.blp:22
 msgid "Copy error to clipboard"
-msgstr ""
+msgstr "Copier le message d’erreur dans le presse papier"
 
 #: data/ui/transaction_result.blp:16
 msgid "Transaction Result"
@@ -821,6 +824,8 @@ msgstr "Résultat de la transaction"
 #: data/ui/transaction_result.blp:64
 msgid "dnf5daemon-server is updated, consider using offline transaction"
 msgstr ""
+"le service dnf5daemon a été mis à jour — utilisez de préférence une "
+"transaction hors ligne"
 
 #: data/ui/transaction_result.blp:65
 msgid ""
@@ -828,6 +833,9 @@ msgid ""
 "Updating the dnfdaemon-server will restart the service.\n"
 " This can cause an error in Yum Extender"
 msgstr ""
+"le service dnf5daemon applique une transaction système.\n"
+"Le mettre à jour redémarrera le service.\n"
+" Ce qui peut entraîner une erreur dans Yum Extender"
 
 #: data/ui/transaction_result.blp:101
 msgid "Problems in Transaction"
@@ -839,7 +847,7 @@ msgstr "Copier dans le presse papier"
 
 #: data/ui/transaction_result.blp:148
 msgid "Install Size"
-msgstr ""
+msgstr "Taille de l’installation"
 
 #: data/ui/transaction_result.blp:153
 msgid "Offline Transaction"
@@ -972,7 +980,7 @@ msgstr "Ajout du support des notifications lors des mises à jour"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:71
 msgid "Improved configuration of yumex-updater in yumex ui"
-msgstr "Configuration du yumex-updater dans l'IU yumex améliorée "
+msgstr "Configuration améliorée du gestionnaire de mises à jour Yumex"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:77
 msgid "Yum Extender 5.0.1 add many fixes and small improvments"
@@ -1048,7 +1056,9 @@ msgstr ""
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:126
 msgid "New fresh scalable UI using Gtk4 and Libadwaita"
-msgstr "Nouvelle IU évolutive et moderne utilisant Gtk4 et Libadwaita"
+msgstr ""
+"Nouvelle interface utilisateur évolutive et moderne utilisant Gtk4 et "
+"Libadwaita"
 
 #: data/dk.yumex.Yumex.metainfo.xml.in.in:127
 msgid "Using dnf directly for readonly actions"
